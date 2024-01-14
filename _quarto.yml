@@ -16,6 +16,7 @@ website:
       - section: "Chapters"
         contents:
           - chapter1.qmd
+          - chapter2.qmd
       - section: "Miscellaneous"
        
         
