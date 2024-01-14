@@ -1,3 +1,77 @@
 ---
 title: "Syllabus"
 ---
+
+### Overview
+
+This course provides a survey of modern statistical methodology for the analysis of **censored** time-to-event data arising from clinical, epidemiological, sociological, and engineering studies. We use intuitive explanations of statistical theory, such as counting-process martingale, to deepen understanding of real-world problems and train problem-solving skills. To do so, we combine methodological exposition with extensive case studies, mostly drawn from health sciences research (sample R/SAS code for case studies will be provided). The overall emphasis of this course is on the **application** side of study design and data analysis.
+
+### Course structure
+
+The course is divided into three parts. The first part focuses on methods for univariate event times, e.g., Kaplan—Meier curve, log-rank test, and Cox proportional hazards model. Building on this foundation, the second part expands the scope to complex outcomes such as recurrent or multivariate events, (semi-)competing risks, joint analysis of survival and longitudinal data, multistate data, composite endpoints, and so forth. Special topics for censored data from cutting-edge research areas such as causal inference and machine learning are discussed in the third part.
+
+### Learning outcomes
+
+After taking the course, students will be able to:
+
+-   Understand the features of censored data and their implications in statistical inference
+
+-   Choose proper non- and semi-parametric methods for analysis of various types of data
+
+-   Understand and check the assumptions needed for estimation and inference
+
+-   Implement the inference procedures to solve real-world problems using statistical packages such as R (or SAS)
+
+-   Interpret and present the analytic results clearly and coherently to answer substantive questions
+
+### Prerequisites
+
+Students are expected to have basic knowledge in statistical concepts such as random variables, expectation, variance, and maximum likelihood estimation, and to have taken first courses in statistical hypothesis testing (e.g., *t*-test, ANOVA, etc.) and (generalized) linear regression models. Prior experience with R or SAS is helpful but not required.
+
+### Time and Location
+
+MW 2:30—3:45pm; G5/119 Clinical Sciences Center (CSC).
+
+### Instructor & Assistant
+
+#### Instructor
+
+**Lu Mao**, PhD
+
+WARF 207A, 610 Walnut St, Madison, WI 53726
+
+Email: lmao\@biostat.wisc.edu
+
+Phone: 608-263-5674
+
+**Office Time and Location**: T&Th 2--3pm, or by appointment.
+
+Zoom link provided in syllabus on Canvas.
+
+#### Teaching Assistant
+
+### Readings
+
+-   \[**Required**\] *Applied Survival Analysis: From Univariate to Complex Time-to-Event Outcomes* (To be posted periodically by chapter on Canvas)
+
+-   \[For methodological reader\] Kalbfleisch, J. D. & Prentice, R. L. (2002). *The statistical analysis of failure time data* (2^nd^ Ed). John Wiley & Sons.
+
+-   \[For applied reader\] Klein, J. P. & Moeschberger, M. L. (2003). *Survival analysis: techniques for censored and truncated data* (2^nd^ Ed). Springer Science & Business Media.
+
+-   \[More theoretical\] Fleming, T. R. & Harrington, D. P. (1991). *Counting processes and survival analysis*. John Wiley & Sons.
+
+### Course Schedule
+
+|      |         |          |
+|------|---------|----------|
+| 1/24 | Lecture | Overview |
+|      | Reading | Syllabus |
+
+Part I: Univariate Events
+
+|      |         |                          |
+|------|---------|--------------------------|
+| 1/29 | Lecture | Introduction             |
+|      | Reading | Chapter 1                |
+| 1/31 | Lecture | Mathematical Foundations |
+|      | Reading | Chapter 2                |

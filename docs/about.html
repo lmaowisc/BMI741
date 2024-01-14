@@ -153,7 +153,20 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#course-structure" id="toc-course-structure" class="nav-link" data-scroll-target="#course-structure">Course structure</a></li>
+  <li><a href="#learning-outcomes" id="toc-learning-outcomes" class="nav-link" data-scroll-target="#learning-outcomes">Learning outcomes</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#time-and-location" id="toc-time-and-location" class="nav-link" data-scroll-target="#time-and-location">Time and Location</a></li>
+  <li><a href="#instructor-assistant" id="toc-instructor-assistant" class="nav-link" data-scroll-target="#instructor-assistant">Instructor &amp; Assistant</a></li>
+  <li><a href="#readings" id="toc-readings" class="nav-link" data-scroll-target="#readings">Readings</a></li>
+  <li><a href="#course-schedule" id="toc-course-schedule" class="nav-link" data-scroll-target="#course-schedule">Course Schedule</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -175,8 +188,101 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<section id="overview" class="level3">
+<h3 class="anchored" data-anchor-id="overview">Overview</h3>
+<p>This course provides a survey of modern statistical methodology for the analysis of <strong>censored</strong> time-to-event data arising from clinical, epidemiological, sociological, and engineering studies. We use intuitive explanations of statistical theory, such as counting-process martingale, to deepen understanding of real-world problems and train problem-solving skills. To do so, we combine methodological exposition with extensive case studies, mostly drawn from health sciences research (sample R/SAS code for case studies will be provided). The overall emphasis of this course is on the <strong>application</strong> side of study design and data analysis.</p>
+</section>
+<section id="course-structure" class="level3">
+<h3 class="anchored" data-anchor-id="course-structure">Course structure</h3>
+<p>The course is divided into three parts. The first part focuses on methods for univariate event times, e.g., Kaplan—Meier curve, log-rank test, and Cox proportional hazards model. Building on this foundation, the second part expands the scope to complex outcomes such as recurrent or multivariate events, (semi-)competing risks, joint analysis of survival and longitudinal data, multistate data, composite endpoints, and so forth. Special topics for censored data from cutting-edge research areas such as causal inference and machine learning are discussed in the third part.</p>
+</section>
+<section id="learning-outcomes" class="level3">
+<h3 class="anchored" data-anchor-id="learning-outcomes">Learning outcomes</h3>
+<p>After taking the course, students will be able to:</p>
+<ul>
+<li><p>Understand the features of censored data and their implications in statistical inference</p></li>
+<li><p>Choose proper non- and semi-parametric methods for analysis of various types of data</p></li>
+<li><p>Understand and check the assumptions needed for estimation and inference</p></li>
+<li><p>Implement the inference procedures to solve real-world problems using statistical packages such as R (or SAS)</p></li>
+<li><p>Interpret and present the analytic results clearly and coherently to answer substantive questions</p></li>
+</ul>
+</section>
+<section id="prerequisites" class="level3">
+<h3 class="anchored" data-anchor-id="prerequisites">Prerequisites</h3>
+<p>Students are expected to have basic knowledge in statistical concepts such as random variables, expectation, variance, and maximum likelihood estimation, and to have taken first courses in statistical hypothesis testing (e.g., <em>t</em>-test, ANOVA, etc.) and (generalized) linear regression models. Prior experience with R or SAS is helpful but not required.</p>
+</section>
+<section id="time-and-location" class="level3">
+<h3 class="anchored" data-anchor-id="time-and-location">Time and Location</h3>
+<p>MW 2:30—3:45pm; G5/119 Clinical Sciences Center (CSC).</p>
+</section>
+<section id="instructor-assistant" class="level3">
+<h3 class="anchored" data-anchor-id="instructor-assistant">Instructor &amp; Assistant</h3>
+<section id="instructor" class="level4">
+<h4 class="anchored" data-anchor-id="instructor">Instructor</h4>
+<p><strong>Lu Mao</strong>, PhD</p>
+<p>WARF 207A, 610 Walnut St, Madison, WI 53726</p>
+<p>Email: lmao@biostat.wisc.edu</p>
+<p>Phone: 608-263-5674</p>
+<p><strong>Office Time and Location</strong>: T&amp;Th 2–3pm, or by appointment.</p>
+<p>Zoom link provided in syllabus on Canvas.</p>
+</section>
+<section id="teaching-assistant" class="level4">
+<h4 class="anchored" data-anchor-id="teaching-assistant">Teaching Assistant</h4>
+</section>
+</section>
+<section id="readings" class="level3">
+<h3 class="anchored" data-anchor-id="readings">Readings</h3>
+<ul>
+<li><p>[<strong>Required</strong>] <em>Applied Survival Analysis: From Univariate to Complex Time-to-Event Outcomes</em> (To be posted periodically by chapter on Canvas)</p></li>
+<li><p>[For methodological reader] Kalbfleisch, J. D. &amp; Prentice, R. L. (2002). <em>The statistical analysis of failure time data</em> (2<sup>nd</sup> Ed). John Wiley &amp; Sons.</p></li>
+<li><p>[For applied reader] Klein, J. P. &amp; Moeschberger, M. L. (2003). <em>Survival analysis: techniques for censored and truncated data</em> (2<sup>nd</sup> Ed). Springer Science &amp; Business Media.</p></li>
+<li><p>[More theoretical] Fleming, T. R. &amp; Harrington, D. P. (1991). <em>Counting processes and survival analysis</em>. John Wiley &amp; Sons.</p></li>
+</ul>
+</section>
+<section id="course-schedule" class="level3">
+<h3 class="anchored" data-anchor-id="course-schedule">Course Schedule</h3>
+<table class="table">
+<tbody>
+<tr class="odd">
+<td>1/24</td>
+<td>Lecture</td>
+<td>Overview</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Reading</td>
+<td>Syllabus</td>
+</tr>
+</tbody>
+</table>
+<p>Part I: Univariate Events</p>
+<table class="table">
+<tbody>
+<tr class="odd">
+<td>1/29</td>
+<td>Lecture</td>
+<td>Introduction</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Reading</td>
+<td>Chapter 1</td>
+</tr>
+<tr class="odd">
+<td>1/31</td>
+<td>Lecture</td>
+<td>Mathematical Foundations</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Reading</td>
+<td>Chapter 2</td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
