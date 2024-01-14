@@ -10,7 +10,14 @@ website:
         text: Home
       - about.qmd
       - chapters.qmd
-
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - section: "Basics"
+        contents:
+          - index.qmd
+          - about.qmd
 format:
   html:
     theme: cosmo
