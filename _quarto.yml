@@ -13,7 +13,12 @@ website:
     style: "docked"
     search: true
     contents:
-      - chapter1.qmd
+      - section: "Chapters"
+        contents:
+          - chapter1.qmd
+      - section: "Miscellaneous"
+       
+        
 format:
   html:
     theme: cosmo
