@@ -1,9 +1,3 @@
 ---
-title: "About"
+title: "Syllabus"
 ---
-
-About this site
-
-```{r}
-1 + 1
-```
