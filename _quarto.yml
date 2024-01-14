@@ -14,10 +14,7 @@ website:
     style: "docked"
     search: true
     contents:
-      - section: "Basics"
-        contents:
-          - index.qmd
-          - about.qmd
+      - chapter1.qmd
 format:
   html:
     theme: cosmo
