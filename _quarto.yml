@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "BMI/STAT 741 Course Site"
+  title: "BMI/STAT 741 Course Study Site"
   navbar:
     left:
       - href: index.qmd
