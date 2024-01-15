@@ -32,11 +32,11 @@ Students are expected to have basic knowledge in statistical concepts such as ra
 
 MW 2:30—3:45pm; G5/119 Clinical Sciences Center (CSC).
 
-### Instructor & Assistant
+### Instructors
 
-#### Instructor
+#### Main Instructor
 
-**Lu Mao**, PhD
+Lu Mao, PhD
 
 WARF 207A, 610 Walnut St, Madison, WI 53726
 
@@ -62,16 +62,32 @@ Zoom link provided in syllabus on Canvas.
 
 ### Course Schedule
 
-|      |         |          |
-|------|---------|----------|
-| 1/24 | Lecture | Overview |
-|      | Reading | Syllabus |
+|      |         |                                                                                              |
+|-------|-----------|--------------------------------------------------------------|
+| 1/24 | Lecture | Overview                                                                                     |
+|      | Reading | Syllabus                                                                                     |
 
-Part I: Univariate Events
+**Part I: Univariate Events**
 
-|      |         |                          |
-|------|---------|--------------------------|
-| 1/29 | Lecture | Introduction             |
-|      | Reading | Chapter 1                |
-| 1/31 | Lecture | Mathematical Foundations |
-|      | Reading | Chapter 2                |
+|      |         |                                                                                |
+|------|---------|---------------------------------------------------|
+| 1/29 | Lecture | Introduction                                                                   |
+|      | Reading | Chapter 1                                                                      |
+| 1/31 | Lecture | Mathematical Foundations                                                       |
+|      | Reading | Chapter 2                                                                      |
+| 2/5  | Lecture | Nonparametric Estimation of the Survival Curve                                 |
+|      | Reading | Chapter 3                                                                      |
+| 2/7  | Lecture | Comparing Survival Rates between Groups                                        |
+|      | Reading | Chapter 3                                                                      |
+| 2/12 | Lecture | The Cox Proportional Hazards Model – [Assumptions and Inference]{.smallcaps}   |
+|      | Reading | Chapter 4                                                                      |
+| 2/14 | Lecture | The Cox Proportional Hazards Model – [Extensions and Diagnostics]{.smallcaps}  |
+|      | Reading | Chapter 4                                                                      |
+| 2/19 | Lecture | Other Non- and Semi-parametric Methods                                         |
+|      | Reading | Chapter 5                                                                      |
+| 2/21 | Lecture | Study Design and Sample Size Calculation                                       |
+|      | Reading | Chapter 6                                                                      |
+|      |         |                                                                                |
+|      |         |                                                                                |
+|      |         |                                                                                |
+|      |         |                                                                                |
