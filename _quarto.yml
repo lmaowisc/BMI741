@@ -13,7 +13,7 @@ website:
     style: "docked"
     search: true
     contents:
-      - section: "Chapters"
+      - section: "Part I - Univariate Events"
         contents:
           - chapter1.qmd
           - chapter2.qmd
