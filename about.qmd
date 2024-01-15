@@ -87,7 +87,7 @@ Zoom link provided in syllabus on Canvas.
 |      | Reading | Chapter 5                                                                      |
 | 2/21 | Lecture | Study Design and Sample Size Calculation                                       |
 |      | Reading | Chapter 6                                                                      |
-|      |         |                                                                                |
-|      |         |                                                                                |
-|      |         |                                                                                |
-|      |         |                                                                                |
+| 2/26 | Lecture | Left Truncation                                                                |
+|      | Reading | Chapter 7                                                                      |
+| 2/28 | Lecture | Interval Censoring                                                             |
+|      | Reading | Chapter 7                                                                      |
