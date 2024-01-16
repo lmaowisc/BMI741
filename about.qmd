@@ -68,15 +68,15 @@ Zoom link provided in syllabus on Canvas.
 
 **Kickoff**
 
-|      |         |                                                           |
-|------|---------|-----------------------------------------------------------|
-| 1/24 | Lecture | Overview                                                  |
-|      | Reading | Syllabus                                                  |
+|      |         |          |
+|------|---------|----------|
+| 1/24 | Lecture | Overview |
+|      | Reading | Syllabus |
 
 **Part I: Univariate Events**
 
 |      |         |                                                                               |
-|-------|---------|---------------------------------------------------------|
+|------|---------|-------------------------------------------------------------------------------|
 | 1/29 | Lecture | Introduction                                                                  |
 |      | Reading | Chapter 1                                                                     |
 | 1/31 | Lecture | Mathematical Foundations                                                      |
@@ -101,7 +101,7 @@ Zoom link provided in syllabus on Canvas.
 **Part II: Complex Outcomes**
 
 |      |         |                                                                          |
-|-------|---------|--------------------------------------------------------|
+|------|---------|--------------------------------------------------------------------------|
 | 3/4  | Lecture | Multivariate Events – [Conditional (Frailty) Models]{.smallcaps}         |
 |      | Reading | Chapter 8                                                                |
 | 3/6  | Lecture | Multivariate Event Times – [Marginal Models]{.smallcaps}                 |
@@ -124,7 +124,7 @@ Zoom link provided in syllabus on Canvas.
 **Part III: Special Topics**
 
 |      |         |                                                                  |
-|-------|---------|--------------------------------------------------------|
+|------|---------|------------------------------------------------------------------|
 | 4/10 | Lecture | Causal Inference with Censored Data – The Basics                 |
 |      | Reading | Chapter 14                                                       |
 | 4/15 | Lecture | Causal Inference with Censored Data – IPTW and Standardization   |
