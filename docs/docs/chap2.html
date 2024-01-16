@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="chap1_files/libs/clipboard/clipboard.min.js"></script>
-<script src="chap1_files/libs/quarto-html/tabby.min.js"></script>
-<script src="chap1_files/libs/quarto-html/popper.min.js"></script>
-<script src="chap1_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="chap1_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="chap1_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="chap1_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="chap1_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.3.450">
 
   <meta name="author" content="Lu Mao">
-  <title>Applied Survival Analysis</title>
+  <title>BMI/STAT 741 Course Study Site - Applied Survival Analysis</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="chap1_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="chap1_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -30,12 +30,12 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="chap1_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto.css">
   <link rel="stylesheet" href="style.css">
-  <link href="chap1_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="chap1_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="chap1_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="chap1_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
   .callout {
@@ -332,7 +332,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Applied Survival Analysis</h1>
-  <p class="subtitle">Chapter 1 - Introduction</p>
+  <p class="subtitle">Chapter 2 - Mathematical Foundations</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -355,498 +355,49 @@ Lu Mao
 <section id="outline" class="slide level2">
 <h2>Outline</h2>
 <ol type="1">
-<li>Time-to-event data and examples</li>
-<li>Censoring mechanisms and implications</li>
-<li>Summarizing the raw data</li>
+<li>Random variable and counting process notations</li>
+<li>Likelihood and score functions</li>
+<li>Martingale residuals and integrals</li>
 </ol>
-<p><span class="math display">\[\newcommand{\indep}{\perp \!\!\! \perp}\]</span></p>
 </section>
-<section>
-<section id="data-and-examples" class="title-slide slide level1 center">
-<h1>Data and Examples</h1>
+<section id="bullets" class="slide level2">
+<h2>Bullets</h2>
+<p>When you click the <strong>Render</strong> button a document will be generated that includes:</p>
+<ul>
+<li>Content authored with markdown</li>
+<li>Output from executable code</li>
+</ul>
+</section>
+<section id="code" class="slide level2">
+<h2>Code</h2>
+<p>When you click the <strong>Render</strong> button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
 
-</section>
-<section id="what-are-time-to-event-data" class="slide level2">
-<h2>What are time-to-event data</h2>
-<ul>
-<li>A common type of outcome in medical studies
-<ul>
-<li>Subjects followed from a predefined <strong>starting point</strong>: randomization, entry into study, birth, etc. until outcome event occurs or study ends</li>
-<li>Outcome event (<strong>endpoint</strong>): death, hospitalization, onset of disease, etc.</li>
-<li>Reliability test in engineering: failure of a machine part</li>
-</ul></li>
-<li><strong>(Right) Censoring</strong>: incomplete data if event does not occur by the time study ends of subject drops out
-<ul>
-<li>Only knows event time <span class="math inline">\(&gt;\)</span> (lies to the right of) censoring time</li>
-</ul></li>
-<li><strong>Survival analysis</strong>: statistical methodology for censored data (any outcome events)</li>
-</ul>
-</section>
-<section id="example-univariate-event-i" class="slide level2">
-<h2>Example: Univariate event (I)</h2>
-<ul>
-<li><strong>German Breast Cancer (GBC) study</strong>
-<ul>
-<li><strong>Study population</strong>: 686 patients with primary node positive breast cancer</li>
-<li><strong>Aim</strong>: evaluate effect of hormonal treatment with tamoxifen in addition to standard chemotherapy in reducing overall mortality</li>
-<li><strong>Baseline information</strong>: age (years), tumor size (mm), number of positive lymph nodes, progesterone and estrogen receptor levels (fmol/mg), menopausal status, and tumor grade (1—3)</li>
-<li><strong>Follow-up</strong>: median length 44 months
-<ul>
-<li>171 deaths <span class="math inline">\(\to\)</span> exact survival times known</li>
-<li>515 survived to end of study or dropped out <span class="math inline">\(\to\)</span> censored (survival time <span class="math inline">\(&gt;\)</span> censoring time)</li>
-</ul></li>
-</ul></li>
-</ul>
-</section>
-<section id="example-univariate-event-ii" class="slide level2">
-<h2>Example: Univariate event (II)</h2>
-<ul>
-<li><strong>German Breast Cancer (GBC) Study</strong></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_gbc.png" style="width:75.0%"></p>
-</figure>
-</div>
-</section>
-<section id="example-recurrent-events-i" class="slide level2">
-<h2>Example: Recurrent events (I)</h2>
-<ul>
-<li><strong>Chronic Granulomatous Disease (CGD) Study</strong>
-<ul>
-<li><strong>Study population</strong>: 128 CGD patients in a placebo-controlled randomized trial</li>
-<li><strong>Aim</strong>: Assess effect of gamma interferon on incidence of repeated CGD infections</li>
-<li><strong>Follow-up</strong>: median length 293 days
-<ul>
-<li>From randomization to study end or dropout (no death)</li>
-<li>Number of infections per patient: maximum 7; minimum 0</li>
-</ul></li>
-<li><strong>Challenge</strong>: correlation of recurrent events within patients</li>
-<li><strong>Data</strong> in “long” format (multiple records per patient)</li>
-</ul></li>
-</ul>
-</section>
-<section id="example-recurrent-events-ii" class="slide level2">
-<h2>Example: Recurrent events (II)</h2>
-<ul>
-<li><strong>Chronic Granulomatous Disease (CGD) Study</strong></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_cgd.png" style="width:75.0%"></p>
-</figure>
-</div>
-</section>
-<section id="example-multivariateclustered-events-i" class="slide level2">
-<h2>Example: Multivariate/Clustered Events (I)</h2>
-<ul>
-<li><p><strong>Diabetic Retinopathy Study</strong></p>
-<ul>
-<li><strong>Study population</strong>: 197 high-risk diabetic patients in a randomized controlled trial</li>
-<li><strong>Aim</strong>: Determine whether photocoagulation (a laser treatment) can delay the onset of blindness</li>
-<li><strong>Study design</strong>: One eye randomly selected to received photocoagulation (by either <em>xenon</em> or <em>argon</em>); the other eye left untreated as control</li>
-<li><strong>Challenge</strong>: Correlation between the eyes</li>
-</ul></li>
-</ul>
-</section>
-<section id="example-multivariateclustered-events-ii" class="slide level2">
-<h2>Example: Multivariate/Clustered Events (II)</h2>
-<ul>
-<li><strong>Diabetic Retinopathy Study</strong></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_drs.png" style="width:70.0%"></p>
-</figure>
-</div>
-</section>
-<section id="example-competing-risks-i" class="slide level2">
-<h2>Example: Competing Risks (I)</h2>
-<ul>
-<li><strong>Definition</strong>: multiple event types; occurrence of one prevents others from occurring afterward
-<ul>
-<li>Natural example: different causes of death</li>
-</ul></li>
-<li><strong>Competing risk vs censoring</strong>:
-<ul>
-<li>Both terminate follow-up</li>
-<li>Competing risk: part of the outcome; inference based on its presence</li>
-<li>Censoring: irrelevant to outcome; inference based on its absence</li>
-</ul></li>
-<li><strong>Example</strong>: death from prostate cancer as main outcome
-<ul>
-<li>Death from other (metastasized) cancers <span class="math inline">\(\to\)</span> competing risk</li>
-<li>Death from traffic accidents <span class="math inline">\(\to\)</span> censoring</li>
-</ul></li>
-</ul>
-</section>
-<section id="example-competing-risks-ii" class="slide level2">
-<h2>Example: Competing Risks (II)</h2>
-<ul>
-<li><p><strong>Bone Marrow Transplant Study</strong></p>
-<ul>
-<li><strong>Study population</strong>: 864 multiple-myeloma leukemia patients undergoing allogeneic haematopoietic cell transplantation (HCT)</li>
-<li><strong>Aim</strong>: Evaluate risk factors for treatment-related mortality (TRM) and relapse of leukemia</li>
-<li><strong>Competing risks</strong>: TRM defined as death in remission (i.e., before relapse); thus is precluded by relapse</li>
-<li><strong>Risk factors</strong>: cohort indicator (years 1995–2000 or 2001–2005), type of donor (unrelated or identical sibling), history of a prior transplant, time from diagnosis to transplantation (&lt;24 months, or ≥ 24 months)</li>
-</ul></li>
-</ul>
-</section>
-<section id="example-competing-risks-iii" class="slide level2">
-<h2>Example: Competing Risks (III)</h2>
-<ul>
-<li><strong>Bone Marrow Transplant Study</strong>
-<ul>
-<li>Why only one record per patient?</li>
-</ul></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_bmt.png" style="width:8in;height:3.3in"></p>
-</figure>
-</div>
-</section>
-<section id="example-more-complex-outcomes-semi-competing-risks" class="slide level2">
-<h2>Example: More Complex Outcomes (Semi-competing risks)</h2>
-<ul>
-<li><strong>German Breast Cancer (GBC) Study</strong>
-<ul>
-<li>Nonfatal event + terminal event (death)</li>
-</ul></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_gbc1.png" style="width:70.0%"></p>
-</figure>
-</div>
-</section>
-<section id="example-more-complex-outcomes-with-longitudinal-data" class="slide level2">
-<h2>Example: More Complex Outcomes (with Longitudinal data)</h2>
-<ul>
-<li><strong>Anti-Retroviral Drug Trial</strong>
-<ul>
-<li>Repeated measures of CD4 cell count + death</li>
-</ul></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_ard.png" style="width:75.0%"></p>
-</figure>
-</div>
-</section>
-<section id="example-more-complex-outcomes-multistate-process" class="slide level2">
-<h2>Example: More Complex Outcomes (Multistate process)</h2>
-<ul>
-<li><strong>Breast Cancer Life History Study</strong>
-<ul>
-<li>Remission <span class="math inline">\(\to\)</span> relapse <span class="math inline">\(\to\)</span> metastasis <span class="math inline">\(\to\)</span> death (can skip states)</li>
-</ul></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_bc.png" style="width:70.0%"></p>
-</figure>
-</div>
-</section>
-<section id="example-composite-endpointsi" class="slide level2">
-<h2>Example: Composite Endpoints(I)</h2>
-<ul>
-<li><strong>Composite endpoint</strong>: one with multiple components
-<ul>
-<li>Recurrent/multivariate events</li>
-<li>(Semi-)Competing risks</li>
-<li>Longitudinal measurements</li>
-<li>Multistate processes</li>
-</ul></li>
-<li>Analysis of complex outcomes
-<ul>
-<li><strong>Marginal approach</strong>: models components separately</li>
-<li><strong>Conditional approach</strong>: models components jointly</li>
-<li><strong>Composite approach</strong>: combines components
-<ul>
-<li>Progression/relapse-free survival (time to the earlier of progression/relapse or death)</li>
-</ul></li>
-</ul></li>
-</ul>
-</section>
-<section id="example-composite-endpointsii" class="slide level2">
-<h2>Example: Composite Endpoints(II)</h2>
-<ul>
-<li>Advantages:
-<ul>
-<li>Concentrates information → Statistical efficiency</li>
-<li>No need for multiple testing adjustment</li>
-<li>A single measure of overall effect size</li>
-</ul></li>
-<li>Preferred for primary analysis of Phase-III clinical trials by
-<ul>
-<li>US Food and Drug Administration (FDA)</li>
-<li>ICH (International Council for Harmonisation for pharmaceuticals)</li>
-</ul></li>
-<li>Challenges:
-<ul>
-<li>Statistical efficiency (e.g., beyond first event)</li>
-<li>Scientific relevance (e.g., relative importance of components)</li>
-</ul></li>
-</ul>
-</section></section>
-<section>
-<section id="censoring-mechanisms-and-implications" class="title-slide slide level1 center">
-<h1>Censoring mechanisms and implications</h1>
-
-</section>
-<section id="censoring-mechanisms" class="slide level2">
-<h2>Censoring Mechanisms</h2>
-<ul>
-<li><strong>Two mechanisms</strong>
-<ul>
-<li>Study termination (administrative censoring)</li>
-<li>Loss to follow-up (LTFU, e.g., withdrawal, death from other causes)</li>
-</ul></li>
-</ul>
-<div class="callout callout-caution callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Caution about censoring</strong></p>
-</div>
-<div class="callout-content">
-<ul>
-<li><p>Event/censoring time <span class="math inline">\(=\)</span> time <em>from starting point</em> (e.g., randomization) to event/censoring (as opposed to time on the calendar)</p></li>
-<li><p>LTFU may not be independent of outcome (e.g., sicker patients withdraw early)</p></li>
-<li><p>Collect information on reason of withdrawal if possible</p></li>
-<li><p>Censoring or competing risk? <span class="math inline">\(\leftarrow\)</span> Domain knowledge</p></li>
-</ul>
-</div>
-</div>
-</div>
-</section>
-<section id="censoring-mechanisms-illustration" class="slide level2">
-<h2>Censoring Mechanisms: Illustration</h2>
-<ul>
-<li>Calendar time vs time synchronized by starting point</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_censor.png" style="width:90.0%"></p>
-</figure>
-</div>
-</section>
-<section id="statistical-implications-i" class="slide level2">
-<h2>Statistical Implications (I)</h2>
-<ul>
-<li>Censored observation
-<ul>
-<li>Not completely missing!</li>
-<li>Partial information: event time <span class="math inline">\(&gt;\)</span> censoring time</li>
-<li>Not accounting for the partial information <span class="math inline">\(\to\)</span> bias in inference</li>
-</ul></li>
-<li>Naïve approaches
-<ul>
-<li>Treat censoring as event (event-imputation analysis) <span class="math inline">\(\to\)</span> underestimates time to event</li>
-<li>Exclude censored observations (complete-case analysis) <span class="math inline">\(\to\)</span> underestimates time to event (longer event times are more likely to be censored)</li>
-</ul></li>
-</ul>
-</section>
-<section id="statistical-implications-ii" class="slide level2">
-<h2>Statistical Implications (II)</h2>
-<ul>
-<li><p><strong>Notation</strong></p>
-<ul>
-<li><span class="math inline">\(T\)</span>: Outcome event time</li>
-<li><span class="math inline">\(C\)</span>: Censoring time</li>
-<li>Observed data: <span class="math inline">\(X=\min(T, C)\)</span>, <span class="math inline">\(\delta = I(T\leq C)\)</span>
-<ul>
-<li>(𝑋, 𝛿) = (<code>time</code>, <code>status</code>) in previous data examples</li>
-</ul></li>
-</ul></li>
-<li><p><strong>Estimation</strong></p>
-<ul>
-<li><strong>Independent censoring assumption</strong></li>
-</ul>
-<p><span class="math display">\[ C \indep T\]</span></p>
-<ul>
-<li><strong>Estimand</strong>: <span class="math inline">\(S(t)={\rm pr}(T &gt; t)\)</span>, i.e., probability of subject “surviving” to time <span class="math inline">\(t\)</span>, using a random sample of <span class="math inline">\((X_i, \delta_i)\)</span> <span class="math inline">\((i=1,\ldots, n)\)</span></li>
-</ul></li>
-</ul>
-</section>
-<section id="statistical-implications-iii" class="slide level2">
-<h2>Statistical Implications (III)</h2>
-<ul>
-<li>Naive methods
-<ul>
-<li><p>Event-imputation empirical survival function: <span class="math display">\[\hat S_{\rm imp}(t)=n^{-1}\sum_{i=1}^n I(X_i &gt; t) \to {\rm pr}(X &gt; t)\leq S(t)\]</span></p></li>
-<li><p>Complete-case empirical survival function: <span class="math display">\[\hat S_{\rm cc}(t)=\frac{\sum_{i=1}^n I(X_i &gt; t, \delta_i = 1)}{\sum_{i=1}^n\delta_i}
-  \to {\rm pr}(T &gt; t\mid T\leq C)\leq S(t)\]</span></p></li>
-<li><p>Both naïve methods underestimate the true survival function</p></li>
-</ul></li>
-</ul>
-</section>
-<section id="statistical-implications-example" class="slide level2">
-<h2>Statistical Implications: Example</h2>
-<ul>
-<li><strong>German Breast Cancer (GBC) Study</strong></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_gbc_naive.png" style="width:70.0%"></p>
-</figure>
-</div>
-</section></section>
-<section>
-<section id="summarizing-raw-data" class="title-slide slide level1 center">
-<h1>Summarizing Raw Data</h1>
-
-</section>
-<section id="importance-of-descriptive-analysis" class="slide level2">
-<h2>Importance of Descriptive Analysis</h2>
-<ul>
-<li>Statistical models rely more or less on assumptions</li>
-<li>Good practice to summarize data descriptively as first step
-<ul>
-<li>Get to know the data</li>
-<li>Informs subsequent analysis</li>
-<li>Check balance of baseline characteristics between randomized arms</li>
-<li>“Table 1” in medical research papers</li>
-</ul></li>
-<li>Two types of summary statistics
-<ul>
-<li>Subject-level characteristics (baseline variables, number of events per subject)</li>
-<li>Event rates (over aggregate length of follow-up)</li>
-</ul></li>
-</ul>
-</section>
-<section id="how-to-calculate-event-rate-i" class="slide level2">
-<h2>How to Calculate Event Rate (I)</h2>
-<ul>
-<li>Length of follow-up is <strong>event-specific</strong>
-<ul>
-<li>If an event is by definition “non-recurrent”, its occurrence means patient is no longer at risk for it</li>
-</ul></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_erate_form.png" style="width:75.0%"></p>
-</figure>
-</div>
-<div class="callout callout-note callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Note</strong></p>
-</div>
-<div class="callout-content">
-<p>Denominator is called person-year (or person-time) of follow-up.</p>
-</div>
-</div>
-</div>
-</section>
-<section id="how-to-calculate-event-rate-ii" class="slide level2">
-<h2>How to Calculate Event Rate (II)</h2>
-<ul>
-<li>Semi-competing risks</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_erate1.png" style="width:50.0%"></p>
-</figure>
-</div>
-</section>
-<section id="how-to-calculate-event-rate-iii" class="slide level2">
-<h2>How to Calculate Event Rate (III)</h2>
-<ul>
-<li>Recurrent events</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_erate2.png" style="width:70.0%"></p>
-</figure>
-</div>
-</section>
-<section id="table-one-example" class="slide level2">
-<h2>Table One: Example</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_tab1.png" style="width:75.0%"></p>
-</figure>
-</div>
-</section></section>
-<section>
-<section id="conclusion" class="title-slide slide level1 center">
-<h1>Conclusion</h1>
-
-</section>
-<section id="chapter-summary" class="slide level2">
-<h2>Chapter Summary</h2>
-<ul>
-<li>Types of time-to-event outcomes
-<ul>
-<li>Univariate, recurrent, multivariate/clustered, (semi-)competing risks, repeated measures, multistate processes, and everything in between…</li>
-</ul></li>
-<li>Common feature: censoring
-<ul>
-<li>Arises if study ends or patient drops out prior to event</li>
-<li>Must be handled with care to avoid false conclusion</li>
-</ul></li>
-<li>Importance of descriptive analysis
-<ul>
-<li>Event rate <span class="math inline">\(\to\)</span> attention to denominator</li>
-</ul></li>
-</ul>
-</section>
-<section id="hw1-due-feb-7" class="slide level2">
-<h2>HW1 (Due Feb 7)</h2>
-<ul>
-<li>Choose one
-<ul>
-<li>Problem 1.1 (Recommended for PhD in Stats/BDS)</li>
-<li>Problem 1.2</li>
-</ul></li>
-<li>Problem 1.8 (Attach you annotated code)</li>
-<li>(Extra credit) Problem 1.3</li>
-</ul>
-</section>
-<section id="guidelines-for-hw" class="slide level2">
-<h2>Guidelines for HW</h2>
-<ul>
-<li>Present a readable and coherent text to report your methods and results
-<ul>
-<li>Include numerical/graphical results only if they contribute to your narrative</li>
-<li>All tables and figures should be properly titled/captioned, with informative labels/legends</li>
-<li>Use full names instead of abbreviations/acronyms
-<ul>
-<li>E.g., “meno” → “Menopause (yes v no)”; “est” → “Estrogen (fmol/mg)”</li>
-</ul></li>
-<li>Specify the unit of variable, e.g., “Age (years)”</li>
-<li>See Table 1.11 and Fig. 1.2 for examples</li>
-</ul></li>
-<li>Append the full code for diagnostic purposes</li>
-</ul>
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</section>
     </div>
   </div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="chap1_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="../site_libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="chap1_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="chap1_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="chap1_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="chap1_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="chap1_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="chap1_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="chap1_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="chap1_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="chap1_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../site_libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
@@ -1041,6 +592,44 @@ Lu Mao
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {

@@ -1,0 +1,43 @@
+---
+title: "Applied Survival Analysis"
+subtitle: "Chapter 2 - Mathematical Foundations"
+css: style.css
+author:
+  name: Lu Mao
+  affiliation: 
+   - name: Department of Biostatistics & Medical Informatics
+   - University of Wisconsin-Madison
+  email: lmao@biostat.wisc.edu
+format: 
+  revealjs:
+    auto-stretch: false
+editor: visual
+include-in-header:
+  - text: |
+      <style type="text/css">
+      ul li ul li {
+        font-size: 0.75em;
+      }
+      </style>
+---
+
+## Outline
+
+1.  Random variable and counting process notations
+2.  Likelihood and score functions
+3.  Martingale residuals and integrals
+
+## Bullets
+
+When you click the **Render** button a document will be generated that includes:
+
+-   Content authored with markdown
+-   Output from executable code
+
+## Code
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```

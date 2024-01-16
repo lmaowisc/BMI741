@@ -26,5 +26,33 @@
     "title": "quarto",
     "section": "",
     "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2\n\n\n\ntest"
+  },
+  {
+    "objectID": "chapter2.html",
+    "href": "chapter2.html",
+    "title": "Chapter 2 - Mathematical Foundations",
+    "section": "",
+    "text": "Slides\nLecture slides here. (To convert html to pdf, press E \\(\\to\\) Print \\(\\to\\) Destination: Save to pdf)"
+  },
+  {
+    "objectID": "docs/chap2.html#outline",
+    "href": "docs/chap2.html#outline",
+    "title": "Applied Survival Analysis",
+    "section": "Outline",
+    "text": "Outline\n\nRandom variable and counting process notations\nLikelihood and score functions\nMartingale residuals and integrals"
+  },
+  {
+    "objectID": "docs/chap2.html#bullets",
+    "href": "docs/chap2.html#bullets",
+    "title": "Applied Survival Analysis",
+    "section": "Bullets",
+    "text": "Bullets\nWhen you click the Render button a document will be generated that includes:\n\nContent authored with markdown\nOutput from executable code"
+  },
+  {
+    "objectID": "docs/chap2.html#code",
+    "href": "docs/chap2.html#code",
+    "title": "Applied Survival Analysis",
+    "section": "Code",
+    "text": "Code\nWhen you click the Render button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:\n\n\n[1] 2"
   }
 ]
