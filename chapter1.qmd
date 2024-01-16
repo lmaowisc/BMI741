@@ -4,4 +4,5 @@ title: "Chapter 1 - Introduction"
 
 ### Slides
 
-Lecture slides [here](chap1.html){target="_blank"}.
+Lecture slides [here](chap1.html){target="_blank"}. (To convert html to pdf, press E $\to$
+Print $\to$ Destination: Save to pdf)
