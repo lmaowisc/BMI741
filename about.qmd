@@ -44,7 +44,7 @@ Email: lmao\@biostat.wisc.edu
 
 Phone: 608-263-5674
 
-Office Time and Location: T&Th 2--3pm, or by appointment.
+Office Time and Location: T&Th 3--4pm, or by appointment.
 
 Zoom link provided in syllabus on Canvas.
 
@@ -80,7 +80,7 @@ Po-Kuei Chen (pchen299\@wisc.edu); Office hours:
 **Part I: Univariate Events**
 
 |      |         |                                                                               |
-|-----------|-----------|---------------------------------------------------|
+|------|---------|-------------------------------------------------------------------------------|
 | 1/29 | Lecture | Introduction                                                                  |
 |      | Reading | Chapter 1                                                                     |
 | 1/31 | Lecture | Mathematical Foundations                                                      |
@@ -104,43 +104,45 @@ Po-Kuei Chen (pchen299\@wisc.edu); Office hours:
 
 **Part II: Complex Outcomes**
 
-|      |         |                                                                          |
-|-----------|-----------|--------------------------------------------------|
-| 3/4  | Lecture | Multivariate Events – [Conditional (Frailty) Models]{.smallcaps}         |
-|      | Reading | Chapter 8                                                                |
-| 3/6  | Lecture | Multivariate Event Times – [Marginal Models]{.smallcaps}                 |
-|      | Reading | Chapter 8                                                                |
-| 3/11 | Lecture | Recurrent Event                                                          |
-|      | Reading | Chapter 9                                                                |
-| 3/13 | Lecture | Competing and Semi-competing Risks                                       |
-|      | Reading | Chapter 10                                                               |
-| 3/18 | Lecture | Joint Analysis of Longitudinal and Survival Data                         |
-|      | Reading | Chapter 11                                                               |
-| 3/20 | Lecture | Multistate Models – [Introduction]{.smallcaps}                           |
-|      | Reading | Chapter 12                                                               |
-| 4/1  | Lecture | Multistate Models – [Cox-Type Markov and Semi-Markov Models]{.smallcaps} |
-|      | Reading | Chapter 12                                                               |
-| 4/3  | Lecture | Composite Endpoints – [Nonparametric Estimation]{.smallcaps}             |
-|      | Reading | Chapter 13                                                               |
-| 4/8  | Lecture | Composite Endpoints – [Semiparametric Regression]{.smallcaps}            |
-|      | Reading | Chapter 13                                                               |
+|      |           |                                                                          |
+|------|-----------|--------------------------------------------------------------------------|
+| 3/4  | Lecture   | Multivariate Events – [Conditional (Frailty) Models]{.smallcaps}         |
+|      | Reading   | Chapter 8                                                                |
+| 3/6  | Lecture   | Multivariate Event Times – [Marginal Models]{.smallcaps}                 |
+|      | Reading   | Chapter 8                                                                |
+| 3/11 | Lecture   | Recurrent Event                                                          |
+|      | Reading   | Chapter 9                                                                |
+| 3/13 | Lecture   | Competing and Semi-competing Risks                                       |
+|      | Reading   | Chapter 10                                                               |
+| 3/18 | Lecture   | Joint Analysis of Longitudinal and Survival Data                         |
+|      | Reading   | Chapter 11                                                               |
+| 3/20 | Lecture   | Multistate Models – [Introduction]{.smallcaps}                           |
+|      | Reading   | Chapter 12                                                               |
+| 4/1  | Lecture   | Multistate Models – [Cox-Type Markov and Semi-Markov Models]{.smallcaps} |
+|      | Reading   | Chapter 12                                                               |
+| 4/3  | Lecture\* | Composite Endpoints – [Nonparametric Estimation]{.smallcaps}             |
+|      | Reading   | Chapter 13                                                               |
+| 4/8  | Lecture   | Composite Endpoints – [Semiparametric Regression]{.smallcaps}            |
+|      | Reading   | Chapter 13                                                               |
 
 **Part III: Special Topics**
 
-|      |         |                                                                  |
-|-----------|-----------|--------------------------------------------------|
-| 4/10 | Lecture | Causal Inference with Censored Data – The Basics                 |
-|      | Reading | Chapter 14                                                       |
-| 4/15 | Lecture | Causal Inference with Censored Data – IPTW and Standardization   |
-|      | Reading | Chapter 14                                                       |
-| 4/17 | Lecture | Causal Inference with Censored Data – Marginal Structural Models |
-|      | Reading | Chapter 14                                                       |
-| 4/22 | Lecture | Machine Learning with Censored Data – Variable Selection         |
-|      | Reading | Chapter 15                                                       |
-| 4/24 | Lecture | Machine Learning with Censored Data – Nonlinear Regression       |
-|      | Reading | Chapter 15                                                       |
-| 4/29 | Lecture | Guest Lecture (Dave DeMets or other)                             |
-| 5/1  | Lecture | Recap                                                            |
+|      |         |                                                                                |
+|------|---------|--------------------------------------------------------------------------------|
+| 4/10 | Lecture | Causal Inference with Censored Data – [The Basics]{.smallcaps}                 |
+|      | Reading | Chapter 14                                                                     |
+| 4/15 | Lecture | Causal Inference with Censored Data – [IPTW and Standardization]{.smallcaps}   |
+|      | Reading | Chapter 14                                                                     |
+| 4/17 | Lecture | Causal Inference with Censored Data – [Marginal Structural Models]{.smallcaps} |
+|      | Reading | Chapter 14                                                                     |
+| 4/22 | Lecture | Machine Learning with Censored Data – [Variable Selection]{.smallcaps}         |
+|      | Reading | Chapter 15                                                                     |
+| 4/24 | Lecture | Machine Learning with Censored Data – [Nonlinear Regression]{.smallcaps}       |
+|      | Reading | Chapter 15                                                                     |
+| 4/29 | Lecture | Guest Lecture (Dave DeMets or other)                                           |
+| 5/1  | Lecture | Recap                                                                          |
+
+\* Possibly online due to the instructor attending an FDA conference (<https://www.advamed.org/events/fda-advamed-mdsi-conference>).
 
 ### Homework and Exams
 
