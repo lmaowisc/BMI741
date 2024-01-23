@@ -14,6 +14,7 @@ Lecture slides [here](chap1.html){target="_blank"}. (To convert html to pdf, pre
 #| eval: false
 
 
+
 ###########################################################################
 # The following code generates Figure 1.2 and Table 1.11 of chapter 1.   ##
 ###########################################################################
@@ -24,7 +25,7 @@ Lecture slides [here](chap1.html){target="_blank"}. (To convert html to pdf, pre
 ####################################################
 
 ## read in the GBC mortality data
-data <- read.table("German Breast Cancer Study//gbc_mort.txt")
+data <- read.table("Data//German Breast Cancer Study//gbc_mort.txt")
 
 head(data)
 
@@ -41,10 +42,10 @@ KMfit1 <- survfit(Surv(time,status)~1,data=data1)
 KMfit2 <- survfit(Surv(time,status)~1,data=data2)
 
 
-#Define a function to calculate empirical survival curve
-#Argument: x= a vector containing a sample of real numbers
-#Output: t= order unique values of x
-#       S =survival probability as a function of t
+# Define a function to calculate empirical survival curve
+# Argument: x= a vector containing a sample of real numbers
+# Output:   t= order unique values of x
+#           S =survival probability as a function of t
 emp.surv <- function(x){
   n <- length(x)
   t <- sort(unique(x))
@@ -57,12 +58,12 @@ emp.surv <- function(x){
 }
 
 
-##event imputation##
+## event imputation##
 
 obj1.imp <- emp.surv(data1$time)
 obj2.imp <- emp.surv(data2$time)
 
-##complete case
+## complete case
 obj1.cc <- emp.surv(data1$time[data1$status==1])
 obj2.cc <- emp.surv(data2$time[data2$status==1])
 
@@ -191,11 +192,11 @@ denom.D <- c(sum(data$time[data$hormone==1]),
 round(num.D/denom.D,3)
 
 #############################
-#Composite event rate       #
+# Composite event rate      #
 #############################
 
 # Read in the complete data
-gbc <- read.table("German Breast Cancer Study//gbc.txt")
+gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
 
 # subset to first-event data
 # Sort the data by time within each id
@@ -210,7 +211,7 @@ num.CE <- c(sum(data.CE$status[data.CE$hormone==1]>0),
         sum(data.CE$status[data.CE$hormone==2]>0), 
         sum(data.CE$status>0))
 
-#Denominator: total length of follow-up (year)
+# Denominator: total length of follow-up (year)
 denom.CE <- c(sum(data.CE$time[data.CE$hormone==1]), 
           sum(data.CE$time[data.CE$hormone==2]), 
           sum(data.CE$time))/12
@@ -218,12 +219,44 @@ denom.CE <- c(sum(data.CE$time[data.CE$hormone==1]),
 
 #CE rate
 round(num.CE/denom.CE,3)
+
 ```
 
 ### Tidyverse Solutions
 
-#### Cleaning of censored data
+#### Data cleaning
 
-#### Facet plotting
+```{r}
+library(tidyverse)
+library(survival)
+
+## read in the GBC mortality data
+data <- read.table("Data//German Breast Cancer Study//gbc_mort.txt")
+
+head(data)
+
+obj <- summary(survfit(Surv(time, status) ~ hormone, data))
+
+km <- tibble(
+  t = obj$time,
+  surv = obj$surv,
+  hormone = obj$strata,
+  type = "Kaplan-Meier"
+) 
+
+km |> 
+  ggplot(aes(x = t, y = surv)) +
+  geom_step() +
+  facet_wrap( ~ hormone) +
+  theme_bw() +
+  scale_x_continuous(name = "Time (months)", breaks = seq(0, 72, by = 12), limits = c(0, 72)) +
+  scale_y_continuous(name = "Survival rate", limits = c(0, 1))
+  
+
+
+
+```
+
+#### ggplotting Figure 1.2
 
 #### Table one
