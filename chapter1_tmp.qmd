@@ -227,6 +227,12 @@ round(num.CE/denom.CE,3)
 #### Data cleaning
 
 ```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+#| fig-align: center
+
+
+
 library(tidyverse)
 library(survival)
 
@@ -240,21 +246,75 @@ obj <- summary(survfit(Surv(time, status) ~ hormone, data))
 km <- tibble(
   t = obj$time,
   surv = obj$surv,
-  hormone = obj$strata,
+  hormone = parse_number(as.character(obj$strata)),
   type = "Kaplan-Meier"
-) 
+) |> 
+  add_row(
+    t = c(0, 0),
+    surv = c(1, 1),
+    hormone = 1:2,
+    type = "Kaplan-Meier"
+  )
+
+
+## empirical survival function
+
+# event imputation
+imp <- data |> 
+  group_by(
+    hormone
+  ) |> 
+  reframe(
+    t = time,
+    surv = 1- ecdf(time)(time)
+  ) |> 
+  arrange( # order by time
+    t
+  ) |> 
+  mutate(
+    type = "Event-imputation"
+  )
+
+
+cc <- data |> 
+  filter(
+    status == 1
+  ) |> 
+  group_by(
+    hormone
+  ) |> 
+  reframe(
+    t = time,
+    surv = 1- ecdf(time)(time)
+  ) |> 
+  arrange( # order by time
+    t
+  ) |> 
+  mutate(
+    type = "Complete-case"
+  )
+
+
+hormone_labeller <- c("1" = "No Hormone", "2" = "Hormone")
 
 km |> 
-  ggplot(aes(x = t, y = surv)) +
+  add_row(imp) |> 
+  add_row(cc) |> 
+  mutate(
+    type = fct(type)
+  ) |> 
+  ggplot(aes(x = t, y = surv, linetype = type)) +
   geom_step() +
-  facet_wrap( ~ hormone) +
+  facet_wrap( ~ hormone, labeller = labeller(hormone = hormone_labeller)) +
   theme_bw() +
   scale_x_continuous(name = "Time (months)", breaks = seq(0, 72, by = 12), limits = c(0, 72)) +
-  scale_y_continuous(name = "Survival rate", limits = c(0, 1))
+  scale_y_continuous(name = "Survival rate", limits = c(0, 1)) +
+  scale_linetype_manual(name = "Estimator",
+                        values = c(1, 2, 3)) +
+  theme(
+    legend.position = "bottom"
+  )
   
-
-
-
 ```
 
 #### ggplotting Figure 1.2
