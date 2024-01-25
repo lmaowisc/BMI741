@@ -228,7 +228,7 @@ round(num.CE/denom.CE,3)
 
 ```{r}
 #| fig-width: 6
-#| fig-height: 3.8
+#| fig-height: 4
 #| fig-align: center
 
 
