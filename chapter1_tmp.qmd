@@ -3,6 +3,7 @@ title: "Chapter 1 - Introduction"
 execute: 
   warning: false
   cache: true
+bibliography: references.bib
 ---
 
 ### Slides
@@ -227,7 +228,41 @@ round(num.CE/denom.CE,3)
 
 ### Tidyverse Solutions
 
-#### Data cleaning
+First load the required packages:
+
+```{r}
+library(tidyverse)
+library(survival)
+
+```
+
+#### Parsing censored data
+
+Instead of `(time, status)`, sometimes the observed data are stored in a single column with censored observations indicated with a "+", or "\>" sign.
+
+For example, Table 1.1 of @klein2003 lists the times (in months) to relapse of leukemia in the treatment group (6-MP):
+
+```{r}
+
+MP <- c(10, 7, "32+", 23, 22, 6, 16, "34+", "32+", "25+", "11+", "20+", 
+        "19+", 6, "17+", "35+", 6, 13, "9+", "6+","10+")
+
+```
+
+To convert this vector to the tidy format, use `parse_number()` to parse out the number and `str_detect()` to detect whether the entry contains "+":
+
+```{r}
+
+df <- tibble(
+  MP = MP,
+  time = parse_number(MP),
+  status = 1 - str_detect(MP, "\\+") # escape literal "+"
+)
+
+df
+```
+
+#### Facet plotting Figure 1.2
 
 ```{r}
 #| fig-width: 6
@@ -319,7 +354,5 @@ km |>
   )
   
 ```
-
-#### ggplotting Figure 1.2
 
 #### Table one
