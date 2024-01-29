@@ -245,49 +245,92 @@ For example, Table 1.1 of @klein2003 lists the times (in months) to relapse of l
 ```{r}
 
 MP <- c(10, 7, "32+", 23, 22, 6, 16, "34+", "32+", "25+", "11+", "20+", 
-        "19+", 6, "17+", "35+", 6, 13, "9+", "6+","10+")
+        "19+", 6, "17+", "35+", 6, 13, "9+", "6+", "10+")
 
 ```
 
-To convert this vector to the tidy format, use `parse_number()` to parse out the number and `str_detect()` to detect whether the entry contains "+":
+To convert character strings to `(time, status)`, use `parse_number()` to parse out the number and `str_detect()` to detect whether the string contains "+":
 
 ```{r}
+#| output: false
 
 df <- tibble(
-  MP = MP,
-  time = parse_number(MP),
-  status = 1 - str_detect(MP, "\\+") # escape literal "+"
+  MP = MP, # for comparison with newly created variables
+  time = parse_number(MP), # extract the number
+  status = 1 - str_detect(MP, "\\+") # "\\" to escape literal "+"
 )
 
 df
+# A tibble: 21 × 3
+#    MP     time status
+#    <chr> <dbl>  <dbl>
+#  1 10       10      1
+#  2 7         7      1
+#  3 32+      32      0
+#  4 23       23      1
+#  5 22       22      1
+#  6 6         6      1
+#  7 16       16      1
+#  8 34+      34      0
+#  9 32+      32      0
+# 10 25+      25      0
+# ℹ 11 more rows
+# ℹ Use `print(n = ...)` to see more rows
 ```
 
-#### Facet plotting Figure 1.2
+We can then use this dataset with standard functions for survival analysis,
+e.g., plot the Kaplan--Meier curve:
 
 ```{r}
-#| fig-width: 6
-#| fig-height: 4
-#| fig-align: center
+
+km <- survfit(Surv(time, status) ~ 1, df)
+plot(km, main = "Relapse of leukemia in 6-MP group", conf.int = FALSE,
+     xlab = "Time (months)", ylab = "Relapse-free probabilities", frame = FALSE)
+
+```
 
 
+#### Facet plotting Fig. 1.2
+Fig. 1.2 of the lecture notes overlays different types of survival estimates
+by hormonal treatment status in two panels. This can be done by facet plotting
+in ggplot2.
 
-library(tidyverse)
-library(survival)
+First read in the data:
+```{r}
+#| output: false
 
 ## read in the GBC mortality data
 data <- read.table("Data//German Breast Cancer Study//gbc_mort.txt")
 
 head(data)
+#   id      time status hormone age meno size grade nodes prog estrg
+# 1  1 74.819672      0       1  38    1   18     3     5  141   105
+# 2  2 65.770492      0       1  52    1   20     1     1   78    14
+# 3  3 47.737705      1       1  47    1   30     2     1  422    89
+# 4  4  4.852459      0       1  40    1   24     1     3   25    11
+# 5  5 61.081967      0       2  64    2   19     2     1   19     9
+# 6  6 63.377049      0       2  49    2   56     1     3  356    64
 
+```
+
+The compute the different estimates within each level of `hormone`. Do this 
+by using `group_by(hormone)` and performing the needed calculations within
+`reframe()`:
+
+
+```{r}
+
+# Kaplan--Meier estimates
 obj <- summary(survfit(Surv(time, status) ~ hormone, data))
-
+## extract the numbers 
 km <- tibble(
   t = obj$time,
   surv = obj$surv,
-  hormone = parse_number(as.character(obj$strata)),
+  hormone = parse_number(as.character(obj$strata)), # 1 or 2
   type = "Kaplan-Meier"
 ) |> 
-  add_row(
+  add_row( # need to add starting points for each group
+    # so the graph starts from (0, 1):
     t = c(0, 0),
     surv = c(1, 1),
     hormone = 1:2,
@@ -295,64 +338,68 @@ km <- tibble(
   )
 
 
-## empirical survival function
-
-# event imputation
+# empirical survival functions
+## event imputation
+## empirical survival functions for all times
 imp <- data |> 
-  group_by(
-    hormone
-  ) |> 
+  group_by(hormone) |> 
   reframe(
     t = time,
     surv = 1- ecdf(time)(time)
   ) |> 
-  arrange( # order by time
-    t
-  ) |> 
+  arrange(t) |> # order by time
   mutate(
     type = "Event-imputation"
   )
 
-
+## complete case
+## empirical survival functions for times with
+## status = 1
 cc <- data |> 
-  filter(
-    status == 1
-  ) |> 
-  group_by(
-    hormone
-  ) |> 
+  filter(status == 1) |> 
+  group_by(hormone) |> 
   reframe(
     t = time,
     surv = 1- ecdf(time)(time)
   ) |> 
-  arrange( # order by time
-    t
-  ) |> 
+  arrange(t) |> # order by time
   mutate(
     type = "Complete-case"
   )
+```
 
 
+Now plot the figure:
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+
+# create a vector to label the panels
 hormone_labeller <- c("1" = "No Hormone", "2" = "Hormone")
 
+# creat the plot
 km |> 
   add_row(imp) |> 
-  add_row(cc) |> 
-  mutate(
-    type = fct(type)
-  ) |> 
+  add_row(cc) |> # stack the three estimates together
+  mutate(type = fct(type)) |> # keep the order of the levels
   ggplot(aes(x = t, y = surv, linetype = type)) +
-  geom_step() +
+  geom_step() + # step function
   facet_wrap( ~ hormone, labeller = labeller(hormone = hormone_labeller)) +
-  theme_bw() +
-  scale_x_continuous(name = "Time (months)", breaks = seq(0, 72, by = 12), limits = c(0, 72)) +
+                # different panels by hormone status
+  theme_bw() +  # black-white theme
+  scale_x_continuous(name = "Time (months)", breaks = seq(0, 72, by = 12), 
+                     limits = c(0, 72)) +
   scale_y_continuous(name = "Survival rate", limits = c(0, 1)) +
-  scale_linetype_manual(name = "Estimator",
-                        values = 1:3) +
+  scale_linetype_manual(name = "Estimator", values = 1:3) + 
+                # set the title and values of line types
   theme(
     legend.position = "bottom"
   )
   
 ```
+Does it look the same as Fig. 1.2?
 
 #### Table one
+
+
