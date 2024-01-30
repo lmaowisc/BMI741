@@ -243,12 +243,12 @@ div.csl-indent {
 
 </header>
 
-<section id="slides" class="level3">
-<h3 class="anchored" data-anchor-id="slides">Slides</h3>
+<section id="slides" class="level2">
+<h2 class="anchored" data-anchor-id="slides">Slides</h2>
 <p>Lecture slides <a href="chap1.html" target="_blank">here</a>. (To convert html to pdf, press E <span class="math inline">\(\to\)</span> Print <span class="math inline">\(\to\)</span> Destination: Save to pdf)</p>
 </section>
-<section id="base-r-code" class="level3">
-<h3 class="anchored" data-anchor-id="base-r-code">Base R Code</h3>
+<section id="base-r-code" class="level2">
+<h2 class="anchored" data-anchor-id="base-r-code">Base R Code</h2>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -459,15 +459,15 @@ div.csl-indent {
 </details>
 </div>
 </section>
-<section id="tidyverse-solutions" class="level3">
-<h3 class="anchored" data-anchor-id="tidyverse-solutions">Tidyverse Solutions</h3>
+<section id="tidyverse-solutions" class="level2">
+<h2 class="anchored" data-anchor-id="tidyverse-solutions">Tidyverse Solutions</h2>
 <p>First load the required packages:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="parsing-censored-data" class="level4">
-<h4 class="anchored" data-anchor-id="parsing-censored-data">Parsing censored data</h4>
+<section id="parsing-censored-data" class="level3">
+<h3 class="anchored" data-anchor-id="parsing-censored-data">Parsing censored data</h3>
 <p>Instead of <code>(time, status)</code>, sometimes the observed data are stored in a single column with censored observations indicated with a “+”, or “&gt;” sign.</p>
 <p>For example, Table 1.1 of <span class="citation" data-cites="klein2003">Klein and Moeschberger (<a href="#ref-klein2003" role="doc-biblioref">2003</a>)</span> lists the times (in months) to relapse of leukemia in the treatment group (6-MP):</p>
 <div class="cell">
@@ -509,8 +509,8 @@ div.csl-indent {
 </div>
 </div>
 </section>
-<section id="facet-plotting-fig.-1.2" class="level4">
-<h4 class="anchored" data-anchor-id="facet-plotting-fig.-1.2">Facet plotting Fig. 1.2</h4>
+<section id="facet-plotting-fig.-1.2" class="level3">
+<h3 class="anchored" data-anchor-id="facet-plotting-fig.-1.2">Facet plotting Fig. 1.2</h3>
 <p>Fig. 1.2 of the lecture notes overlays different types of survival estimates by hormonal treatment status in two panels. This can be done by facet plotting in ggplot2.</p>
 <p>First read in the data:</p>
 <div class="cell">
@@ -609,8 +609,8 @@ div.csl-indent {
 </div>
 <p>Prettier than Fig. 1.2?</p>
 </section>
-<section id="table-one" class="level4">
-<h4 class="anchored" data-anchor-id="table-one">Table one</h4>
+<section id="table-one" class="level3">
+<h3 class="anchored" data-anchor-id="table-one">Table one</h3>
 <p>Let’s recreate Table 1.1, that is, “Table 1” for the German Breast Cancer study. Because the summary statistics are grouped by hormone status and overall, we add a replica to the original data where <code>hormone</code> is set to “Overall”, thereby creating three levels: “No hormone”, “Hormone”, “Overall”. Then we can use <code>summarize()</code> to calculate the summary statistics within each level of <code>hormone</code> after <code>group_by(hormone)</code>.</p>
 <p>To do so, we will define three summary functions:</p>
 <ul>

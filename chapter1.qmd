@@ -6,11 +6,11 @@ execute:
 bibliography: references.bib
 ---
 
-### Slides
+## Slides
 
 Lecture slides [here](chap1.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-### Base R Code
+## Base R Code
 
 ```{r}
 #| code-fold: true
@@ -226,7 +226,7 @@ round(num.CE/denom.CE,3)
 
 ```
 
-### Tidyverse Solutions
+## Tidyverse Solutions
 
 First load the required packages:
 
@@ -236,7 +236,7 @@ library(survival)
 
 ```
 
-#### Parsing censored data
+### Parsing censored data
 
 Instead of `(time, status)`, sometimes the observed data are stored in a single column with censored observations indicated with a "+", or "\>" sign.
 
@@ -288,7 +288,7 @@ plot(km, main = "Relapse of leukemia in 6-MP group", conf.int = FALSE,
 
 ```
 
-#### Facet plotting Fig. 1.2
+### Facet plotting Fig. 1.2
 
 Fig. 1.2 of the lecture notes overlays different types of survival estimates by hormonal treatment status in two panels. This can be done by facet plotting in ggplot2.
 
@@ -400,7 +400,7 @@ km |>
 
 Prettier than Fig. 1.2?
 
-#### Table one
+### Table one
 
 Let's recreate Table 1.1, that is, "Table 1" for the German Breast Cancer study. Because the summary statistics are grouped by hormone status and overall, we add a replica to the original data where `hormone` is set to "Overall", thereby creating three levels: "No hormone", "Hormone", "Overall". Then we can use `summarize()` to calculate the summary statistics within each level of `hormone` after `group_by(hormone)`.
 
