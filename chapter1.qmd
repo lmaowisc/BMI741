@@ -238,7 +238,7 @@ library(survival)
 
 ### Parsing censored data
 
-Instead of `(time, status)`, sometimes the observed data are stored in a single column with censored observations indicated with a "+", or "\>" sign.
+Instead of `(time, status)`, sometimes the observed data are stored in a single column with censored observations indicated with a "+" or "\>" sign.
 
 For example, Table 1.1 of @klein2003 lists the times (in months) to relapse of leukemia in the treatment group (6-MP):
 
