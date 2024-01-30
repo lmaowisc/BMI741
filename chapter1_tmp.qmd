@@ -494,7 +494,7 @@ Next we deal with categorical variables. Because the results span multiple rows 
 
 ```{r}
 
-## a function that computes N (%) for each leve of var
+## a function that computes N (%) for each level of var
 ## by group in data frame df (percent rounded to rth point)
 freq_pct<- function(df, group, var, r = 1){
   # compute the N for each level of var by group
@@ -514,9 +514,7 @@ freq_pct<- function(df, group, var, r = 1){
     mutate( # N (%)
       value = str_c(n, " (", round(100 * n / N, r), "%)")
     ) |> 
-    select(
-      - c(n, N)
-    ) |> 
+    select(- c(n, N)) |> 
     pivot_wider( # put group levels on columns
       names_from = {{ group }},
       values_from = value
@@ -573,18 +571,25 @@ tabone
 # 10 Tumor grade - 3        111 (25.2%)  50 (20.3%)    161 (23.5%)  
 ```
 
+As the last step, create an event rate function and apply it to `df` to
+calculate the death rate:
+
 ```{r}
+#| output: false
 
 # event rate function
-
+# status = 1 for event
 event_rate <- function(time, status){
-  sum(status)/sum(time)
+  sum(status)/sum(time) 
+  # we don't use sum(x, na.rm = TRUE) because
+  # missing data should alarm us
 }
 
+# calculate death rates
 death_rates <- df |> 
   group_by(hormone) |> 
   summarize(
-    death_rate = as.character(round(event_rate(time, status) * 12, 3))
+    death_rate = as.character(round(event_rate(time, status) * 12, 3)) # per year
   ) |> 
   pivot_wider(
     names_from = hormone,
@@ -595,28 +600,28 @@ death_rates <- df |>
     .before = 1
   )
 
-tabone |> 
-  add_row(
-    death_rates
-  )
+death_rates
+# # A tibble: 1 × 4
+#   name                         `No Hormone` Hormone Overall
+#   <chr>                        <chr>        <chr>   <chr>  
+# 1 Death rate (per person-year) 0.075        0.059   0.069  
 
 ```
 
+Finally, read in and clean up the complete data (relapse and death) to calculate the composite endpoint (CE; time to first) event rate.
+
 ```{r}
-
-#############################
-# Composite event rate      #
-#############################
-
 # Read in the complete data
 gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
 
+## get the first event (minimum time)
+## for each patient id
 gbc_ce <- gbc |> 
   group_by(id) |> 
   slice_min(time) |> 
   ungroup()
 
-
+## same manipulations
 df_ce <- gbc_ce |> 
   mutate(
     hormone = if_else(hormone == 1, "No Hormone", "Hormone")
@@ -625,12 +630,15 @@ df_ce <- gbc_ce |>
   mutate(
     hormone = fct(hormone, levels = c("No Hormone", "Hormone", "Overall")),
   )
+```
 
+Apply the same event rate function to calculate the CE rate.
+```{r}
 
 ce_rates <- df_ce |> 
   group_by(hormone) |> 
   summarize(
-    ce_rate = as.character(round(event_rate(time, status > 0) * 12, 3))
+    ce_rate = as.character(round(event_rate(time, status > 0) * 12, 3)) # per year
   ) |> 
   pivot_wider(
     names_from = hormone,
@@ -642,11 +650,12 @@ ce_rates <- df_ce |>
   )
 ```
 
+Add the event rates to the table and print it out:
 ```{r}
 #| label: tbl-tabone
 #| tbl-cap: Patient characteristics in the German Breast Cancer study.
 
-
+## add event rates
 tabone <- tabone |> 
   add_row(
     death_rates
@@ -654,9 +663,10 @@ tabone <- tabone |>
   add_row(
     ce_rates
   ) 
-  
-colnames(tabone) <- c(" ", str_c(colnames(tabone)[2:4], " (N=", table(df$hormone),")"))
 
+## add N to group names  
+colnames(tabone) <- c(" ", str_c(colnames(tabone)[2:4], " (N=", table(df$hormone),")"))
+## print out the table
 kable(tabone)
 
 ```
