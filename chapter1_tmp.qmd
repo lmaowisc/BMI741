@@ -278,8 +278,7 @@ df
 # ℹ Use `print(n = ...)` to see more rows
 ```
 
-We can now feed this dataset to standard functions for survival analysis,
-e.g., `survfit()` for the Kaplan--Meier estimator:
+We can now feed this dataset to standard functions for survival analysis, e.g., `survfit()` for the Kaplan--Meier estimator:
 
 ```{r}
 
@@ -289,13 +288,12 @@ plot(km, main = "Relapse of leukemia in 6-MP group", conf.int = FALSE,
 
 ```
 
-
 #### Facet plotting Fig. 1.2
-Fig. 1.2 of the lecture notes overlays different types of survival estimates
-by hormonal treatment status in two panels. This can be done by facet plotting
-in ggplot2.
+
+Fig. 1.2 of the lecture notes overlays different types of survival estimates by hormonal treatment status in two panels. This can be done by facet plotting in ggplot2.
 
 First read in the data:
+
 ```{r}
 #| output: false
 
@@ -313,10 +311,7 @@ head(data)
 
 ```
 
-The compute the different estimates within each level of `hormone`. Do this 
-by using `group_by(hormone)` and performing the needed calculations within
-`reframe()`. But first we use `survfit()` to get the Kaplan--Meier estimates:
-
+The compute the different estimates within each level of `hormone`. Do this by using `group_by(hormone)` and performing the needed calculations within `reframe()`. But first we use `survfit()` to get the Kaplan--Meier estimates:
 
 ```{r}
 # Kaplan--Meier estimates
@@ -338,9 +333,7 @@ km <- tibble(
 
 ```
 
-Then the event-imputation and complete-case estimates
-(with `ecdf()` for empirical distribution function):
-
+Then the event-imputation and complete-case estimates (with `ecdf()` for empirical distribution function):
 
 ```{r}
 
@@ -374,8 +367,8 @@ cc <- data |>
   )
 ```
 
-
 Now plot the figure:
+
 ```{r}
 #| fig-width: 6
 #| fig-height: 4
@@ -404,19 +397,23 @@ km |>
   )
   
 ```
+
 Prettier than Fig. 1.2?
 
 #### Table one
 
-Let's recreate Table 
+Let's recreate Table 1.1, that is, "Table 1" for the German Breast Cancer study. Because the summary statistics are grouped by hormone status and overall, we add a replica to the original data where `hormone` is set to "Overall", thereby creating three levels: "No hormone", "Hormone", "Overall". Then we can use `summarize()` to calculate the summary statistics within each level of `hormone` after `group_by(hormone)`.
+
+To do so, we will define three summary functions:
+
+-   One calculating median (IQR) for a quantitative variable;
+-   One calculating *N* (%) for each level of a categorical variable;
+-   One calculating event rate based on `time` and `status`.
+
+To start, read in and clean the GBC mortality data for the subject-level statistics and death rate:
 
 ```{r}
-library(knitr)
-```
-
-
-
-```{r}
+library(knitr) # for printing formatted table
 
 ## for subject-level summary and mortality
 ## read in the GBC mortality data
@@ -424,26 +421,24 @@ data <- read.table("Data//German Breast Cancer Study//gbc_mort.txt")
 
 # clean up data
 df <- data |> 
-  mutate(
+  mutate( # clean up the levels of hormone
     hormone = if_else(hormone == 1, "No Hormone", "Hormone")
   ) |> 
-  add_row(data |> mutate(hormone = "Overall")) |> 
-  mutate(
+  add_row(data |> mutate(hormone = "Overall")) |>  # add a replica for overall
+  mutate( # specify the levels of categorical variables
     hormone = fct(hormone, levels = c("No Hormone", "Hormone", "Overall")),
     meno = if_else(meno == 1, "No", "Yes")
   )
 
-
 ```
 
-
-
+Now, write a function to compute median (IQR) and use it on the quantitative variables. In the process, we use `pivot_longer()` and `pivot_wider()` to put the hormone levels on the columns rather than rows. (For details on these data transposition tools, see <https://r4ds.hadley.nz/data-tidy>).
 
 ```{r}
 
-x <- df$age
-r = 1
 
+## a function to compute median (IQR) for x
+## rounded to the rth decimal place
 med_iqr <- function(x, r = 1){
   qt <- quantile(x, na.rm = TRUE)
   
@@ -452,24 +447,24 @@ med_iqr <- function(x, r = 1){
         round(qt[4], r), ")")
 }
 
-
+# create summary table for quantitative variables
+# age, size, nodes, prog, estrg
 tab_quant <- df |> 
   group_by(hormone) |> 
   summarize(
-    # age = med_iqr(age)
     across(c(age, size, nodes, prog, estrg), med_iqr)
   ) |> 
-  pivot_longer(
+  pivot_longer( # long format: value = median (IQR); name = variable names
     !hormone,
     values_to = "value",
     names_to = "name"
   ) |> 
-  pivot_wider(
+  pivot_wider( # wide format: name = variable names; hormone levels as columns
     values_from = value,
     names_from = hormone
   ) |> 
   mutate(
-    name = case_when(
+    name = case_when( # format the variable names
       name == "age" ~ "Age (years)",
       name == "size" ~ "Tumor size (mm)",
       name == "nodes" ~ "# Nodes",
@@ -477,71 +472,106 @@ tab_quant <- df |>
       name == "estrg" ~ "Estrogen (fmol/mg)"
     )
   )
+```
 
+See what the result looks like:
 
+```{r}
+#| output: false
 
-# x <- df$grade
-# r = 1
+tab_quant
+# # A tibble: 5 × 4
+#   name                   `No Hormone` Hormone       Overall        
+#   <chr>                  <chr>        <chr>         <chr>          
+# 1 Age (years)            50 (45, 59)  58 (50, 63)   53 (46, 61)    
+# 2 Tumor size (mm)        25 (20, 35)  25 (20, 35)   25 (20, 35)    
+# 3 # Nodes                3 (1, 7)     3 (1, 7)      3 (1, 7)       
+# 4 Progesterone (fmol/mg) 32 (7, 130)  35 (7.2, 133) 32.5 (7, 131.8)
+# 5 Estrogen (fmol/mg)     32 (8, 92.2) 46 (9, 182.5) 36 (8, 114) 
+```
 
+Next we deal with categorical variables. Because the results span multiple rows due to multiple levels, it is easier to write a data frame function, one that takes the tibble data frame as an argument. For details, see <https://r4ds.hadley.nz/functions#data-frame-functions>.
 
+```{r}
+
+## a function that computes N (%) for each leve of var
+## by group in data frame df (percent rounded to rth point)
 freq_pct<- function(df, group, var, r = 1){
-  
+  # compute the N for each level of var by group
   var_counts <- df |> 
     group_by({{ group }}, {{ var }}) |> 
     summarize(
       n = n(),
       .groups = "drop"
     ) 
-    
-  
+  # compute N (%)
   var_counts |> 
-    left_join(
+    left_join( # compute the total number (demoninator) in each group
+               # and joint it back to the numerator
       var_counts |> group_by({{ group }}) |> summarize(N = sum(n)),
       by = join_by({{ group }})
     ) |> 
-    mutate(
+    mutate( # N (%)
       value = str_c(n, " (", round(100 * n / N, r), "%)")
     ) |> 
     select(
       - c(n, N)
     ) |> 
-    pivot_wider(
+    pivot_wider( # put group levels on columns
       names_from = {{ group }},
       values_from = value
     ) |> 
     rename(
-      name = {{ var }}
+      name = {{ var }} # name = variable names 
     )
 }
 
+```
 
-meno <- df |> 
+
+Apply this function to `meno` and `grade` (by `hormone` of course):
+
+```{r}
+
+## menopausal status
+meno <- df |>
   freq_pct(hormone, meno) |> 
   mutate(
     name = str_c("Menopause - ", name)
   )
 
-
+## tumor grade
 grade <- df |> 
   freq_pct(hormone, grade) |> 
   mutate(
     name = str_c("Tumor grade - ", name)
   )
+```
 
+Combine with the quantitative variables:
+
+```{r}
+#| output: false
 
 tabone <- tab_quant |> 
   add_row(meno) |> 
   add_row(grade)
 
-
-kable(tabone)
-
-
-
-
+tabone
+# # A tibble: 10 × 4
+#    name                   `No Hormone` Hormone       Overall        
+#    <chr>                  <chr>        <chr>         <chr>          
+#  1 Age (years)            50 (45, 59)  58 (50, 63)   53 (46, 61)    
+#  2 Tumor size (mm)        25 (20, 35)  25 (20, 35)   25 (20, 35)    
+#  3 # Nodes                3 (1, 7)     3 (1, 7)      3 (1, 7)       
+#  4 Progesterone (fmol/mg) 32 (7, 130)  35 (7.2, 133) 32.5 (7, 131.8)
+#  5 Estrogen (fmol/mg)     32 (8, 92.2) 46 (9, 182.5) 36 (8, 114)    
+#  6 Menopause - No         231 (52.5%)  59 (24%)      290 (42.3%)    
+#  7 Menopause - Yes        209 (47.5%)  187 (76%)     396 (57.7%)    
+#  8 Tumor grade - 1        48 (10.9%)   33 (13.4%)    81 (11.8%)     
+#  9 Tumor grade - 2        281 (63.9%)  163 (66.3%)   444 (64.7%)    
+# 10 Tumor grade - 3        111 (25.2%)  50 (20.3%)    161 (23.5%)  
 ```
-
-
 
 ```{r}
 
@@ -571,8 +601,6 @@ tabone |>
   )
 
 ```
-
-
 
 ```{r}
 
@@ -612,6 +640,11 @@ ce_rates <- df_ce |>
     name = "CE rate (per person-year)",
     .before = 1
   )
+```
+
+```{r}
+#| label: tbl-tabone
+#| tbl-cap: Patient characteristics in the German Breast Cancer study.
 
 
 tabone <- tabone |> 
@@ -627,4 +660,3 @@ colnames(tabone) <- c(" ", str_c(colnames(tabone)[2:4], " (N=", table(df$hormone
 kable(tabone)
 
 ```
-
