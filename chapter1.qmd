@@ -526,7 +526,6 @@ freq_pct<- function(df, group, var, r = 1){
 
 ```
 
-
 Apply this function to `meno` and `grade` (by `hormone` of course):
 
 ```{r}
@@ -571,8 +570,7 @@ tabone
 # 10 Tumor grade - 3        111 (25.2%)  50 (20.3%)    161 (23.5%)  
 ```
 
-As the last step, create an event rate function and apply it to `df` to
-calculate the death rate:
+As the last step, create an event rate function and apply it to `df` to calculate the death rate:
 
 ```{r}
 #| output: false
@@ -633,6 +631,7 @@ df_ce <- gbc_ce |>
 ```
 
 Apply the same event rate function to calculate the CE rate.
+
 ```{r}
 
 ce_rates <- df_ce |> 
@@ -651,6 +650,7 @@ ce_rates <- df_ce |>
 ```
 
 Add the event rates to the table and print it out:
+
 ```{r}
 #| label: tbl-tabone
 #| tbl-cap: Patient characteristics in the German Breast Cancer study.
