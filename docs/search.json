@@ -11,7 +11,7 @@
     "href": "chapter2.html",
     "title": "Chapter 2 - Mathematical Foundations",
     "section": "",
-    "text": "Slides\nLecture slides here. (To convert html to pdf, press E \\(\\to\\) Print \\(\\to\\) Destination: Save to pdf)"
+    "text": "Lecture slides here. (To convert html to pdf, press E \\(\\to\\) Print \\(\\to\\) Destination: Save to pdf)"
   },
   {
     "objectID": "about.html",
@@ -61,5 +61,12 @@
     "title": "quarto",
     "section": "",
     "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2\n\n\n\ntest"
+  },
+  {
+    "objectID": "chapter2.html#slides",
+    "href": "chapter2.html#slides",
+    "title": "Chapter 2 - Mathematical Foundations",
+    "section": "",
+    "text": "Lecture slides here. (To convert html to pdf, press E \\(\\to\\) Print \\(\\to\\) Destination: Save to pdf)"
   }
 ]
