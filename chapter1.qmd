@@ -249,7 +249,7 @@ MP <- c(10, 7, "32+", 23, 22, 6, 16, "34+", "32+", "25+", "11+", "20+",
 
 ```
 
-To convert character strings to `(time, status)`, use `parse_number()` to parse out the number and `str_detect()` to detect whether the string contains "+":
+To convert the character strings to `(time, status)`, use `parse_number()` to parse out the number and `str_detect()` to detect whether the string contains "+":
 
 ```{r}
 #| output: false
@@ -311,7 +311,7 @@ head(data)
 
 ```
 
-The compute the different estimates within each level of `hormone`. Do this by using `group_by(hormone)` and performing the needed calculations within `reframe()`. But first we use `survfit()` to get the Kaplan--Meier estimates:
+Then compute the different estimates within each level of `hormone`. Do this by using `group_by(hormone)` and performing the needed calculations within `reframe()`. But first we use `survfit()` to get the Kaplan--Meier estimates:
 
 ```{r}
 # Kaplan--Meier estimates
