@@ -2,7 +2,7 @@
 title: "Chapter 1 - Introduction"
 execute: 
   warning: false
-  cache: true
+  cache: false
 bibliography: references.bib
 ---
 
@@ -278,8 +278,8 @@ df
 # ℹ Use `print(n = ...)` to see more rows
 ```
 
-We can then use this dataset with standard functions for survival analysis,
-e.g., plot the Kaplan--Meier curve:
+We can now feed this dataset to standard functions for survival analysis,
+e.g., `survfit()` for the Kaplan--Meier estimator:
 
 ```{r}
 
@@ -315,11 +315,10 @@ head(data)
 
 The compute the different estimates within each level of `hormone`. Do this 
 by using `group_by(hormone)` and performing the needed calculations within
-`reframe()`:
+`reframe()`. But first we use `survfit()` to get the Kaplan--Meier estimates:
 
 
 ```{r}
-
 # Kaplan--Meier estimates
 obj <- summary(survfit(Surv(time, status) ~ hormone, data))
 ## extract the numbers 
@@ -337,6 +336,13 @@ km <- tibble(
     type = "Kaplan-Meier"
   )
 
+```
+
+Then the event-imputation and complete-case estimates
+(with `ecdf()` for empirical distribution function):
+
+
+```{r}
 
 # empirical survival functions
 ## event imputation
@@ -378,7 +384,7 @@ Now plot the figure:
 # create a vector to label the panels
 hormone_labeller <- c("1" = "No Hormone", "2" = "Hormone")
 
-# creat the plot
+# create the plot
 km |> 
   add_row(imp) |> 
   add_row(cc) |> # stack the three estimates together
@@ -391,15 +397,234 @@ km |>
   scale_x_continuous(name = "Time (months)", breaks = seq(0, 72, by = 12), 
                      limits = c(0, 72)) +
   scale_y_continuous(name = "Survival rate", limits = c(0, 1)) +
-  scale_linetype_manual(name = "Estimator", values = 1:3) + 
+  scale_linetype_manual(name = "Method", values = 1:3) + 
                 # set the title and values of line types
   theme(
     legend.position = "bottom"
   )
   
 ```
-Does it look the same as Fig. 1.2?
+Prettier than Fig. 1.2?
 
 #### Table one
 
+Let's recreate Table 
+
+```{r}
+library(knitr)
+```
+
+
+
+```{r}
+
+## for subject-level summary and mortality
+## read in the GBC mortality data
+data <- read.table("Data//German Breast Cancer Study//gbc_mort.txt")
+
+# clean up data
+df <- data |> 
+  mutate(
+    hormone = if_else(hormone == 1, "No Hormone", "Hormone")
+  ) |> 
+  add_row(data |> mutate(hormone = "Overall")) |> 
+  mutate(
+    hormone = fct(hormone, levels = c("No Hormone", "Hormone", "Overall")),
+    meno = if_else(meno == 1, "No", "Yes")
+  )
+
+
+```
+
+
+
+
+```{r}
+
+x <- df$age
+r = 1
+
+med_iqr <- function(x, r = 1){
+  qt <- quantile(x, na.rm = TRUE)
+  
+  str_c(round(qt[3], r), " (", 
+        round(qt[2], r), ", ",
+        round(qt[4], r), ")")
+}
+
+
+tab_quant <- df |> 
+  group_by(hormone) |> 
+  summarize(
+    # age = med_iqr(age)
+    across(c(age, size, nodes, prog, estrg), med_iqr)
+  ) |> 
+  pivot_longer(
+    !hormone,
+    values_to = "value",
+    names_to = "name"
+  ) |> 
+  pivot_wider(
+    values_from = value,
+    names_from = hormone
+  ) |> 
+  mutate(
+    name = case_when(
+      name == "age" ~ "Age (years)",
+      name == "size" ~ "Tumor size (mm)",
+      name == "nodes" ~ "# Nodes",
+      name == "prog" ~ "Progesterone (fmol/mg)",
+      name == "estrg" ~ "Estrogen (fmol/mg)"
+    )
+  )
+
+
+
+# x <- df$grade
+# r = 1
+
+
+freq_pct<- function(df, group, var, r = 1){
+  
+  var_counts <- df |> 
+    group_by({{ group }}, {{ var }}) |> 
+    summarize(
+      n = n(),
+      .groups = "drop"
+    ) 
+    
+  
+  var_counts |> 
+    left_join(
+      var_counts |> group_by({{ group }}) |> summarize(N = sum(n)),
+      by = join_by({{ group }})
+    ) |> 
+    mutate(
+      value = str_c(n, " (", round(100 * n / N, r), "%)")
+    ) |> 
+    select(
+      - c(n, N)
+    ) |> 
+    pivot_wider(
+      names_from = {{ group }},
+      values_from = value
+    ) |> 
+    rename(
+      name = {{ var }}
+    )
+}
+
+
+meno <- df |> 
+  freq_pct(hormone, meno) |> 
+  mutate(
+    name = str_c("Menopause - ", name)
+  )
+
+
+grade <- df |> 
+  freq_pct(hormone, grade) |> 
+  mutate(
+    name = str_c("Tumor grade - ", name)
+  )
+
+
+tabone <- tab_quant |> 
+  add_row(meno) |> 
+  add_row(grade)
+
+
+kable(tabone)
+
+
+
+
+```
+
+
+
+```{r}
+
+# event rate function
+
+event_rate <- function(time, status){
+  sum(status)/sum(time)
+}
+
+death_rates <- df |> 
+  group_by(hormone) |> 
+  summarize(
+    death_rate = as.character(round(event_rate(time, status) * 12, 3))
+  ) |> 
+  pivot_wider(
+    names_from = hormone,
+    values_from = death_rate
+  ) |> 
+  mutate(
+    name = "Death rate (per person-year)",
+    .before = 1
+  )
+
+tabone |> 
+  add_row(
+    death_rates
+  )
+
+```
+
+
+
+```{r}
+
+#############################
+# Composite event rate      #
+#############################
+
+# Read in the complete data
+gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
+
+gbc_ce <- gbc |> 
+  group_by(id) |> 
+  slice_min(time) |> 
+  ungroup()
+
+
+df_ce <- gbc_ce |> 
+  mutate(
+    hormone = if_else(hormone == 1, "No Hormone", "Hormone")
+  ) |> 
+  add_row(gbc_ce |> mutate(hormone = "Overall")) |> 
+  mutate(
+    hormone = fct(hormone, levels = c("No Hormone", "Hormone", "Overall")),
+  )
+
+
+ce_rates <- df_ce |> 
+  group_by(hormone) |> 
+  summarize(
+    ce_rate = as.character(round(event_rate(time, status > 0) * 12, 3))
+  ) |> 
+  pivot_wider(
+    names_from = hormone,
+    values_from = ce_rate
+  ) |> 
+  mutate(
+    name = "CE rate (per person-year)",
+    .before = 1
+  )
+
+
+tabone <- tabone |> 
+  add_row(
+    death_rates
+  ) |> 
+  add_row(
+    ce_rates
+  ) 
+  
+colnames(tabone) <- c(" ", str_c(colnames(tabone)[2:4], " (N=", table(df$hormone),")"))
+
+kable(tabone)
+
+```
 
