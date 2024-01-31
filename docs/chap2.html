@@ -625,7 +625,7 @@ E\{\dd M(t)\dd M(s)\}=E\left[\dd M(t)E\{\dd M(s)\mid\mathcal H(s-)\}\right]
 <p><span class="math display">\[E\left\{\int_0^t h(u)\dd M(u)\right\}=\int_0^t h(u)E\left\{\dd M(u)\right\}=0\]</span></p>
 <p><span class="math display">\[
 \begin{align}
-E\left\{\int_0^t h(u)\dd M(u)\right\}^2 \stackrel{\mbox{UCI}}{=}\int_0^t h(u)^2E\left\{\dd M(u)\right\}^2
+E\left\{\int_0^t h(u)\dd M(u)\right\}^2 \stackrel{\mbox{UCI}}{=}\int_0^t h(u)^2E\left\{\dd M(u)^2\right\}
 =\int_0^t h(u)^2\pr(X\geq u)\dd\Lambda(u)
 \end{align}
 \]</span></p>
@@ -695,7 +695,7 @@ E\left\{\int_0^t h(u)\dd M(u)\right\}^2 \stackrel{\mbox{UCI}}{=}\int_0^t h(u)^2E
 <h2>Summary (II)</h2>
 <ul>
 <li><p>Martingale integral (e.g., score function) <span class="math display">\[
-\int_0^t h(u)\dd M(u)=\int_0^t h(u)\left\{\dd N(u)-I(X\geq t)\dd\Lambda(t)\right\}
+\int_0^t h(u)\dd M(u)=\int_0^t h(u)\left\{\dd N(u)-I(X\geq u)\dd\Lambda(u)\right\}
 \]</span></p>
 <ul>
 <li>Mean zero with easily computable variance</li>
