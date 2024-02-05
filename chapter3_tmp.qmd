@@ -12,12 +12,13 @@ Lecture slides [here](chap3.html){target="_blank"}. (To convert html to pdf, pre
 #| eval: false
 #| code-fold: true
 
+
 ##################################################################
 # This code generates all numerical results in  chapter 3.      ##
 ##################################################################
 
 ###################################################
-# Figure 3.3 and Table 3.2                 
+# Figure 3.2  and Table 3.1                 
 # Nelsen-Aalen estimator of cumulative hazard function
 # for the rat study
 ###################################################
@@ -28,7 +29,7 @@ library(survival)
 # 
 # Rat treatment data from Mantel et al. Three rats were chosen from each of 100 litters, 
 # one of which was treated with a drug, and then all followed for tumor incidence.
-# Usage
+# 
 # 
 # 
 # 
@@ -44,12 +45,16 @@ library(survival)
 # Cancer Research, 37:3863-3868, 1977.
 ##############################################################
 
-rats <- read.table("Data//Rat Tumorigenicity Study//rats.txt",header=T)
+rats <- read.table("Data//Rat Tumorigenicity Study//rats.txt", header = T)
 
 head(rats)
 
 #subset to treatment arm
 rats.rx <- rats[rats$rx==1,]
+
+
+
+
 
 #X and delta
 time <- rats.rx$time
@@ -80,20 +85,20 @@ round(results,3)
 
 #plot the estimated cumulative hazard function
 par(mfrow=c(1,1))
-plot(stepfun(ts,c(0,L)),do.points = F,ylim=c(0,0.4),xlim=c(0,120), lwd=2, 
-     frame.plot=FALSE, xlab="Time (days)",ylab="Cumulative hazard function",
-     main="", cex.lab=1.5, cex.axis=1.5)
+plot(stepfun(ts,c(0,L)),do.points = F,ylim=c(0,0.4),xlim=c(0,120),lwd=2,frame=F,
+     xlab="Time (days)",ylab="Cumulative hazard function",main="",
+     cex.lab=1.5,cex.axis=1.5)
 
 
 
 ###################################################
-# Table 3.3                 
+# Table 3.2                 
 # Kaplan-Meier (KM) estimator of survival function
 # for the rat study
 ###################################################
 
 #csurv (conditional survival): 1-d_j/n_j
-csurv <- 1-dL
+csurv <- 1 - dL
 #variance of csurv by Greenwoods's formula
 var.csurv <- ds/(ns*(ns-ds))
 
@@ -116,39 +121,41 @@ round(results2,3)
 
 
 ###################################################
-# Figure 3.4                 
+# Figure 3.3                 
 # Kaplan-Meier (KM) estimator of survival function
 # for the rat study
 ###################################################
 
-obj <- survfit(Surv(time,status) ~ 1, data = rats.rx, conf.type = "log-log")
+obj <- survfit(Surv(time,status)~1,data=rats.rx,conf.type="log-log")
 
 summary(obj)
 
-# plot the estimated survival function
-plot(obj, ylim = c(0,1), xlim = c(0, 100), lwd = 2, frame.plot = FALSE,
-     xlab = "Time (days)", ylab = "Tumor-free probabilities", main = "")
+#plot the estimated cumulative hazard function
+par(mfrow=c(1,1))
+plot(obj,ylim=c(0,1),xlim=c(0,100),lwd=2,frame=F,
+     xlab="Time (days)",ylab="Survival probabilities",main="",
+     cex.lab=1.5,cex.axis=1.5)
+legend(1,0.2,lty=1:2,c("Kaplan-Meier curve","95% Confidence limits"),
+       lwd=2,cex=1.5)
 
-legend(1, 0.2, c("Kaplan-Meier curve", "95% Confidence limits"),
-       lty = 1:2, lwd = 2)
 
 
 #################################################
 #   log-rank test for rat study
-#   comparing treatment and control
+#   combing treatment and control
 #################################################
 #dataset
 head(rats)
 
 # log-rank test on treatment difference
-survdiff(Surv(time,status)~ rx+ strata(sex),
-         data=rats, rho=0)
+survdiff(Surv(time,status)~rx+ strata(sex),
+         data=rats,rho=0)
 
 ##############################################
-# GBC study: Figure 3.7 and related test results 
+# GBC study: igure 3.5 and related test results 
 #############################################
 #read in the complete data
-gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
+gbc <- read.table("German Breast Cancer Study//gbc.txt")
 
 #subset to first event data
 #Sort the data by time within each id
@@ -163,7 +170,7 @@ data.CE$status <- (data.CE$status>0)+0
 
 
 ################################################
-# Figure 3.7  Plot the KM curves by hormonal group 
+# Figure 3.5  Plot the KM curves by hormonal group 
 # stratified by menopausal status for GBC study
 ################################################
 
@@ -195,11 +202,140 @@ legend(1,0.2,lty=2:1,c("No Hormone","Hormone"),
 
 
 ## Stratified log-rank test (by menopausal status)
-survdiff(Surv(time, status) ~ hormone + strata(meno),
-         data = data.CE)
+survdiff(Surv(time,status)~hormone+ strata(meno),
+         data=data.CE)
 ## Unstratified log-rank test
-survdiff(Surv(time, status) ~ hormone,
-         data = data.CE)
+survdiff(Surv(time,status)~hormone,
+         data=data.CE)
 
 ```
 
+## Tidyverse Solutions
+
+```{r}
+library("survminer")
+library(tidyverse)
+library("survival")
+fit<- survfit(Surv(time, status) ~ sex, data = lung)
+
+# Drawing survival curves
+ggsurvplot(fit, data = lung, risk.table = TRUE)
+
+
+
+tab3_1 <- tribble(
+  ~time, ~status,
+     101,     0, 
+      55,     0,
+    67,      1, 
+    23,      0, 
+  45,    1, 
+   98,     0, 
+  34,      1,  
+   77,      0, 
+   91,     0, 
+  104,     0,  
+   88,     1
+) |> 
+  mutate(
+    id = row_number(),
+    .before = 1
+  )
+
+
+
+fig3_2 <- tab3_1 |> 
+  ggplot(aes(x = time, y = reorder(id, time))) +
+  geom_linerange(aes(xmin = 0, xmax = time)) +
+  geom_point(aes(shape = factor(status)), size = 2.5, fill = "white") +
+  geom_vline(xintercept = 0, linewidth = 1) +
+  theme_minimal() +
+  scale_y_discrete(name = "Rats") +
+  scale_x_continuous(name = "Time (days)", breaks = seq(0, 100, by = 20), 
+                     expand = expansion(c(0, 0.05))) +
+  scale_shape_manual(values = c(23, 19), labels = c("Censoring", "Tumor development")) +
+  theme(
+    legend.position = "top",
+    legend.title = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.text = element_text(size = 11)
+    
+  )
+  
+
+ggsave("km_rats.pdf", fig3_2, width = 8, height = 3.2)
+ggsave("km_rats.eps", fig3_2, width = 8, height = 3.2)
+```
+
+```{r}
+
+#read in the complete data
+gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
+
+gbc_ce <- gbc |> 
+  group_by(id) |> 
+  slice_min(time) |> 
+  slice_max(status) 
+
+
+# gbc_ce |> 
+#   count(id) |> 
+#   filter(n>1)
+# 
+# gbc |> 
+#   filter(
+#     status == 1
+#   )
+
+n <- nrow(gbc)
+
+set.seed(2024)
+gbc_ce_sub <- gbc_ce |> 
+  filter(id %in% sample(n, 200)) 
+
+# create a vector to label the panels
+hormone_labeller <- c("1" = "No Hormone", "2" = "Hormone")
+
+fig3_5 <- gbc_ce_sub |> 
+  ggplot(aes(x = time, y = reorder(factor(id), time))) +
+  geom_linerange(aes(xmin = 0, xmax = time)) +
+  geom_point(aes(shape = factor(status), fill = factor(status)), size = 2.5) +
+  geom_vline(xintercept = 0, linewidth = 1) +
+  theme_minimal() +
+  scale_y_discrete(name = "Patients") +
+  scale_x_continuous(name = "Time (months)", breaks = seq(0, 84, by = 12), 
+                     expand = expansion(c(0, 0.05))) +
+  scale_shape_manual(values = c(23, 22, 19), 
+                     labels = c("Censoring", "Relapse", "Death")) +
+  
+  scale_fill_manual(values = c("white", "black", "black"), 
+                     labels = c("Censoring", "Relapse", "Death")) +
+  facet_wrap(~ hormone, scales = "free", 
+             labeller = labeller(hormone = hormone_labeller)) +
+  theme(
+    legend.position = "top",
+    legend.title = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.text = element_text(size = 11)
+    
+  )
+
+
+ggsave("km_gbc_fu.pdf", fig3_5, width = 8, height = 9)
+ggsave("km_gbc_fu.eps", fig3_5, width = 8, height = 9)
+```
+
+```{r}
+
+
+fit <- survfit(Surv(time, status > 0) ~ hormone, data = gbc_ce)
+ggsurvplot(fit, gbc_ce, risk.table = TRUE,
+                palette = "jco", pval = TRUE,
+           risk.table.height = 0.2)
+
+
+```
