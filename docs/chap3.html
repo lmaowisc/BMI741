@@ -842,10 +842,10 @@ R_j&amp;=d_{1j}-d_j\frac{n_{1j}}{n_j}\\
 <h2>Two-Group Comparison: Log-rank (II)</h2>
 <ul>
 <li><strong>Testing overall incidence</strong> <span class="math display">\[\begin{equation}\label{eq:km:logrank_stat}
-S_{N_1,N_0}=\frac{(\sum_{j=1}^m E_j)^2}{\sum_{j=1}^m V_j}\stackrel{H_0}{\sim} \chi_1^2
+S_{N_1,N_0}=\frac{(\sum_{j=1}^m R_j)^2}{\sum_{j=1}^m V_j}\stackrel{H_0}{\sim} \chi_1^2
 \end{equation}\]</span>
 <ul>
-<li><span class="math inline">\(\hat\var(\sum_{j=1}^m r_j)=\sum_{j=1}^m V_j\)</span> by conditioning (martingale) arguments</li>
+<li><span class="math inline">\(\hat\var(\sum_{j=1}^m R_j)=\sum_{j=1}^m V_j\)</span> by conditioning (martingale) arguments</li>
 <li>Reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(S_{N_1,N_0}&gt;\chi_1^2(1-\alpha)\)</span>, where <span class="math inline">\(\chi_1^2(1-\alpha)\)</span> is the <span class="math inline">\(100(1-\alpha)\)</span>th percentile of <span class="math inline">\(\chi_1^2\)</span></li>
 <li>Log-rank test (with significance level <span class="math inline">\(\alpha\)</span>)</li>
 </ul></li>
@@ -859,7 +859,7 @@ H_A: \lambda_1(t)\leq\lambda_0(t)\mbox{ for all } t \mbox{ with strict inequalit
 \end{equation}\]</span>
 <ul>
 <li><strong>Ordered hazards</strong>: treatment <strong>consistently</strong> lowers event risk over time as compared to control (or <em>vice versa</em>) <span class="math display">\[\pr\left\{S_{N_1,N_0}&gt;\chi_1^2(1-\alpha)\right\}\stackrel{H_A}{\to} 1 \mbox{ as } n\to\infty\]</span></li>
-<li><span class="math inline">\(\sum_{j=1}^m E_j =\)</span> Weighted difference of group-wise Nelsen–Aalen estimates of hazard functions (Section 3.2.2)</li>
+<li><span class="math inline">\(\sum_{j=1}^m R_j =\)</span> Weighted difference of group-wise Nelsen–Aalen estimates of hazard functions (Section 3.2.2)</li>
 <li><strong>Crossing hazards</strong> <span class="math inline">\(\to\)</span> weak power</li>
 </ul></li>
 </ul>
