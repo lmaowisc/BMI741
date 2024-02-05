@@ -9,8 +9,10 @@ Lecture slides [here](chap3.html){target="_blank"}. (To convert html to pdf, pre
 ## Base R Code
 
 ```{r}
-#| eval: false
 #| code-fold: true
+#| code-summary: "Show the code"
+#| eval: false
+
 
 ##################################################################
 # This code generates all numerical results in  chapter 3.      ##
