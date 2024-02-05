@@ -719,6 +719,15 @@ S(t)=\prod_{j:t_j\leq t}\pr(T&gt;t_j\mid T\geq t_j)
 <li><strong>Output</strong>: a <code>surfit</code> object containing KM estimates
 <ul>
 <li>Directly <code>summarize()</code> and <code>plot()</code></li>
+<li><code>summarize(obj)</code>: a list containing
+<ul>
+<li><code>time</code>: <span class="math inline">\(t_j\)</span> <span class="math inline">\((j=1,\ldots, m)\)</span></li>
+<li><code>surv</code>: <span class="math inline">\(\hat S(t_j)\)</span></li>
+<li><code>n.risk</code>: <span class="math inline">\(n_j\)</span></li>
+<li><code>n.event</code>: <span class="math inline">\(d_j\)</span></li>
+<li><code>std.err</code>: <span class="math inline">\(\hat\se\{\hat S(t_j)\}\)</span></li>
+<li><code>...</code></li>
+</ul></li>
 </ul></li>
 </ul>
 </section>
