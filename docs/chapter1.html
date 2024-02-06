@@ -802,18 +802,19 @@ div.csl-indent {
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="do">## for each patient id</span></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>gbc_ce <span class="ot">&lt;-</span> gbc <span class="sc">|&gt;</span> </span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id) <span class="sc">|&gt;</span> </span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(time) <span class="sc">|&gt;</span> </span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="do">## same manipulations</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>df_ce <span class="ot">&lt;-</span> gbc_ce <span class="sc">|&gt;</span> </span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">hormone =</span> <span class="fu">if_else</span>(hormone <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"No Hormone"</span>, <span class="st">"Hormone"</span>)</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(gbc_ce <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">hormone =</span> <span class="st">"Overall"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">hormone =</span> <span class="fu">fct</span>(hormone, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"No Hormone"</span>, <span class="st">"Hormone"</span>, <span class="st">"Overall"</span>)),</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(time) <span class="sc">|&gt;</span> <span class="co"># take min time</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(status) <span class="sc">|&gt;</span> <span class="co"># if death (2) is tied with relapse (1), take death</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="do">## same manipulations</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>df_ce <span class="ot">&lt;-</span> gbc_ce <span class="sc">|&gt;</span> </span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">hormone =</span> <span class="fu">if_else</span>(hormone <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"No Hormone"</span>, <span class="st">"Hormone"</span>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(gbc_ce <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">hormone =</span> <span class="st">"Overall"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">hormone =</span> <span class="fu">fct</span>(hormone, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"No Hormone"</span>, <span class="st">"Hormone"</span>, <span class="st">"Overall"</span>)),</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Apply the same event rate function to calculate the CE rate.</p>
 <div class="cell">
@@ -934,8 +935,8 @@ div.csl-indent {
 <tr class="even">
 <td style="text-align: left;">CE rate (per person-year)</td>
 <td style="text-align: left;">0.161</td>
-<td style="text-align: left;">0.116</td>
-<td style="text-align: left;">0.143</td>
+<td style="text-align: left;">0.113</td>
+<td style="text-align: left;">0.142</td>
 </tr>
 </tbody>
 </table>

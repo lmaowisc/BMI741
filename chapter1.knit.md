@@ -6,19 +6,17 @@ execute:
 bibliography: references.bib
 ---
 
+
 ## Slides
 
 Lecture slides [here](chap1.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
 ## Base R Code
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-#| eval: false
 
+::: {.cell}
 
-
+```{.r .cell-code  code-fold="true" code-summary="Show the code"}
 ###########################################################################
 # The following code generates Figure 1.2 and Table 1.11 of chapter 1.   ##
 ###########################################################################
@@ -223,18 +221,23 @@ denom.CE <- c(sum(data.CE$time[data.CE$hormone==1]),
 
 #CE rate
 round(num.CE/denom.CE,3)
-
 ```
+:::
+
 
 ## Tidyverse Solutions
 
 First load the required packages:
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 library(tidyverse)
 library(survival)
-
 ```
+:::
+
 
 ### Parsing censored data
 
@@ -242,18 +245,22 @@ Instead of `(time, status)`, sometimes the observed data are stored in a single 
 
 For example, Table 1.1 of @klein2003 lists the times (in months) to relapse of leukemia in the treatment group (6-MP):
 
-```{r}
 
+::: {.cell}
+
+```{.r .cell-code}
 MP <- c(10, 7, "32+", 23, 22, 6, 16, "34+", "32+", "25+", "11+", "20+", 
         "19+", 6, "17+", "35+", 6, 13, "9+", "6+", "10+")
-
 ```
+:::
+
 
 To convert the character strings to `(time, status)`, use `parse_number()` to parse out the number and `str_detect()` to detect whether the string contains "+":
 
-```{r}
-#| output: false
 
+::: {.cell}
+
+```{.r .cell-code}
 df <- tibble(
   MP = MP, # for comparison with newly created variables
   time = parse_number(MP), # extract the number
@@ -277,16 +284,25 @@ df
 # ℹ 11 more rows
 # ℹ Use `print(n = ...)` to see more rows
 ```
+:::
+
 
 We can now feed this dataset to standard functions for survival analysis, e.g., `survfit()` for the Kaplan--Meier estimator:
 
-```{r}
 
+::: {.cell}
+
+```{.r .cell-code}
 km <- survfit(Surv(time, status) ~ 1, df)
 plot(km, main = "Relapse of leukemia in 6-MP group", conf.int = FALSE,
      xlab = "Time (months)", ylab = "Relapse-free probabilities", frame = FALSE)
-
 ```
+
+::: {.cell-output-display}
+![](chapter1_files/figure-html/unnamed-chunk-5-1.png){width=672}
+:::
+:::
+
 
 ### Facet plotting Fig. 1.2
 
@@ -294,9 +310,10 @@ Fig. 1.2 of the lecture notes overlays different types of survival estimates by 
 
 First read in the data:
 
-```{r}
-#| output: false
 
+::: {.cell}
+
+```{.r .cell-code}
 ## read in the GBC mortality data
 data <- read.table("Data//German Breast Cancer Study//gbc_mort.txt")
 
@@ -308,12 +325,16 @@ head(data)
 # 4  4  4.852459      0       1  40    1   24     1     3   25    11
 # 5  5 61.081967      0       2  64    2   19     2     1   19     9
 # 6  6 63.377049      0       2  49    2   56     1     3  356    64
-
 ```
+:::
+
 
 Then compute the different estimates within each level of `hormone`. Do this by using `group_by(hormone)` and performing the needed calculations within `reframe()`. But first we use `survfit()` to get the Kaplan--Meier estimates:
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 # Kaplan--Meier estimates
 obj <- summary(survfit(Surv(time, status) ~ hormone, data))
 ## extract the numbers 
@@ -330,13 +351,16 @@ km <- tibble(
     hormone = 1:2,
     type = "Kaplan-Meier"
   )
-
 ```
+:::
+
 
 Then the event-imputation and complete-case estimates (with `ecdf()` for empirical distribution function):
 
-```{r}
 
+::: {.cell}
+
+```{.r .cell-code}
 # empirical survival functions
 ## event imputation
 ## empirical survival functions for all times
@@ -366,14 +390,15 @@ cc <- data |>
     type = "Complete-case"
   )
 ```
+:::
+
 
 Now plot the figure:
 
-```{r}
-#| fig-width: 6
-#| fig-height: 4
-#| fig-align: center
 
+::: {.cell layout-align="center"}
+
+```{.r .cell-code}
 # create a vector to label the panels
 hormone_labeller <- c("1" = "No Hormone", "2" = "Hormone")
 
@@ -395,8 +420,13 @@ km |>
   theme(
     legend.position = "bottom"
   )
-  
 ```
+
+::: {.cell-output-display}
+![](chapter1_files/figure-html/unnamed-chunk-9-1.png){fig-align='center' width=576}
+:::
+:::
+
 
 Prettier than Fig. 1.2?
 
@@ -412,7 +442,10 @@ To do so, we will define three summary functions:
 
 To start, read in and clean the GBC mortality data for the subject-level statistics and death rate:
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 library(knitr) # for printing formatted table
 
 ## for subject-level summary and mortality
@@ -429,14 +462,16 @@ df <- data |>
     hormone = fct(hormone, levels = c("No Hormone", "Hormone", "Overall")),
     meno = if_else(meno == 1, "No", "Yes")
   )
-
 ```
+:::
+
 
 Now, write a function to compute median (IQR) and use it on the quantitative variables. In the process, we use `pivot_longer()` and `pivot_wider()` to put the hormone levels on the columns rather than rows. (For details on these data transposition tools, see <https://r4ds.hadley.nz/data-tidy>).
 
-```{r}
 
+::: {.cell}
 
+```{.r .cell-code}
 ## a function to compute median (IQR) for x
 ## rounded to the rth decimal place
 med_iqr <- function(x, r = 1){
@@ -473,12 +508,15 @@ tab_quant <- df |>
     )
   )
 ```
+:::
+
 
 See what the result looks like:
 
-```{r}
-#| output: false
 
+::: {.cell}
+
+```{.r .cell-code}
 tab_quant
 # # A tibble: 5 × 4
 #   name                   `No Hormone` Hormone       Overall        
@@ -489,11 +527,15 @@ tab_quant
 # 4 Progesterone (fmol/mg) 32 (7, 130)  35 (7.2, 133) 32.5 (7, 131.8)
 # 5 Estrogen (fmol/mg)     32 (8, 92.2) 46 (9, 182.5) 36 (8, 114) 
 ```
+:::
+
 
 Next we deal with categorical variables. Because the results span multiple rows due to multiple levels, it is easier to write a data frame function, one that takes the tibble data frame as an argument. For details, see <https://r4ds.hadley.nz/functions#data-frame-functions>.
 
-```{r}
 
+::: {.cell}
+
+```{.r .cell-code}
 ## a function that computes N (%) for each level of var
 ## by group in data frame df (percent rounded to rth point)
 freq_pct<- function(df, group, var, r = 1){
@@ -523,13 +565,16 @@ freq_pct<- function(df, group, var, r = 1){
       name = {{ var }} # name = variable names 
     )
 }
-
 ```
+:::
+
 
 Apply this function to `meno` and `grade` (by `hormone` of course):
 
-```{r}
 
+::: {.cell}
+
+```{.r .cell-code}
 ## menopausal status
 meno <- df |>
   freq_pct(hormone, meno) |> 
@@ -544,12 +589,15 @@ grade <- df |>
     name = str_c("Tumor grade - ", name)
   )
 ```
+:::
+
 
 Combine with the quantitative variables:
 
-```{r}
-#| output: false
 
+::: {.cell}
+
+```{.r .cell-code}
 tabone <- tab_quant |> 
   add_row(meno) |> 
   add_row(grade)
@@ -569,12 +617,15 @@ tabone
 #  9 Tumor grade - 2        281 (63.9%)  163 (66.3%)   444 (64.7%)    
 # 10 Tumor grade - 3        111 (25.2%)  50 (20.3%)    161 (23.5%)  
 ```
+:::
+
 
 As the last step, create an event rate function and apply it to `df` to calculate the death rate:
 
-```{r}
-#| output: false
 
+::: {.cell}
+
+```{.r .cell-code}
 # event rate function
 # status = 1 for event
 event_rate <- function(time, status){
@@ -603,12 +654,16 @@ death_rates
 #   name                         `No Hormone` Hormone Overall
 #   <chr>                        <chr>        <chr>   <chr>  
 # 1 Death rate (per person-year) 0.075        0.059   0.069  
-
 ```
+:::
+
 
 Finally, read in and clean up the complete data (relapse and death) to calculate the composite endpoint (CE; time to first) event rate.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 # Read in the complete data
 gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
 
@@ -630,11 +685,15 @@ df_ce <- gbc_ce |>
     hormone = fct(hormone, levels = c("No Hormone", "Hormone", "Overall")),
   )
 ```
+:::
+
 
 Apply the same event rate function to calculate the CE rate.
 
-```{r}
 
+::: {.cell}
+
+```{.r .cell-code}
 ce_rates <- df_ce |> 
   group_by(hormone) |> 
   summarize(
@@ -649,13 +708,15 @@ ce_rates <- df_ce |>
     .before = 1
   )
 ```
+:::
+
 
 Add the event rates to the table and print it out:
 
-```{r}
-#| label: tbl-tabone
-#| tbl-cap: Patient characteristics in the German Breast Cancer study.
 
+::: {#tbl-tabone .cell tbl-cap='Patient characteristics in the German Breast Cancer study.'}
+
+```{.r .cell-code}
 ## add event rates
 tabone <- tabone |> 
   add_row(
@@ -669,5 +730,23 @@ tabone <- tabone |>
 colnames(tabone) <- c(" ", str_c(colnames(tabone)[2:4], " (N=", table(df$hormone),")"))
 ## print out the table
 kable(tabone)
-
 ```
+
+::: {.cell-output-display}
+|                             |No Hormone (N=440) |Hormone (N=246) |Overall (N=686) |
+|:----------------------------|:------------------|:---------------|:---------------|
+|Age (years)                  |50 (45, 59)        |58 (50, 63)     |53 (46, 61)     |
+|Tumor size (mm)              |25 (20, 35)        |25 (20, 35)     |25 (20, 35)     |
+|# Nodes                      |3 (1, 7)           |3 (1, 7)        |3 (1, 7)        |
+|Progesterone (fmol/mg)       |32 (7, 130)        |35 (7.2, 133)   |32.5 (7, 131.8) |
+|Estrogen (fmol/mg)           |32 (8, 92.2)       |46 (9, 182.5)   |36 (8, 114)     |
+|Menopause - No               |231 (52.5%)        |59 (24%)        |290 (42.3%)     |
+|Menopause - Yes              |209 (47.5%)        |187 (76%)       |396 (57.7%)     |
+|Tumor grade - 1              |48 (10.9%)         |33 (13.4%)      |81 (11.8%)      |
+|Tumor grade - 2              |281 (63.9%)        |163 (66.3%)     |444 (64.7%)     |
+|Tumor grade - 3              |111 (25.2%)        |50 (20.3%)      |161 (23.5%)     |
+|Death rate (per person-year) |0.075              |0.059           |0.069           |
+|CE rate (per person-year)    |0.161              |0.113           |0.142           |
+:::
+:::
+
