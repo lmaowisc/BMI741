@@ -18,6 +18,7 @@ website:
           - chapter1.qmd
           - chapter2.qmd
           - chapter3.qmd
+          - chapter4.qmd
       - section: "Miscellaneous"
        
         
