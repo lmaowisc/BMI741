@@ -12,7 +12,7 @@ $\newcommand{\indep}{\perp \!\!\! \perp}$ $\newcommand{\pr}{{\rm pr}}$
 ::: callout-note
 ## Question
 
-Suppose that patient enrollment (and randomization) is uniform in calendar time $[0, \tau_b]$ and that the study is terminated at calendar time $\tau_c$ $(\tau_c>\tau_b)$. What is the distribution of the administrative censoring time? (Hint: see Fig. 1.2) Further suppose that patients are subject to a random LTFU following an exponential distribution with hazard $\lambda_L$ (whose survival function is $\exp(-\lambda_L t)$). Write out the survival function for the censoring time $C$ (i.e., the earlier of administrative censoring and LTFU times).
+Suppose that patient enrollment (and randomization) is uniform in calendar time $[0, \tau_b]$ and that the study is terminated at calendar time $\tau_c$ $(\tau_c>\tau_b)$. What is the distribution of the administrative censoring time? (Hint: see Fig. 1.1) Further suppose that patients are subject to a random LTFU following an exponential distribution with hazard $\lambda_L$ (whose survival function is $\exp(-\lambda_L t)$). Write out the survival function for the censoring time $C$ (i.e., the earlier of administrative censoring and LTFU times).
 :::
 
 The administrative censoring time $C_A$ is defined as the duration between time of enrollment, $R\sim \mbox{Unif}[0, \tau_b]$, and time of study termination $\tau_c$ (see Fig. 1.2). So $$C_A = (\tau_c - R) \sim \mbox{Unif}[\tau_c - \tau_b, \tau_c].$$ As a result, $${\rm pr}(C_A > t) = \left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+
@@ -43,17 +43,46 @@ Because $X=\min(T,C)$, we have that $X\leq T$ always. Therefore, $X>t$ implies $
 S_{\rm imp}(t)=\pr(X>t)=\pr(T>t)\pr(C>t)=S(t)\pr(C>t),
 $$ which is strictly less than $S(t)$ if $\pr(C>t)<1$ and $S(t)>0$. That is, if there is a positive probability of censoring before $t$ and a positive probability of failure after it.
 
-## Problem 1.3
+## Problem 1.3 (extra  credit)
 
 ::: callout-note
 ## Question
-Formulate a survival function estimator under the \`\`nonevent-imputation'' approach described in Section \ref{sec:intro:bias} and show that it overestimates $S(t)$ whether censoring is independent or not. Give a simple sufficient condition for strict overestimation under
+Formulate a survival function estimator under the "nonevent-imputation" approach described in Section 1.2.2 and show that it overestimates $S(t)$ whether censoring is independent or not. Give a simple sufficient condition for strict overestimation under $C\indep T$.
 :::
+
+Non-event imputation means imputing event time to $\infty$ whenever censored, i.e.,
+$$
+\hat T_i = \left\{
+\begin{array}{cc}
+T_i, &\delta_i =1\\
+\infty,&\delta_i =0
+\end{array}
+\right.
+$$
+So the empirical survival function based on the $\hat T_i$ is
+\begin{align}
+n^{-1}\sum_{i=1}^n I(\hat T_i >t) &= n^{-1}\sum_{i=1}^n\left\{\delta_iI(T_i > t) + (1-\delta_i)\right\}\\
+&= 1 - n^{-1}\sum_{i=1}^n\delta_i I(T_i\leq t)\\
+&\to 1- \pr(T\leq t\wedge C)\\
+&= \pr(T > t\wedge C)\\
+&\geq \pr(T > t)\\
+& = S(t).
+\end{align}
+This shows that the estimator overestimates $S(t)$ regardless of whether censoring
+is independent. 
+Under $C\indep T$,
+$$
+\pr(T > t\wedge C) = E\{S(C\wedge t)\}.
+$$
+It turns out that the right hand side does not have a "simple" condition for 
+being strictly greater than $S(t)$. 
+But the following condition works: (1) there exists $t_0 < t$ such that $S(t_0)> S(t)$;
+and  (2) $\pr(C\leq t_0)>0$. That is, there is a positive probability of censoring before
+a point to the left of $t$ where the survival rate is strictly greater than $S(t)$.
+The proof is left as an exercise.
 
 ```{r}
 library(tidyverse)
-
-
 ```
 
 ## Problem 1.8

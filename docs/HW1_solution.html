@@ -207,7 +207,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#problem-1.1" id="toc-problem-1.1" class="nav-link active" data-scroll-target="#problem-1.1">Problem 1.1</a></li>
   <li><a href="#problem-1.2" id="toc-problem-1.2" class="nav-link" data-scroll-target="#problem-1.2">Problem 1.2</a></li>
-  <li><a href="#problem-1.3" id="toc-problem-1.3" class="nav-link" data-scroll-target="#problem-1.3">Problem 1.3</a></li>
+  <li><a href="#problem-1.3-extra-credit" id="toc-problem-1.3-extra-credit" class="nav-link" data-scroll-target="#problem-1.3-extra-credit">Problem 1.3 (extra credit)</a></li>
   <li><a href="#problem-1.8" id="toc-problem-1.8" class="nav-link" data-scroll-target="#problem-1.8">Problem 1.8</a></li>
   </ul>
 </nav>
@@ -245,7 +245,7 @@ Question
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Suppose that patient enrollment (and randomization) is uniform in calendar time <span class="math inline">\([0, \tau_b]\)</span> and that the study is terminated at calendar time <span class="math inline">\(\tau_c\)</span> <span class="math inline">\((\tau_c&gt;\tau_b)\)</span>. What is the distribution of the administrative censoring time? (Hint: see Fig. 1.2) Further suppose that patients are subject to a random LTFU following an exponential distribution with hazard <span class="math inline">\(\lambda_L\)</span> (whose survival function is <span class="math inline">\(\exp(-\lambda_L t)\)</span>). Write out the survival function for the censoring time <span class="math inline">\(C\)</span> (i.e., the earlier of administrative censoring and LTFU times).</p>
+<p>Suppose that patient enrollment (and randomization) is uniform in calendar time <span class="math inline">\([0, \tau_b]\)</span> and that the study is terminated at calendar time <span class="math inline">\(\tau_c\)</span> <span class="math inline">\((\tau_c&gt;\tau_b)\)</span>. What is the distribution of the administrative censoring time? (Hint: see Fig. 1.1) Further suppose that patients are subject to a random LTFU following an exponential distribution with hazard <span class="math inline">\(\lambda_L\)</span> (whose survival function is <span class="math inline">\(\exp(-\lambda_L t)\)</span>). Write out the survival function for the censoring time <span class="math inline">\(C\)</span> (i.e., the earlier of administrative censoring and LTFU times).</p>
 </div>
 </div>
 <p>The administrative censoring time <span class="math inline">\(C_A\)</span> is defined as the duration between time of enrollment, <span class="math inline">\(R\sim \mbox{Unif}[0, \tau_b]\)</span>, and time of study termination <span class="math inline">\(\tau_c\)</span> (see Fig. 1.2). So <span class="math display">\[C_A = (\tau_c - R) \sim \mbox{Unif}[\tau_c - \tau_b, \tau_c].\]</span> As a result, <span class="math display">\[{\rm pr}(C_A &gt; t) = \left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+
@@ -282,8 +282,8 @@ Question
 S_{\rm imp}(t)=\pr(X&gt;t)=\pr(T&gt;t)\pr(C&gt;t)=S(t)\pr(C&gt;t),
 \]</span> which is strictly less than <span class="math inline">\(S(t)\)</span> if <span class="math inline">\(\pr(C&gt;t)&lt;1\)</span> and <span class="math inline">\(S(t)&gt;0\)</span>. That is, if there is a positive probability of censoring before <span class="math inline">\(t\)</span> and a positive probability of failure after it.</p>
 </section>
-<section id="problem-1.3" class="level2">
-<h2 class="anchored" data-anchor-id="problem-1.3">Problem 1.3</h2>
+<section id="problem-1.3-extra-credit" class="level2">
+<h2 class="anchored" data-anchor-id="problem-1.3-extra-credit">Problem 1.3 (extra credit)</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -294,9 +294,26 @@ Question
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Formulate a survival function estimator under the ``nonevent-imputation’’ approach described in Section <span class="math inline">\(\ref{sec:intro:bias}\)</span> and show that it overestimates <span class="math inline">\(S(t)\)</span> whether censoring is independent or not. Give a simple sufficient condition for strict overestimation under</p>
+<p>Formulate a survival function estimator under the “nonevent-imputation” approach described in Section 1.2.2 and show that it overestimates <span class="math inline">\(S(t)\)</span> whether censoring is independent or not. Give a simple sufficient condition for strict overestimation under <span class="math inline">\(C\indep T\)</span>.</p>
 </div>
 </div>
+<p>Non-event imputation means imputing event time to <span class="math inline">\(\infty\)</span> whenever censored, i.e., <span class="math display">\[
+\hat T_i = \left\{
+\begin{array}{cc}
+T_i, &amp;\delta_i =1\\
+\infty,&amp;\delta_i =0
+\end{array}
+\right.
+\]</span> So the empirical survival function based on the <span class="math inline">\(\hat T_i\)</span> is <span class="math display">\[\begin{align}
+n^{-1}\sum_{i=1}^n I(\hat T_i &gt;t) &amp;= n^{-1}\sum_{i=1}^n\left\{\delta_iI(T_i &gt; t) + (1-\delta_i)\right\}\\
+&amp;= 1 - n^{-1}\sum_{i=1}^n\delta_i I(T_i\leq t)\\
+&amp;\to 1- \pr(T\leq t\wedge C)\\
+&amp;= \pr(T &gt; t\wedge C)\\
+&amp;\geq \pr(T &gt; t)\\
+&amp; = S(t).
+\end{align}\]</span> This shows that the estimator overestimates <span class="math inline">\(S(t)\)</span> regardless of whether censoring is independent. Under <span class="math inline">\(C\indep T\)</span>, <span class="math display">\[
+\pr(T &gt; t\wedge C) = E\{S(C\wedge t)\}.
+\]</span> It turns out that the right hand side does not have a “simple” condition for being strictly greater than <span class="math inline">\(S(t)\)</span>. But the following condition works: (1) there exists <span class="math inline">\(t_0 &lt; t\)</span> such that <span class="math inline">\(S(t_0)&gt; S(t)\)</span>; and (2) <span class="math inline">\(\pr(C\leq t_0)&gt;0\)</span>. That is, there is a positive probability of censoring before a point to the left of <span class="math inline">\(t\)</span> where the survival rate is strictly greater than <span class="math inline">\(S(t)\)</span>. The proof is left as an exercise.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
