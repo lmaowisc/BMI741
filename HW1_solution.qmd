@@ -90,7 +90,7 @@ except that the proportion of X-linked inheritance is slightly higher in the tre
 than in the control arm (63.1\%).
 The event rates for both first and recurrent infections are substantially lower in the treatment arm.
 
-![](Figures/cgd_table1.png){fig-align="center" width="90%"}
+![](Figures/cgd_table1.png){fig-align="center" width="70%"}
 
 ```{r}
 #| code-fold: true
