@@ -186,7 +186,7 @@
     "href": "HW1_solution.html#problem-1.3",
     "title": "HW1 sample solution",
     "section": "Problem 1.3",
-    "text": "Problem 1.3\n\n\n\n\n\n\nNote\n\n\n\nFormulate a survival function estimator under the ``nonevent-imputation’’ approach described in Section \\(\\ref{sec:intro:bias}\\) and show that it overestimates \\(S(t)\\) whether censoring is independent or not. Give a simple sufficient condition for strict overestimation under\n\n\n\nlibrary(tidyverse)"
+    "text": "Problem 1.3\n\n\n\n\n\n\nQuestion\n\n\n\nFormulate a survival function estimator under the ``nonevent-imputation’’ approach described in Section \\(\\ref{sec:intro:bias}\\) and show that it overestimates \\(S(t)\\) whether censoring is independent or not. Give a simple sufficient condition for strict overestimation under\n\n\n\nlibrary(tidyverse)"
   },
   {
     "objectID": "HW1_solution.html#problem-1.8",

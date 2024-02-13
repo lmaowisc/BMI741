@@ -4,25 +4,18 @@ execute:
   eval: false
   echo: true
 ---
- $\newcommand{\indep}{\perp \!\!\! \perp}$
- $\newcommand{\pr}{{\rm pr}}$
+
+$\newcommand{\indep}{\perp \!\!\! \perp}$ $\newcommand{\pr}{{\rm pr}}$
 
 ## Problem 1.1
 
-
-
 ::: callout-note
 ## Question
+
 Suppose that patient enrollment (and randomization) is uniform in calendar time $[0, \tau_b]$ and that the study is terminated at calendar time $\tau_c$ $(\tau_c>\tau_b)$. What is the distribution of the administrative censoring time? (Hint: see Fig. 1.2) Further suppose that patients are subject to a random LTFU following an exponential distribution with hazard $\lambda_L$ (whose survival function is $\exp(-\lambda_L t)$). Write out the survival function for the censoring time $C$ (i.e., the earlier of administrative censoring and LTFU times).
 :::
 
-The administrative censoring time $C_A$ is defined as the duration
-between time of enrollment, $R\sim \mbox{Unif}[0, \tau_b]$, and time of study termination $\tau_c$
-(see Fig. 1.2).
-So
-$$C_A = (\tau_c - R) \sim \mbox{Unif}[\tau_c - \tau_b, \tau_c].$$
-As a result, 
-$${\rm pr}(C_A > t) = \left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+
+The administrative censoring time $C_A$ is defined as the duration between time of enrollment, $R\sim \mbox{Unif}[0, \tau_b]$, and time of study termination $\tau_c$ (see Fig. 1.2). So $$C_A = (\tau_c - R) \sim \mbox{Unif}[\tau_c - \tau_b, \tau_c].$$ As a result, $${\rm pr}(C_A > t) = \left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+
 =\left\{
 \begin{array}{lr}
 1&  0\leq t \leq \tau_c - \tau_b\\
@@ -30,58 +23,37 @@ $${\rm pr}(C_A > t) = \left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+
 0 & t\geq \tau_c
 \end{array}
 \right.,
-$$
-where $x_+=\max(x, 0)$.
+$$ where $x_+=\max(x, 0)$.
 
-On the other hand, the survival function for LTFU $C_L$ is
-${\rm pr}(C_L > t) = \exp(-\lambda_L t)$. 
-Assuming $C_A\indep C_L$, the survival function for the overall censoring time $C$
-is
-\begin{align}
+On the other hand, the survival function for LTFU $C_L$ is ${\rm pr}(C_L > t) = \exp(-\lambda_L t)$. Assuming $C_A\indep C_L$, the survival function for the overall censoring time $C$ is \begin{align}
 {\rm pr}(C > t)&={\rm pr}(C_A\wedge C_L > t)\\
 &={\rm pr}(C_A > t){\rm pr}(C_L > t)\\
 &=\left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+\exp(-\lambda_L t)
 \end{align}
 
-
-
 ## Problem 1.2
 
 ::: callout-note
 ## Question
-Show that $S_{\rm imp}(t)\leq S(t)$ for all $t$ 
-whether censoring is independent or not.
-Give a simple sufficient condition for strict inequality under 
-$C\indep T$.
+
+Show that $S_{\rm imp}(t)\leq S(t)$ for all $t$ whether censoring is independent or not. Give a simple sufficient condition for strict inequality under $C\indep T$.
 :::
 
-Because $X=\min(T,C)$, we have that $X\leq T$ always.
-Therefore, $X>t$ implies $T>t$. Hence $\pr(X>t)\leq \pr(T>t)$.
-Under independence,
-we have that 
-$$
+Because $X=\min(T,C)$, we have that $X\leq T$ always. Therefore, $X>t$ implies $T>t$. Hence $\pr(X>t)\leq \pr(T>t)$. Under independence, we have that $$
 S_{\rm imp}(t)=\pr(X>t)=\pr(T>t)\pr(C>t)=S(t)\pr(C>t),
-$$
-which is strictly less than $S(t)$ if $\pr(C>t)<1$
-and $S(t)>0$. That is, if there is a positive probability of
-censoring before $t$ and a positive probability of failure after it.
+$$ which is strictly less than $S(t)$ if $\pr(C>t)<1$ and $S(t)>0$. That is, if there is a positive probability of censoring before $t$ and a positive probability of failure after it.
 
 ## Problem 1.3
 
 ::: callout-note
-Formulate a survival function estimator under the ``nonevent-imputation'' approach described in Section \ref{sec:intro:bias}
-and show that it overestimates $S(t)$ whether censoring is independent or not.
-Give a simple sufficient condition for strict overestimation under 
+## Question
+Formulate a survival function estimator under the \`\`nonevent-imputation'' approach described in Section \ref{sec:intro:bias} and show that it overestimates $S(t)$ whether censoring is independent or not. Give a simple sufficient condition for strict overestimation under
 :::
-
-
-
 
 ```{r}
 library(tidyverse)
 
 
 ```
-
 
 ## Problem 1.8
