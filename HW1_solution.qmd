@@ -1,15 +1,48 @@
 ---
 title: "HW1 sample solution"
 ---
+ $\newcommand{\indep}{\perp \!\!\! \perp}$
 
 ## Problem 1.1
 
 
-## Problem 1.2
 
+::: callout-note
+## Question
+Suppose that patient enrollment (and randomization) is uniform in calendar time $[0, \tau_b]$ and that the study is terminated at calendar time $\tau_c$ $(\tau_c>\tau_b)$. What is the distribution of the administrative censoring time? (Hint: see Fig. 1.2) Further suppose that patients are subject to a random LTFU following an exponential distribution with hazard $\lambda_L$ (whose survival function is $\exp(-\lambda_L t)$). Write out the survival function for the censoring time $C$ (i.e., the earlier of administrative censoring and LTFU times).
+:::
+
+The administrative censoring time $C_A$ is defined as the duration
+between time of enrollment, $R\sim \mbox{Unif}[0, \tau_b]$, and time of study termination $\tau_c$
+(see Fig. 1.2).
+So
+$$C_A = (\tau_c - R) \sim \mbox{Unif}[\tau_c - \tau_b, \tau_c].$$
+As a result, 
+$${\rm pr}(C_A > t) = \left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+
+=\left\{
+\begin{array}{lr}
+1&  0\leq t \leq \tau_c - \tau_b\\
+\frac{\tau_c - t}{\tau_b}& \tau_c - \tau_b < t \leq \tau_c\\
+0 & t\geq \tau_c
+\end{array}
+\right.,
+$$
+where $x_+=\max(x, 0)$.
+
+On the other hand, the survival function for LTFU $C_L$ is
+${\rm pr}(C_L > t) = \exp(-\lambda_L t)$. 
+Assuming $C_A\indep C_L$, the survival function for the overall censoring time $C$
+is
+\begin{align}
+{\rm pr}(C > t)&={\rm pr}(C_A\wedge C_L > t)\\
+&={\rm pr}(C_A > t){\rm pr}(C_L > t)\\
+&=\left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+\exp(-\lambda_L t)
+\end{align}
+
+
+
+## Problem 1.2
 
 ## Problem 1.3
 
-
 ## Problem 1.8
-

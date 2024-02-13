@@ -60,6 +60,8 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -196,8 +198,36 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p><span class="math inline">\(\newcommand{\indep}{\perp \!\!\! \perp}\)</span></p>
 <section id="problem-1.1" class="level2">
 <h2 class="anchored" data-anchor-id="problem-1.1">Problem 1.1</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose that patient enrollment (and randomization) is uniform in calendar time <span class="math inline">\([0, \tau_b]\)</span> and that the study is terminated at calendar time <span class="math inline">\(\tau_c\)</span> <span class="math inline">\((\tau_c&gt;\tau_b)\)</span>. What is the distribution of the administrative censoring time? (Hint: see Fig. 1.2) Further suppose that patients are subject to a random LTFU following an exponential distribution with hazard <span class="math inline">\(\lambda_L\)</span> (whose survival function is <span class="math inline">\(\exp(-\lambda_L t)\)</span>). Write out the survival function for the censoring time <span class="math inline">\(C\)</span> (i.e., the earlier of administrative censoring and LTFU times).</p>
+</div>
+</div>
+<p>The administrative censoring time <span class="math inline">\(C_A\)</span> is defined as the duration between time of enrollment, <span class="math inline">\(R\sim \mbox{Unif}[0, \tau_b]\)</span>, and time of study termination <span class="math inline">\(\tau_c\)</span> (see Fig. 1.2). So <span class="math display">\[C_A = (\tau_c - R) \sim \mbox{Unif}[\tau_c - \tau_b, \tau_c].\]</span> As a result, <span class="math display">\[{\rm pr}(C_A &gt; t) = \left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+
+=\left\{
+\begin{array}{lr}
+1&amp;  0\leq t \leq \tau_c - \tau_b\\
+\frac{\tau_c - t}{\tau_b}&amp; \tau_c - \tau_b &lt; t \leq \tau_c\\
+0 &amp; t\geq \tau_c
+\end{array}
+\right.,
+\]</span> where <span class="math inline">\(x_+=\max(x, 0)\)</span>.</p>
+<p>On the other hand, the survival function for LTFU <span class="math inline">\(C_L\)</span> is <span class="math inline">\({\rm pr}(C_L &gt; t) = \exp(-\lambda_L t)\)</span>. Assuming <span class="math inline">\(C_A\indep C_L\)</span>, the survival function for the overall censoring time <span class="math inline">\(C\)</span> is <span class="math display">\[\begin{align}
+{\rm pr}(C &gt; t)&amp;={\rm pr}(C_A\wedge C_L &gt; t)\\
+&amp;={\rm pr}(C_A &gt; t){\rm pr}(C_L &gt; t)\\
+&amp;=\left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+\exp(-\lambda_L t)
+\end{align}\]</span></p>
 </section>
 <section id="problem-1.2" class="level2">
 <h2 class="anchored" data-anchor-id="problem-1.2">Problem 1.2</h2>

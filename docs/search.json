@@ -194,5 +194,19 @@
     "title": "HW1 sample solution",
     "section": "Problem 1.8",
     "text": "Problem 1.8"
+  },
+  {
+    "objectID": "HW1_solution.html",
+    "href": "HW1_solution.html",
+    "title": "HW1 sample solution",
+    "section": "",
+    "text": "\\(\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\)"
+  },
+  {
+    "objectID": "HW1_solution.html#problem-1.1",
+    "href": "HW1_solution.html#problem-1.1",
+    "title": "HW1 sample solution",
+    "section": "Problem 1.1",
+    "text": "Problem 1.1\n\n\n\n\n\n\nQuestion\n\n\n\nSuppose that patient enrollment (and randomization) is uniform in calendar time \\([0, \\tau_b]\\) and that the study is terminated at calendar time \\(\\tau_c\\) \\((\\tau_c&gt;\\tau_b)\\). What is the distribution of the administrative censoring time? (Hint: see Fig. 1.2) Further suppose that patients are subject to a random LTFU following an exponential distribution with hazard \\(\\lambda_L\\) (whose survival function is \\(\\exp(-\\lambda_L t)\\)). Write out the survival function for the censoring time \\(C\\) (i.e., the earlier of administrative censoring and LTFU times).\n\n\nThe administrative censoring time \\(C_A\\) is defined as the duration between time of enrollment, \\(R\\sim \\mbox{Unif}[0, \\tau_b]\\), and time of study termination \\(\\tau_c\\) (see Fig. 1.2). So \\[C_A = (\\tau_c - R) \\sim \\mbox{Unif}[\\tau_c - \\tau_b, \\tau_c].\\] As a result, \\[{\\rm pr}(C_A &gt; t) = \\left(\\frac{\\tau_c - t}{\\tau_b}\\wedge 1\\right)_+\n=\\left\\{\n\\begin{array}{lr}\n1&  0\\leq t \\leq \\tau_c - \\tau_b\\\\\n\\frac{\\tau_c - t}{\\tau_b}& \\tau_c - \\tau_b &lt; t \\leq \\tau_c\\\\\n0 & t\\geq \\tau_c\n\\end{array}\n\\right.,\n\\] where \\(x_+=\\max(x, 0)\\).\nOn the other hand, the survival function for LTFU \\(C_L\\) is \\({\\rm pr}(C_L &gt; t) = \\exp(-\\lambda_L t)\\). Assuming \\(C_A\\indep C_L\\), the survival function for the overall censoring time \\(C\\) is \\[\\begin{align}\n{\\rm pr}(C &gt; t)&={\\rm pr}(C_A\\wedge C_L &gt; t)\\\\\n&={\\rm pr}(C_A &gt; t){\\rm pr}(C_L &gt; t)\\\\\n&=\\left(\\frac{\\tau_c - t}{\\tau_b}\\wedge 1\\right)_+\\exp(-\\lambda_L t)\n\\end{align}\\]"
   }
 ]
