@@ -248,7 +248,7 @@ Question
 <p>Suppose that patient enrollment (and randomization) is uniform in calendar time <span class="math inline">\([0, \tau_b]\)</span> and that the study is terminated at calendar time <span class="math inline">\(\tau_c\)</span> <span class="math inline">\((\tau_c&gt;\tau_b)\)</span>. What is the distribution of the administrative censoring time? (Hint: see Fig. 1.1) Further suppose that patients are subject to a random LTFU following an exponential distribution with hazard <span class="math inline">\(\lambda_L\)</span> (whose survival function is <span class="math inline">\(\exp(-\lambda_L t)\)</span>). Write out the survival function for the censoring time <span class="math inline">\(C\)</span> (i.e., the earlier of administrative censoring and LTFU times).</p>
 </div>
 </div>
-<p>The administrative censoring time <span class="math inline">\(C_A\)</span> is defined as the duration between time of enrollment, <span class="math inline">\(R\sim \mbox{Unif}[0, \tau_b]\)</span>, and time of study termination <span class="math inline">\(\tau_c\)</span> (see Fig. 1.2). So <span class="math display">\[C_A = (\tau_c - R) \sim \mbox{Unif}[\tau_c - \tau_b, \tau_c].\]</span> As a result, <span class="math display">\[{\rm pr}(C_A &gt; t) = \left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+
+<p>The administrative censoring time <span class="math inline">\(C_A\)</span> is defined as the duration between time of enrollment, <span class="math inline">\(R\sim \mbox{Unif}[0, \tau_b]\)</span>, and time of study termination <span class="math inline">\(\tau_c\)</span> (see Fig. 1.1). So <span class="math display">\[C_A = (\tau_c - R) \sim \mbox{Unif}[\tau_c - \tau_b, \tau_c].\]</span> As a result, <span class="math display">\[{\rm pr}(C_A &gt; t) = \left(\frac{\tau_c - t}{\tau_b}\wedge 1\right)_+
 =\left\{
 \begin{array}{lr}
 1&amp;  0\leq t \leq \tau_c - \tau_b\\
@@ -313,7 +313,7 @@ n^{-1}\sum_{i=1}^n I(\hat T_i &gt;t) &amp;= n^{-1}\sum_{i=1}^n\left\{\delta_iI(T
 &amp; = S(t).
 \end{align}\]</span> This shows that the estimator overestimates <span class="math inline">\(S(t)\)</span> regardless of whether censoring is independent. Under <span class="math inline">\(C\indep T\)</span>, <span class="math display">\[
 \pr(T &gt; t\wedge C) = E\{S(C\wedge t)\}.
-\]</span> It turns out that the right hand side does not have a “simple” condition for being strictly greater than <span class="math inline">\(S(t)\)</span>. But the following condition works: (1) there exists <span class="math inline">\(t_0 &lt; t\)</span> such that <span class="math inline">\(S(t_0)&gt; S(t)\)</span>; and (2) <span class="math inline">\(\pr(C\leq t_0)&gt;0\)</span>. That is, there is a positive probability of censoring before a point to the left of <span class="math inline">\(t\)</span> where the survival rate is strictly greater than <span class="math inline">\(S(t)\)</span>. The proof is left as an exercise.</p>
+\]</span> It turns out that there is no “simple” condition for the right hand side to be strictly greater than <span class="math inline">\(S(t)\)</span>. But the following condition works: (1) there exists <span class="math inline">\(t_0 &lt; t\)</span> such that <span class="math inline">\(S(t_0)&gt; S(t)\)</span>; and (2) <span class="math inline">\(\pr(C\leq t_0)&gt;0\)</span>. That is, there is a positive probability of censoring before a point to the left of <span class="math inline">\(t\)</span> where the survival rate is strictly greater than <span class="math inline">\(S(t)\)</span>. The proof is left as an exercise.</p>
 </section>
 <section id="problem-1.8" class="level2">
 <h2 class="anchored" data-anchor-id="problem-1.8">Problem 1.8</h2>
@@ -444,71 +444,72 @@ Question
 <span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="do">#####################################################</span></span>
 <span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>o <span class="ot">&lt;-</span> <span class="fu">order</span>(data<span class="sc">$</span>id,data<span class="sc">$</span>time)</span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> data[<span class="sc">!</span><span class="fu">duplicated</span>(data<span class="sc">$</span>id),]</span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(dat)</span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="co">#n=128: number of subjects</span></span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">N.prct.by.trt</span>(<span class="at">x=</span>dat<span class="sc">$</span>sex,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Mean.IQR.by.trt</span>(<span class="at">y=</span>dat<span class="sc">$</span>age,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Mean.IQR.by.trt</span>(<span class="at">y=</span>dat<span class="sc">$</span>hght,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Mean.IQR.by.trt</span>(<span class="at">y=</span>dat<span class="sc">$</span>wght,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">N.prct.by.trt</span>(<span class="at">x=</span>dat<span class="sc">$</span>inherit,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">N.prct.by.trt</span>(<span class="at">x=</span>dat<span class="sc">$</span>stero,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>  <span class="fu">N.prct.by.trt</span>(<span class="at">x=</span>dat<span class="sc">$</span>proph,<span class="at">trt=</span>dat<span class="sc">$</span>trt)</span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[o,]</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> data[<span class="sc">!</span><span class="fu">duplicated</span>(data<span class="sc">$</span>id),]</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(dat)</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="co">#n=128: number of subjects</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">N.prct.by.trt</span>(<span class="at">x=</span>dat<span class="sc">$</span>sex,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Mean.IQR.by.trt</span>(<span class="at">y=</span>dat<span class="sc">$</span>age,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Mean.IQR.by.trt</span>(<span class="at">y=</span>dat<span class="sc">$</span>hght,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Mean.IQR.by.trt</span>(<span class="at">y=</span>dat<span class="sc">$</span>wght,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">N.prct.by.trt</span>(<span class="at">x=</span>dat<span class="sc">$</span>inherit,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>  <span class="fu">N.prct.by.trt</span>(<span class="at">x=</span>dat<span class="sc">$</span>stero,<span class="at">trt=</span>dat<span class="sc">$</span>trt),</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">N.prct.by.trt</span>(<span class="at">x=</span>dat<span class="sc">$</span>proph,<span class="at">trt=</span>dat<span class="sc">$</span>trt)</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="fu">noquote</span>(table1)</span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="do">#############################################</span></span>
-<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="do">##Calculate the *first event* rates (per year)</span></span>
-<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="co"># use the dataset "dat", since it contains</span></span>
-<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="co"># the first record for each patient</span></span>
-<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="do">############################################</span></span>
-<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="fu">noquote</span>(table1)</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="do">#############################################</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="do">##Calculate the *first event* rates (per year)</span></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="co"># use the dataset "dat", since it contains</span></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="co"># the first record for each patient</span></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="do">############################################</span></span>
 <span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="co">#Numerator: total # of events</span></span>
-<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a><span class="co"># note that event is coded as status=2</span></span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>num.FE <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(dat<span class="sc">$</span>status[dat<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"placebo"</span>]<span class="sc">&gt;</span><span class="dv">0</span>), </span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(dat<span class="sc">$</span>status[dat<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"rIFN-g"</span>]<span class="sc">&gt;</span><span class="dv">0</span>), </span>
-<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(dat<span class="sc">$</span>status<span class="sc">&gt;</span><span class="dv">0</span>))</span>
-<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a><span class="co">#Demoninator: total length of follow-up (year)</span></span>
-<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>denom.FE <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(dat<span class="sc">$</span>time[dat<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"placebo"</span>]), </span>
-<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(dat<span class="sc">$</span>time[dat<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"rIFN-g"</span>]), </span>
-<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(dat<span class="sc">$</span>time))<span class="sc">/</span><span class="dv">12</span></span>
-<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a><span class="co">#death rate</span></span>
-<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(num.FE<span class="sc">/</span>denom.FE,<span class="dv">3</span>)</span>
-<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="do">#############################</span></span>
-<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="co">#Recurrent event rate       #</span></span>
-<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="do">#############################</span></span>
-<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a><span class="co"># the numerator is easy: simply the numbers of records</span></span>
-<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="co"># with non-zero status</span></span>
-<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>num.rec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(data<span class="sc">$</span>status[data<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"placebo"</span>]<span class="sc">&gt;</span><span class="dv">0</span>), </span>
-<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>         <span class="fu">sum</span>(data<span class="sc">$</span>status[data<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"rIFN-g"</span>]<span class="sc">&gt;</span><span class="dv">0</span>), </span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>         <span class="fu">sum</span>(data<span class="sc">$</span>status<span class="sc">&gt;</span><span class="dv">0</span>))</span>
-<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="co"># Denominator should be the sum of the longest</span></span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="co"># follow-up for each patient</span></span>
-<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a><span class="co">#sort the data by descending order of time</span></span>
-<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>o <span class="ot">&lt;-</span> <span class="fu">order</span>(data<span class="sc">$</span>id,data<span class="sc">$</span>time,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[o,]</span>
-<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a><span class="co"># get the first record, which contains</span></span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a><span class="co"># the overall length of follow-up</span></span>
-<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="co"># for each patient</span></span>
-<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>dat.last <span class="ot">&lt;-</span> data[<span class="sc">!</span><span class="fu">duplicated</span>(data<span class="sc">$</span>id),]</span>
-<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>denom.rec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(dat.last<span class="sc">$</span>time[dat.last<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"placebo"</span>]), </span>
-<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>            <span class="fu">sum</span>(dat.last<span class="sc">$</span>time[dat.last<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"rIFN-g"</span>]), </span>
-<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>            <span class="fu">sum</span>(dat.last<span class="sc">$</span>time))<span class="sc">/</span><span class="dv">12</span></span>
-<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a><span class="co">#recurrent event rate</span></span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(num.rec<span class="sc">/</span>denom.rec,<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a><span class="co">#Numerator: total # of events</span></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="co"># note that event is coded as status=2</span></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>num.FE <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(dat<span class="sc">$</span>status[dat<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"placebo"</span>]<span class="sc">&gt;</span><span class="dv">0</span>), </span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(dat<span class="sc">$</span>status[dat<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"rIFN-g"</span>]<span class="sc">&gt;</span><span class="dv">0</span>), </span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(dat<span class="sc">$</span>status<span class="sc">&gt;</span><span class="dv">0</span>))</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a><span class="co">#Demoninator: total length of follow-up (year)</span></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>denom.FE <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(dat<span class="sc">$</span>time[dat<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"placebo"</span>]), </span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(dat<span class="sc">$</span>time[dat<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"rIFN-g"</span>]), </span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(dat<span class="sc">$</span>time))<span class="sc">/</span><span class="dv">12</span></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="co">#death rate</span></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(num.FE<span class="sc">/</span>denom.FE,<span class="dv">3</span>)</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="do">#############################</span></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="co">#Recurrent event rate       #</span></span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a><span class="do">#############################</span></span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="co"># the numerator is easy: simply the numbers of records</span></span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a><span class="co"># with non-zero status</span></span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>num.rec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(data<span class="sc">$</span>status[data<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"placebo"</span>]<span class="sc">&gt;</span><span class="dv">0</span>), </span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>         <span class="fu">sum</span>(data<span class="sc">$</span>status[data<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"rIFN-g"</span>]<span class="sc">&gt;</span><span class="dv">0</span>), </span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>         <span class="fu">sum</span>(data<span class="sc">$</span>status<span class="sc">&gt;</span><span class="dv">0</span>))</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="co"># Denominator should be the sum of the longest</span></span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a><span class="co"># follow-up for each patient</span></span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a><span class="co">#sort the data by descending order of time</span></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>o <span class="ot">&lt;-</span> <span class="fu">order</span>(data<span class="sc">$</span>id,data<span class="sc">$</span>time,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[o,]</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a><span class="co"># get the first record, which contains</span></span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="co"># the overall length of follow-up</span></span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a><span class="co"># for each patient</span></span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>dat.last <span class="ot">&lt;-</span> data[<span class="sc">!</span><span class="fu">duplicated</span>(data<span class="sc">$</span>id),]</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>denom.rec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(dat.last<span class="sc">$</span>time[dat.last<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"placebo"</span>]), </span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>            <span class="fu">sum</span>(dat.last<span class="sc">$</span>time[dat.last<span class="sc">$</span>trt<span class="sc">==</span><span class="st">"rIFN-g"</span>]), </span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>            <span class="fu">sum</span>(dat.last<span class="sc">$</span>time))<span class="sc">/</span><span class="dv">12</span></span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="co">#recurrent event rate</span></span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(num.rec<span class="sc">/</span>denom.rec,<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 
