@@ -79,58 +79,58 @@ Po-Kuei Chen (pchen299\@wisc.edu); Office hours:
 
 **Part I: Univariate Events**
 
-|      |         |                                                                               |
-|------|---------|-------------------------------------------------------------------------------|
-| 1/29 | Lecture | Introduction                                                                  |
-|      | Reading | Chapter 1                                                                     |
-| 1/31 | Lecture | Mathematical Foundations                                                      |
-|      | Reading | Chapter 2                                                                     |
-| 2/5  | Lecture | Nonparametric Estimation of the Survival Curve                                |
-|      | Reading | Chapter 3                                                                     |
-| 2/7  | Lecture | Comparing Survival Rates between Groups                                       |
-|      | Reading | Chapter 3                                                                     |
-| 2/12 | Lecture | The Cox Proportional Hazards Model – [Assumptions and Inference]{.smallcaps}  |
-|      | Reading | Chapter 4                                                                     |
-| 2/14 | Lecture | The Cox Proportional Hazards Model – [Extensions and Diagnostics]{.smallcaps} |
-|      | Reading | Chapter 4                                                                     |
-| 2/19 | Lecture | Other Non- and Semi-parametric Methods                                        |
-|      | Reading | Chapter 5                                                                     |
-| 2/21 | Lecture | Study Design and Sample Size Calculation                                      |
-|      | Reading | Chapter 6                                                                     |
-| 2/26 | Lecture | Left Truncation                                                               |
-|      | Reading | Chapter 7                                                                     |
-| 2/28 | Lecture | Interval Censoring                                                            |
-|      | Reading | Chapter 7                                                                     |
+|      |         |                                                                              |
+|-----------|-----------|---------------------------------------------------|
+| 1/29 | Lecture | Introduction                                                                 |
+|      | Reading | Chapter 1                                                                    |
+| 1/31 | Lecture | Mathematical Foundations                                                     |
+|      | Reading | Chapter 2                                                                    |
+| 2/5  | Lecture | Nonparametric Estimation of the Survival Curve                               |
+|      | Reading | Chapter 3                                                                    |
+| 2/7  | Lecture | Comparing Survival Rates between Groups                                      |
+|      | Reading | Chapter 3                                                                    |
+| 2/12 | Lecture | The Cox Proportional Hazards Model – [Assumptions and Inference]{.smallcaps} |
+|      | Reading | Chapter 4                                                                    |
+| 2/14 | Lecture | The Cox Proportional Hazards Model – [Residual Analysis]{.smallcaps}         |
+|      | Reading | Chapter 4                                                                    |
+| 2/19 | Lecture | The Cox Proportional Hazards Model – [Time-Varying Covariates]{.smallcaps}   |
+|      | Reading | Chapter 4                                                                    |
+| 2/21 | Lecture | Other Non- and Semi-parametric Methods                                       |
+|      | Reading | Chapter 5                                                                    |
+| 2/26 | Lecture | Study Design and Sample Size Calculation                                     |
+|      | Reading | Chapter 6                                                                    |
+| 2/28 | Lecture | Left Truncation                                                              |
+|      | Reading | Chapter 7                                                                    |
+| 3/4  | Lecture | Interval Censoring                                                           |
+|      | Reading | Chapter 7                                                                    |
 
 **Part II: Complex Outcomes**
 
 |      |           |                                                                          |
-|------|-----------|--------------------------------------------------------------------------|
-| 3/4  | Lecture   | Multivariate Events – [Conditional (Frailty) Models]{.smallcaps}         |
+|-----------|-----------|--------------------------------------------------|
+| 3/6  | Lecture   | Multivariate Events – [Conditional (Frailty) Models]{.smallcaps}         |
 |      | Reading   | Chapter 8                                                                |
-| 3/6  | Lecture   | Multivariate Event Times – [Marginal Models]{.smallcaps}                 |
+| 3/11 | Lecture   | Multivariate Event Times – [Marginal Models]{.smallcaps}                 |
 |      | Reading   | Chapter 8                                                                |
-| 3/11 | Lecture   | Recurrent Event                                                          |
+| 3/13 | Lecture   | Recurrent Event                                                          |
 |      | Reading   | Chapter 9                                                                |
-| 3/13 | Lecture   | Competing and Semi-competing Risks                                       |
+| 3/18 | Lecture   | Competing and Semi-competing Risks                                       |
 |      | Reading   | Chapter 10                                                               |
-| 3/18 | Lecture   | Joint Analysis of Longitudinal and Survival Data                         |
+| 3/20 | Lecture   | Joint Analysis of Longitudinal and Survival Data                         |
 |      | Reading   | Chapter 11                                                               |
-| 3/20 | Lecture   | Multistate Models – [Introduction]{.smallcaps}                           |
+| 4/1  | Lecture   | Multistate Models – [Introduction]{.smallcaps}                           |
 |      | Reading   | Chapter 12                                                               |
-| 4/1  | Lecture   | Multistate Models – [Cox-Type Markov and Semi-Markov Models]{.smallcaps} |
+| 4/3  | Lecture   | Multistate Models – [Cox-Type Markov and Semi-Markov Models]{.smallcaps} |
 |      | Reading   | Chapter 12                                                               |
-| 4/3  | Lecture\* | Composite Endpoints – [Nonparametric Estimation]{.smallcaps}             |
+| 4/8  | Lecture\* | Composite Endpoints – [Nonparametric Estimation]{.smallcaps}             |
 |      | Reading   | Chapter 13                                                               |
-| 4/8  | Lecture   | Composite Endpoints – [Semiparametric Regression]{.smallcaps}            |
+| 4/10 | Lecture   | Composite Endpoints – [Semiparametric Regression]{.smallcaps}            |
 |      | Reading   | Chapter 13                                                               |
 
 **Part III: Special Topics**
 
 |      |         |                                                                                |
-|------|---------|--------------------------------------------------------------------------------|
-| 4/10 | Lecture | Causal Inference with Censored Data – [The Basics]{.smallcaps}                 |
-|      | Reading | Chapter 14                                                                     |
+|-----------|-----------|---------------------------------------------------|
 | 4/15 | Lecture | Causal Inference with Censored Data – [IPTW and Standardization]{.smallcaps}   |
 |      | Reading | Chapter 14                                                                     |
 | 4/17 | Lecture | Causal Inference with Censored Data – [Marginal Structural Models]{.smallcaps} |
