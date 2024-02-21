@@ -499,9 +499,13 @@ Lu Mao
 <li><strong>Estimation and inference</strong>
 <ul>
 <li>Plug in KM estimators <span class="math inline">\(\hat S_a(t)\)</span> <span class="math inline">\((a= 1, 0)\)</span></li>
-<li>Obtain <span class="math inline">\(\hat\var\{\hat\mu(\tau)\}\)</span> by <span class="math display">\[
-\hat\mu_a(\tau) = \sum_{j=1}^m (t_j -t_{j-1}) \hat S_a(t_{j-1})
-\]</span></li>
+<li>Obtain <span class="math inline">\(\hat\var\{\hat\mu_a(\tau)\}\)</span> by <span class="math display">\[
+\hat\mu_a(\tau) = \mbox{time-weighted sum of the }\hat S_a(t_j)
+\mbox{ up to }\tau
+\]</span>
+<ul>
+<li>Greenwood’s formula for <span class="math inline">\(\hat\var\{\hat S_a(t_j)\}\)</span></li>
+</ul></li>
 </ul></li>
 </ul>
 </section>
