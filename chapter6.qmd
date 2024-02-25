@@ -14,7 +14,7 @@ Lecture slides [here](chap6.html){target="_blank"}. (To convert html to pdf, pre
 #| eval: false
 
 ##################################################################
-# This code generates all numerical results in chapter 6 .      ##
+# This code generates all numerical results in chapter 6.      ##
 ##################################################################
 
 
