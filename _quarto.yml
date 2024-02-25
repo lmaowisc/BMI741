@@ -20,6 +20,7 @@ website:
           - chapter3.qmd
           - chapter4.qmd
           - chapter5.qmd
+          - chapter6.qmd
       - section: "Miscellaneous"
        
         
