@@ -200,7 +200,7 @@ To show the additional information, we need additional features on the plot.
 ### Under left truncation
 
 For each subject, we use a line segment to represent the period $[T_{Li}, X_i]$ on study, 
-at the end of which the outcome event is distinguished from censoring by the point shape. 
+at the end of which the outcome event is distinguished from censoring by point shape. 
 
 The following is an example using the Channing House study.
 

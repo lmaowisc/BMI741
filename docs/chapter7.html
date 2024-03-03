@@ -449,7 +449,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Visualization of subject-level follow-up under left truncation or interval censoring must account for the nonzero entry time or the imprecise location of the endpoint. This makes it different from right-censored data. To show the additional information, we need additional features on the plot.</p>
 <section id="under-left-truncation" class="level3">
 <h3 class="anchored" data-anchor-id="under-left-truncation">Under left truncation</h3>
-<p>For each subject, we use a line segment to represent the period <span class="math inline">\([T_{Li}, X_i]\)</span> on study, at the end of which the outcome event is distinguished from censoring by the point shape.</p>
+<p>For each subject, we use a line segment to represent the period <span class="math inline">\([T_{Li}, X_i]\)</span> on study, at the end of which the outcome event is distinguished from censoring by point shape.</p>
 <p>The following is an example using the Channing House study.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
