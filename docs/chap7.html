@@ -655,13 +655,13 @@ L_n(\theta)=\prod_{i=1}^n S(T_{Li};\theta)^{-1}\lambda(X_i;\theta)^{\delta_i}S(X
 <section id="maximum-likelihood-po-model" class="slide level2">
 <h2>Maximum Likelihood: PO Model</h2>
 <ul>
-<li><strong>Example: Propotional odds model</strong>
+<li><strong>Example: Proportional odds model</strong>
 <ul>
 <li>Model specification with <span class="math inline">\(\theta = (\beta, h_0)\)</span> <span class="math display">\[\begin{equation}\label{eq:non_haz:po}
 \log\left\{\frac{1-S(t\mid Z)}{S(t\mid Z)}\right\}=h_0(t)+\beta^\T Z,
 \end{equation}\]</span></li>
 <li>Model-based hazard functions <span class="math display">\[\begin{align}    
-\lambda(t\mid Z;\beta, h_0)&amp;=\frac{\exp\{h_0(t)+\beta^\T Z\}h_0'(t)}{1+\exp\{h(t)+\beta^\T Z\}}\\
+\lambda(t\mid Z;\beta, h_0)&amp;=\frac{\exp\{h_0(t)+\beta^\T Z\}h_0'(t)}{1+\exp\{h_0(t)+\beta^\T Z\}}\\
 \Lambda(t\mid Z;\beta, h_0)&amp;=\log\left[1+\exp\{h_0(t)+\beta^\T Z\}\right]
 \end{align}\]</span></li>
 <li>Nonparametric maximum likelihood (NPMLE)
