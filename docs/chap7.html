@@ -428,8 +428,8 @@ Lu Mao
 <p><span class="math display">\[\newcommand{\d}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\T}{{\rm T}}\]</span> <span class="math display">\[\newcommand{\dd}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\pr}{{\rm pr}}\]</span> <span class="math display">\[\newcommand{\var}{{\rm var}}\]</span> <span class="math display">\[\newcommand{\se}{{\rm se}}\]</span> <span class="math display">\[\newcommand{\indep}{\perp \!\!\! \perp}\]</span> <span class="math display">\[\newcommand{\Pn}{n^{-1}\sum_{i=1}^n}\]</span></p>
 </section>
 <section>
-<section id="left-truncation-mechnisms" class="title-slide slide level1 center">
-<h1>Left Truncation: Mechnisms</h1>
+<section id="left-truncation-mechanisms" class="title-slide slide level1 center">
+<h1>Left Truncation: Mechanisms</h1>
 
 </section>
 <section id="truncation---biased-sampling" class="slide level2">
@@ -486,7 +486,7 @@ Lu Mao
 <ul>
 <li><strong>Partial missing data</strong>: subject available and we know they fail in some range</li>
 </ul></li>
-<li><strong>Left truncation <span class="math inline">\(+\)</span> right censoring</strong></li>
+<li><strong>Left truncation</strong> <span class="math inline">\(+\)</span> right censoring</li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -558,6 +558,9 @@ Lu Mao
 \end{align}\]</span>
 <ul>
 <li>Not the marginal <span class="math inline">\(\pr(T&gt;t)\)</span></li>
+<li><strong>Solution</strong>: choose a late <span class="math inline">\(t_0^*&gt; t_0\)</span> (s.t. <span class="math inline">\(n_j\gg 1\)</span> for all <span class="math inline">\(t_j\geq t_0^*\)</span>) and consider <span class="math display">\[\begin{equation}
+\hat\pr(T&gt;t\mid T \geq t_0^*)=\prod_{j:t_0^*\leq t_j\leq t}(1-d_j/n_j),
+\end{equation}\]</span></li>
 </ul></li>
 </ul>
 </section>
@@ -602,6 +605,33 @@ U_n(\beta)=\Pn\int_0^\infty\left\{Z_i-\frac{\sum_{j=1}^n I(T_{Lj}\leq t\leq X_j)
 </ul></li>
 </ul>
 </section>
+<section id="standard-methods---cox-model-iv" class="slide level2">
+<h2>Standard Methods - Cox Model (IV)</h2>
+<ul>
+<li><strong>Prediction of survival rate</strong>
+<ul>
+<li><p>If all subjects enter late, choose late cutoff <span class="math inline">\(t_0^*\)</span></p></li>
+<li><p><strong>Conditional survival function</strong> <span class="math display">\[\begin{equation}
+\hat\pr(T &gt; t\mid T\geq t_0^*, Z) =
+\exp\left[-\left\{\hat\Lambda_0(t)- \hat\Lambda_0(t_0^*)\right\}\exp(\hat\beta^\T Z)\right]
+\end{equation}\]</span></p></li>
+</ul></li>
+</ul>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Exercise</strong></p>
+</div>
+<div class="callout-content">
+<p>Show that <span class="math display">\[\pr(T &gt; t\mid T\geq t_0^*, Z) =
+\exp\left[-\left\{\Lambda_0(t)- \Lambda_0(t_0^*)\right\}\exp(\beta^\T Z)\right]  \]</span> for any <span class="math inline">\(t&gt;t_0^*\)</span> under the Cox model.</p>
+</div>
+</div>
+</div>
+</section>
 <section id="general-approach---likelihood" class="slide level2">
 <h2>General Approach - Likelihood</h2>
 <ul>
@@ -625,13 +655,13 @@ L_n(\theta)=\prod_{i=1}^n S(T_{Li};\theta)^{-1}\lambda(X_i;\theta)^{\delta_i}S(X
 <section id="maximum-likelihood-po-model" class="slide level2">
 <h2>Maximum Likelihood: PO Model</h2>
 <ul>
-<li><strong>Example: Propotional odds model</strong>
+<li><strong>Example: Proportional odds model</strong>
 <ul>
 <li>Model specification with <span class="math inline">\(\theta = (\beta, h_0)\)</span> <span class="math display">\[\begin{equation}\label{eq:non_haz:po}
 \log\left\{\frac{1-S(t\mid Z)}{S(t\mid Z)}\right\}=h_0(t)+\beta^\T Z,
 \end{equation}\]</span></li>
 <li>Model-based hazard functions <span class="math display">\[\begin{align}    
-\lambda(t\mid Z;\beta, h_0)&amp;=\frac{\exp\{h_0(t)+\beta^\T Z\}h_0'(t)}{1+\exp\{h(t)+\beta^\T Z\}}\\
+\lambda(t\mid Z;\beta, h_0)&amp;=\frac{\exp\{h_0(t)+\beta^\T Z\}h_0'(t)}{1+\exp\{h_0(t)+\beta^\T Z\}}\\
 \Lambda(t\mid Z;\beta, h_0)&amp;=\log\left[1+\exp\{h_0(t)+\beta^\T Z\}\right]
 \end{align}\]</span></li>
 <li>Nonparametric maximum likelihood (NPMLE)
@@ -674,7 +704,7 @@ L_n(\theta)=\prod_{i=1}^n S(T_{Li};\theta)^{-1}\lambda(X_i;\theta)^{\delta_i}S(X
 <li><strong>Aim</strong>: Compare mortality between males (<code>gender=1</code>) and females (<code>gender=2</code>)</li>
 <li><strong>Truncation</strong>: Age of admission into the center (<code>Entry.Age</code>)
 <ul>
-<li>Subject must survive long enough to enter cohort</li>
+<li>Subject must survive long enough to enter cohort (<a href="https://lmaowisc.github.io/BMI741/chapter7_files/figure-html/fig-chan-fu-1.png">link</a> to follow-up plot)</li>
 </ul></li>
 </ul></li>
 </ul>
@@ -710,6 +740,36 @@ L_n(\theta)=\prod_{i=1}^n S(T_{Li};\theta)^{-1}\lambda(X_i;\theta)^{\delta_i}S(X
 <span id="cb3-12"><a href="#cb3-12"></a><span class="co"># Likelihood ratio test= 3.17  on 1 df,   p=0.07</span></span>
 <span id="cb3-13"><a href="#cb3-13"></a><span class="co"># Wald test            = 3.34  on 1 df,   p=0.07</span></span>
 <span id="cb3-14"><a href="#cb3-14"></a><span class="co"># Score (logrank) test = 3.36  on 1 df,   p=0.07</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="example-channing-house-study-iii" class="slide level2">
+<h2>Example: Channing House Study (III)</h2>
+<ul>
+<li><strong>Checking proportionality</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Schoenfeld residuals</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>obj_zph <span class="ot">&lt;-</span> <span class="fu">cox.zph</span>(obj)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co"># test result</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>obj_zph</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co"># plot the rescaled residuals</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="fu">plot</span>(obj_zph, <span class="at">ylab =</span> <span class="st">"Gender"</span>, <span class="at">xlab =</span> <span class="st">"Age (years)"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/trunc_chan_ph.png" style="width:80.0%"></p>
+</figure>
+</div>
+</section>
+<section id="example-channing-house-study-iv" class="slide level2">
+<h2>Example: Channing House Study (IV)</h2>
+<ul>
+<li><strong>Prediction</strong></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/trunc_chan_pred.png" style="width:85.0%"></p>
+</figure>
 </div>
 </section></section>
 <section>
@@ -760,7 +820,7 @@ U\indep T
 <ul>
 <li><strong>Censoring interval</strong>
 <ul>
-<li><span class="math inline">\((L, R]\)</span>: the check-up interval containing the event <img data-src="images/trunc_ic.png" style="width:55.0%" data-fig-align="center"></li>
+<li><span class="math inline">\((L, R]\)</span>: the check-up interval containing the event <img data-src="images/trunc_ic.png" style="width:70.0%" data-fig-align="center"></li>
 <li>Other check-up times may be available but not relevant</li>
 <li><strong>Example</strong>: current status data
 <ul>
@@ -868,8 +928,8 @@ l_n(\beta,\Lambda_0)=\sum_{i=1}^n\log\left[\exp\{-\exp(\beta^\T Z_i)\Lambda_0(L_
 </ul>
 <div class="big-code">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">ICSurvICM</span>(delta, gamma, U, V, Z, </span>
-<span id="cb4-2"><a href="#cb4-2"></a>                 <span class="at">model =</span> <span class="fu">c</span>(<span class="st">"NP"</span>, <span class="st">"PH"</span>, <span class="st">"PO"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">ICSurvICM</span>(delta, gamma, U, V, Z, </span>
+<span id="cb5-2"><a href="#cb5-2"></a>                 <span class="at">model =</span> <span class="fu">c</span>(<span class="st">"NP"</span>, <span class="st">"PH"</span>, <span class="st">"PO"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <ul>
@@ -894,7 +954,7 @@ l_n(\beta,\Lambda_0)=\sum_{i=1}^n\log\left[\exp\{-\exp(\beta^\T Z_i)\Lambda_0(L_
 <li><strong>Study information</strong>
 <ul>
 <li><strong>Population</strong>: 1,124 injecting drug users (IDUs) followed from 1995 to 1998 at 4-month intervals for blood test for HIV sero-positivity</li>
-<li><strong>Endpoint</strong>: (interval-censored) time from enrollment to HIV seroconversion</li>
+<li><strong>Endpoint</strong>: (interval-censored) time from enrollment to HIV seroconversion (<a href="https://lmaowisc.github.io/BMI741/chapter7_files/figure-html/fig-bma_fu-1.png">link</a> to follow-up plot)</li>
 <li><strong>Baseline risk factors</strong>
 <ul>
 <li>Age (years)</li>
@@ -912,21 +972,21 @@ l_n(\beta,\Lambda_0)=\sum_{i=1}^n\log\left[\exp\{-\exp(\beta^\T Z_i)\Lambda_0(L_
 <li><strong>Load package and data</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">library</span>(IntCens)</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="do">## BMA data</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="fu">head</span>(data)</span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># delta gamma      U       V age sex need jail inject</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#     0     0     NA 40.5574  37   0    0    1      1</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#     0     0     NA 24.2623  25   0    0    1      1</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#     1     0 4.1311      NA  49   0    1    1      1</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#     0     1 7.1475 13.2131  32   1    0    1      0</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co"># ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">library</span>(IntCens)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="do">## BMA data</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="fu">head</span>(data)</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co"># delta gamma      U       V age sex need jail inject</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#     0     0     NA 40.5574  37   0    0    1      1</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#     0     0     NA 24.2623  25   0    0    1      1</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#     1     0 4.1311      NA  49   0    1    1      1</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#     0     1 7.1475 13.2131  32   1    0    1      0</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co"># ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><strong>Fit Cox model</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>obj.PH <span class="ot">&lt;-</span> <span class="fu">ICSurvICM</span>(delta, gamma, U, V, <span class="at">Z =</span> data[, <span class="dv">5</span><span class="sc">:</span><span class="dv">9</span>], <span class="at">model=</span><span class="st">"PH"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>obj.PH <span class="ot">&lt;-</span> <span class="fu">ICSurvICM</span>(delta, gamma, U, V, <span class="at">Z =</span> data[, <span class="dv">5</span><span class="sc">:</span><span class="dv">9</span>], <span class="at">model=</span><span class="st">"PH"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="cox-ph-regression-inference-i" class="slide level2">
@@ -935,21 +995,21 @@ l_n(\beta,\Lambda_0)=\sum_{i=1}^n\log\left[\exp\{-\exp(\beta^\T Z_i)\Lambda_0(L_
 <li><strong>Summary results</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># print out regression results</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">print.ICSurv</span>(obj.PH)</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="co"># NPMLE of proportional hazards for interval-censored data:</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="co"># </span></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="co"># ICM algorithm converges in 102 iterations.</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="co"># </span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="co"># Maximum Likelihood Estimates for Regression parameters:</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#         Estimate    StdErr z.value  p.value   </span></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="co"># age    -0.029914  0.011051 -2.7068 0.006793 **</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="co"># sex     0.387923  0.268032  1.4473 0.147814   </span></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="co"># need    0.249568  0.144987  1.7213 0.085195 . </span></span>
-<span id="cb7-12"><a href="#cb7-12"></a><span class="co"># jail    0.456849  0.143961  3.1734 0.001506 **</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a><span class="co"># inject  0.221270  0.146767  1.5076 0.131652</span></span>
-<span id="cb7-14"><a href="#cb7-14"></a><span class="co"># ---</span></span>
-<span id="cb7-15"><a href="#cb7-15"></a><span class="co"># Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># print out regression results</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">print.ICSurv</span>(obj.PH)</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co"># NPMLE of proportional hazards for interval-censored data:</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># </span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co"># ICM algorithm converges in 102 iterations.</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co"># </span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co"># Maximum Likelihood Estimates for Regression parameters:</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#         Estimate    StdErr z.value  p.value   </span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co"># age    -0.029914  0.011051 -2.7068 0.006793 **</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co"># sex     0.387923  0.268032  1.4473 0.147814   </span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co"># need    0.249568  0.144987  1.7213 0.085195 . </span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co"># jail    0.456849  0.143961  3.1734 0.001506 **</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co"># inject  0.221270  0.146767  1.5076 0.131652</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co"># ---</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co"># Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="cox-ph-regression-inference-ii" class="slide level2">
@@ -982,8 +1042,8 @@ l_n(\beta,\Lambda_0)=\sum_{i=1}^n\log\left[\exp\{-\exp(\beta^\T Z_i)\Lambda_0(L_
 <h1>Conclusion</h1>
 
 </section>
-<section id="notes" class="slide level2">
-<h2>Notes</h2>
+<section id="notes-i" class="slide level2">
+<h2>Notes (I)</h2>
 <ul>
 <li><strong>Left-truncated and interval-censored (LTIC) data</strong>
 <ul>
@@ -995,8 +1055,20 @@ l_n(\beta,\Lambda_0)=\sum_{i=1}^n\log\left[\exp\{-\exp(\beta^\T Z_i)\Lambda_0(L_
 <li><strong>Review</strong>: Huang and Wellner (1997)</li>
 <li><strong>Time-varying covariates</strong>: Zeng et al.&nbsp;(2016)</li>
 <li><strong>Profile-likelihood</strong>: Murphy and van der Vaart (2000)</li>
+<li><strong>Text</strong>: Sun (2010)</li>
 </ul></li>
 </ul>
+</section>
+<section id="notes-ii" class="slide level2">
+<h2>Notes (II)</h2>
+<ul>
+<li><strong>Sun (2010)</strong></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/trunc_ic_book.jpg" style="width:28.0%"></p>
+</figure>
+</div>
 </section>
 <section id="summary" class="slide level2">
 <h2>Summary</h2>
@@ -1029,7 +1101,7 @@ l_n(\beta,\Lambda_0)=\sum_{i=1}^n\log\left[\exp\{-\exp(\beta^\T Z_i)\Lambda_0(L_
 <li>Problem 5.2</li>
 </ul></li>
 <li>Problem 6.5</li>
-<li>Problem 7.9 (The <code>IntCens</code> package is in “Files &gt; R-package”)</li>
+<li>Problem 7.14 (The <code>IntCens</code> package is in “Files &gt; R-package”)</li>
 </ul>
 <div class="footer footer-default">
 
