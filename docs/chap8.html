@@ -638,7 +638,7 @@ S(t_1,\ldots, t_K) = \exp\left(-\left[\sum_{k=1}^K\{-\log S_k(t_k)\}^{1/\gamma}\
 <ul>
 <li><p><span class="math inline">\(T_1,\ldots, T_K\)</span> mutually independent given <span class="math inline">\(Z\)</span> and <span class="math inline">\(\xi\)</span></p></li>
 <li><p><strong>Conditional component-wise model</strong> <span class="math display">\[\begin{align}\label{eq:multi:ph_cond}
-\lambda_k(t\mid Z, \xi)&amp;= \exp(\beta_k^\T Z) \eta_{k0}'(t)\\
+\lambda_k(t\mid Z, \xi)&amp;= \xi\exp(\beta_k^\T Z) \eta_{k0}'(t)\\
 \pr(T_k&gt;t\mid Z,\xi)&amp;=\exp\left\{-\xi\exp(\beta_k^\T Z) \eta_{k0}(t)\right\}
 \end{align}\]</span></p></li>
 <li><p><strong>Conditional joint survival</strong> <span class="math display">\[\begin{equation}\label{eq:multi:fr_surv_reg}
