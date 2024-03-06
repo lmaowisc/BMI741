@@ -210,8 +210,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Part II - Complex Outcomes</span></span>
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Part II - Complex Outcomes</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 8 - Multivariate Failure Times</span></a>
+  </div>
+</li>
+      </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <span class="sidebar-item-text sidebar-link text-start">
@@ -232,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#follow-up-plots" id="toc-follow-up-plots" class="nav-link" data-scroll-target="#follow-up-plots">Follow-up Plots</a>
   <ul>
   <li><a href="#under-left-truncation" id="toc-under-left-truncation" class="nav-link" data-scroll-target="#under-left-truncation">Under left truncation</a></li>
-  <li><a href="#under-interval-censoring" id="toc-under-interval-censoring" class="nav-link" data-scroll-target="#under-interval-censoring">Under interval-censoring</a></li>
+  <li><a href="#under-interval-censoring" id="toc-under-interval-censoring" class="nav-link" data-scroll-target="#under-interval-censoring">Under interval censoring</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -481,7 +494,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Entry.Age, <span class="at">shape =</span> <span class="st">"2"</span>), <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="co"># entry point (2)</span></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> End.Age, <span class="at">shape =</span> <span class="fu">factor</span>(status)), <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">size =</span> <span class="dv">2</span>)  <span class="sc">+</span> </span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># endpoint (1: event; 0: censoring)</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">60</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="co"># reference line at age 60</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">60</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="co"># start line at age 60</span></span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> gender, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="co"># by gender</span></span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>             <span class="at">labeller =</span> <span class="fu">labeller</span>(<span class="at">gender =</span> gender_labeller)) <span class="sc">+</span></span>
 <span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
@@ -517,7 +530,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="under-interval-censoring" class="level3">
-<h3 class="anchored" data-anchor-id="under-interval-censoring">Under interval-censoring</h3>
+<h3 class="anchored" data-anchor-id="under-interval-censoring">Under interval censoring</h3>
 <p>For each subject, we use a gray line to represent the follow-up period. The check-up times can be marked on it by dots if such data are available. The event-containing interval <span class="math inline">\([L_i, R_i]\)</span> (<span class="math inline">\(R_i&lt;\infty\)</span>) is highlighted from the rest of the follow-up period using a black line segment.</p>
 <p>The following is an example using the Bangkok Metropolitan Administration HIV study.</p>
 <div class="cell">

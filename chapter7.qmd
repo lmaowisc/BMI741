@@ -240,7 +240,7 @@ chan_fig <- channing_sub |>
   geom_point(aes(x = Entry.Age, shape = "2"), fill = "white", size = 2) + # entry point (2)
   geom_point(aes(x = End.Age, shape = factor(status)), fill = "white", size = 2)  + 
   # endpoint (1: event; 0: censoring)
-  geom_vline(xintercept = 60, linewidth = 1) + # reference line at age 60
+  geom_vline(xintercept = 60, linewidth = 1) + # start line at age 60
   facet_wrap(~ gender, ncol = 2, scales = "free", # by gender
              labeller = labeller(gender = gender_labeller)) +
   theme_minimal() +
@@ -269,7 +269,7 @@ chan_fig
 ```
 
 
-### Under interval-censoring
+### Under interval censoring
 For each subject, we use a gray line to represent the follow-up period. The check-up times can be marked on it by dots if such data are available.
 The event-containing interval $[L_i, R_i]$
 ($R_i<\infty$) is highlighted from the rest of the follow-up period 
