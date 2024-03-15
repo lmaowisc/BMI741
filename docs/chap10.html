@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="chap10_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chap10_files/libs/quarto-html/tabby.min.js"></script>
+<script src="chap10_files/libs/quarto-html/popper.min.js"></script>
+<script src="chap10_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="chap10_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chap10_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="chap10_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="chap10_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.3.450">
+
+  <meta name="author" content="Lu Mao">
+  <title>Applied Survival Analysis</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="chap10_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="chap10_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="chap10_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="style.css">
+  <link href="chap10_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="chap10_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="chap10_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="chap10_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <style type="text/css">
+  ul li ul li {
+    font-size: 0.75em;
+  }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Applied Survival Analysis</h1>
+  <p class="subtitle">Chapter 10 - Competing/Semi-Competing Risks</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Lu Mao 
+</div>
+<div class="quarto-title-author-email">
+<a href="mailto:lmao@biostat.wisc.edu">lmao@biostat.wisc.edu</a>
+</div>
+        <p class="quarto-title-affiliation">
+            Department of Biostatistics &amp; Medical Informatics
+          </p>
+        <p class="quarto-title-affiliation">
+            University of Wisconsin-Madison
+          </p>
+    </div>
+</div>
+
+</section>
+<section id="outline" class="slide level2">
+<h2>Outline</h2>
+<ol type="1">
+<li><p>Cause-specific hazard and cumulative incidence</p></li>
+<li><p>Non- and semi-parametric methods</p></li>
+<li><p>Analysis of bone marrow transplantation study</p></li>
+<li><p>Semi-competing risks and examples</p></li>
+</ol>
+<p><span class="math display">\[\newcommand{\d}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\T}{{\rm T}}\]</span> <span class="math display">\[\newcommand{\dd}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\cc}{{\rm c}}\]</span> <span class="math display">\[\newcommand{\pr}{{\rm pr}}\]</span> <span class="math display">\[\newcommand{\var}{{\rm var}}\]</span> <span class="math display">\[\newcommand{\se}{{\rm se}}\]</span> <span class="math display">\[\newcommand{\indep}{\perp \!\!\! \perp}\]</span> <span class="math display">\[\newcommand{\Pn}{n^{-1}\sum_{i=1}^n}\]</span></p>
+</section>
+<section>
+<section id="basic-quantities" class="title-slide slide level1 center">
+<h1>Basic Quantities</h1>
+
+</section>
+<section id="definition-and-examples" class="slide level2">
+<h2>Definition and Examples</h2>
+<ul>
+<li><strong>Competing risks</strong>
+<ul>
+<li><strong>Definition</strong>: multiple types of failures, occurrence of one <strong>precludes</strong> others
+<ul>
+<li>Multiple latent risks competing with each other for first occurrence</li>
+</ul></li>
+<li><strong>Examples</strong>: different causes of death</li>
+</ul></li>
+<li><strong>Defining feature</strong>
+<ul>
+<li>One failure per subject</li>
+<li>Less info than multivariate failure times</li>
+<li>Implications for analysis and interpretation</li>
+</ul></li>
+</ul>
+</section>
+<section id="outcome-data-identifiability" class="slide level2">
+<h2>Outcome Data &amp; Identifiability</h2>
+<ul>
+<li><strong>Target of inference</strong>: <span class="math inline">\((T, \Delta)\)</span>
+<ul>
+<li><span class="math inline">\(T\)</span>: <strong>time</strong> to failure</li>
+<li><span class="math inline">\(\Delta \in \{1, \ldots, K\}\)</span>: <strong>type/cause</strong> of failure (categorical)</li>
+</ul></li>
+<li><strong>Multivariate perspective</strong>
+<ul>
+<li><strong>A conceptual framework</strong> <span class="math display">\[\begin{equation}\label{eq:cmpr:mult}
+T=\min(T_1,\ldots, T_K) \hspace{1mm}\mbox{ and } \hspace{1mm}\Delta=\arg\min_{k=1,\ldots, K} T_k
+\end{equation}\]</span>
+<ul>
+<li><span class="math inline">\(T_k\)</span>: time to <span class="math inline">\(k\)</span>th <em>latent</em> risk <span class="math inline">\((k=1,\ldots, K)\)</span> in absence of other risks</li>
+<li>Competing risks <span class="math inline">\(=\)</span> partially observed multivariate failure times</li>
+</ul></li>
+<li><strong>Identifiability</strong>: net distribution of latent <span class="math inline">\(T_k\)</span> not recognizable from <span class="math inline">\((T, \Delta)\)</span>
+<ul>
+<li>unless under unrealistic assumption of mutual independence of the <span class="math inline">\(T_k\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="two-approaches" class="slide level2">
+<h2>Two Approaches</h2>
+<ul>
+<li><strong>Two ways</strong> to characterize <span class="math inline">\((T, \Delta)\)</span>
+<ul>
+<li><strong>Cause-specific hazard</strong></li>
+<li><strong>Cumulative incidence (Sub-distribution)</strong></li>
+</ul></li>
+<li><strong>Cause-specific hazard (CSH)</strong>
+<ul>
+<li><strong>Definition</strong>: instantaneous incidence of <span class="math inline">\(k\)</span>th risk given overall “survival” <span class="math display">\[\begin{equation}\label{eq:cmpr:cs_hazard}
+\dd\Lambda_k^\cc(t)=\pr(t\leq T&lt;t+\dd t, \Delta=k\mid T\geq t)
+\end{equation}\]</span></li>
+<li><strong>Example</strong>: <span class="math inline">\(\dd\Lambda_1^\cc(t)=\)</span> incidence rate for CV death among survivors at <span class="math inline">\(t\)</span>
+<ul>
+<li><span class="math inline">\(k =1\)</span>: CV death; <span class="math inline">\(k =2\)</span>: other causes of death</li>
+</ul></li>
+<li><strong>Overall hazard</strong>: partitioned into CSH <span class="math display">\[\begin{equation}\label{eq:cmpr:overall_hazard}
+\dd\Lambda(t)=\pr(t\leq T&lt;t+\dd t \mid T\geq t) = \sum_{k=1}^K \dd\Lambda_k^\cc(t)
+\end{equation}\]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="cause-specific-hazard" class="slide level2">
+<h2>Cause-Specific Hazard</h2>
+<ul>
+<li><strong>Limitations</strong>
+<ul>
+<li>The <em>cumulative</em> CSH <span class="math inline">\(\Lambda_k^\cc(t)\)</span> not a meaningful quantity</li>
+<li><span class="math inline">\(\exp\{-\Lambda_k^\cc(t)\}\)</span> not a survival function of any kind</li>
+</ul></li>
+<li><strong>Correspondence with “net hazard”</strong>
+<ul>
+<li>Under (unrealistic) mutual independence of the latent <span class="math inline">\(T_k\)</span></li>
+<li>Hazard of <span class="math inline">\(T_k\)</span> identifiable and equal to <span class="math inline">\(\Lambda_k^\cc(t)\)</span></li>
+<li>Not recommended</li>
+</ul></li>
+</ul>
+</section>
+<section id="cumulative-incidence" class="slide level2">
+<h2>Cumulative Incidence</h2>
+<ul>
+<li><strong>Cumulative incidence function (CIF)</strong>
+<ul>
+<li><strong>Definition</strong>: probability of failure from <span class="math inline">\(k\)</span>th risk <em>in presence of</em> other risks <span class="math display">\[
+F_k(t)=\pr(T\leq t, \Delta=k)
+\]</span></li>
+<li>Marginal quantity, easy to interpret (a real-world probability)</li>
+<li>a.k.a. Sub-distribution function</li>
+<li><span class="math inline">\(F(t)=\pr(T\leq t) = \sum_{k=1}^K F_k(t)\)</span></li>
+</ul></li>
+<li><strong>Relationship</strong>
+<ul>
+<li>CSH in terms of CIF (for a particular risk, no one-to-one correspondence) <span class="math display">\[\begin{equation}\label{eq:cmpr:correspond}
+\dd\Lambda_k^\cc(t)=\frac{\dd F_k(t)}{1-\sum_{l=1}^K F_l(t-)}
+\end{equation}\]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="csh-vs-cif" class="slide level2">
+<h2>CSH vs CIF</h2>
+<ul>
+<li><strong>Example</strong>: effect on CSH may not align with CIF
+<ul>
+<li><strong>Treatment</strong>: <span class="math inline">\(\Lambda_1^\cc(t)=\Lambda_2^\cc(t)=3t\)</span></li>
+<li><strong>Control</strong>: <span class="math inline">\(\Lambda_1^\cc(t)=2t\)</span> and <span class="math inline">\(\Lambda_2^\cc(t)=t\)</span> <img data-src="images/cmpr_compare.png" style="width:70.0%" data-fig-align="center"></li>
+</ul></li>
+</ul>
+</section>
+<section id="comparison-of-functions" class="slide level2">
+<h2>Comparison of Functions</h2>
+<ul>
+<li><strong>CSH vs net hazard vs CIF</strong></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cmpr_functions.png" style="width:90.0%"></p>
+</figure>
+</div>
+</section></section>
+<section>
+<section id="methods-for-competing-risks" class="title-slide slide level1 center">
+<h1>Methods for Competing Risks</h1>
+
+</section>
+<section id="observed-data" class="slide level2">
+<h2>Observed Data</h2>
+<ul>
+<li><strong>A random</strong> <span class="math inline">\(n\)</span>-sample <span class="math display">\[(X_i, \delta_i, Z_i), \,\,\, i=1,\ldots, n\]</span>
+<ul>
+<li><span class="math inline">\(X=T\wedge C\)</span></li>
+<li><span class="math inline">\(\delta=\Delta I(T\leq C)\)</span> (0: censored; <span class="math inline">\(k\)</span>: observed <span class="math inline">\(k\)</span>th risk, <span class="math inline">\(k=1,\ldots, K\)</span>)</li>
+<li><span class="math inline">\(C\)</span>: independent censoring time</li>
+<li><span class="math inline">\(Z\)</span>: covariates</li>
+<li><strong>Observed counting process for</strong> <span class="math inline">\(k\)</span>th risk <span class="math display">\[
+N_{ki}(t)=I(X_i\leq t, \delta_i=k)
+\]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="cause-specific-hazard-models-i" class="slide level2">
+<h2>Cause-Specific Hazard Models (I)</h2>
+<ul>
+<li><strong>Proportional cause-specific hazards</strong> <span class="math display">\[\begin{equation}\label{eq:cmpr:ph_csh}
+\pr(t\leq T&lt;t+\dd t, \Delta=k\mid T\geq t, Z)=\exp(\beta_k^\T Z)\dd\Lambda_{k0}(t)
+\end{equation}\]</span>
+<ul>
+<li>A model on “survivors” (those who have not failed from any risk)</li>
+<li><span class="math inline">\(\beta_k\)</span>: log-hazard ratios for <span class="math inline">\(k\)</span>th risk in survivors</li>
+<li><strong>Estimation</strong> <span class="math display">\[\begin{equation}\label{eq:cmpr:pls_csh}
+U_{nk}(\beta_k)=\Pn\int_0^\infty\left\{Z_i-\frac{\sum_{j=1}^n I(X_j\geq t)Z_j\exp(\beta_k^\T Z_j)}{\sum_{j=1}^n I(X_j\geq t)\exp(\beta_k^\T Z_j)}\right\}\dd N_{ki}(t)
+\end{equation}\]</span>
+<ul>
+<li>Essentially treating non-<span class="math inline">\(k\)</span> risks as censoring</li>
+<li>Easy to implement in <code>survival::coxph()</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="cause-specific-hazard-models-ii" class="slide level2">
+<h2>Cause-Specific Hazard Models (II)</h2>
+<ul>
+<li><strong>Under (unrealistic) independence of the latent</strong> <span class="math inline">\(T_k\)</span>
+<ul>
+<li>Proportional cause-specific hazards <span class="math inline">\(=\)</span> proportional net hazards</li>
+<li>Frailty to relax independence</li>
+<li>Not recommended (non-identifiability)</li>
+</ul></li>
+<li><strong>Log-rank test</strong>
+<ul>
+<li>Risk-specific log-rank statisic with other risks treated as censoring</li>
+<li>“Kaplan-Meier” doesn’t work <span class="math inline">\(\to\)</span> estimand <span class="math inline">\(\exp\{-\Lambda_k^\cc(t)\}\)</span> is non-quantity</li>
+<li>Competing-risks equivalent of KM is Gray (1988) estimator of <span class="math inline">\(F_k(t)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="cif-nonparametric-estimation" class="slide level2">
+<h2>CIF: Nonparametric Estimation</h2>
+<ul>
+<li><strong>How to estimate</strong> <span class="math inline">\(F_k(t)\)</span>
+<ul>
+<li><p>Recall relationship <span class="math display">\[\begin{equation*}
+\dd F_k(t)=S(t-)\dd\Lambda_k^\cc(t)
+\end{equation*}\]</span></p></li>
+<li><p><span class="math inline">\(S(t-)=\pr(T\geq t)\)</span>: By KM estimator <span class="math inline">\(\hat S(t-)\)</span> for overall failure</p></li>
+<li><p><span class="math inline">\(\dd\Lambda_k^\cc(t)\)</span>: By Nelsen-Aalen estimator (non-<span class="math inline">\(k\)</span> risks as censoring) <span class="math display">\[
+  \dd\hat\Lambda_k^\cc(t)=\frac{\sum_{i=1}^n\dd N_{ki}(t)}{\sum_{i=1}^n I(X_i\geq t)}
+  \]</span></p></li>
+<li><p><strong>Gray estimator</strong> <span class="math display">\[\hat F_k(t)=\int_0^t \hat S(u-)\dd\hat \Lambda_k^\cc(u)\]</span></p></li>
+</ul></li>
+</ul>
+</section>
+<section id="cif-sub-distribution-hazard" class="slide level2">
+<h2>CIF: Sub-Distribution Hazard</h2>
+<ul>
+<li><strong>Sub-distribution hazard (SDH)</strong>
+<ul>
+<li>Easier to work with hazard-like functions (unbounded)</li>
+<li>Time to <span class="math inline">\(k\)</span>th risk <em>in presence of</em> other risks <span class="math display">\[
+T_k^*=T_kI(\Delta=k)+\infty I(\Delta\neq k)
+\]</span>
+<ul>
+<li><span class="math inline">\(F_k(t)=\pr(T_k^*\leq t)\)</span></li>
+</ul></li>
+<li><strong>SDH</strong>: incidence of <span class="math inline">\(k\)</span>th risk given not failing from it <span class="math display">\[\begin{equation}\label{eq:cmpr:sdh}
+\dd\Lambda_k(t)=\pr(t\leq T_k^*&lt;t+\dd t\mid T_k^*\geq t).
+\end{equation}\]</span></li>
+<li><strong>Correspondence with CIF</strong> <span class="math display">\[\begin{equation}\label{eq:cmpr:subdist}
+F_k(t)=1-\exp\{-\Lambda_k(t)\}.
+\end{equation}\]</span></li>
+<li><strong>Model/test on SDH</strong> <span class="math inline">\(\Leftrightarrow\)</span> Model/test on CIF</li>
+</ul></li>
+</ul>
+</section>
+<section id="cif-grays-test" class="slide level2">
+<h2>CIF: Gray’s Test</h2>
+<ul>
+<li><strong>Discrete version</strong> (<span class="math inline">\(k\)</span>th risk) <span class="math display">\[
+\dd\Lambda_k(t)=\frac{\dd F_k(t)}{1-F_k(t-)}
+\]</span></li>
+<li><strong>Weighted log-rank-type test</strong>
+<ul>
+<li>Testing <span class="math inline">\(H_0:\)</span> equality of CIF between two groups <span class="math display">\[\begin{equation}\label{eq:cmpr:gray_tests}
+\int_0^\infty W(t)\big\{\dd\hat\Lambda_{k1}(t)-\dd\hat\Lambda_{k0}(t)\big\}
+\end{equation}\]</span></li>
+<li><span class="math inline">\(\hat\Lambda_{ka}(t)\)</span>: Gray’s CIF plug-in estimator for SDH in group <span class="math inline">\(a\)</span> <span class="math inline">\((a=1, 0)\)</span></li>
+<li><span class="math inline">\(W(t)\)</span>: Weight function</li>
+<li><strong>Extensions</strong>: multi-group, stratification, etc.</li>
+</ul></li>
+</ul>
+</section>
+<section id="cif-fine-gray-regression" class="slide level2">
+<h2>CIF: Fine-Gray Regression</h2>
+<ul>
+<li><strong>Proportional sub-distribution hazards</strong> (Fine and Gray, 1999) <span class="math display">\[\begin{equation}\label{eq:cmpr:fg}
+\pr(t\leq T_k^*&lt;t+\dd t\mid T_k^*\geq t, Z)=\exp(\beta_k^\T Z)\dd\Lambda_{k0}(t)
+\end{equation}\]</span>
+<ul>
+<li><span class="math inline">\(\beta_k\)</span>: <strong>log-hazard ratios</strong> for <span class="math inline">\(k\)</span>th risk in entire population (under other risks)</li>
+<li><strong>Target population</strong>
+<ul>
+<li><strong>Cause-specific hazard</strong>: survivors</li>
+<li><strong>Sub-distribution hazard</strong>: all, including those who have failed from other causes</li>
+</ul></li>
+<li><strong>Estimation and inference</strong>: partial-likelihood score with IPCW to address dependent censoring by other risks</li>
+</ul></li>
+</ul>
+</section>
+<section id="software-cmprkcuminc" class="slide level2">
+<h2>Software: <code>cmprk::cuminc()</code></h2>
+<ul>
+<li><strong>Basic syntax for Gray’s estimator &amp; test</strong></li>
+</ul>
+<div class="big-code">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">cuminc</span>(ftime, fstatus, group, strata, <span class="at">rho =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<ul>
+<li><strong>Input</strong>
+<ul>
+<li><code>(ftime, fstatus)</code>: <span class="math inline">\((X, \delta)\)</span></li>
+<li><code>group</code>: group variable (optional); <code>strata</code>: strata variable (optional)</li>
+<li><code>rho</code>: <span class="math inline">\(\rho\)</span> in weight <span class="math inline">\(W(t)=\hat S(t-)^\rho\)</span> (HF <span class="math inline">\(G^\rho\)</span> family)</li>
+</ul></li>
+<li><strong>Output</strong>: a list
+<ul>
+<li><code>obj$Tests</code>: tests results on each risk</li>
+<li><code>obj$"a k"</code>: CIF estimates for <span class="math inline">\(k\)</span>th risk in group <span class="math inline">\(a\)</span>
+<ul>
+<li><code>time</code>: <span class="math inline">\(t\)</span>; <code>est</code>: <span class="math inline">\(\hat F_k(t)\)</span>; <code>var</code>: <span class="math inline">\(\hat\var\{\hat F_k(t)\}\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="software-cmprkcrr-i" class="slide level2">
+<h2>Software: <code>cmprk::crr()</code> (I)</h2>
+<ul>
+<li><strong>Basic syntax for Fine-Gray model</strong></li>
+</ul>
+<div class="big-code">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">crr</span>(ftime, fstatus, cov1, <span class="at">failcode =</span> k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<ul>
+<li><strong>Input</strong>
+<ul>
+<li><code>(ftime, fstatus)</code>: <span class="math inline">\((X, \delta)\)</span>; <code>cov1</code>: <span class="math inline">\(Z\)</span></li>
+<li><code>failcode = k</code>: models <span class="math inline">\(k\)</span>th risk</li>
+</ul></li>
+<li><strong>Output</strong>: a list of class <code>crr</code>
+<ul>
+<li><code>obj$coef</code>: <span class="math inline">\(\hat\beta_k\)</span>; <code>obj$var</code>: <span class="math inline">\(\hat\var(\hat\beta_k)\)</span></li>
+<li><code>obj$uftime</code>: <span class="math inline">\(t\)</span>; <code>obj$bfitj</code>: <span class="math inline">\(\dd\hat\Lambda_{k0}(t)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="software-cmprkcrr-ii" class="slide level2">
+<h2>Software: <code>cmprk::crr()</code> (II)</h2>
+<ul>
+<li><strong>Prediction of CIF by Fine-Gray model</strong>
+<ul>
+<li><code>obj</code>: a <code>crr</code> object for fit model</li>
+<li><code>z</code>: new covariate data</li>
+</ul></li>
+</ul>
+<div class="big-code">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># --- Method 1: use predict.crr() </span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>obj_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(obj, z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># --- Method 2: manual calculation</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>beta <span class="ot">&lt;-</span> obj<span class="sc">$</span>coef</span>
+<span id="cb4-3"><a href="#cb4-3"></a>Lambda <span class="ot">&lt;-</span> <span class="fu">cusum</span>(obj<span class="sc">$</span>bfitj)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>time <span class="ot">&lt;-</span> obj<span class="sc">$</span>uftime</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="do">## calculate CIF based on FG model</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>cif <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(beta <span class="sc">*</span> z)) <span class="sc">*</span> Lambda)</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="do">## Same as obj_pred from Method 1</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>obj_pred <span class="ot">&lt;-</span> <span class="fu">cbind</span>(time, cif)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="bone-marrow-transplant-study" class="title-slide slide level1 center">
+<h1>Bone Marrow Transplant Study</h1>
+
+</section>
+<section id="study-background" class="slide level2">
+<h2>Study Background</h2>
+<ul>
+<li><strong>Study information</strong>
+<ul>
+<li><strong>Population</strong>: 864 multiple-myeloma leukemia patients undergoing allo-HCT cell transplantation</li>
+<li><strong>Endpoints</strong>: Time from surgery to <strong>treatment-related mortality</strong> (TRM; death in remission) or <strong>relapse of leukemia</strong></li>
+<li><strong>Risk factors</strong>
+<ul>
+<li>Cohort indicator (years 1995–2000 or 2001–2005)</li>
+<li>Type of donor (unrelated or HLA-identical sibling)</li>
+<li>History of a prior transplant</li>
+<li>Time from diagnosis to transplantation (&lt;24 months, or ≥ 24 months)</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="study-data" class="slide level2">
+<h2>Study Data</h2>
+<ul>
+<li><strong>Data format</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">head</span>(cibmtr)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#    time status cohort donor hist wait</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co"># 1 0.010      2      1     1    1    1</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># 2 0.066      2      1     1    1    0</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># 3 0.099      1      1     1    1    1</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cmpr_cibmtr.png" style="width:75.0%"></p>
+</figure>
+</div>
+</section>
+<section id="cif-by-donor-type" class="slide level2">
+<h2>CIF by Donor Type</h2>
+<ul>
+<li>Gray’s nonparametric estimates/tests of CIFs by donor type</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">cuminc</span>(cibmtr<span class="sc">$</span>time, cibmtr<span class="sc">$</span>status, cibmtr<span class="sc">$</span>donor, <span class="at">rho =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cmpr_bm_cif.png" style="width:70.0%"></p>
+</figure>
+</div>
+</section>
+<section id="regression-analysis" class="slide level2">
+<h2>Regression Analysis</h2>
+<ul>
+<li>Semiparametric regression
+<ul>
+<li>Proportional cause-specific hazard</li>
+<li>Proportional sub-distribution hazard (FG)</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">#change k</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>k <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#--- proportional cause-specific hazards -----------------------------</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>obj.cs <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status <span class="sc">==</span> k) <span class="sc">~</span> cohort <span class="sc">+</span> donor <span class="sc">+</span> hist <span class="sc">+</span> wait,</span>
+<span id="cb7-5"><a href="#cb7-5"></a>                <span class="at">data =</span> cibmtr)</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#--- Fine and Gray --------------------------------------------------</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>obj.fg <span class="ot">&lt;-</span> <span class="fu">crr</span>(cibmtr<span class="sc">$</span>time, cibmtr<span class="sc">$</span>status, cibmtr[, <span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>], <span class="at">failcode =</span> k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="regression-results" class="slide level2">
+<h2>Regression Results</h2>
+<ul>
+<li>Differential effects of prior surgery
+<ul>
+<li><strong>Relapse</strong>: increases risk by <span class="math inline">\(42\%\)</span></li>
+<li><strong>TRM</strong>: decreases risk by <span class="math inline">\(1-0.63 = 37\%\)</span> <img data-src="images/cmpr_bm_reg.png" style="width:85.0%" data-fig-align="center"></li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="semi-competing-risks" class="title-slide slide level1 center">
+<h1>Semi-Competing Risks</h1>
+
+</section>
+<section id="definition-and-examples-1" class="slide level2">
+<h2>Definition and Examples</h2>
+<ul>
+<li><strong>Semi-competing risks</strong>
+<ul>
+<li><strong>Terminal event</strong> (competing): death</li>
+<li><strong>Non-terminal events</strong> (non-competing): hospitalization, relapse, etc.</li>
+</ul></li>
+<li><strong>Examples</strong>
+<ul>
+<li>Death + relapse of cancer (German breast cancer study)</li>
+<li>Death terminates nonfatal event but not <em>vice versa</em></li>
+</ul></li>
+<li><strong>Methods</strong>
+<ul>
+<li><strong>Marginal</strong>: cumulative incidence/frequency</li>
+<li><strong>Frailty</strong> (Ch. 8); <strong>Multistate</strong> (Ch. 12); <strong>Composite</strong> (Ch. 13)</li>
+</ul></li>
+</ul>
+</section>
+<section id="data-and-identifiability" class="slide level2">
+<h2>Data and Identifiability</h2>
+<div class="columns">
+<div class="column" style="width:55%;">
+<ul>
+<li><strong>Target of inference</strong>: <span class="math inline">\((T, D)\)</span>
+<ul>
+<li><span class="math inline">\(T\)</span>: time to nonfatal event</li>
+<li><span class="math inline">\(D\)</span>: time to death</li>
+<li><strong>Joint distribution</strong> <span class="math display">\[H(s, t)=\pr(D&gt;s, T&gt;t)\]</span></li>
+<li><strong>Identifiable region</strong>: <span class="math inline">\(\{(s, t):0\leq t\leq s&lt;\infty\}\)</span>
+<ul>
+<li>Possibly nonfatal <span class="math inline">\(\to\)</span> death, not <em>vice versa</em></li>
+</ul></li>
+<li><strong>Marginal models</strong>
+<ul>
+<li><strong>Death</strong>: univariate event (KM, log-rank, Cox)</li>
+<li><strong>Nonfatal event</strong>: cumulative incidence (Gray, FG)</li>
+</ul></li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:45%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cmpr_wedge.png" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="recurrent-events" class="slide level2">
+<h2>Recurrent Events</h2>
+<ul>
+<li><strong>Outcome data</strong>: <span class="math inline">\(\{N^*(\cdot), D\}\)</span>
+<ul>
+<li><span class="math inline">\(N^*(t)\)</span>: number of recurrent events in presence of death
+<ul>
+<li><span class="math inline">\(\dd N^*(t)\equiv 0\)</span> for <span class="math inline">\(t&gt;D\)</span></li>
+<li>Repeated tumor occurrences/hospitalizations before death</li>
+</ul></li>
+<li>Treating <span class="math inline">\(D\)</span> as censoring (AG/LWYY) <span class="math inline">\(\to\)</span> cause-specific event rate <span class="math display">\[E\{\dd N^*(t)\mid D\geq t\}\]</span></li>
+<li>Incidence rate in survivors</li>
+</ul></li>
+<li><strong>Cumulative frequency</strong>
+<ul>
+<li>Mean function in overall population, dead or alive <span class="math display">\[
+\mu(t)=E\{N^*(t)\}
+\]</span></li>
+<li>Extension of CIF</li>
+</ul></li>
+</ul>
+</section>
+<section id="marginal-approaches" class="slide level2">
+<h2>Marginal Approaches</h2>
+<ul>
+<li><strong>Methods for cumulative frequency</strong>
+<ul>
+<li>Gray-type nonparametric estimator/test (Ghosh and Lin, 2000)</li>
+<li>Proportional CF model (Fine-Gray-type) (Ghosh and Lin, 2002; 2003) <span class="math display">\[\begin{equation}\label{eq:cmpr:pcf}
+E\{N^*(t)\mid Z\}=\exp(\beta^\T Z)\mu_0(t)
+\end{equation}\]</span></li>
+<li>Higher death rate can reduce CF</li>
+</ul></li>
+<li><strong>Joint analysis with mortality</strong>
+<ul>
+<li>Ghosh-Lin for recurrent events <span class="math inline">\(+\)</span> Cox/log-rank for death</li>
+<li><span class="math inline">\(\chi^2\)</span> test with 2 d.f.</li>
+</ul></li>
+</ul>
+</section>
+<section id="example-bladder-tumor-study" class="slide level2">
+<h2>Example: Bladder Tumor Study</h2>
+<ul>
+<li><strong>Bladder cancer trial</strong>: thiotepa (<span class="math inline">\(n=38\)</span>) bs placebo (<span class="math inline">\(n=48\)</span>)
+<ul>
+<li><strong>Endpoints</strong>: tumor recurrences and death (<span class="math inline">\(\chi_2^2\)</span> test <span class="math inline">\(p\)</span>-value 0.184) <img data-src="images/cmpr_bladder.png" style="width:70.0%" data-fig-align="center"></li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="conclusion" class="title-slide slide level1 center">
+<h1>Conclusion</h1>
+
+</section>
+<section id="notes" class="slide level2">
+<h2>Notes</h2>
+<ul>
+<li><strong>Gray and FG</strong>
+<ul>
+<li><strong>Recommended</strong> by the European Group for Blood and Marrow Transplantation (EBMT) Statistical Committee</li>
+<li><strong>Extensions</strong>
+<ul>
+<li>Proportional sub-distribution odds model (Eriksson et al., 2015)</li>
+<li>Sub-distribution transformation models (Mao and Lin, 2017)</li>
+<li>Regression of interval-censored competing risks data (Mao et al., 2018)</li>
+</ul></li>
+</ul></li>
+<li><strong>Semi-competing risks</strong></li>
+</ul>
+<blockquote>
+<p>Fine, J. P., Jiang, H., &amp; Chappell, R. (2001). On semi-competing risks data. <em>Biometrika</em>, <em>88</em>(4), 907-919.</p>
+</blockquote>
+</section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
+<ul>
+<li><strong>Competing risks</strong>
+<ul>
+<li><strong>Cause-specific hazard</strong>: conditional failure rate on survivors
+<ul>
+<li><code>coxph(Surv(time, status == k) ~ covariates)</code></li>
+</ul></li>
+<li><strong>Cumulative incidence</strong>: marginal failure probability under other risks
+<ul>
+<li><strong>Gray’s estimator/test</strong> <code>cmprk::cuminc(ftime, fstatus, group, strata, rho = 0)</code></li>
+<li><strong>Fine-Gray model</strong> <code>cmprk::crr(ftime, fstatus, cov1, failcode = k)</code></li>
+</ul></li>
+</ul></li>
+<li><strong>Recurrent events in presence of death</strong>
+<ul>
+<li>Ghosh-Lin methods (R packages <code>mets</code>, <code>reReg</code>, etc.)</li>
+</ul></li>
+</ul>
+<div class="footer footer-default">
+
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="chap10_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="chap10_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="chap10_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="chap10_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="chap10_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="chap10_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="chap10_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="chap10_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="chap10_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="chap10_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
