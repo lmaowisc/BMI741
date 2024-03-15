@@ -750,7 +750,7 @@ F_k(t)=1-\exp\{-\Lambda_k(t)\}.
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># --- Method 2: manual calculation</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>beta <span class="ot">&lt;-</span> obj<span class="sc">$</span>coef</span>
-<span id="cb4-3"><a href="#cb4-3"></a>Lambda <span class="ot">&lt;-</span> <span class="fu">cusum</span>(obj<span class="sc">$</span>bfitj)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>Lambda <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(obj<span class="sc">$</span>bfitj)</span>
 <span id="cb4-4"><a href="#cb4-4"></a>time <span class="ot">&lt;-</span> obj<span class="sc">$</span>uftime</span>
 <span id="cb4-5"><a href="#cb4-5"></a><span class="do">## calculate CIF based on FG model</span></span>
 <span id="cb4-6"><a href="#cb4-6"></a>cif <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(beta <span class="sc">*</span> z)) <span class="sc">*</span> Lambda)</span>
