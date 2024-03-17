@@ -1,0 +1,116 @@
+---
+title: "Chapter 11 - Joint Analysis of Longitudinal and Survival Data"
+---
+
+## Slides
+
+Lecture slides [here](chap11.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
+
+## Base R Code
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| eval: false
+
+##################################################################
+# This code generates all numerical results in chapter 11.      ##
+##################################################################
+
+
+############################################################
+# Analysis of the anti-retroviral drug trial
+############################################################
+
+#load required packages
+library(nlme) # for linear mixed effects model
+library(survival)
+
+# read in the study dataset
+data <- read.table("Data//Anti-retroviral Trial//aids.txt")
+head(data)
+
+#load the JM package
+install.packages("JM")
+library(JM)
+
+#####################################################
+# Figure 11.2 Histograms of CD4 count and square-root
+#       transformation
+#####################################################
+par(mfrow=c(1,2))
+hist(data$CD4,xlab="CD4 count", main = "", lwd=2)
+hist(sqrt(data$CD4),xlab="Square root of CD4 count",main="",lwd=2)
+
+# taking square root of CD4 count
+data$y <- sqrt(data$CD4)
+
+# create a de-duplicated data for survival sub-model
+data.surv <- data[!duplicated(data$id),]
+
+# Joint model fit for the HIV/AIDS dataset
+# longitudinal sub-model
+longit.sub <- lme(y ~ obsmo + obsmo:drug + sex + hist,
+                   random = ~ obsmo|id, data = data)
+
+# survival sub-model
+surv.sub <- coxph(Surv(time, status) ~ drug + sex + hist,
+                     data = data.surv, x = TRUE)
+
+# combine the two models
+# piecewise linear baseline with six internal knots
+joint.model <- jointModel(longit.sub, surv.sub,
+                            timeVar = "obsmo",
+                            method = "piecewise-PH-aGH")
+
+
+joint.model$coefficients
+
+# print out the summary
+summary(joint.model)
+
+
+
+######################################
+# Figure 11.3
+######################################
+
+# compute the mean trajectories based on the longitudinal
+# sub-model results
+
+t <- (0:180)/10
+
+g0 <- 2.2123
+g1 <- -0.0414
+g3 <- 0.9153
+g4 <- 0.0061
+
+
+ddC.nonhist <- (g0+g3+g1*t)^2
+ddC.hist <- (g0+g1*t)^2
+
+
+ddI.nonhist <- (g0+g3+(g1+g4)*t)^2
+ddI.hist <- (g0+(g1+g4)*t)^2
+
+
+#######################################################
+# Figure 11.3
+# Model-based estimates of the mean trajectories
+#  of CD4 count for female patients by treatment
+#  group and previous infection status. Solid, ddC;
+#  dotted, ddI
+######################################################
+par(mfrow=c(1,2))
+
+plot(t, ddC.nonhist,type='l',frame.plot=F,
+     main="No previous infection",xlim=c(0,20),ylim=c(0,10),
+     xlab="Time (months)", ylab="Mean CD4 cell count", lwd=2, cex.main = 1)
+lines(t,ddI.nonhist,lty=3,lwd=2)
+
+plot(t, ddC.hist,type='l',frame.plot=F,
+     main="Previous infection",xlim=c(0,20),ylim=c(0,10),
+     xlab="Time (months)", ylab="Mean CD4 cell count", lwd=2, cex.main = 1)
+lines(t,ddI.hist,lty=3,lwd=2)
+
+```
