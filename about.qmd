@@ -80,7 +80,7 @@ Po-Kuei Chen (pchen299\@wisc.edu); Office hours:
 **Part I: Univariate Events**
 
 |      |         |                                                                              |
-|------|---------|------------------------------------------------------------------------------|
+|-----------|-----------|---------------------------------------------------|
 | 1/29 | Lecture | Introduction                                                                 |
 |      | Reading | Chapter 1                                                                    |
 | 1/31 | Lecture | Mathematical Foundations                                                     |
@@ -107,7 +107,7 @@ Po-Kuei Chen (pchen299\@wisc.edu); Office hours:
 **Part II: Complex Outcomes**
 
 |      |           |                                                                          |
-|------|-----------|--------------------------------------------------------------------------|
+|-----------|-----------|--------------------------------------------------|
 | 3/6  | Lecture   | Multivariate Events – [Conditional (Frailty) Models]{.smallcaps}         |
 |      | Reading   | Chapter 8                                                                |
 | 3/11 | Lecture   | Multivariate Event Times – [Marginal Models]{.smallcaps}                 |
@@ -120,9 +120,9 @@ Po-Kuei Chen (pchen299\@wisc.edu); Office hours:
 |      | Reading   | Chapter 11                                                               |
 | 4/1  | Lecture   | Multistate Models – [Introduction]{.smallcaps}                           |
 |      | Reading   | Chapter 12                                                               |
-| 4/3  | Lecture   | Multistate Models – [Cox-Type Markov and Semi-Markov Models]{.smallcaps} |
+| 4/3  | Lecture\* | Multistate Models – [Cox-Type Markov and Semi-Markov Models]{.smallcaps} |
 |      | Reading   | Chapter 12                                                               |
-| 4/8  | Lecture\* | Composite Endpoints – [Nonparametric Estimation]{.smallcaps}             |
+| 4/8  | Lecture   | Composite Endpoints – [Nonparametric Estimation]{.smallcaps}             |
 |      | Reading   | Chapter 13                                                               |
 | 4/10 | Lecture   | Composite Endpoints – [Semiparametric Regression]{.smallcaps}            |
 |      | Reading   | Chapter 13                                                               |
@@ -130,7 +130,7 @@ Po-Kuei Chen (pchen299\@wisc.edu); Office hours:
 **Part III: Special Topics**
 
 |      |         |                                                                                |
-|------|---------|--------------------------------------------------------------------------------|
+|-----------|-----------|---------------------------------------------------|
 | 4/15 | Lecture | Causal Inference with Censored Data – [IPTW and Standardization]{.smallcaps}   |
 |      | Reading | Chapter 14                                                                     |
 | 4/17 | Lecture | Causal Inference with Censored Data – [Marginal Structural Models]{.smallcaps} |
