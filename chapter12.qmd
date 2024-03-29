@@ -1,0 +1,7 @@
+---
+title: "Chapter 12 - Multistate Modeling of Life History"
+---
+
+## Slides
+
+Lecture slides [here](chap12.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)

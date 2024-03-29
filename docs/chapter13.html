@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>BMI/STAT 741 Course Study Site - Syllabus</title>
+<title>BMI/STAT 741 Course Study Site - Chapter 13 - Composite Endpoints</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -86,7 +86,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="./about.html" rel="" target="">
  <span class="menu-text">Syllabus</span></a>
   </li>  
 </ul>
@@ -100,7 +100,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Syllabus</li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter8.html">Part II - Complex Outcomes</a></li><li class="breadcrumb-item"><a href="./chapter13.html">Chapter 13 - Composite Endpoints</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -214,7 +214,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Chapter 13 - Composite Endpoints</span></a>
   </div>
 </li>
@@ -238,20 +238,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#course-structure" id="toc-course-structure" class="nav-link" data-scroll-target="#course-structure">Course structure</a></li>
-  <li><a href="#learning-outcomes" id="toc-learning-outcomes" class="nav-link" data-scroll-target="#learning-outcomes">Learning outcomes</a></li>
-  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
-  <li><a href="#time-and-location" id="toc-time-and-location" class="nav-link" data-scroll-target="#time-and-location">Time and Location</a></li>
-  <li><a href="#instructors" id="toc-instructors" class="nav-link" data-scroll-target="#instructors">Instructors</a>
-  <ul>
-  <li><a href="#main-instructor" id="toc-main-instructor" class="nav-link" data-scroll-target="#main-instructor">Main Instructor</a></li>
-  <li><a href="#teaching-assistant" id="toc-teaching-assistant" class="nav-link" data-scroll-target="#teaching-assistant">Teaching Assistant</a></li>
-  </ul></li>
-  <li><a href="#readings" id="toc-readings" class="nav-link" data-scroll-target="#readings">Readings</a></li>
-  <li><a href="#course-schedule" id="toc-course-schedule" class="nav-link" data-scroll-target="#course-schedule">Course Schedule</a></li>
-  <li><a href="#homework-and-exams" id="toc-homework-and-exams" class="nav-link" data-scroll-target="#homework-and-exams">Homework and Exams</a></li>
-  <li><a href="#grading" id="toc-grading" class="nav-link" data-scroll-target="#grading">Grading</a></li>
+  <li><a href="#slides" id="toc-slides" class="nav-link active" data-scroll-target="#slides">Slides</a></li>
   </ul>
 </nav>
     </div>
@@ -260,7 +247,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Syllabus</h1>
+<h1 class="title">Chapter 13 - Composite Endpoints</h1>
 </div>
 
 
@@ -275,369 +262,8 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="overview" class="level3">
-<h3 class="anchored" data-anchor-id="overview">Overview</h3>
-<p>This course provides a survey of modern statistical methodology for the analysis of <strong>censored</strong> time-to-event data arising from clinical, epidemiological, sociological, and engineering studies. We use intuitive explanations of statistical theory, such as counting-process martingale, to deepen understanding of real-world problems and train problem-solving skills. To do so, we combine methodological exposition with extensive case studies, mostly drawn from health sciences research (sample R/SAS code for case studies will be provided). The overall emphasis of this course is on the <strong>application</strong> side of study design and data analysis.</p>
-</section>
-<section id="course-structure" class="level3">
-<h3 class="anchored" data-anchor-id="course-structure">Course structure</h3>
-<p>The course is divided into three parts. The first part focuses on methods for univariate event times, e.g., Kaplan—Meier curve, log-rank test, and Cox proportional hazards model. Building on this foundation, the second part expands the scope to complex outcomes such as recurrent or multivariate events, (semi-)competing risks, joint analysis of survival and longitudinal data, multistate data, composite endpoints, and so forth. Special topics for censored data from cutting-edge research areas such as causal inference and machine learning are discussed in the third part.</p>
-</section>
-<section id="learning-outcomes" class="level3">
-<h3 class="anchored" data-anchor-id="learning-outcomes">Learning outcomes</h3>
-<p>After taking the course, students will be able to:</p>
-<ul>
-<li><p>Understand the features of censored data and their implications in statistical inference</p></li>
-<li><p>Choose proper non- and semi-parametric methods for analysis of various types of data</p></li>
-<li><p>Understand and check the assumptions needed for estimation and inference</p></li>
-<li><p>Implement the inference procedures to solve real-world problems using statistical packages such as R (or SAS)</p></li>
-<li><p>Interpret and present the analytic results clearly and coherently to answer substantive questions</p></li>
-</ul>
-</section>
-<section id="prerequisites" class="level3">
-<h3 class="anchored" data-anchor-id="prerequisites">Prerequisites</h3>
-<p>Students are expected to have basic knowledge in statistical concepts such as random variables, expectation, variance, and maximum likelihood estimation, and to have taken first courses in statistical hypothesis testing (e.g., <em>t</em>-test, ANOVA, etc.) and (generalized) linear regression models. Prior experience with R or SAS is helpful but not required.</p>
-</section>
-<section id="time-and-location" class="level3">
-<h3 class="anchored" data-anchor-id="time-and-location">Time and Location</h3>
-<p>MW 2:30—3:45pm; 1220 HSLC (Health Sciences Learning Center)</p>
-</section>
-<section id="instructors" class="level3">
-<h3 class="anchored" data-anchor-id="instructors">Instructors</h3>
-<section id="main-instructor" class="level4">
-<h4 class="anchored" data-anchor-id="main-instructor">Main Instructor</h4>
-<p>Lu Mao, PhD</p>
-<p>WARF 207A, 610 Walnut St, Madison, WI 53726</p>
-<p>Email: lmao@biostat.wisc.edu</p>
-<p>Phone: 608-263-5674</p>
-<p>Office Time and Location: T&amp;Th 3–4pm, or by appointment.</p>
-<p>Zoom link provided in syllabus on Canvas.</p>
-</section>
-<section id="teaching-assistant" class="level4">
-<h4 class="anchored" data-anchor-id="teaching-assistant">Teaching Assistant</h4>
-<p>Po-Kuei Chen (pchen299@wisc.edu); Office hours:</p>
-<ul>
-<li><p>Monday 4:30–5:30pm (Medical Science Center (MSC), room B248)</p></li>
-<li><p>Wednesday 4:30–5:30pm (Zoom link provided in syllabus on Canvas)</p></li>
-<li><p>By appointment.</p></li>
-</ul>
-</section>
-</section>
-<section id="readings" class="level3">
-<h3 class="anchored" data-anchor-id="readings">Readings</h3>
-<ul>
-<li><p>[<strong>Required</strong>] <em>Applied Survival Analysis: From Univariate to Complex Time-to-Event Outcomes</em> (To be posted periodically by chapter on Canvas)</p></li>
-<li><p>[For methodological reader] Kalbfleisch, J. D. &amp; Prentice, R. L. (2002). <em>The statistical analysis of failure time data</em> (2<sup>nd</sup> Ed). John Wiley &amp; Sons.</p></li>
-<li><p>[For applied reader] Klein, J. P. &amp; Moeschberger, M. L. (2003). <em>Survival analysis: techniques for censored and truncated data</em> (2<sup>nd</sup> Ed). Springer Science &amp; Business Media.</p></li>
-<li><p>[More theoretical] Fleming, T. R. &amp; Harrington, D. P. (1991). <em>Counting processes and survival analysis</em>. John Wiley &amp; Sons.</p></li>
-</ul>
-</section>
-<section id="course-schedule" class="level3">
-<h3 class="anchored" data-anchor-id="course-schedule">Course Schedule</h3>
-<p><strong>Kickoff</strong></p>
-<table class="table">
-<tbody>
-<tr class="odd">
-<td>1/24</td>
-<td>Lecture</td>
-<td>Overview</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Syllabus</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Part I: Univariate Events</strong></p>
-<table class="table">
-<colgroup>
-<col style="width: 6%">
-<col style="width: 9%">
-<col style="width: 83%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>1/29</td>
-<td>Lecture</td>
-<td>Introduction</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 1</td>
-</tr>
-<tr class="odd">
-<td>1/31</td>
-<td>Lecture</td>
-<td>Mathematical Foundations</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 2</td>
-</tr>
-<tr class="odd">
-<td>2/5</td>
-<td>Lecture</td>
-<td>Nonparametric Estimation of the Survival Curve</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 3</td>
-</tr>
-<tr class="odd">
-<td>2/7</td>
-<td>Lecture</td>
-<td>Comparing Survival Rates between Groups</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 3</td>
-</tr>
-<tr class="odd">
-<td>2/12</td>
-<td>Lecture</td>
-<td>The Cox Proportional Hazards Model – <span class="smallcaps">Assumptions and Inference</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 4</td>
-</tr>
-<tr class="odd">
-<td>2/14</td>
-<td>Lecture</td>
-<td>The Cox Proportional Hazards Model – <span class="smallcaps">Residual Analysis</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 4</td>
-</tr>
-<tr class="odd">
-<td>2/19</td>
-<td>Lecture</td>
-<td>The Cox Proportional Hazards Model – <span class="smallcaps">Time-Varying Covariates</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 4</td>
-</tr>
-<tr class="odd">
-<td>2/21</td>
-<td>Lecture</td>
-<td>Other Non- and Semi-parametric Methods</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 5</td>
-</tr>
-<tr class="odd">
-<td>2/26</td>
-<td>Lecture</td>
-<td>Study Design and Sample Size Calculation</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 6</td>
-</tr>
-<tr class="odd">
-<td>2/28</td>
-<td>Lecture</td>
-<td>Left Truncation</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 7</td>
-</tr>
-<tr class="odd">
-<td>3/4</td>
-<td>Lecture</td>
-<td>Interval Censoring</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 7</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Part II: Complex Outcomes</strong></p>
-<table class="table">
-<colgroup>
-<col style="width: 6%">
-<col style="width: 12%">
-<col style="width: 81%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>3/6</td>
-<td>Lecture</td>
-<td>Multivariate Events – <span class="smallcaps">Conditional (Frailty) Models</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 8</td>
-</tr>
-<tr class="odd">
-<td>3/11</td>
-<td>Lecture</td>
-<td>Multivariate Event Times – <span class="smallcaps">Marginal Models</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 8</td>
-</tr>
-<tr class="odd">
-<td>3/13</td>
-<td>Lecture</td>
-<td>Recurrent Event</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 9</td>
-</tr>
-<tr class="odd">
-<td>3/18</td>
-<td>Lecture</td>
-<td>Competing and Semi-competing Risks</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 10</td>
-</tr>
-<tr class="odd">
-<td>3/20</td>
-<td>Lecture</td>
-<td>Joint Analysis of Longitudinal and Survival Data</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 11</td>
-</tr>
-<tr class="odd">
-<td>4/1</td>
-<td>Lecture</td>
-<td>Multistate Models – <span class="smallcaps">Introduction</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 12</td>
-</tr>
-<tr class="odd">
-<td>4/3</td>
-<td>Lecture</td>
-<td>Multistate Models – <span class="smallcaps">Cox-Type Markov and Semi-Markov Models</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 12</td>
-</tr>
-<tr class="odd">
-<td>4/8</td>
-<td>Lecture*</td>
-<td>Composite Endpoints – <span class="smallcaps">Nonparametric Estimation</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 13</td>
-</tr>
-<tr class="odd">
-<td>4/10</td>
-<td>Lecture</td>
-<td>Composite Endpoints – <span class="smallcaps">Semiparametric Regression</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 13</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Part III: Special Topics</strong></p>
-<table class="table">
-<colgroup>
-<col style="width: 6%">
-<col style="width: 9%">
-<col style="width: 84%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>4/15</td>
-<td>Lecture</td>
-<td>Causal Inference with Censored Data – <span class="smallcaps">IPTW and Standardization</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 14</td>
-</tr>
-<tr class="odd">
-<td>4/17</td>
-<td>Lecture</td>
-<td>Causal Inference with Censored Data – <span class="smallcaps">Marginal Structural Models</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 14</td>
-</tr>
-<tr class="odd">
-<td>4/22</td>
-<td>Lecture</td>
-<td>Machine Learning with Censored Data – <span class="smallcaps">Variable Selection</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 15</td>
-</tr>
-<tr class="odd">
-<td>4/24</td>
-<td>Lecture</td>
-<td>Machine Learning with Censored Data – <span class="smallcaps">Nonlinear Regression</span></td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Reading</td>
-<td>Chapter 15</td>
-</tr>
-<tr class="odd">
-<td>4/29</td>
-<td>Lecture</td>
-<td>Guest Lecture (Dave DeMets or other)</td>
-</tr>
-<tr class="even">
-<td>5/1</td>
-<td>Lecture</td>
-<td>Recap</td>
-</tr>
-</tbody>
-</table>
-<p>* Possibly online due to the instructor attending an FDA conference (<a href="https://www.advamed.org/events/fda-advamed-mdsi-conference" class="uri">https://www.advamed.org/events/fda-advamed-mdsi-conference</a>).</p>
-</section>
-<section id="homework-and-exams" class="level3">
-<h3 class="anchored" data-anchor-id="homework-and-exams">Homework and Exams</h3>
-<p>One homework every other week; one mid-term, and one data analysis final project.</p>
-</section>
-<section id="grading" class="level3">
-<h3 class="anchored" data-anchor-id="grading">Grading</h3>
-<p>15% attendance; 35% homework; 20% mid-term; 30% final project.</p>
+<section id="slides" class="level2">
+<h2 class="anchored" data-anchor-id="slides">Slides</h2>
 
 
 </section>

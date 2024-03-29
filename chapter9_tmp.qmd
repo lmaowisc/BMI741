@@ -149,7 +149,7 @@ rec_cgd_hist <- cgd |>
   facet_wrap( ~ sex, labeller = labeller(sex = sex_labeller)) +
   scale_x_continuous("Infection count per patient", 
                    breaks = 0:7, labels = 0:7) +
-  scale_y_continuous("Number of patients",expand = c(0, 1)) + 
+  scale_y_continuous("Number of patients", expand = c(0, 1)) + 
   scale_fill_manual(values = c("gray80", "gray20"), labels = c("Placebo", "rIFN-g")) +
   theme_bw() +
   theme(
