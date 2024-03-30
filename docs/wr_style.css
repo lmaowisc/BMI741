@@ -1,3 +1,6 @@
+.reveal table {
+  font-size: x-large;
+}
 
 
 .title {
@@ -17,11 +20,11 @@
 
 
 .math.inline {
-  font-size: 88%  !important;
+  font-size: 80%  !important;
 }
 
 .MathJax, .MathJax_Display  {
-    font-size: 75%  !important;
+    font-size: 70%  !important;
 }
 
 code.sourceCode {

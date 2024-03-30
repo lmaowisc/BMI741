@@ -393,8 +393,16 @@ Lu Mao
 <li><strong>Nonparametric</strong>: fix the time frame</li>
 <li><strong>Semiparametric</strong>: posit a time-constant feature</li>
 </ul></li>
-<li><p><strong>Future work</strong></p></li>
+<li><p><strong>Summary and discussion</strong></p></li>
 </ul>
+<p><span class="math display">\[
+\def\a{{(a)}}
+\def\b{{(1-a)}}
+\def\t{{(1)}}
+\def\c{{(0)}}
+\def\d{{\rm d}}
+\def\T{{\rm T}}
+\]</span></p>
 </section>
 <section>
 <section id="introduction" class="title-slide slide level1 center">
@@ -427,11 +435,11 @@ Lu Mao
 <ul>
 <li><strong>A common approach to HCE</strong>
 <ul>
-<li><strong>Proposed and popularized</strong> by <span class="citation" data-cites="pocock2011">Pocock et al. (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span></li>
+<li><strong>Proposed and popularized</strong> by <span class="citation" data-cites="pocock2012">Pocock et al. (<a href="#/references" role="doc-biblioref" onclick="">2012</a>)</span></li>
 <li><strong>Treatment vs control</strong>: generalized pairwise comparisons</li>
 <li><strong>Win-loss</strong>: sequential comparison on components
 <ul>
-<li>Longer survivor &gt; fewer/later nonfatal MACE &gt; better 6MWT/NYHA</li>
+<li>Longer survival &gt; fewer/later nonfatal MACE &gt; better 6MWT/NYHA score</li>
 </ul></li>
 <li><strong>Effect size</strong>: WR <span class="math inline">\(=\)</span> wins / losses</li>
 </ul></li>
@@ -447,37 +455,305 @@ Lu Mao
 <ul>
 <li>More trials are using it…</li>
 </ul>
-
-<img data-src="images/Ntrial_title.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section></section>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/Ntrial_title.png" style="width:100.0%"></p>
+</figure>
+</div>
+</section></section>
 <section>
 <section id="estimand-vs-censoring" class="title-slide slide level1 center">
 <h1>Estimand vs Censoring</h1>
 
 </section>
-<section id="limitation" class="slide level2">
-<h2>Limitation</h2>
+<section id="an-important-caveat" class="slide level2">
+<h2>An Important Caveat</h2>
 <ul>
-<li>WR estimand depends on censoring</li>
+<li><p><strong>WR’s estimand depends on censoring …</strong></p>
+<ul>
+<li><span class="citation" data-cites="Luo2015">Luo et al. (<a href="#/references" role="doc-biblioref" onclick="">2015</a>)</span>, <span class="citation" data-cites="Bebu2016">Bebu &amp; Lachin (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span>, <span class="citation" data-cites="oakes2016">Oakes (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span>, <span class="citation" data-cites="Mao2019">Mao (<a href="#/references" role="doc-biblioref" onclick="">2018</a>)</span>, etc.</li>
+</ul></li>
+<li><p><strong>What is an estimand?</strong></p>
+<ul>
+<li>Population-level quantity to be estimated
+<ul>
+<li>Population-mean difference, (true) risk ratio, etc.</li>
+</ul></li>
+<li>Specifies how treatment effect is measured</li>
+<li><strong>ICH E9 (R1) addendum</strong>: estimand construction one of the “<em>central questions for drug development and licensing</em>”</li>
+</ul></li>
+</ul>
+</section>
+<section id="time-frame-of-comparison" class="slide level2">
+<h2>Time Frame of Comparison</h2>
+<ul>
+<li><strong>Cause of dependency on censoring</strong>
+<ul>
+<li>Censoring <span class="math inline">\(\to\)</span> time frame of comparison <span class="math inline">\(\to\)</span> magnitude of win/loss probabilities</li>
+</ul></li>
+<li><strong>Example</strong>
+<ul>
+<li><strong>Pair 1</strong>: one patient censored at year 1, the other <span class="math inline">\(&gt;1\)</span> year
+<ul>
+<li>Compared over <span class="math inline">\([0, 1]\)</span> year</li>
+</ul></li>
+<li><strong>Pair 2</strong>: neither patient censored until year 5
+<ul>
+<li>Compared over <span class="math inline">\(&gt; [0, 5]\)</span> years</li>
+<li>More events <span class="math inline">\(\to\)</span> fewer ties <span class="math inline">\(\to\)</span> higher win/loss proportions</li>
+<li>Prioritized components more likely conclusive, harder to pass</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="win-loss-changes-with-time" class="slide level2">
+<h2>Win-Loss Changes with Time</h2>
+<ul>
+<li><strong>Illustration</strong>
+<ul>
+<li>Win-loss status, and deciding component, changes with time <img data-src="images/exmp.png" style="width:85.0%" data-fig-align="center"></li>
+<li>Longer follow-up …
+<ul>
+<li><strong>Parameters</strong>: win/loss proportions <span class="math inline">\(\uparrow\)</span> (WR uncertain); tie proportion <span class="math inline">\(\downarrow\)</span></li>
+<li><strong>Relative contribution</strong>: prioritized <span class="math inline">\(\uparrow\)</span>; deprioritized <span class="math inline">\(\downarrow\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="trial-dependent-estimand" class="slide level2">
+<h2>Trial-Dependent Estimand</h2>
+<ul>
+<li><strong>Actual estimand</strong>
+<ul>
+<li>Average WR mixing shorter-term with longer-term comparisons</li>
+<li>Weight set (haphazardly) by censoring distribution
+<ul>
+<li>Staggered entry, random withdrawal <span class="math inline">\(\to\)</span> non-scientific</li>
+</ul></li>
+</ul></li>
+<li><strong>Testing vs estimation</strong>
+<ul>
+<li><strong>Testing (qualitative)</strong>: okay
+<ul>
+<li>Valid under <span class="math inline">\(H_0\)</span>, powerful if treatment <em>consistently</em> outperforms control over time</li>
+</ul></li>
+<li><strong>Estimation (quantitative)</strong>: not okay
+<ul>
+<li>Needs a generalizable target quantity (scientific estimand)</li>
+<li>Unaffected by length of trial, rates of patient accrual/loss to follow-up, etc.</li>
+</ul></li>
+</ul></li>
 </ul>
 </section></section>
-<section id="two-approaches-to-estimand" class="title-slide slide level1 center">
-<h1>Two Approaches to Estimand</h1>
+<section>
+<section id="two-approaches-to-meaningful-estimand" class="title-slide slide level1 center">
+<h1>Two Approaches to Meaningful Estimand</h1>
 
 </section>
-
+<section id="general-strategies" class="slide level2">
+<h2>General Strategies</h2>
+<ul>
+<li><strong>Goal</strong>: a meaningful, generalizable WR estimand
+<ul>
+<li>Unaffected by censoring distribution</li>
+</ul></li>
+<li><strong>Key strategy</strong>
+<ul>
+<li>Be <em>proactive</em> on time frame of comparison</li>
+</ul></li>
+<li><strong>Approaches</strong>
+<ul>
+<li>Choose a fixed time (nonparametric)</li>
+<li>Model time trajectory with a constant parameter (semiparametric)</li>
+</ul></li>
+</ul>
+</section>
+<section id="time-restriction---univariate" class="slide level2">
+<h2>Time Restriction - Univariate</h2>
+<ul>
+<li><strong>Outcome data</strong>
+<ul>
+<li><span class="math inline">\(D^\a\)</span>: survival time for a patient in group <span class="math inline">\(a\)</span> (<span class="math inline">\(1\)</span>: treatment; <span class="math inline">\(0\)</span>: control)
+<ul>
+<li><span class="math inline">\(S^\a(t) = P(D^\a&gt;t)\)</span></li>
+</ul></li>
+</ul></li>
+<li><strong>Time restriction: a familiar concept</strong>
+<ul>
+<li><em>Five-year</em> survival rate of breast cancer patients
+<ul>
+<li>Estimand: <span class="math inline">\(S^\t(\tau) - S^\c(\tau)\)</span></li>
+</ul></li>
+<li><em>Five-year</em> average survival time
+<ul>
+<li>Estimand: <span class="math inline">\(E\{\min(D^\t, \tau)\} - E\{\min(D^\c, \tau)\}\)</span></li>
+<li>Restricted mean survival time (RMST)</li>
+</ul></li>
+<li><strong>Restriction time</strong> <span class="math inline">\(\tau=5\)</span> years (pre-specify)</li>
+</ul></li>
+</ul>
+</section>
+<section id="time-restriction---wr" class="slide level2">
+<h2>Time Restriction - WR</h2>
+<ul>
+<li><strong>Two-tiered composite</strong>
+<ul>
+<li><span class="math inline">\(D^\a\)</span>: survival time; <span class="math inline">\(T^\a\)</span>: time to (first) nonfatal MACE</li>
+</ul></li>
+<li><strong>Restricted win/loss probability</strong>
+<ul>
+<li>Image all patients followed up to <span class="math inline">\(\tau\)</span> <span class="math display">\[\begin{align}\label{eq:wl_2comp}
+w_{a, 1-a}(\tau) &amp;=  \underbrace{P\{D^\b &lt; \min(D^\a, \tau)\}}_{\mbox{win on survival}}\\
+&amp; +
+\underbrace{P\{\min(D^\t, D^\c) &gt; \tau, T^\b &lt; \min(T^\a, \tau)\}}_{\mbox{tie on survival, win on nonfatal event}}
+\end{align}\]</span></li>
+<li><strong>Restricted WR</strong>: <span class="math inline">\({\rm WR}(\tau)=w_{1, 0}(\tau)/w_{0, 1}(\tau)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="time-restriction---estimation" class="slide level2">
+<h2>Time Restriction - Estimation</h2>
+<ul>
+<li><strong>General case</strong>
+<ul>
+<li>Formulate win/loss probability as function of time based on <em>uncensored</em> outcomes</li>
+<li>Pick restriction time <span class="math inline">\(\tau\)</span></li>
+</ul></li>
+<li><strong>Estimation</strong>: must handle censoring properly
+<ul>
+<li><strong>Inverse probability censoring weighting</strong> <span class="citation" data-cites="Dong2020 Dong2021">(IPCW, <a href="#/references" role="doc-biblioref" onclick="">Dong et al., 2020</a>, <a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span>
+<ul>
+<li><strong>R-package</strong>: <code>WINS</code> <span class="citation" data-cites="WINS">(<a href="#/references" role="doc-biblioref" onclick="">Cui &amp; Huang, 2023</a>)</span></li>
+</ul></li>
+<li><strong>Multiple imputations</strong> for data censored before <span class="math inline">\(\tau\)</span> <span class="citation" data-cites="wang2023 wang2024">(<a href="#/references" role="doc-biblioref" onclick="">Wang et al., 2023</a>, <a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="time-restriction---a-variation" class="slide level2">
+<h2>Time Restriction - A Variation</h2>
+<ul>
+<li><strong>Take time difference into account</strong>
+<ul>
+<li><span class="math inline">\(w_{a, 1-a}(\tau)\)</span>: win probability by <span class="math inline">\(\tau\)</span> <span class="math inline">\(\to\)</span> average win time by <span class="math inline">\(\tau\)</span></li>
+<li>Restricted mean time in favor: <span class="math inline">\(w_{1, 0}(\tau) - w_{0, 1}(\tau)\)</span> <span class="citation" data-cites="Mao2023">(<a href="#/references" role="doc-biblioref" onclick="">Mao, 2023</a>)</span>
+<ul>
+<li><strong>R-package</strong>: <code>rmt</code> <span class="citation" data-cites="rmt">(<a href="#/references" role="doc-biblioref" onclick="">Mao, 2021</a>)</span></li>
+<li><strong>Colon cancer trial</strong>: levamisole + fluorouracil (<span class="math inline">\(n =\)</span> 304) vs control (<span class="math inline">\(n =\)</span> 314)</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-cars">
+<table>
+<caption>Table&nbsp;1: Restricted mean times in favor of treatment in a colon cancer trial by τ = 7.5 years.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Component</th>
+<th style="text-align: center;">Estimate (yrs)</th>
+<th style="text-align: center;">95% CI (yrs)</th>
+<th style="text-align: center;">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Death</td>
+<td style="text-align: center;">0.62</td>
+<td style="text-align: center;">(0.20, 1.04)</td>
+<td style="text-align: center;">0.004</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Recurrence</td>
+<td style="text-align: center;">0.35</td>
+<td style="text-align: center;">(0.21, 0.49)</td>
+<td style="text-align: center;">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Overall</td>
+<td style="text-align: center;">0.97</td>
+<td style="text-align: center;">(0.47, 1.46)</td>
+<td style="text-align: center;">&lt;0.001</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="temporal-modeling" class="slide level2">
+<h2>Temporal Modeling</h2>
+<ul>
+<li><strong>A prime example</strong>
+<ul>
+<li>Cox proportional hazards (PH) model</li>
+<li>Time-varying hazard <span class="math inline">\(\stackrel{\rm PH}{\longrightarrow}\)</span> time-constant hazard ratio <span class="math inline">\(\to\)</span> global effect</li>
+<li>Checking proportionality: score residuals</li>
+</ul></li>
+<li><strong>A proportional win-fractions (PW) model</strong></li>
+</ul>
+</section>
+<section id="checking-proportionality" class="slide level2">
+<h2>Checking Proportionality</h2>
+<ul>
+<li><strong>Cumulative residuals</strong> (rescale) <span class="math display">\[
+\hat{\mbox{resid}}(t) = \mbox{(Observed wins by $t$)} - \mbox{(Model-based wins by $t$)}
+\]</span></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/res_p.png" style="width:100.0%"></p>
+</figure>
+</div>
+</section></section>
 <section>
-<section id="discussion-future-work" class="title-slide slide level1 center">
-<h1>Discussion &amp; Future Work</h1>
+<section id="conclusion" class="title-slide slide level1 center">
+<h1>Conclusion</h1>
 
+</section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 <div class="footer footer-default">
 
 </div>
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-pocock2011" class="csl-entry" role="listitem">
-Pocock, S. J., C. A. Ariti, T. J. Collier, and D. Wang. 2011. <span>“The Win Ratio: A New Approach to the Analysis of Composite Endpoints in Clinical Trials Based on Clinical Priorities.”</span> <em>European Heart Journal</em> 33 (2): 176–82. <a href="https://doi.org/10.1093/eurheartj/ehr352">https://doi.org/10.1093/eurheartj/ehr352</a>.
+<div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-Bebu2016" class="csl-entry" role="listitem">
+Bebu, I., &amp; Lachin, J. M. (2016). Large sample inference for a win ratio analysis of a composite outcome based on prioritized components. <em>Biostatistics</em>, <em>17</em>(1), 178–187. <a href="https://doi.org/10.1093/biostatistics/kxv032">https://doi.org/10.1093/biostatistics/kxv032</a>
+</div>
+<div id="ref-WINS" class="csl-entry" role="listitem">
+Cui, Y., &amp; Huang, B. (2023). <em>WINS: The r WINS package</em>. <a href="https://CRAN.R-project.org/package=WINS">https://CRAN.R-project.org/package=WINS</a>
+</div>
+<div id="ref-Dong2021" class="csl-entry" role="listitem">
+Dong, G., Huang, B., Wang, D., Verbeeck, J., Wang, J., &amp; Hoaglin, D. C. (2021). Adjusting win statistics for dependent censoring. <em>Pharmaceutical Statistics</em>, <em>20</em>(3), 440–450. <a href="https://doi.org/10.1002/pst.2086">https://doi.org/10.1002/pst.2086</a>
+</div>
+<div id="ref-Dong2020" class="csl-entry" role="listitem">
+Dong, G., Mao, L., Huang, B., Gamalo-Siebers, M., Wang, J., Yu, G., &amp; Hoaglin, D. C. (2020). The inverse-probability-of-censoring weighting (IPCW) adjusted win ratio statistic: an unbiased estimator in the presence of independent censoring. <em>Journal of Biopharmaceutical Statistics</em>, <em>30</em>(5), 882–899. <a href="https://doi.org/10.1080/10543406.2020.1757692">https://doi.org/10.1080/10543406.2020.1757692</a>
+</div>
+<div id="ref-Luo2015" class="csl-entry" role="listitem">
+Luo, X., Tian, H., Mohanty, S., &amp; Tsai, W. Y. (2015). An Alternative Approach to Confidence Interval Estimation for the Win Ratio Statistic. <em>Biometrics</em>, <em>71</em>(1), 139–145. <a href="https://doi.org/10.1111/biom.12225">https://doi.org/10.1111/biom.12225</a>
+</div>
+<div id="ref-Mao2019" class="csl-entry" role="listitem">
+Mao, L. (2018). On the Alternative Hypotheses for the Win Ratio. <em>Biometrics</em>, <em>75</em>(1), 347–351. <a href="https://doi.org/10.1111/biom.12954">https://doi.org/10.1111/biom.12954</a>
+</div>
+<div id="ref-rmt" class="csl-entry" role="listitem">
+Mao, L. (2021). <em>Rmt: Restricted mean time in favor of treatment</em>. <a href="https://CRAN.R-project.org/package=rmt">https://CRAN.R-project.org/package=rmt</a>
+</div>
+<div id="ref-Mao2023" class="csl-entry" role="listitem">
+Mao, L. (2023). On restricted mean time in favor of treatment. <em>Biometrics</em>, <em>79</em>(1), 61–72. <a href="https://doi.org/10.1111/biom.13570">https://doi.org/10.1111/biom.13570</a>
+</div>
+<div id="ref-oakes2016" class="csl-entry" role="listitem">
+Oakes, D. (2016). On the win-ratio statistic in clinical trials with multiple types of event. <em>Biometrika</em>, <em>103</em>(3), 742–745. <a href="https://doi.org/10.1093/biomet/asw026">https://doi.org/10.1093/biomet/asw026</a>
+</div>
+<div id="ref-pocock2012" class="csl-entry" role="listitem">
+Pocock, S. J., Ariti, C. A., Collier, T. J., &amp; Wang, D. (2012). The win ratio: a new approach to the analysis of composite endpoints in clinical trials based on clinical priorities. <em>European Heart Journal</em>, <em>33</em>(2), 176–182. <a href="https://doi.org/10.1093/eurheartj/ehr352">https://doi.org/10.1093/eurheartj/ehr352</a>
+</div>
+<div id="ref-wang2024" class="csl-entry" role="listitem">
+Wang, T., Li, Y., &amp; Qu, Y. (2024). Restricted time win ratio: from estimands to estimation. <em>Statistics in Biopharmaceutical Research</em>, 1–18. <a href="https://doi.org/10.1080/19466315.2024.2332675">https://doi.org/10.1080/19466315.2024.2332675</a>
+</div>
+<div id="ref-wang2023" class="csl-entry" role="listitem">
+Wang, T., Zilinskas, R., Li, Y., &amp; Qu, Y. (2023). Missing Data Imputation for a Multivariate Outcome of Mixed Variable Types. <em>Statistics in Biopharmaceutical Research</em>, <em>15</em>(4), 826–837. <a href="https://doi.org/10.1080/19466315.2023.2169753">https://doi.org/10.1080/19466315.2023.2169753</a>
 </div>
 </div>
 </section></section>
@@ -692,6 +968,44 @@ Pocock, S. J., C. A. Ariti, T. J. Collier, and D. Wang. 2011. <span>“The Win R
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
