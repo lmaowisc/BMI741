@@ -30,8 +30,11 @@ website:
           - chapter11.qmd
           - chapter12.qmd
           - chapter13.qmd
-      - section: "Special Topics" 
+      - section: "Part III - Special Topics" 
       - section: "Miscellaneous"
+        contents:
+          - win_ratio.qmd
+          - rmtif.qmd
        
         
 format:

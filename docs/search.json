@@ -460,5 +460,26 @@
     "title": "Chapter 12 - Multistate Modeling of Life History",
     "section": "Base R Code",
     "text": "Base R Code\n\n\nShow the code\n##################################################################\n# This code generates all numerical results in chapter 12.      ##\n##################################################################\n\n\n############################################################\n# Table 12.1\n# Multi-state analysis of the GBC Study\n############################################################\n\nlibrary(\"survival\")\n\n # read data\ngbc_ms &lt;- read.table(\"Data//German Breast Cancer Study//gbc_ms.txt\")\n\n# categorize age into three groups\n# &lt;=40, &gt;40 & &lt;=60, &gt;60\ngbc_ms$agec &lt;- (gbc_ms$age&lt;=40) + 2*(gbc_ms$age&gt;40&gbc_ms$age&lt;=60) +\n        3*(gbc_ms$age&gt;60)\n\n# B(t): time spent in current state\ngbc_ms$Bt &lt;- gbc_ms$stop - gbc_ms$start\n\n# change unit to 10 fmol/mg\ngbc_ms$prog &lt;- gbc_ms$prog/10\ngbc_ms$estrg &lt;- gbc_ms$estrg/10\n\n# convert variables to factors\ngbc_ms$hormone &lt;- factor(gbc_ms$hormone)\ngbc_ms$meno &lt;- factor(gbc_ms$meno)\ngbc_ms$agec &lt;- factor(gbc_ms$agec)\n\n###############################\n#Fit the transition models\n#############################\n\n### 0-&gt;1: remission to relapse\nobj01 &lt;- coxph(Surv(start, stop, status) ~ hormone + meno\n                     + agec + size + prog + estrg + strata(grade), data = gbc_ms,\n               subset = ((from==0) & (to == 1)))\n\n### 0-&gt;2: remission to death\nobj02 &lt;- coxph(Surv(start, stop, status) ~ hormone + meno\n            + size + prog + estrg + strata(grade), data = gbc_ms,\n            subset = ((from == 0) & (to == 2)))\n\n### 1-&gt;2: relapse to death\nobj12 &lt;- coxph(Surv(start, stop, status) ~ Bt + hormone + meno\n            + agec + size + prog + estrg + strata(grade), data = gbc_ms,\n            subset = ((from == 1) & (to == 2)))\n\n##########################################\n### Tabulate the results \n##########################################\n\n### 0-&gt;1: remission to relapse\nbeta01 &lt;- obj01$coefficients\nse01 &lt;- sqrt(diag(obj01$var))\np01 &lt;- 1-pchisq((beta01/se01)^2,1)\n\nc1 &lt;- round(exp(beta01),3)\nc2 &lt;- paste0(\"(\",round(exp(beta01-1.96*se01),3),\", \",\n          round(exp(beta01+1.96*se01),3),\")\")\nc3 &lt;- round(p01,3)\n# print out the sub-table\nnoquote(cbind(c1,c2,c3))\n\n\n\n### 0-&gt;2: remission to death\nbeta02 &lt;- obj02$coefficients\nse02 &lt;- sqrt(diag(obj02$var))\np02 &lt;- 1-pchisq((beta02/se02)^2,1)\n\nc1 &lt;- round(exp(beta02),3)\nc2 &lt;- paste0(\"(\",round(exp(beta02-1.96*se02),3),\", \",\n          round(exp(beta02+1.96*se02),3),\")\")\nc3 &lt;- round(p02,3)\n# print out the sub-table\nnoquote(cbind(c1,c2,c3))\n\n\n### 1-&gt;2: relapse to death\nbeta12 &lt;- obj12$coefficients\nse12 &lt;- sqrt(diag(obj12$var))\np12 &lt;- 1-pchisq((beta12/se12)^2,1)\n\nc1 &lt;- round(exp(beta12),3)\nc2 &lt;- paste0(\"(\",round(exp(beta12-1.96*se12),3),\", \",\n          round(exp(beta12+1.96*se12),3),\")\")\nc3 &lt;- round(p12,3)\n# print out the sub-table\nnoquote(cbind(c1,c2,c3))"
+  },
+  {
+    "objectID": "win_ratio_estimand.html",
+    "href": "win_ratio_estimand.html",
+    "title": "Defining estimand for the win ratio",
+    "section": "",
+    "text": "This is a talk I give at the 15th Annual FDA/AdvaMed Medical Device Statistical Issues Conference.\nTalk slides here. (To convert html to pdf, press E \\(\\to\\) Print \\(\\to\\) Destination: Save to pdf)"
+  },
+  {
+    "objectID": "win_ratio.html",
+    "href": "win_ratio.html",
+    "title": "Defining estimand for the win ratio",
+    "section": "",
+    "text": "This is a talk I give at the FDA/AdvaMed Medical Device Statistical Issues (MDSI) Conference on April 3rd, 2024 in Washington, DC.\nTalk slides here. (To convert html to pdf, press E \\(\\to\\) Print \\(\\to\\) Destination: Save to pdf)"
+  },
+  {
+    "objectID": "rmtif.html",
+    "href": "rmtif.html",
+    "title": "Retricted mean time in favor of treatment",
+    "section": "",
+    "text": "This is a talk I give at the 2024 Duke Industry Statistics Symposium (DISS) on April 4rd, 2024 in Durham, NC."
   }
 ]
