@@ -416,17 +416,17 @@ Lu Mao
 <ul>
 <li><strong>Time to first event</strong>
 <ul>
-<li>Major adverse cardiac event (MACE): death, heart failure, myocardio-infarction, etc.</li>
+<li>Major adverse cardiac event (MACE): death, heart failure, myocardio-infarction, stroke, etc.</li>
 </ul></li>
 <li><strong>Limitations</strong>:
 <ul>
-<li>Lack of priority</li>
+<li>Lack of clinical priority</li>
 <li>Statistical inefficiency (waste of data)</li>
 </ul></li>
 </ul></li>
 <li><strong>Hierarchical composite endpoint (HCE)</strong>
 <ul>
-<li><strong>Example</strong>: Death &gt; nonfatal MACE &gt; six-minute walk test (6MWT)/NYHA</li>
+<li><strong>Example</strong>: Death &gt; nonfatal MACE &gt; six-minute walk test (6MWT)/NYHA class</li>
 </ul></li>
 </ul>
 </section>
@@ -471,7 +471,7 @@ Lu Mao
 <ul>
 <li><p><strong>WR’s estimand depends on censoring …</strong></p>
 <ul>
-<li><span class="citation" data-cites="Luo2015">Luo et al. (<a href="#/references" role="doc-biblioref" onclick="">2015</a>)</span>, <span class="citation" data-cites="Bebu2016">Bebu &amp; Lachin (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span>, <span class="citation" data-cites="oakes2016">Oakes (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span>, <span class="citation" data-cites="Mao2019">Mao (<a href="#/references" role="doc-biblioref" onclick="">2018</a>)</span>, etc.</li>
+<li><span class="citation" data-cites="Luo2015">Luo et al. (<a href="#/references" role="doc-biblioref" onclick="">2015</a>)</span>, <span class="citation" data-cites="Bebu2016">Bebu &amp; Lachin (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span>, <span class="citation" data-cites="oakes2016">Oakes (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span>, <span class="citation" data-cites="Mao2019">Mao (<a href="#/references" role="doc-biblioref" onclick="">2018</a>)</span>, <span class="citation" data-cites="Dong2020a">Dong et al. (<a href="#/references" role="doc-biblioref" onclick="">2020a</a>)</span>, <span class="citation" data-cites="li2024">Li et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span>, etc.</li>
 </ul></li>
 <li><p><strong>What is an estimand?</strong></p>
 <ul>
@@ -480,7 +480,7 @@ Lu Mao
 <li>Population-mean difference, (true) risk ratio, etc.</li>
 </ul></li>
 <li>Specifies how treatment effect is measured</li>
-<li><strong>ICH E9 (R1) addendum</strong>: estimand construction one of the “<em>central questions for drug development and licensing</em>”</li>
+<li><strong>ICH E9 (R1) addendum</strong>: estimand construction one of the “<em>central questions for drug development and licensing</em>” <span class="citation" data-cites="ich2020">(<a href="#/references" role="doc-biblioref" onclick="">ICH, 2020</a>)</span></li>
 </ul></li>
 </ul>
 </section>
@@ -621,11 +621,11 @@ w_{a, 1-a}(\tau) &amp;=  \underbrace{P\{D^\b &lt; \min(D^\a, \tau)\}}_{\mbox{win
 </ul></li>
 <li><strong>Estimation</strong>: must handle censoring properly
 <ul>
-<li><strong>Inverse probability censoring weighting</strong> <span class="citation" data-cites="Dong2020 Dong2021">(IPCW, <a href="#/references" role="doc-biblioref" onclick="">Dong et al., 2020</a>, <a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span>
+<li><strong>Inverse probability censoring weighting</strong> <span class="citation" data-cites="Dong2020 Dong2021">(IPCW, <a href="#/references" role="doc-biblioref" onclick="">Dong et al., 2020b</a>, <a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span>
 <ul>
 <li><strong>R-package</strong>: <code>WINS</code> <span class="citation" data-cites="WINS">(<a href="#/references" role="doc-biblioref" onclick="">Cui &amp; Huang, 2023</a>)</span></li>
 </ul></li>
-<li><strong>Multiple imputations</strong> for data censored before <span class="math inline">\(\tau\)</span> <span class="citation" data-cites="wang2023 wang2024">(<a href="#/references" role="doc-biblioref" onclick="">Wang et al., 2023</a>, <a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span></li>
+<li><strong>Multiple imputations</strong> for data censored before <span class="math inline">\(\tau\)</span> <span class="citation" data-cites="wang2023 wang2024">(<a href="#/references" role="doc-biblioref" onclick="">T. Wang et al., 2023</a>, <a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span></li>
 </ul></li>
 </ul>
 </section>
@@ -649,30 +649,30 @@ w_{a, 1-a}(\tau) &amp;=  \underbrace{P\{D^\b &lt; \min(D^\a, \tau)\}}_{\mbox{win
 <caption>Table&nbsp;1: Restricted mean times in favor of treatment in a colon cancer trial by τ = 7.5 years.</caption>
 <thead>
 <tr class="header">
-<th style="text-align: center;">Component</th>
+<th style="text-align: left;"></th>
 <th style="text-align: center;">Estimate (yrs)</th>
 <th style="text-align: center;">95% CI (yrs)</th>
-<th style="text-align: center;">P-value</th>
+<th style="text-align: right;">P-value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">Death</td>
+<td style="text-align: left;">Death</td>
 <td style="text-align: center;">0.62</td>
 <td style="text-align: center;">(0.20, 1.04)</td>
-<td style="text-align: center;">0.004</td>
+<td style="text-align: right;">0.004</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">Recurrence</td>
+<td style="text-align: left;">Recurrence</td>
 <td style="text-align: center;">0.35</td>
 <td style="text-align: center;">(0.21, 0.49)</td>
-<td style="text-align: center;">&lt;0.001</td>
+<td style="text-align: right;">&lt;0.001</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Overall</td>
+<td style="text-align: left;">Overall</td>
 <td style="text-align: center;">0.97</td>
 <td style="text-align: center;">(0.47, 1.46)</td>
-<td style="text-align: center;">&lt;0.001</td>
+<td style="text-align: right;">&lt;0.001</td>
 </tr>
 </tbody>
 </table>
@@ -683,27 +683,104 @@ w_{a, 1-a}(\tau) &amp;=  \underbrace{P\{D^\b &lt; \min(D^\a, \tau)\}}_{\mbox{win
 <section id="temporal-modeling" class="slide level2">
 <h2>Temporal Modeling</h2>
 <ul>
-<li><strong>A prime example</strong>
+<li><strong>Cox proportional hazards (PH) model</strong>
 <ul>
-<li>Cox proportional hazards (PH) model</li>
-<li>Time-varying hazard <span class="math inline">\(\stackrel{\rm PH}{\longrightarrow}\)</span> time-constant hazard ratio <span class="math inline">\(\to\)</span> global effect</li>
+<li>Time-varying hazard <span class="math inline">\(\stackrel{\rm PH}{\longrightarrow}\)</span> time-constant hazard ratio (global effect)</li>
 <li>Checking proportionality: score residuals</li>
 </ul></li>
-<li><strong>A proportional win-fractions (PW) model</strong></li>
+<li><strong>A proportional win-fractions (PW) model</strong>
+<ul>
+<li>Time-varying win-loss probability <span class="math inline">\(\stackrel{\rm PW}{\longrightarrow}\)</span> time-constant win ratio (global effect) <span class="citation" data-cites="Mao2021 Wang2022">(<a href="#/references" role="doc-biblioref" onclick="">Mao &amp; Wang, 2021a</a>; <a href="#/references" role="doc-biblioref" onclick="">T. Wang &amp; Mao, 2022</a>)</span> <span class="math display">\[\begin{equation}\label{eq:pw}
+\frac{w_{1, 0}(t)}{w_{0, 1}(t)} = \exp(\theta) \mbox{ for
+some $\theta$ and all } t
+\end{equation}\]</span>
+<ul>
+<li><span class="math inline">\(\exp(\hat\theta)\)</span>: standard or time-weighted WR statistic</li>
+<li><strong>R-package</strong>: <code>WR</code> <span class="citation" data-cites="WR">(<a href="#/references" role="doc-biblioref" onclick="">Mao &amp; Wang, 2021b</a>)</span></li>
+</ul></li>
+</ul></li>
 </ul>
 </section>
 <section id="checking-proportionality" class="slide level2">
 <h2>Checking Proportionality</h2>
 <ul>
-<li><strong>Cumulative residuals</strong> (rescale) <span class="math display">\[
-\hat{\mbox{resid}}(t) = \mbox{(Observed wins by $t$)} - \mbox{(Model-based wins by $t$)}
-\]</span></li>
+<li><strong>Cumulative residuals</strong><br>
+<span class="math display">\[\hat{\mbox{resid}}(t) = \mbox{(Observed wins by $t$)} - \mbox{(Model-based wins by $t$)}\]</span></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="images/res_p.png" style="width:100.0%"></p>
 </figure>
 </div>
+</section>
+<section id="covariate-adjustment" class="slide level2">
+<h2>Covariate Adjustment</h2>
+<ul>
+<li><p><strong>HF-ACTION trial</strong></p>
+<ul>
+<li><strong>Exercise training</strong> <span class="math inline">\((n=1051)\)</span> vs <strong>usual care</strong> <span class="math inline">\((n=1054)\)</span> <span class="math display">\[\begin{equation}\label{eq:pw_cov}
+\frac{w_{z, z'}(t)}{w_{z', z}(t)}
+= \exp\{\theta(a - a') + \beta^\T(x - x')\} \mbox{ for
+all } t
+\end{equation}\]</span></li>
+<li><strong>Covariates</strong> <span class="math inline">\(x\)</span>: sex, etiology, CPX, medical history, etc.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-hf-action">
+<table>
+<caption>Table&nbsp;2: Multiple PW regression for death &gt; hospitalization in HF-ACTION.</caption>
+<colgroup>
+<col style="width: 40%">
+<col style="width: 15%">
+<col style="width: 30%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: center;">Win ratio</th>
+<th style="text-align: center;">95% CI</th>
+<th style="text-align: right;">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Training v usual</td>
+<td style="text-align: center;">1.06</td>
+<td style="text-align: center;">(0.95, 1.19)</td>
+<td style="text-align: right;">0.275</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Male vs female</td>
+<td style="text-align: center;">0.72</td>
+<td style="text-align: center;">(0.63, 0.82)</td>
+<td style="text-align: right;">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ischemic vs non-ischemic</td>
+<td style="text-align: center;">0.87</td>
+<td style="text-align: center;">(0.76, 0.98)</td>
+<td style="text-align: right;">0.027</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CP exercise test (minute)</td>
+<td style="text-align: center;">1.11</td>
+<td style="text-align: center;">(1.09, 1.13)</td>
+<td style="text-align: right;">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Atrial fibrillation</td>
+<td style="text-align: center;">0.80</td>
+<td style="text-align: center;">(0.70, 0.92)</td>
+<td style="text-align: right;">0.002</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div></li>
+</ul>
 </section></section>
 <section>
 <section id="conclusion" class="title-slide slide level1 center">
@@ -712,6 +789,62 @@ w_{a, 1-a}(\tau) &amp;=  \underbrace{P\{D^\b &lt; \min(D^\a, \tau)\}}_{\mbox{win
 </section>
 <section id="summary" class="slide level2">
 <h2>Summary</h2>
+<ul>
+<li><strong>How to separate true effect from censoring</strong>
+<ul>
+<li>Make a conscious choice on time frame of comparison
+<ul>
+<li>Fix it (nonparametric) or model it (semiparametric)</li>
+</ul></li>
+</ul></li>
+<li><strong>Time restriction vs temporal modeling</strong>
+<ul>
+<li><strong>Restricted win-loss</strong>: model-free estimand, less efficient (<a href="https://CRAN.R-project.org/package=WINS"><code>WINS</code></a>, <a href="https://CRAN.R-project.org/package=rmt"><code>rmt</code></a>)</li>
+<li><strong>PW regression</strong>: may be more efficient <em>if proportionality (constant WR) holds</em> (<a href="https://CRAN.R-project.org/package=WR"><code>WR</code></a>)</li>
+</ul></li>
+<li><strong>Combine the two</strong>
+<ul>
+<li>IPCW + working model for locally efficient estimation?</li>
+<li>Nonparametric estimand but semiparametric inference</li>
+</ul></li>
+</ul>
+</section>
+<section id="future-work" class="slide level2">
+<h2>Future Work</h2>
+<ul>
+<li><strong>Sample size estimation</strong>
+<ul>
+<li><strong>Standard tests</strong>: <span class="citation" data-cites="gasparyan2021">Gasparyan et al. (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span>, <span class="citation" data-cites="mao2022">Mao et al. (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span>, <span class="citation" data-cites="yu2022">Yu &amp; Ganju (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span>, <span class="citation" data-cites="wang2023a">B. Wang et al. (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>, etc.</li>
+<li><strong>Restricted WR</strong>: ??</li>
+</ul></li>
+<li><strong>Intercurrent event</strong>
+<ul>
+<li>Treatment non-response/toxicity/discontinuation <span class="citation" data-cites="ich2020">(<a href="#/references" role="doc-biblioref" onclick="">ICH, 2020</a>)</span></li>
+<li><strong>Hypothetical</strong>: win/lose had treatment continued <span class="math inline">\(\to\)</span> imputation?</li>
+<li><strong>Composite</strong>: death &gt; <em>treatment failure</em> &gt; lesser events?</li>
+<li><strong>Principal strata</strong>: win/lose among those who would not experience treatment failure if assigned to either group (identifiability)</li>
+</ul></li>
+</ul>
+</section>
+<section id="for-more" class="slide level2">
+<h2>For More</h2>
+<blockquote>
+<p>Mao, L. (2024). Defining estimand for the win ratio: separate the true effect from censoring. <em>Clinical Trials</em>, under revision.</p>
+</blockquote>
+</section>
+<section id="acknowledgments" class="slide level2">
+<h2>Acknowledgments</h2>
+<ul>
+<li><p><strong>Funding</strong></p>
+<ul>
+<li><a href="https://reporter.nih.gov/search/9aSu5u3xlE26GrjbF_4cBg/project-details/10734551">R01HL149875</a> (11/2019 – 7/2028)</li>
+<li><a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2015526">DMS2015526</a> (7/2020 – 6/2024) <img data-src="images/funds.png" style="width:70.0%" data-fig-align="center"></li>
+</ul></li>
+<li><p><strong>Collaborators</strong></p>
+<ul>
+<li><a href="https://biostat.wiscweb.wisc.edu/staff/kim-kyungmann/">KyungMann Kim</a>, <a href="https://tuowang.rbind.io/">Tuo Wang</a>, Gaohong Dong, Bo Huang, etc.</li>
+</ul></li>
+</ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
@@ -725,11 +858,23 @@ Bebu, I., &amp; Lachin, J. M. (2016). Large sample inference for a win ratio ana
 <div id="ref-WINS" class="csl-entry" role="listitem">
 Cui, Y., &amp; Huang, B. (2023). <em>WINS: The r WINS package</em>. <a href="https://CRAN.R-project.org/package=WINS">https://CRAN.R-project.org/package=WINS</a>
 </div>
+<div id="ref-Dong2020a" class="csl-entry" role="listitem">
+Dong, G., Huang, B., Chang, Y.-W., Seifu, Y., Song, J., &amp; Hoaglin, D. C. (2020a). The win ratio: Impact of censoring and follow<span>-</span>up time and use with nonproportional hazards. <em>Pharmaceutical Statistics</em>, <em>19</em>(3), 168–177. <a href="https://doi.org/10.1002/pst.1977">https://doi.org/10.1002/pst.1977</a>
+</div>
 <div id="ref-Dong2021" class="csl-entry" role="listitem">
 Dong, G., Huang, B., Wang, D., Verbeeck, J., Wang, J., &amp; Hoaglin, D. C. (2021). Adjusting win statistics for dependent censoring. <em>Pharmaceutical Statistics</em>, <em>20</em>(3), 440–450. <a href="https://doi.org/10.1002/pst.2086">https://doi.org/10.1002/pst.2086</a>
 </div>
 <div id="ref-Dong2020" class="csl-entry" role="listitem">
-Dong, G., Mao, L., Huang, B., Gamalo-Siebers, M., Wang, J., Yu, G., &amp; Hoaglin, D. C. (2020). The inverse-probability-of-censoring weighting (IPCW) adjusted win ratio statistic: an unbiased estimator in the presence of independent censoring. <em>Journal of Biopharmaceutical Statistics</em>, <em>30</em>(5), 882–899. <a href="https://doi.org/10.1080/10543406.2020.1757692">https://doi.org/10.1080/10543406.2020.1757692</a>
+Dong, G., Mao, L., Huang, B., Gamalo-Siebers, M., Wang, J., Yu, G., &amp; Hoaglin, D. C. (2020b). The inverse-probability-of-censoring weighting (IPCW) adjusted win ratio statistic: an unbiased estimator in the presence of independent censoring. <em>Journal of Biopharmaceutical Statistics</em>, <em>30</em>(5), 882–899. <a href="https://doi.org/10.1080/10543406.2020.1757692">https://doi.org/10.1080/10543406.2020.1757692</a>
+</div>
+<div id="ref-gasparyan2021" class="csl-entry" role="listitem">
+Gasparyan, S. B., Kowalewski, E. K., Folkvaljon, F., Bengtsson, O., Buenconsejo, J., Adler, J., &amp; Koch, G. G. (2021). Power and sample size calculation for the win odds test: application to an ordinal endpoint in COVID-19 trials. <em>Journal of Biopharmaceutical Statistics</em>, <em>31</em>(6), 765–787. <a href="https://doi.org/10.1080/10543406.2021.1968893">https://doi.org/10.1080/10543406.2021.1968893</a>
+</div>
+<div id="ref-ich2020" class="csl-entry" role="listitem">
+ICH. (2020). <em>ICH E9 (R1) addendum on estimands and sensitivity analysis in clinical trials to the guideline on statistical principles for clinical trials, step 5</em>. London: European Medicines Evaluation Agency.
+</div>
+<div id="ref-li2024" class="csl-entry" role="listitem">
+Li, H., Chen, W.-C., Lu, N., Tang, R., &amp; Zhao, Y. (2024). The elusiveness of the win ratio parameter in the presence of missing data. <em>Therapeutic Innovation &amp; Regulatory Science</em>, 1–2.
 </div>
 <div id="ref-Luo2015" class="csl-entry" role="listitem">
 Luo, X., Tian, H., Mohanty, S., &amp; Tsai, W. Y. (2015). An Alternative Approach to Confidence Interval Estimation for the Win Ratio Statistic. <em>Biometrics</em>, <em>71</em>(1), 139–145. <a href="https://doi.org/10.1111/biom.12225">https://doi.org/10.1111/biom.12225</a>
@@ -743,17 +888,35 @@ Mao, L. (2021). <em>Rmt: Restricted mean time in favor of treatment</em>. <a hre
 <div id="ref-Mao2023" class="csl-entry" role="listitem">
 Mao, L. (2023). On restricted mean time in favor of treatment. <em>Biometrics</em>, <em>79</em>(1), 61–72. <a href="https://doi.org/10.1111/biom.13570">https://doi.org/10.1111/biom.13570</a>
 </div>
+<div id="ref-mao2022" class="csl-entry" role="listitem">
+Mao, L., Kim, K., &amp; Miao, X. (2022). Sample size formula for general win ratio analysis. <em>Biometrics</em>, <em>78</em>(3), 1257–1268. <a href="https://doi.org/10.1111/biom.13501">https://doi.org/10.1111/biom.13501</a>
+</div>
+<div id="ref-Mao2021" class="csl-entry" role="listitem">
+Mao, L., &amp; Wang, T. (2021a). A class of proportional win<span>-</span>fractions regression models for composite outcomes. <em>Biometrics</em>, <em>77</em>(4), 1265–1275. <a href="https://doi.org/10.1111/biom.13382">https://doi.org/10.1111/biom.13382</a>
+</div>
+<div id="ref-WR" class="csl-entry" role="listitem">
+Mao, L., &amp; Wang, T. (2021b). <em>WR: Win ratio analysis of composite time-to-event outcomes</em>. <a href="https://CRAN.R-project.org/package=WR">https://CRAN.R-project.org/package=WR</a>
+</div>
 <div id="ref-oakes2016" class="csl-entry" role="listitem">
 Oakes, D. (2016). On the win-ratio statistic in clinical trials with multiple types of event. <em>Biometrika</em>, <em>103</em>(3), 742–745. <a href="https://doi.org/10.1093/biomet/asw026">https://doi.org/10.1093/biomet/asw026</a>
 </div>
 <div id="ref-pocock2012" class="csl-entry" role="listitem">
 Pocock, S. J., Ariti, C. A., Collier, T. J., &amp; Wang, D. (2012). The win ratio: a new approach to the analysis of composite endpoints in clinical trials based on clinical priorities. <em>European Heart Journal</em>, <em>33</em>(2), 176–182. <a href="https://doi.org/10.1093/eurheartj/ehr352">https://doi.org/10.1093/eurheartj/ehr352</a>
 </div>
+<div id="ref-wang2023a" class="csl-entry" role="listitem">
+Wang, B., Zhou, D., Zhang, J., Kim, Y., Chen, L.-W., Dunnmon, P., Bai, S., Liu, Q., &amp; Ishida, E. (2023). Statistical power considerations in the use of win ratio in cardiovascular outcome trials. <em>Contemporary Clinical Trials</em>, <em>124</em>, 107040. <a href="https://doi.org/10.1016/j.cct.2022.107040">https://doi.org/10.1016/j.cct.2022.107040</a>
+</div>
 <div id="ref-wang2024" class="csl-entry" role="listitem">
 Wang, T., Li, Y., &amp; Qu, Y. (2024). Restricted time win ratio: from estimands to estimation. <em>Statistics in Biopharmaceutical Research</em>, 1–18. <a href="https://doi.org/10.1080/19466315.2024.2332675">https://doi.org/10.1080/19466315.2024.2332675</a>
 </div>
+<div id="ref-Wang2022" class="csl-entry" role="listitem">
+Wang, T., &amp; Mao, L. (2022). Stratified proportional win<span>-</span>fractions regression analysis. <em>Statistics in Medicine</em>, <em>41</em>(26), 5305–5318. <a href="https://doi.org/10.1002/sim.9570">https://doi.org/10.1002/sim.9570</a>
+</div>
 <div id="ref-wang2023" class="csl-entry" role="listitem">
 Wang, T., Zilinskas, R., Li, Y., &amp; Qu, Y. (2023). Missing Data Imputation for a Multivariate Outcome of Mixed Variable Types. <em>Statistics in Biopharmaceutical Research</em>, <em>15</em>(4), 826–837. <a href="https://doi.org/10.1080/19466315.2023.2169753">https://doi.org/10.1080/19466315.2023.2169753</a>
+</div>
+<div id="ref-yu2022" class="csl-entry" role="listitem">
+Yu, R. X., &amp; Ganju, J. (2022). Sample size formula for a win ratio endpoint. <em>Statistics in Medicine</em>, <em>41</em>(6), 950–963. <a href="https://doi.org/10.1002/sim.9297">https://doi.org/10.1002/sim.9297</a>
 </div>
 </div>
 </section></section>
