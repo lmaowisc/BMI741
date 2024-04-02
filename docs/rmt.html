@@ -8,7 +8,7 @@
 <link href="rmt_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="rmt_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="rmt_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.3.450">
+  <meta name="generator" content="quarto-1.3.353">
 
   <meta name="author" content="Lu Mao">
   <title>Restricted mean time in favor of treatment</title>
@@ -512,7 +512,7 @@ Lu Mao
 <ul>
 <li><strong>Complex patient outcomes</strong>
 <ul>
-<li><strong>Multistate process</strong> <span class="math inline">\(Y(t)\in\{0, 1,\ldots, K,\infty\}\)</span> <img data-src="images/rmt_ms.png" style="width:100.0%" data-fig-align="right"></li>
+<li><strong>Multistate process</strong> <span class="math inline">\(Y(t)\in\{0, 1,\ldots, K,\infty\}\)</span> <span class="citation" data-cites="cook2018">(<a href="#/references" role="doc-biblioref" onclick="">Cook &amp; Lawless, 2018</a>)</span><img data-src="images/rmt_ms.png" style="width:100.0%" data-fig-align="right"></li>
 <li><strong>Traditional composite endpoint</strong>
 <ul>
 <li>Time to first event <span class="math inline">\(\tilde T =\inf\{t: Y(t) &gt; 0\}\)</span> <span class="math inline">\(\to\)</span> event-free survival</li>
@@ -768,6 +768,271 @@ H_0: \mu_1(\tau)=\cdots=\mu_K(\tau)=\mu_\infty(\tau)
 </section>
 <section id="example-hf-action" class="slide level2">
 <h2>Example: HF-ACTION</h2>
+<ul>
+<li><strong>Exercise training vs usual care</strong></li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-desc">
+<table>
+<caption>Table&nbsp;1: Descriptive statistics for a high-risk subgroup (n=426) in HF-ACTION trial.</caption>
+<colgroup>
+<col style="width: 21%">
+<col style="width: 15%">
+<col style="width: 27%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;">Usual care (N = 221)</th>
+<th style="text-align: center;">Exercise training (N = 205)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Age</td>
+<td style="text-align: center;">≤ 60 years</td>
+<td style="text-align: center;">122 (55.2%)</td>
+<td style="text-align: center;">128 (62.4%)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: center;">&gt; 60 years</td>
+<td style="text-align: center;">99 (44.8%)</td>
+<td style="text-align: center;">77 (37.6%)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Follow-up</td>
+<td style="text-align: center;">(months)</td>
+<td style="text-align: center;">28.6 (18.4, 39.3)</td>
+<td style="text-align: center;">27.6 (19, 40.2)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Death</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">57 (25.8%)</td>
+<td style="text-align: center;">36 (17.6%)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hospitalizations</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">51 (23.1%)</td>
+<td style="text-align: center;">60 (29.3%)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: center;">1-3</td>
+<td style="text-align: center;">114 (51.6%)</td>
+<td style="text-align: center;">102 (49.8%)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: center;">4-10</td>
+<td style="text-align: center;">49 (22.2%)</td>
+<td style="text-align: center;">39 (19%)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: center;">&gt;10</td>
+<td style="text-align: center;">7 (3.2%)</td>
+<td style="text-align: center;">4 (2%)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="standard-analyses" class="slide level2">
+<h2>Standard Analyses</h2>
+<ul>
+<li><strong>Traditional composite and overall survival</strong> <img data-src="images/rmt_rmest.png" style="width:90.0%" data-fig-align="right"></li>
+</ul>
+</section>
+<section id="r-code" class="slide level2">
+<h2>R-Code</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(rmt)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">head</span>(hfaction)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt;       patid       time status trt_ab age60</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt;  HFACT00001 0.60506502      1      0     1</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt;  HFACT00001 1.04859685      0      0     1</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># fit RMT-IF</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>obj <span class="ot">&lt;-</span> <span class="fu">rmtfit</span>(hfaction<span class="sc">$</span>patid, hfaction<span class="sc">$</span>time, hfaction<span class="sc">$</span>status, hfaction<span class="sc">$</span>trt, </span>
+<span id="cb4-3"><a href="#cb4-3"></a>              <span class="at">type =</span> <span class="st">"recurrent"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="fu">summary</span>(obj, <span class="at">Kmax=</span><span class="dv">4</span>, <span class="at">tau=</span><span class="fl">3.97</span>) <span class="do">## combined recurrent events &gt;= 4</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co"># Restricted mean time in favor of group "1" by time tau = 3.97:</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#   Estimate    Std.Err Z value Pr(&gt;|z|)    </span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co"># Event 1   0.0140515  0.0498836  0.2817 0.778184    </span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co"># Event 2   0.0358028  0.0499618  0.7166 0.473619    </span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co"># Event 3   0.1385287  0.0409533  3.3826 0.000718 ***</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co"># Event 4+ -0.0064731  0.0600813 -0.1077 0.914203    </span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co"># Survival  0.2384169  0.1143484  2.0850 0.037069 *  </span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co"># Overall   0.4203268  0.1777363  2.3649 0.018035 * </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="graphics" class="slide level2">
+<h2>Graphics</h2>
+<ul>
+<li><p><span class="math inline">\(\hat\mu(t)\)</span> as a function of <span class="math inline">\(t\)</span></p>
+<ul>
+<li>Overall RMT-IF becomes significant after 1 year (see lower CL)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">plot</span>(obj, <span class="at">conf =</span> <span class="cn">TRUE</span>, <span class="at">conf.col =</span> <span class="st">"gray"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">xlab=</span><span class="st">"t (years)"</span>,</span>
+<span id="cb5-2"><a href="#cb5-2"></a>     <span class="at">ylab =</span> <span class="st">"expression(mu(t))"</span>, <span class="at">main =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/rmt_mut.png" style="width:75.0%"></p>
+</figure>
+</div></li>
+</ul>
+</section>
+<section id="inference-results" class="slide level2">
+<h2>Inference Results</h2>
+<ul>
+<li><strong>4-year RMT-IF of exercise training</strong>
+<ul>
+<li><p>Training on average gains 5.1 months (<span class="math inline">\(P\)</span>=0.018) in favorable state</p>
+<ul>
+<li>2.9 months net survival <span class="math inline">\(+\)</span> 2.2 months net time with fewer hospitalizations (little effect on 1st)</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-infer">
+<table style="width:75%;">
+<caption>Table&nbsp;2: Analysis of 4-year RMT-IF of exercise training in HF-ACTION trial.</caption>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Hopitalization</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">2.18</td>
+<td style="text-align: right;">1.22</td>
+<td style="text-align: right;">0.073</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">0.778</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">0.43</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">0.474</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">1.66</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">4+</td>
+<td style="text-align: right;">-0.08</td>
+<td style="text-align: right;">0.72</td>
+<td style="text-align: right;">0.914</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Death</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">2.86</td>
+<td style="text-align: right;">1.37</td>
+<td style="text-align: right;">0.037</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Overall</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">5.04</td>
+<td style="text-align: right;">2.13</td>
+<td style="text-align: right;">0.018</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div></li>
+</ul></li>
+</ul>
+</section>
+<section id="favorability-plot" class="slide level2">
+<h2>Favorability Plot</h2>
+<ul>
+<li><strong>4-year average win-loss times</strong></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/rmt_favor.png" style="width:85.0%"></p>
+</figure>
+</div>
+</section></section>
+<section>
+<section id="summary-and-discussion" class="title-slide slide level1 center">
+<h1>Summary and Discussion</h1>
+
+</section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
+<ul>
+<li><strong>RMT-IF</strong>
+<ul>
+<li>A model-free estimand to measure treatment effect on hierarchical composite endpoints</li>
+<li>Net average win time <span class="math inline">\(=\)</span> Average win <span class="math inline">\(-\)</span> loss time
+<ul>
+<li><span class="math inline">\(\sum_k\)</span> (Net average win time on <span class="math inline">\(k\)</span>th component)</li>
+</ul></li>
+<li><strong>R-package</strong>: <a href="https://cran.r-project.org/package=rmt"><code>rmt</code></a>
+<ul>
+<li><code>obj &lt;- rmtfit(id, time, status, trt, type = c("multistate", "recurrent"))</code></li>
+<li><code>summary(plot)</code></li>
+<li><code>plot(obj)</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="discussion" class="slide level2">
+<h2>Discussion</h2>
+<ul>
+<li><strong>Standard win-loss measures</strong>
+<ul>
+<li>Longer survivor wins categorically <img data-src="images/rmt_cases.png" style="width:100.0%" data-fig-align="center"></li>
+</ul></li>
+<li><strong>RMT-IF</strong>
+<ul>
+<li><p>Quantitative win-loss times</p></li>
+<li><p>Loss on nonfatal event can (more than) offset win on survival</p>
+<ul>
+<li>Disregard win/loss time on nonfatal event in presence of death?</li>
+</ul></li>
+</ul></li>
+</ul>
 </section>
 <section id="acknowledgments" class="slide level2">
 <h2>Acknowledgments</h2>
@@ -789,6 +1054,9 @@ H_0: \mu_1(\tau)=\cdots=\mu_K(\tau)=\mu_\infty(\tau)
 
 </div>
 <div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-cook2018" class="csl-entry" role="listitem">
+Cook, R. J., &amp; Lawless, J. F. (2018). <em>Multistate models for the analysis of life history data</em>. Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9781315119731">https://doi.org/10.1201/9781315119731</a>
+</div>
 <div id="ref-Dong2021" class="csl-entry" role="listitem">
 Dong, G., Huang, B., Wang, D., Verbeeck, J., Wang, J., &amp; Hoaglin, D. C. (2021). Adjusting win statistics for dependent censoring. <em>Pharmaceutical Statistics</em>, <em>20</em>(3), 440–450. <a href="https://doi.org/10.1002/pst.2086">https://doi.org/10.1002/pst.2086</a>
 </div>
