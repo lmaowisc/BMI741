@@ -14,7 +14,7 @@ Lecture slides [here](chap14.html){target="_blank"}. (To convert html to pdf, pr
 #| eval: false
 
 ##################################################################
-# This code generates all numerical results in chapter 15.     ##
+# This code generates all numerical results in chapter 14.     ##
 ##################################################################
 
 
