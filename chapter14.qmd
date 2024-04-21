@@ -2,7 +2,6 @@
 title: "Chapter 14 - Causal Inference in Survival Analysis"
 ---
 
-
 ## Slides
 
 Lecture slides [here](chap14.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
