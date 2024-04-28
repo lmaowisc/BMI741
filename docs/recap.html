@@ -838,8 +838,9 @@ Lu Mao
 <section id="hierarchical-composite-endpoints" class="slide level2">
 <h2>Hierarchical Composite Endpoints</h2>
 <ul>
-<li><strong>Motivation</strong>: importance ranking of components
+<li><strong>Motivation</strong>
 <ul>
+<li>Importance ranking of components</li>
 <li>Death &gt; hospitalization &gt; minor symptoms</li>
 </ul></li>
 <li><strong>Statistical methods</strong> <strong>(Ch 13)</strong>
@@ -892,7 +893,7 @@ Lu Mao
 <section id="machine-learning" class="slide level2">
 <h2>Machine Learning</h2>
 <ul>
-<li><strong>Regularized Cox model</strong>
+<li><strong>Regularized Cox model</strong> <strong>(Ch 15)</strong>
 <ul>
 <li>Penalize log-partial likelihood by <span class="math inline">\(L_1\)</span>-norm of <span class="math inline">\(\beta\)</span></li>
 <li>Selected variables <span class="math inline">\(\{Z_{\cdot j}: \hat\beta_j(\lambda_{\rm opt})\neq 0, j=1,\ldots, p\}\)</span>
@@ -900,7 +901,7 @@ Lu Mao
 <li><code>glmnet::glmnet(Z, Surv(time, status), family =  "cox", alpha = 1)</code></li>
 </ul></li>
 </ul></li>
-<li><strong>Survival trees</strong>
+<li><strong>Survival trees</strong> <strong>(Ch 15)</strong>
 <ul>
 <li>Root node <span class="math inline">\(\to\)</span> recursive splitting <span class="math inline">\(\to\)</span> pruning to prevent overfitting
 <ul>
