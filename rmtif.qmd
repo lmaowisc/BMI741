@@ -3,6 +3,6 @@ title: "Retricted mean time in favor of treatment"
 subtitle: "An estimand for hierarchical composite endpoints"
 ---
 
-This is a talk I give at the [2024 Duke Industry Statistics Symposium (DISS)](https://sites.duke.edu/diss/) on April 4rd, 2024 in Durham, NC.
+This is a talk I give at the [2024 Duke Industry Statistics Symposium (DISS)](https://sites.duke.edu/diss/) on April 4th, 2024 in Durham, NC.
 
 Talk slides [here](rmt.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)

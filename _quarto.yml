@@ -38,6 +38,7 @@ website:
         contents:
           - win_ratio.qmd
           - rmtif.qmd
+          - wa_estimands.qmd
        
         
 format:
