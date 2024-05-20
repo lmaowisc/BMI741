@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="chap15_files/libs/clipboard/clipboard.min.js"></script>
-<script src="chap15_files/libs/quarto-html/tabby.min.js"></script>
-<script src="chap15_files/libs/quarto-html/popper.min.js"></script>
-<script src="chap15_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="chap15_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="chap15_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="chap15_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="chap15_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<script src="recap_files/libs/clipboard/clipboard.min.js"></script>
+<script src="recap_files/libs/quarto-html/tabby.min.js"></script>
+<script src="recap_files/libs/quarto-html/popper.min.js"></script>
+<script src="recap_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="recap_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="recap_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="recap_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="recap_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.3.450">
 
   <meta name="author" content="Lu Mao">
@@ -15,8 +15,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="chap15_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="chap15_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="recap_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="recap_files/libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -95,12 +95,12 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="chap15_files/libs/revealjs/dist/theme/quarto.css">
-  <link rel="stylesheet" href="style.css">
-  <link href="chap15_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="chap15_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="chap15_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="chap15_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="recap_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="style_recap.css">
+  <link href="recap_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="recap_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="recap_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="recap_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
   .callout {
@@ -397,7 +397,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Applied Survival Analysis</h1>
-  <p class="subtitle">Chapter 15 - Machine Learning in Survival Analysis</p>
+  <p class="subtitle">Course Recap</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -419,644 +419,579 @@ Lu Mao
 </section>
 <section id="outline" class="slide level2">
 <h2>Outline</h2>
-<ol type="1">
-<li><p>Regularized Cox regression models</p></li>
-<li><p>Nonparametric regression by survival trees</p></li>
-<li><p>Building prediction models for German Breast Cancer study</p></li>
-</ol>
+<ul>
+<li>What have we learned (and what have we not)?
+<ul>
+<li>Background</li>
+<li>Univariate event time</li>
+<li>Complex outcomes</li>
+<li>Special topics (causal inference and machine learning)</li>
+</ul></li>
+<li>Are learning objectives achieved?</li>
+<li>What’s next?</li>
+</ul>
 <p><span class="math display">\[\newcommand{\d}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\T}{{\rm T}}\]</span> <span class="math display">\[\newcommand{\dd}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\cc}{{\rm c}}\]</span> <span class="math display">\[\newcommand{\pr}{{\rm pr}}\]</span> <span class="math display">\[\newcommand{\var}{{\rm var}}\]</span> <span class="math display">\[\newcommand{\se}{{\rm se}}\]</span> <span class="math display">\[\newcommand{\indep}{\perp \!\!\! \perp}\]</span> <span class="math display">\[\newcommand{\Pn}{n^{-1}\sum_{i=1}^n}\]</span> <span class="math display">\[
 \newcommand\mymathop[1]{\mathop{\operatorname{#1}}}
 \]</span> <span class="math display">\[
 \newcommand{\Ut}{{n \choose 2}^{-1}\sum_{i&lt;j}\sum}
 \]</span></p>
 </section>
-<section>
-<section id="regularized-cox-regression" class="title-slide slide level1 center">
-<h1>Regularized Cox Regression</h1>
-
-</section>
-<section id="rationale" class="slide level2">
-<h2>Rationale</h2>
+<section id="why-bmi-741" class="slide level2">
+<h2>Why BMI-741?</h2>
 <ul>
-<li><strong>With many covariates</strong>
+<li><strong>Censoring</strong>
 <ul>
-<li><strong>Prediction accuracy</strong>: under- vs over-fitting <img data-src="images/ml_overfit.png" style="width:70.0%" data-fig-align="center">
-<ul>
-<li>Too many predictors <span class="math inline">\(\to\)</span> overfitting</li>
-</ul></li>
-<li><strong>Interpretation</strong>: easier with fewer predictors</li>
+<li>Outcome event does not occur by end of follow-up</li>
 </ul></li>
 </ul>
-</section>
-<section id="linear-model-basics" class="slide level2">
-<h2>Linear Model Basics</h2>
+<div class="columns">
+<div class="column" style="width:48%;">
 <ul>
-<li><strong>Set-up</strong> <span class="math display">\[
-Y=\alpha+\beta^\T Z+\epsilon
+<li><strong>Partial information</strong> <strong>(Ch 1)</strong>
+<ul>
+<li>Handle with care (standard methods biased) <img data-src="images/intro_gbc_naive.png" style="width:100.0%" data-fig-align="center"></li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:52%;">
+<ul>
+<li><strong>Descriptive analysis</strong> <strong>(Ch 1)</strong>
+<ul>
+<li>Baseline characteristics</li>
+<li>Event rate</li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/intro_erate_form.png" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="mathematical-notation" class="slide level2">
+<h2>Mathematical Notation</h2>
+<ul>
+<li><strong>Hazard function</strong> (instantaneous risk at <span class="math inline">\(t\)</span>) <span class="math display">\[\lambda(t)=\pr(t\leq T&lt;t+\dd t\mid T\geq t)/\dd t\]</span></li>
+<li><strong>Counting process notation</strong> <!-- -   $N^*(t)$: number of *latent* (uncensored) events by $t$ -->
+<ul>
+<li><span class="math inline">\(N(t)\)</span>: number of <em>observed</em> (possibly censored) events by <span class="math inline">\(t\)</span></li>
+</ul></li>
+<li><strong>Mean-zero (martingale) residual</strong> <strong>(Ch 2)</strong> <span class="math display">\[
+\dd M(t) = \underbrace{\dd N(t)}_{\rm observed} - I(X\geq t)\underbrace{\lambda(t)}_{\rm model-based}\dd t
 \]</span>
 <ul>
-<li><span class="math inline">\(Z\)</span>: a <span class="math inline">\(p\)</span>-vector of covariates (predictors)</li>
-<li><span class="math inline">\(E(\epsilon\mid Z)=0\)</span></li>
-<li>Assume WLOG <span class="math inline">\(\sum_{i=1}^n Y_i=0\)</span> and <span class="math inline">\(\sum_{i=1}^n Z_i=0\)</span></li>
-<li>Ordinary least-squares (OLS) estimator <span class="math display">\[\begin{align*}
-\hat\beta_{\rm OLS}=\arg\min_\beta R_n(\beta)=\left(\sum_{i=1}^n Z_i^{\otimes 2}\right)^{-1}\sum_{i=1}^nZ_iY_i
-\end{align*}\]</span>
-<ul>
-<li><span class="math inline">\(R_n(\beta)=\sum_{i=1}^n(Y_i-\beta^\T Z_i)^2\)</span>: residual sum of squares (RSS)</li>
-</ul></li>
+<li>Construct estimation procedures</li>
+<li>Assess model fit</li>
 </ul></li>
 </ul>
 </section>
-<section id="subset-selection" class="slide level2">
-<h2>Subset Selection</h2>
+<section id="standard-methods" class="slide level2">
+<h2>Standard Methods</h2>
 <ul>
-<li><strong>Big</strong> <span class="math inline">\(p\)</span> problem
+<li><strong>Discrete hazards</strong> <span class="math inline">\(\dd\hat\Lambda(t)=d_j/n_j\)</span>
 <ul>
-<li>Large variance (overfit) <span class="math inline">\(\to\)</span> poor prediction</li>
-<li><span class="math inline">\(p&gt;n\)</span>: no fit</li>
-</ul></li>
-<li><strong>Best-subset selection</strong>
-<ul>
-<li>For each <span class="math inline">\(l\in\{0, 1,\ldots, p\}\)</span>, choose best model with <span class="math inline">\(l\)</span> covariates with least RSS</li>
-<li><span class="math inline">\((p+1)\)</span> best models with decreasing RSS (as <span class="math inline">\(l=0,1,\ldots, p\)</span>)</li>
-<li>Choose <span class="math inline">\(l\)</span> by cross-validation
-<ul>
-<li>Partition sample into <span class="math inline">\(k\)</span> pieces</li>
-<li>Set one piece aside to evaluate RSS of model fit on remaining data</li>
-<li>Cycle through all <span class="math inline">\(k\)</span> pieces and average validation errors</li>
-</ul></li>
+<li>Central to standard, hazard-based methods <strong>(Ch 3 &amp; 4)</strong> <img data-src="images/km_discr_haz.png" style="width:60.0%" data-fig-align="center"></li>
 </ul></li>
 </ul>
+<table style="width:80%;">
+<colgroup>
+<col style="width: 55%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">R-function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Kaplan-Meier curve</strong></td>
+<td style="text-align: left;"><code>survival::survfit()</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Log-rank test</strong></td>
+<td style="text-align: left;"><code>survival::survdiff()</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Cox model</strong></td>
+<td style="text-align: left;"><code>survival::coxph()</code></td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="cross-validation" class="slide level2">
-<h2>Cross-Validation</h2>
+<section id="model-diagnostics" class="slide level2">
+<h2>Model Diagnostics</h2>
 <ul>
-<li><strong>Computing validation error</strong></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/ml_cv.png" style="width:70.0%"></p>
-</figure>
-</div>
-</section>
-<section id="subset-selection-limitations" class="slide level2">
-<h2>Subset Selection: Limitations</h2>
-<ul>
-<li><strong>Best subset</strong>
-<ul>
-<li>Fit all <span class="math inline">\(2^p\)</span> submodels</li>
-</ul></li>
-<li><strong>Forward/backward stepwise selections</strong>
-<ul>
-<li>Start with null/full model, add/drop most/least significant predictor</li>
-<li>Where to stop <span class="math inline">\(\to\)</span> cross-validation</li>
-</ul></li>
-<li><strong>Disadvantages</strong>
-<ul>
-<li><strong>Computationally costly</strong></li>
-<li><strong>A discrete process</strong>: covariates are either retained or dropped; may be sub-optimal for prediction</li>
-</ul></li>
-</ul>
-</section>
-<section id="penalized-regression-i" class="slide level2">
-<h2>Penalized Regression (I)</h2>
-<ul>
-<li><strong>Constrained least-squares</strong>
-<ul>
-<li>Restricting <span class="math inline">\(L_q\)</span>-norm of <span class="math inline">\(\beta\)</span> reduces effective d.f. <span class="math display">\[\begin{equation}\label{eq:vs:constrained}
-\tilde\beta(c)=\arg\min_\beta R_n(\beta), \mbox{ subject to }\sum_{j=1}^p|\beta_j|^q\leq c,
-\end{equation}\]</span></li>
-</ul></li>
-<li><strong>Equivalent form by Lagrange multiplier</strong>
-<ul>
-<li><span class="math inline">\(L_q\)</span>-penalized regression <span class="math display">\[\begin{equation}\label{eq:vs:penal}
-\hat\beta(\lambda)=\arg\min_\beta \left\{R_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|^q\right\}
-\end{equation}\]</span>
-<ul>
-<li><span class="math inline">\(\lambda\geq 0\)</span>: tuning parameter controlling degree of regulation, determined by cross-validation</li>
-<li><span class="math inline">\(\hat\beta(0)=\hat\beta_{\rm OLS}\)</span>; <span class="math inline">\(\hat\beta(\infty)=0\)</span></li>
-</ul></li>
-</ul></li>
-</ul>
-</section>
-<section id="penalized-regression-ii" class="slide level2">
-<h2>Penalized Regression (II)</h2>
-<ul>
-<li><strong>Examples</strong>
-<ul>
-<li><strong>Ridge regression</strong> <span class="math inline">\((q=2)\)</span>
-<ul>
-<li>Closed-form solution (not sparse; every <span class="math inline">\(\beta_j\neq 0\)</span>) <span class="math display">\[\begin{equation}\label{eq:vs:ridge}
-\hat\beta(\lambda)=\left(\sum_{i=1}^n Z_i^{\otimes 2}+\lambda I_p\right)^{-1}\sum_{i=1}^nZ_iY_i
-\end{equation}\]</span></li>
-</ul></li>
-<li><strong>Lasso</strong> <span class="math inline">\((q=1)\)</span>
-<ul>
-<li>For “least absolute shrinkage and selection operator”</li>
-<li>Sets some <span class="math inline">\(\hat\beta_j\equiv 0\)</span>; sparse solution</li>
-</ul></li>
-<li><strong>Elastic net</strong>
-<ul>
-<li>Combines the strengths of ridge regression and lasso <span class="math display">\[\begin{equation}\label{eq:vs:en}
-\hat\beta(\lambda)=\arg\min_\beta \left[R_n(\beta)+\lambda\sum_{j=1}^p\left\{\alpha|\beta_j|+2^{-1}(1-\alpha)\beta_j^2\right\}\right]
-\end{equation}\]</span></li>
-<li>Handles correlated covariates better than lasso</li>
-</ul></li>
-</ul></li>
-</ul>
-</section>
-<section id="l_1-regularized-cox-model" class="slide level2">
-<h2><span class="math inline">\(L_1\)</span>-Regularized Cox Model</h2>
-<ul>
-<li><strong>What’s with Cox model</strong>
-<ul>
-<li><strong>Objective function</strong> (RSS not computable due to censoring)</li>
-<li><strong>Computational algorithm</strong></li>
-<li><strong>Definition of error</strong> for cross-validation</li>
-</ul></li>
-<li><strong>Objective function</strong>: negative log-partial likelihood
-<ul>
-<li>Regularize by <span class="math inline">\(L_1\)</span> penalty <span class="math display">\[\begin{equation}\label{eq:vs:cox_lasso}
-Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
-\end{equation}\]</span></li>
-<li><span class="math inline">\(L_1\)</span>-penalized partial-likelihood estimator <span class="math display">\[\begin{equation}\label{eq:vs:optimize}
-\hat\beta(\lambda)=\arg\min_\beta Q_n(\beta;\lambda)
-\end{equation}\]</span></li>
-</ul></li>
-</ul>
-</section>
-<section id="pathwise-solution" class="slide level2">
-<h2>Pathwise Solution</h2>
-<ul>
-<li><span class="math inline">\(\hat\beta(\lambda)\)</span> as a path of <span class="math inline">\(\lambda\)</span>
-<ul>
-<li>Iterative <span class="math inline">\(pl_n(\beta)\approx\)</span> weighted sum of squares</li>
-<li><strong>Coordinate descent</strong> at each iteration for <span class="math inline">\(L_1\)</span>-penalized weighted least-squares</li>
-<li>Details in Section 15.1.3 of lecture notes</li>
-</ul></li>
-<li><span class="math inline">\(K\)</span>-fold cross-validation to select <span class="math inline">\(\lambda_{\rm opt}\)</span>
-<ul>
-<li>Some <span class="math inline">\(\hat\beta_j(\lambda_{\rm opt})=0\)</span></li>
-<li><strong>Selected variables</strong> <span class="math inline">\(\{Z_{\cdot j}: \hat\beta_j(\lambda_{\rm opt})\neq 0, j=1,\ldots, p\}\)</span></li>
-</ul></li>
-</ul>
-</section>
-<section id="cross-validation-error" class="slide level2">
-<h2>Cross-Validation Error</h2>
-<ul>
-<li><strong>What is measure of error?</strong>
-<ul>
-<li>RSS not applicable due to censoring</li>
-<li>Negative partial-likelihood?
-<ul>
-<li>Unstable with small validation set (risk set too small)</li>
-</ul></li>
-</ul></li>
-<li><strong>Partial-likelihood deviance</strong>
-<ul>
-<li>On <span class="math inline">\(j\)</span>th validation set <span class="math display">\[
-  \mbox{CV}_j(\lambda)=pl_{n,-j}\{\hat\beta(\lambda)\}-pl_{n}\{\hat\beta(\lambda)\}
-  \]</span>
-<ul>
-<li><span class="math inline">\(pl_{n,-j}(\beta)\)</span>: log-partial likelihood based on training set</li>
-</ul></li>
-<li><span class="math inline">\(\mbox{CV}(\lambda)=k^{-1}\sum_{j=1}^k\mbox{CV}_j(\lambda)\)</span></li>
-</ul></li>
-</ul>
-</section>
-<section id="prediction-error-brier-score" class="slide level2">
-<h2>Prediction Error: Brier Score</h2>
-<ul>
-<li><strong>Brier score</strong>
-<ul>
-<li><strong>Mean squared error</strong> for predicted vs observed in test set</li>
-<li>Commonly used for <strong>binary outcomes</strong></li>
-</ul></li>
-<li><strong>Extension to time-to-event endpoint</strong>
-<ul>
-<li>IPCW <span class="math display">\[\begin{align}\label{eq:ml:BS}
-\hat{BS}(t)&amp;=n^{-1}\sum_{i=1}^n\Bigg[I(X_i\leq t, \delta_i=1)\hat G(X_i)^{-1}\hat S_i(t)^2\notag\\
-&amp;\hspace{20mm} + I(X_i&gt;t)\hat G(t)^{-1}\{1-\hat S_i(t)\}^2 \Bigg]
-\end{align}\]</span>
-<ul>
-<li><span class="math inline">\(\hat S_i(t)\)</span>: predicted survival function for <span class="math inline">\(i\)</span>th subject</li>
-<li><span class="math inline">\(\hat G(t)\)</span>: KM estimator for the censoring distribution in test set</li>
-</ul></li>
-</ul></li>
-</ul>
-</section>
-<section id="software-glmnetglmnet-i" class="slide level2">
-<h2>Software: <code>glmnet::glmnet()</code> (I)</h2>
-<ul>
-<li><strong>Basic syntax for regularized Cox model</strong>
-<ul>
-<li><strong>Elastic net</strong> <span class="math display">\[
-\hat\beta(\lambda)=\arg\min_\beta \left[-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p\left\{\alpha|\beta_j|+2^{-1}(1-\alpha)\beta_j^2\right\}\right]
-\]</span></li>
-<li><code>Z</code>: covariate matrix; <code>alpha</code>: <span class="math inline">\(\alpha\)</span></li>
-</ul></li>
-</ul>
-<div class="big-code">
+<li><p><strong>Cox model residual analysis</strong> <strong>(Ch 4)</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># compute the covariate path as a function of lambda</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># alpha=1: L_1 penalty (lasso)</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>obj <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(Z, <span class="fu">Surv</span>(time, status), <span class="at">family =</span> <span class="st">"cox"</span>, <span class="at">alpha =</span> <span class="dv">1</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># compute 10-fold (default) cross-validation</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a>obj.cv <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(Z, <span class="fu">Surv</span>(time, status), <span class="at">family =</span> <span class="st">"cox"</span>, </span>
-<span id="cb1-6"><a href="#cb1-6"></a>                    <span class="at">alpha =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</section>
-<section id="software-glmnetglmnet-ii" class="slide level2">
-<h2>Software: <code>glmnet::glmnet()</code> (II)</h2>
-<ul>
-<li><strong>Find optimal</strong> <span class="math inline">\(\lambda\)</span></li>
-</ul>
-<div class="big-code">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># plot validation error (partial-likelihood deviance)</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="co"># as a function of log-lambda</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="fu">plot</span>(obj.cv)</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># the optimal lambda</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>obj.cv<span class="sc">$</span>lambda.min</span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co"># the beta at optimal lambda</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>beta <span class="ot">&lt;-</span> <span class="fu">coef</span>(obj.cv, <span class="at">s =</span> <span class="st">"lambda.min"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</section>
-<section id="gbc-an-example" class="slide level2">
-<h2>GBC: An Example</h2>
-<ul>
-<li><strong>German Breast Cancer (GBC) study</strong>
-<ul>
-<li><strong>Cohort</strong>: 686 breast cancer patients<br>
-</li>
-<li><strong>Outcome</strong>: relapse-free survival</li>
-<li><strong>Predictors</strong>: age (<span class="math inline">\(\leq\)</span> 40 vs &gt;40), menopausal status, hormone treatment, tumor grade, tumor size, lymph nodes, estrogen and progesterone receptor levels</li>
-<li>Training set (<span class="math inline">\(n=400\)</span>) + test set (<span class="math inline">\(n=286\)</span>)</li>
-</ul></li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># select training set N=400</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb3-3"><a href="#cb3-3"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n)[<span class="dv">1</span><span class="sc">:</span><span class="dv">400</span>]</span>
-<span id="cb3-4"><a href="#cb3-4"></a>train <span class="ot">&lt;-</span> data.CE[ind,]</span>
-<span id="cb3-5"><a href="#cb3-5"></a>test <span class="ot">&lt;-</span> data.CE[<span class="sc">-</span>ind,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="graphics" class="slide level2">
-<h2>Graphics</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/ml_gbc_path_cv.png" style="width:70.0%"></p>
-</figure>
-</div>
-</section>
-<section id="selected-predictors" class="slide level2">
-<h2>Selected Predictors</h2>
-<ul>
-<li><p><strong>CV results</strong></p>
-<ul>
-<li><span class="math inline">\(\log(\lambda_{\rm opt}) = -3.89\)</span></li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># the optimal lambda</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>obj.cv<span class="sc">$</span>lambda.min</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">log</span>(obj.cv<span class="sc">$</span>lambda.min)</span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; [1] -3.886169</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="co"># the beta at optimal lambda</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>beta <span class="ot">&lt;-</span> <span class="fu">coef</span>(obj.cv, <span class="at">s =</span> <span class="st">"lambda.min"</span>)</span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="co"># the non-zero coefficients</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a>beta.selected <span class="ot">&lt;-</span> beta[<span class="fu">abs</span>(beta[,<span class="dv">1</span>])<span class="sc">&gt;</span><span class="dv">0</span>,]</span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="co"># print out the non-zero coefficients</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>beta.selected</span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt;      hormone        age40         size        grade        nodes </span></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt; -0.371809445  0.455421368  0.003448500  0.201404194  0.040170638</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt;      prog </span></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt; -0.002908887</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
-</section></section>
-<section>
-<section id="survival-trees" class="title-slide slide level1 center">
-<h1>Survival Trees</h1>
-
-</section>
-<section id="decision-trees" class="slide level2">
-<h2>Decision Trees</h2>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 30%">
+<col style="width: 45%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Residual type</th>
+<th>Main use</th>
+<th>Code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cox-Snell</td>
+<td>Overall fit</td>
+<td><code>status-resid(obj, type = "martingale")</code></td>
+</tr>
+<tr class="even">
+<td>Scheonfeld</td>
+<td>Proportionality</td>
+<td><code>cox.zph(obj)</code></td>
+</tr>
+<tr class="odd">
+<td>Martingale/Deviance</td>
+<td>Covariate form; link functionl; outliers</td>
+<td><code>resid(obj, type = c("martingale", "deviance"))</code></td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li><strong>Limitations of regularized Cox model</strong>
+<li><strong>Similar strategies</strong> for other Cox-type models
 <ul>
-<li>Proportionality</li>
-<li>Linearity of covariate effects</li>
-<li>Interactions</li>
-</ul></li>
-<li><strong>Tree-based classification and regression</strong>
-<ul>
-<li><em>Classification and Regression Trees</em> (CART; Breiman et al., 1984)</li>
-<li>Root node (all sample) <span class="math inline">\(\stackrel{\rm covariates}{\rightarrow}\)</span> split into (more homogeneous) daughter nodes <span class="math inline">\(\stackrel{\rm covariates}{\rightarrow}\)</span> split recursively</li>
-</ul></li>
-</ul>
-</section>
-<section id="basic-procedures" class="slide level2">
-<h2>Basic Procedures</h2>
-<ul>
-<li><strong>Growing the tree</strong>
-<ul>
-<li>Starting with root node, search partition criteria <span class="math display">\[Z_{\cdot j}\leq z \,\,\,(j=1,\ldots, p; z \in\mathbb R)\]</span> for one that minimizes “impurity” within daughter nodes <span class="math display">\[\begin{equation}\label{eq:tree:nodes}
-A=\{i=1,\ldots, n: Z_{ij}\leq z\} \mbox{ and }
-B=\{i=1,\ldots, n: Z_{ij}&gt; z\}
-\end{equation}\]</span></li>
-<li>Recursive splitting until terminal nodes sufficiently “pure” in outcome</li>
-</ul></li>
-<li><strong>Tree-based prediction</strong>
-<ul>
-<li>A new covariate vector <span class="math inline">\(\to\)</span> terminal node it belongs <span class="math inline">\(\to\)</span> predicted outcome
-<ul>
-<li>Majority class</li>
-<li>empirical mean</li>
-<li>Kaplan-Meier estimator</li>
-</ul></li>
+<li>Fine-Gray model for competing risks <strong>(Ch 8)</strong> (R-package <code>crskdiag</code>)</li>
 </ul></li>
 </ul>
 </section>
-<section id="splitting-criterion" class="slide level2">
-<h2>Splitting Criterion</h2>
+<section id="importance-of-model-checking" class="slide level2">
+<h2>Importance of Model Checking</h2>
 <ul>
-<li><strong>Objective function</strong>
+<li>Model diagnostics are important…</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cox_gbc_age_cat.png" style="width:65.0%"></p>
+</figure>
+</div>
+</section>
+<section id="non-cox-methods" class="slide level2">
+<h2>Non-Cox Methods</h2>
 <ul>
-<li>Choose partition <span class="math inline">\(A|B\)</span> to minimize <span class="math display">\[
-R(A\mid\mid B)=\hat P(A)\hat{\mathcal G}(A)+\hat P(B)\hat{\mathcal G}(B)
-\]</span>
-<ul>
-<li><span class="math inline">\(\hat P(A)\)</span>, <span class="math inline">\(\hat P(B)\)</span>: proportions of observations in daughter nodes</li>
-<li><span class="math inline">\(\hat{\mathcal G}(A)\)</span>, <span class="math inline">\(\hat{\mathcal G}(B)\)</span>: impurity measures within daughter nodes</li>
-</ul></li>
-</ul></li>
-<li><strong>Impurity measure</strong>
-<ul>
-<li><strong>Categorical</strong> <span class="math inline">\(Y \in\{1,\ldots, K\}\)</span>: Gini index <span class="math inline">\(\pr(Y_i\neq Y_j) = 1-\sum_{k=1}^K \pi_k^2\)</span></li>
-<li><strong>Continuous</strong>: mean squared error</li>
-<li><strong>Survival</strong>: mean squared deviance residuals (Cox model with binary node) <span class="math display">\[\begin{equation}\label{eq:tree:deviance}
-R(A\mid\mid B)=n^{-1}\sum_{i \in A}d_{i}^2 +n^{-1}\sum_{i \in B}d_{i}^2
-\end{equation}\]</span></li>
-</ul></li>
+<li><p>If Cox model doesn’t fit… <strong>(Ch 5)</strong></p>
+<table>
+<colgroup>
+<col style="width: 31%">
+<col style="width: 41%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Effect size</th>
+<th>Software</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\tau\)</span><strong>-RMST</strong></td>
+<td>Difference/ratio in average life time</td>
+<td><code>survRM2::rmst2()</code></td>
+</tr>
+<tr class="even">
+<td><strong>Additive hazards</strong></td>
+<td>Risk difference</td>
+<td><code>addhazard::ah()</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Proportional odds</strong></td>
+<td>Odds ratio for early event</td>
+<td><code>timereg::prop.odds()</code></td>
+</tr>
+<tr class="even">
+<td><strong>Accelerated failure time</strong></td>
+<td>Ratio in life time</td>
+<td><code>aftgee::aftgee()</code></td>
+</tr>
+</tbody>
+</table></li>
 </ul>
 </section>
-<section id="pruning-the-tree" class="slide level2">
-<h2>Pruning the Tree</h2>
+<section id="sample-size-calculation" class="slide level2">
+<h2>Sample Size Calculation</h2>
 <ul>
-<li><strong>Penalize complexity</strong>
+<li><strong>Input</strong>
 <ul>
-<li>Cut overgrown branches <span class="math inline">\(\to\)</span> prevent overfitting <span class="math inline">\(\to\)</span> generalizability<br>
-</li>
-<li>Minimize <span class="math display">\[\begin{equation}\label{eq:tree:risk}
-R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
-\end{equation}\]</span>
+<li><strong>Type I error</strong> <span class="math inline">\(\alpha=0.05\)</span>; <strong>Desired power</strong> <span class="math inline">\(\gamma = 0.8, 0.9\)</span></li>
+<li><strong>Assignment proportion</strong> <span class="math inline">\(q = E(Z)\)</span> (e.g., 0.5)</li>
+<li><strong>Nuisance parameter</strong> (affected by censoring distribution)
 <ul>
-<li><span class="math inline">\(R(\mathcal T)\)</span>: mean squared (deviance) residuals for terminal nodes of tree <span class="math inline">\(\mathcal T\)</span></li>
-<li><span class="math inline">\(|\mathcal T|\)</span>: number of terminal nodes</li>
-<li><span class="math inline">\(\lambda\geq 0\)</span>: complexity parameter determined by cross-validation</li>
+<li><strong>Log-rank</strong>: <span class="math inline">\(\psi=\pr(T\leq C\mid Z=0)\)</span> proportion of failure</li>
+<li><span class="math inline">\(\tau\)</span>-RMST: <span class="math inline">\(\zeta(\tau)=\int_0^\tau \left\{\int_t^\tau S_0(t)\dd t\right\}^2\pi(t)^{-1}\lambda_0(t)\dd t\)</span></li>
 </ul></li>
+<li><strong>Effect sizes</strong> 𝜃: log-hazard ratio; 𝜃(𝜏): difference in 𝜏-RMST</li>
 </ul></li>
-<li><strong>Final tree</strong>
+<li><strong>Formula</strong> <strong>(Ch 6)</strong>
 <ul>
-<li><span class="math inline">\(\mathcal T^{\rm opt} = \arg\min_{\mathcal T}R(\mathcal T;\lambda_{\rm opt})\)</span></li>
-<li><span class="math inline">\(\mathcal T^{\rm opt}(z)\)</span>: terminal node for new covariate vector <span class="math inline">\(z\)</span></li>
-<li><span class="math inline">\(\hat S(t\mid z)\)</span>: KM estimates in node <span class="math inline">\(\mathcal T^{\rm opt}(z)\)</span></li>
-</ul></li>
-</ul>
-</section>
-<section id="bagging-and-random-forests" class="slide level2">
-<h2>Bagging and Random Forests</h2>
-<ul>
-<li><strong>Bagging</strong>
-<ul>
-<li>A single tree <span class="math inline">\(\to\)</span> large variance</li>
-<li>Take <span class="math inline">\(B\)</span> bootstrapped samples from training data
-<ul>
-<li><span class="math inline">\(\mathcal T_b\)</span>: survival tree grown on <span class="math inline">\(b\)</span>th bootstrap sample <span class="math inline">\((b=1, \ldots, B)\)</span> (without pruning)</li>
-<li><span class="math inline">\(\hat S_b(t\mid z)\)</span>: predicted survival function<br>
-</li>
-</ul></li>
-<li><strong>Final prediction</strong> <span class="math display">\[
-\hat S(t\mid z)=B^{-1}\sum_{b=1}^B \hat S_b(t\mid z)
+<li>R-programs available <span class="math display">\[
+\mbox{Log-rank}: n= \frac{(z_{1-\alpha/2}+z_{\gamma})^2}{q(1-q)\psi\theta^2}\,\,\,\,
+\mbox{$\tau$-RMST}: n= \frac{\zeta(\tau)(z_{1-\alpha/2}+z_{\gamma})^2}{q(1-q)\theta(\tau)^2}
 \]</span></li>
 </ul></li>
-<li><strong>Random forests</strong>
-<ul>
-<li>Same except only a random subset of covariates are considered at each split</li>
-<li>De-correlate the trees grown on different bootstrapped samples)</li>
-</ul></li>
 </ul>
 </section>
-<section id="software-rpartrpart" class="slide level2">
-<h2>Software: <code>rpart::rpart()</code></h2>
+<section id="other-truncationcensoring" class="slide level2">
+<h2>Other Truncation/Censoring</h2>
 <ul>
-<li><strong>Basic syntax for growing survival tree</strong>
+<li><p><strong>Left truncation</strong> (delayed entry; <strong>Ch 7</strong>)</p>
 <ul>
-<li><code>xval = k</code>: <span class="math inline">\(k\)</span>-fold cross-validation; <code>minbucket</code>: minimum size of terminal node; <code>cp</code>: minimum reduction of impurity measure for a split</li>
+<li><code>Surv(start, stop, status)</code>: <code>(start, stop)</code> <span class="math inline">\(=(T_L, X)\)</span> <img data-src="images/trunc_delayed.png" style="width:65.0%" data-fig-align="center"></li>
 </ul></li>
 </ul>
-<div class="big-code">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># grow the tree, with cross-validation</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>obj <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates, </span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">xval =</span> <span class="dv">10</span>, <span class="at">minbucket =</span> <span class="dv">2</span>, <span class="at">cp =</span> <span class="dv">0</span>))</span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># cross-validation results</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>cptable <span class="ot">&lt;-</span> obj<span class="sc">$</span>cptable</span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co"># complexity parameter (lambda)</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>CP <span class="ot">&lt;-</span> cptable[, <span class="dv">1</span>] </span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co"># find optimal parameter</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co"># cptable[, 4]: error function</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a>cp.opt <span class="ot">&lt;-</span> CP[<span class="fu">which.min</span>(cptable[, <span class="dv">4</span>])] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</section>
-<section id="software-rpartprune" class="slide level2">
-<h2>Software: <code>rpart::prune()</code></h2>
+<div class="columns">
+<div class="column" style="width:72%;">
 <ul>
-<li><strong>Basic syntax for pruning survival tree</strong>
+<li><strong>Interval censoring</strong> <strong>(Ch 7)</strong>
 <ul>
-<li><code>tree</code>: <code>rpart</code> object for grown tree; <code>cp</code>: optimal <span class="math inline">\(\lambda\)</span></li>
-<li><code>test</code>: test data frame</li>
+<li><strong>Asymptomatic event</strong> tested at periodic visits
+<ul>
+<li>HIV infection; tumor formation</li>
+</ul></li>
+<li><strong>Nonparametric MLE (NPMLE)</strong>
+<ul>
+<li>Proportional hazards/odds models</li>
+<li>R-package <code>IntCens</code></li>
+</ul></li>
 </ul></li>
 </ul>
-<div class="big-code">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># prune the tree, with optimal lambda</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>fit <span class="ot">&lt;-</span> <span class="fu">prune</span>(<span class="at">tree =</span> obj, <span class="at">cp =</span> cp.opt)</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="co"># plot the pruned tree structure</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="fu">rpart.plot</span>(fit)</span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="co"># fit$where: vector of terminal node for training data</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="co"># compute KM estimates by terminal node</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a>km <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> fit<span class="sc">$</span>where)</span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="do">## prediction on test data ---------------------------</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="co"># terminal node for test data</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a>treeClust<span class="sc">::</span><span class="fu">rpart.predict.leaves</span>(fit, test) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</section>
-<section id="gbc-survival-trees" class="slide level2">
-<h2>GBC: Survival Trees</h2>
-<ul>
-<li><strong>Same training data</strong>
-<ul>
-<li><span class="math inline">\(\lambda_{\rm opt}=0.017\)</span>; 3 splits (4 terminal nodes)</li>
-</ul></li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Conduct 10-fold cross-validation (xval = 10)</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>obj <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno <span class="sc">+</span> size <span class="sc">+</span> grade <span class="sc">+</span> nodes <span class="sc">+</span> </span>
-<span id="cb7-3"><a href="#cb7-3"></a>              prog <span class="sc">+</span> estrg <span class="sc">+</span> age,</span>
-<span id="cb7-4"><a href="#cb7-4"></a>             <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">xval =</span> <span class="dv">10</span>, <span class="at">minbucket =</span> <span class="dv">2</span>, <span class="at">cp =</span> <span class="dv">0</span>),</span>
-<span id="cb7-5"><a href="#cb7-5"></a>             <span class="at">data =</span> train)</span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="fu">printcp</span>(obj) <span class="co"># xerror: objective </span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#            CP  nsplit rel.error  xerror   xstd</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="co"># 1  0.07556835      0   1.00000 1.00411 0.046231</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="co"># 2  0.03720019      1   0.92443 0.96817 0.047281</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="co"># 3  0.02661914      2   0.88723 0.95124 0.046567</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="co"># 4  0.01716925      3   0.86061 0.92745 0.046606 # minimizer</span></span>
-<span id="cb7-12"><a href="#cb7-12"></a><span class="co"># 5  0.01398306      4   0.84344 0.92976 0.047514</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a><span class="co"># 6  0.01394869      5   0.82946 0.93941 0.048404</span></span>
-<span id="cb7-14"><a href="#cb7-14"></a><span class="co"># 7  0.01055028      9   0.77120 0.97722 0.052133</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="gbc-final-tree" class="slide level2">
-<h2>GBC: Final Tree</h2>
-<ul>
-<li><strong>Pruned tree</strong></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
+</div><div class="column" style="width:28%;">
+<div class="quarto-figure quarto-figure-left">
 <figure>
-<p><img data-src="images/ml_gbc_tree.png" style="width:65.0%"></p>
+<p><img data-src="images/trunc_ic_book.jpg" style="width:58.0%"></p>
 </figure>
 </div>
+</div>
+</div>
 </section>
-<section id="gbc-brier-scores" class="slide level2">
-<h2>GBC: Brier Scores</h2>
+<section id="multiplerecurrent-events" class="slide level2">
+<h2>Multiple/Recurrent Events</h2>
 <ul>
-<li><strong>Brier scores of three models on test data</strong></li>
+<li><strong>Key feature</strong> <strong>(Ch 8 &amp; 9)</strong>
+<ul>
+<li><p>Within-subject correlations between multiple events</p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 35%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: center;">Frailty (conditional) models</th>
+<th style="text-align: center;">Marginal models</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Interpretation</strong></td>
+<td style="text-align: center;">Unit-level hazard</td>
+<td style="text-align: center;">Population-level hazard</td>
+</tr>
+<tr class="even">
+<td><strong>Computation</strong></td>
+<td style="text-align: center;">Intensive</td>
+<td style="text-align: center;">Simple</td>
+</tr>
+<tr class="odd">
+<td><strong>Statistical efficiency</strong></td>
+<td style="text-align: center;">Efficient (more assumptions)</td>
+<td style="text-align: center;">Less efficient (fewer assumptions)</td>
+</tr>
+<tr class="even">
+<td><strong>Robustness</strong></td>
+<td style="text-align: center;">Less robust (more assumptions)</td>
+<td style="text-align: center;">Robust (fewer assumptions)</td>
+</tr>
+<tr class="odd">
+<td><strong>Association measure</strong></td>
+<td style="text-align: center;">Variance of frailty term</td>
+<td style="text-align: center;">No such measure</td>
+</tr>
+</tbody>
+</table></li>
+</ul></li>
 </ul>
-<div class="quarto-figure quarto-figure-center">
+</section>
+<section id="recurrent-events" class="slide level2">
+<h2>Recurrent Events</h2>
+<ul>
+<li><strong>R-code and book</strong> <strong>(Ch 9)</strong></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:70%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Multiplicative intensity (Andersen-Gill)</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, status) <span class="sc">~</span> covariates)</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># Multiplicative intensity with Gamma frailty </span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, status) <span class="sc">~</span> covariates <span class="sc">+</span> </span>
+<span id="cb2-6"><a href="#cb2-6"></a>        <span class="fu">frailty</span>(id, <span class="at">distribution =</span> <span class="st">"gamma"</span>))</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co"># Proportional rates/means (marginal)</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co"># (recommended)</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, status) <span class="sc">~</span> covariates </span>
+<span id="cb2-11"><a href="#cb2-11"></a>      <span class="sc">+</span> <span class="fu">cluster</span>(id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-left">
 <figure>
-<p><img data-src="images/ml_gbc_test.png" style="width:60.0%"></p>
+<p><img data-src="images/rec_cook.jpg" style="width:70.0%"></p>
 </figure>
 </div>
-</section></section>
-<section>
-<section id="conclusion" class="title-slide slide level1 center">
-<h1>Conclusion</h1>
-
+</div>
+</div>
 </section>
-<section id="notes-i" class="slide level2">
-<h2>Notes (I)</h2>
+<section id="semi-competing-risks" class="slide level2">
+<h2>(Semi-)Competing Risks</h2>
 <ul>
-<li><strong>The lasso</strong>
+<li><strong>Competing risks</strong> <strong>(Ch 10)</strong>
 <ul>
-<li>First proposed by Tibshirani (1996) for least-squares</li>
-<li>Extended to Cox model by Tibshirani (1997)</li>
-<li>Algorithms for <span class="math inline">\(L_1\)</span>-regularized Cox model described in Simon et al.&nbsp;(2011)</li>
+<li><strong>Cause-specific hazards</strong>
+<ul>
+<li>Conditional failure rate of <span class="math inline">\(k\)</span>th cause on <em>survivors</em></li>
+<li><code>coxph(Surv(time, status == k) ~ covariates)</code></li>
 </ul></li>
-<li><strong>Variations</strong>
+<li><strong>Cumulative incidence</strong>
 <ul>
-<li>group lasso (Yuan and Lin, 2006)</li>
-<li>adaptive lasso (Zou, 2006)</li>
-<li>smoothly clipped absolute deviations (SCAD; Xie and Huang, 2009)</li>
+<li>Marginal failure probability in <em>whole population</em> under other risks</li>
+<li><strong>Gray’s estimator/test</strong> <code>cmprk::cuminc(ftime, fstatus, group, strata)</code></li>
+<li><strong>Fine-Gray model</strong> <code>cmprk::crr(ftime, fstatus, cov1, failcode = k)</code></li>
+</ul></li>
+</ul></li>
+<li><strong>Recurrent events in presence of death</strong> <strong>(Ch 10)</strong>
+<ul>
+<li>Ghosh-Lin methods (R packages <code>mets</code>, <code>reReg</code>, etc.)</li>
 </ul></li>
 </ul>
 </section>
-<section id="notes-ii" class="slide level2">
-<h2>Notes (II)</h2>
+<section id="joint-models-with-longitudinal-data" class="slide level2">
+<h2>Joint Models with Longitudinal Data</h2>
+<ul>
+<li><p><strong>Two-stage joint models</strong> <strong>(Ch 11)</strong></p>
+<div class="columns">
+<div class="column" style="width:65%;">
+<ul>
+<li><strong>Longitudinal sub-model</strong> <span class="math display">\[m_i(t)=\gamma_0+\gamma^\T Z_i(t)+b_i^\T\tilde Z_i(t)\]</span>
+<ul>
+<li><code>obj1 &lt;- nlme::lme()</code></li>
+</ul></li>
+<li><strong>Survival sub-model</strong>
+<ul>
+<li><p><span class="math inline">\(\pr\{t\leq T_i&lt;t+\dd t\mid Z_i^*, \overline m_i(t)\}=\exp\{\beta^\T Z_i^*+\nu m_i(t)\}\lambda_0(t)\dd t\)</span></p></li>
+<li><p><code>obj2 &lt;- survival::coxph()</code></p></li>
+</ul></li>
+<li><strong>Joining two models</strong>
+<ul>
+<li><code>JM::jointModel(obj1, obj2, timeVar)</code></li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:35%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/longit_jm.jpg" style="width:75.0%"></p>
+</figure>
+</div>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="multistate-models" class="slide level2">
+<h2>Multistate Models</h2>
+<ul>
+<li><p><strong>An approach to complex life history data</strong> <strong>(Ch 12)</strong></p>
+<ul>
+<li><span class="math inline">\(Y(t)\in \{0, 1,\ldots, K\}\,\,\,\)</span> <img data-src="images/ms_gbc_ms.png" style="width:60.0%" data-fig-align="center"></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:65%;">
+<ul>
+<li><strong>Transition intensity</strong>: risk of going to another state given current state and history</li>
+<li><strong>Cox-type multiplicative intensity models</strong>
+<ul>
+<li>Markov or semi-Markov models for intensity <span class="math inline">\(k\to j\)</span></li>
+<li><code>coxph(Surv(start, stop, status) ~ covariates, subset = (from==k)&amp;(to==j))</code></li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:35%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/ms_cook_lawless.jpg" style="width:55.0%"></p>
+</figure>
+</div>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="hierarchical-composite-endpoints" class="slide level2">
+<h2>Hierarchical Composite Endpoints</h2>
+<ul>
+<li><strong>Motivation</strong>
+<ul>
+<li>Importance ranking of components</li>
+<li>Death &gt; hospitalization &gt; minor symptoms</li>
+</ul></li>
+<li><strong>Statistical methods</strong> <strong>(Ch 13)</strong>
+<ul>
+<li><strong>RMT-IF</strong>: net average time favorable to treatment
+<ul>
+<li>Model-free, component-wise decomposable</li>
+<li><code>rmt::rmtfit()</code></li>
+</ul></li>
+<li><strong>Win ratio regression</strong>
+<ul>
+<li>Prioritized comparison between two subjects</li>
+<li>Log-Win/loss modeled as multiplicative function of <span class="math inline">\(Z\)</span> with coeff <span class="math inline">\(\beta\)</span></li>
+<li><span class="math inline">\(\exp(\beta)\)</span>: WRs with unit increases in covariates</li>
+<li><code>WR::pwreg()</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="causal-inference" class="slide level2">
+<h2>Causal Inference</h2>
 <div class="columns">
 <div class="column" style="width:60%;">
-<div style="font-size: 98%">
 <ul>
-<li><strong>More on decision trees</strong>
+<li><strong>Counterfactual framework</strong> <strong>(Ch 14)</strong>
 <ul>
-<li><strong>Text</strong>: Breiman et al.&nbsp;(1984)</li>
-<li><strong>Review article</strong>: Bou-Hamad et al.&nbsp;(2011, <em>Statistics Surveys</em>)</li>
+<li>Potential outcomes <span class="math inline">\(T^{(a)}\)</span> <span class="math inline">\((a = 1, 0)\)</span><br>
+</li>
+<li>Directed Acyclic Graph (DAG) <img data-src="images/causal_censor_ass.png" style="width:90.0%" data-fig-align="center"></li>
 </ul></li>
-<li><strong>Bagging and random forests</strong> (R-packages)
+<li><strong>Marginal structural models</strong>
 <ul>
-<li><code>ipred</code></li>
-<li><code>randomSurvivalForest</code></li>
-<li><code>ranger</code></li>
+<li><span class="math inline">\(T^{(a)}\)</span> against <span class="math inline">\(a\)</span> and other covariates
+<ul>
+<li>Inverse probability treatment weighting (IPTW)</li>
+<li>Time-varying treatment/confounding</li>
+<li>R-package: <code>ipw</code> to compute weights</li>
+</ul></li>
 </ul></li>
 </ul>
-</div>
 </div><div class="column" style="width:40%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ml_cart.jpg" style="width:80.0%"></p>
+<p><img data-src="images/recap_whatif.png" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="notes-iii" class="slide level2">
-<h2>Notes (III)</h2>
+<section id="machine-learning" class="slide level2">
+<h2>Machine Learning</h2>
 <ul>
-<li><strong>Tidymodels</strong>
+<li><strong>Regularized Cox model</strong> <strong>(Ch 15)</strong>
 <ul>
-<li><code>censored</code>: a member of <code>tidymodels</code> family</li>
-<li><a href="https://www.tidyverse.org/blog/2021/11/survival-analysis-parsnip-adjacent">https://www.tidyverse.org/blog/2021/11/survival-analysis-parsnip-adjacent</a></li>
-</ul></li>
-</ul>
-<div class="big-code">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">library</span>(censored) </span>
-<span id="cb8-2"><a href="#cb8-2"></a></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="fu">decision_tree</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">set_engine</span>(<span class="st">"rpart"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-5"><a href="#cb8-5"></a>  <span class="fu">set_mode</span>(<span class="st">"censored regression"</span>)</span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; Decision Tree Model Specification (censored regression)</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; </span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; Computational engine: rpart</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</section>
-<section id="summary" class="slide level2">
-<h2>Summary</h2>
+<li>Penalize log-partial likelihood by <span class="math inline">\(L_1\)</span>-norm of <span class="math inline">\(\beta\)</span></li>
+<li>Selected variables <span class="math inline">\(\{Z_{\cdot j}: \hat\beta_j(\lambda_{\rm opt})\neq 0, j=1,\ldots, p\}\)</span>
 <ul>
-<li><strong>Regularized Cox model</strong>
-<ul>
-<li><strong>Objective function</strong> <span class="math display">\[
-Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
-\]</span>
-<ul>
-<li><code>glmnet::glmnet(Z, Surv(time, status), family =  “cox”, alpha = 1)</code></li>
+<li><code>glmnet::glmnet(Z, Surv(time, status), family =  "cox", alpha = 1)</code></li>
 </ul></li>
 </ul></li>
-<li><strong>Survival trees</strong>
+<li><strong>Survival trees</strong> <strong>(Ch 15)</strong>
 <ul>
-<li>Root node <span class="math inline">\(\to\)</span> recursive partitioning based on similarity in outcome <span class="math inline">\(\to\)</span> pruning to prevent overfitting
+<li>Root node <span class="math inline">\(\to\)</span> recursive splitting <span class="math inline">\(\to\)</span> pruning to prevent overfitting
 <ul>
 <li><code>rpart:: rpart(Surv(time, status) ~ covariates)</code></li>
 </ul></li>
 </ul></li>
+<li><strong>Deeping learning</strong> for survival analysis
+<ul>
+<li>Tutorial by Löschmann and Smorodina (2020)
+<ul>
+<li><a href="https://humboldt-wi.github.io/blog/research/information_systems_1920/group2_survivalanalysis">https://humboldt-wi.github.io/blog/research/information_systems_1920/group2_survivalanalysis</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="learning-outcomes" class="slide level2">
+<h2>Learning Outcomes</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>On <a href="https://lmaowisc.github.io/BMI741/about.html">Syllabus</a> …</strong></p>
+</div>
+<div class="callout-content">
+<p>After taking the course, students will be able to</p>
+<ul>
+<li><p>Understand features of censored data and their implications in statistical inference</p></li>
+<li><p>Choose proper non- and semi-parametric methods to analyze various types of data</p></li>
+<li><p>Understand and check the assumptions needed for estimation and inference</p></li>
+<li><p>Implement the inference procedures to solve real-world problems using statistical packages such as R (or SAS)</p></li>
+<li><p>Interpret and present the analytic results clearly and coherently to answer substantive questions</p></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="springer-book" class="slide level2">
+<h2>Springer Book</h2>
+<ul>
+<li><p>Book manuscript due to Springer by fall 2024</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>Check back on study site: <a href="https://lmaowisc.github.io/BMI741">https://lmaowisc.github.io/BMI741</a></li>
+<li>I welcome your feedback!</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-left">
+<figure>
+<p><img data-src="images/recap_book.png" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="final-assignment" class="slide level2">
+<h2>Final Assignment</h2>
+<ul>
+<li>Please take a few minutes to complete course evaluation
+<ul>
+<li>Deadline 5/3/2024</li>
+</ul></li>
+<li>Target response rate: &gt; 90%<br>
+</li>
+<li>Your feedback matters!</li>
 </ul>
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</section>
     </div>
   </div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="chap15_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="recap_files/libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="chap15_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="chap15_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="chap15_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="chap15_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="chap15_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="recap_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="recap_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="recap_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="recap_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="recap_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="chap15_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="chap15_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="chap15_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="chap15_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="recap_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="recap_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="recap_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="recap_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
