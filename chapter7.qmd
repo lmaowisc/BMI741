@@ -192,15 +192,11 @@ legend(0, 0.3, lty=c(2, 1), c("Not jailed before","Jailed before"), lwd=2)
 
 ## Follow-up Plots
 
-Visualization of subject-level follow-up under left truncation or interval censoring 
-must account for the nonzero entry time or the imprecise location of the endpoint.
-This makes it different from right-censored data.
-To show the additional information, we need additional features on the plot.
+Visualization of subject-level follow-up under left truncation or interval censoring must account for the nonzero entry time or the imprecise location of the endpoint. This makes it different from right-censored data. To show the additional information, we need additional features on the plot.
 
 ### Under left truncation
 
-For each subject, we use a line segment to represent the period $[T_{Li}, X_i]$ on study, 
-at the end of which the outcome event is distinguished from censoring by point shape. 
+For each subject, we use a line segment to represent the period $[T_{Li}, X_i]$ on study, at the end of which the outcome event is distinguished from censoring by point shape.
 
 The following is an example using the Channing House study.
 
@@ -268,15 +264,11 @@ chan_fig
 
 ```
 
-
 ### Under interval censoring
-For each subject, we use a gray line to represent the follow-up period. The check-up times can be marked on it by dots if such data are available.
-The event-containing interval $[L_i, R_i]$
-($R_i<\infty$) is highlighted from the rest of the follow-up period 
-using a black line segment.
+
+For each subject, we use a gray line to represent the follow-up period. The check-up times can be marked on it by dots if such data are available. The event-containing interval $[L_i, R_i]$ ($R_i<\infty$) is highlighted from the rest of the follow-up period using a black line segment.
 
 The following is an example using the Bangkok Metropolitan Administration HIV study.
-
 
 ```{r}
 #| label: fig-bma_fu
@@ -370,10 +362,3 @@ bma_fig
 # ggsave("trunc_bma_fig.pdf", bma_fig, width = 8, height = 12)
 # ggsave("trunc_bma_fig.eps", bma_fig, width = 8, height = 12, device = cairo_pdf)
 ```
-
-
-
-
-
-
-

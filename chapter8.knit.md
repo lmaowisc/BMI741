@@ -2,18 +2,17 @@
 title: "Chapter 8 - Multivariate Failure Times"
 ---
 
+
 ## Slides
 
 Lecture slides [here](chap8.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
 ## Base R Code
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-#| eval: false
 
+::: {.cell}
 
+```{.r .cell-code  code-fold="true" code-summary="Show the code"}
 ##################################################################
 # This code generates all numerical results in chapter 8.      ##
 ##################################################################
@@ -216,13 +215,15 @@ plot(t,juv.contr,type="s",xlim=c(0,80),ylim=c(0,1),frame.plot=F,lty=3,main="Juve
      cex.axis=1.2,cex.main=1.2)
 lines(t,juv.trt,lty=1,lwd=2)
 ```
+:::
+
 
 ## Descriptive analysis of TOPCAT trial
 
-```{r}
-#| warning: false
 
+::: {.cell}
 
+```{.r .cell-code}
 library(survival)
 library(tidyverse)
 library(knitr)
@@ -244,8 +245,18 @@ topcat |>
   summarize(
     median(time)
   )
-  
+```
 
+::: {.cell-output .cell-output-stdout}
+```
+# A tibble: 1 × 1
+  `median(time)`
+           <dbl>
+1           3.55
+```
+:::
+
+```{.r .cell-code}
 # table(topcat$drug)
 # table(topcat$race)
 
@@ -442,6 +453,33 @@ tabone <- bind_rows(
 colnames(tabone) <- c(" ", str_c(colnames(tabone)[2:3], " (N=", table(df$drug),")"))
 ## print out the table
 kable(tabone)
-
 ```
+
+::: {.cell-output-display}
+|                              |Placebo (N=1446)  |Spironolactone (N=1465) |
+|:-----------------------------|:-----------------|:-----------------------|
+|Age (years)                   |68 (60, 74)       |68 (60, 75)             |
+|Gender - Female               |763 (52.8%)       |790 (53.9%)             |
+|Gender - Male                 |683 (47.2%)       |675 (46.1%)             |
+|Race - Caucasian              |1422 (98.3%)      |1432 (97.7%)            |
+|Race - Other                  |24 (1.7%)         |33 (2.3%)               |
+|NYHA - 1-2                    |993 (68.7%)       |1003 (68.5%)            |
+|NYHA - 3-4                    |451 (31.2%)       |461 (31.5%)             |
+|BMI (kg/m^2)                  |30.8 (27.2, 35.6) |31.1 (27.3, 35.6)       |
+|Heart rate (per min)          |68 (61.2, 76)     |68 (61, 75)             |
+|Smoker                        |154 (10.7%)       |146 (10%)               |
+|CHF                           |1057 (73.1%)      |1057 (72.2%)            |
+|COPD                          |152 (10.5%)       |166 (11.3%)             |
+|Asthma                        |84 (5.8%)         |93 (6.3%)               |
+|Diabetes                      |439 (30.4%)       |456 (31.1%)             |
+|Hypertension                  |1335 (92.3%)      |1336 (91.2%)            |
+|Coronary surgery              |173 (12%)         |171 (11.7%)             |
+|HF                            |147 (10.2%)       |127 (8.7%)              |
+|MI                            |40 (2.8%)         |44 (3%)                 |
+|Stroke                        |36 (2.5%)         |29 (2%)                 |
+|HF rate (per person-year)     |0.0303            |0.0255                  |
+|MI rate (per person-year)     |0.0079            |0.0086                  |
+|Stroke rate (per person-year) |0.0071            |0.0056                  |
+:::
+:::
 
