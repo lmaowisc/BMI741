@@ -45,7 +45,6 @@ website:
           # - chapter15.qmd
       - section: "Miscellaneous"
         contents:
-          - test.qmd
           # - rmtif.qmd
           # - wa_estimands.qmd
        
