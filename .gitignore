@@ -5,6 +5,5 @@
 /.quarto/
 Data
 .Rdata
-.httr-oauth
 .DS_Store
 .quarto
