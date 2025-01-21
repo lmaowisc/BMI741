@@ -18,13 +18,13 @@
 }
 
 
-
 .math.inline {
-  font-size: 88%  !important;
+  font-size: 0.95em !important; /* Use 'em' for consistent scaling */
 }
 
-.MathJax, .MathJax_Display  {
-    font-size: 75%  !important;
+.MathJax_Display {
+  font-size: 75% !important; /* Adjust size for display math */
+  line-height: 1.2;          /* Ensure proper spacing */
 }
 
 code.sourceCode {

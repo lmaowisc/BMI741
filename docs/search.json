@@ -749,5 +749,145 @@
     "title": "Applied Survival Analysis",
     "section": "HW1 (Due Feb 5)",
     "text": "HW1 (Due Feb 5)\n\nChoose one\n\nProblem 1.1 (Recommended for PhD in Stats/BDS)\nProblem 1.2\n\nProblem 1.8 (Attach you annotated code)\n(Extra credit) Problem 1.3"
+  },
+  {
+    "objectID": "chap2.html#outline",
+    "href": "chap2.html#outline",
+    "title": "Applied Survival Analysis",
+    "section": "Outline",
+    "text": "Outline\n\nRandom variable and counting process notations\nLikelihood and score functions\nMartingale residuals and integrals \\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\]"
+  },
+  {
+    "objectID": "chap2.html#outcome-event-notation",
+    "href": "chap2.html#outcome-event-notation",
+    "title": "Applied Survival Analysis",
+    "section": "Outcome Event: Notation",
+    "text": "Outcome Event: Notation\n\nTime to outcome event (latent, w.o. censoring): \\(T\\)\n\nCumulative distribution function (cdf): \\(F(t)={\\rm pr}(T\\leq t)\\)\nSurvival function: \\(S(t) = 1- F(t) = {\\rm pr}(T &gt; t)\\)\nDensity function: \\(f(t) = \\d F(t)/\\d t = - \\d S(t)/ \\d t\\)\n\nLeibniz notation\n\n\\(\\d F(t) = f(t)\\d t = \\pr(t \\leq T &lt; t + \\d t)\\): infinitesimal (marginal) event rate (i.e. incidence) over \\([t, t + \\d t)\\)"
+  },
+  {
+    "objectID": "chap2.html#outcome-event-hazard-function",
+    "href": "chap2.html#outcome-event-hazard-function",
+    "title": "Applied Survival Analysis",
+    "section": "Outcome Event: Hazard Function",
+    "text": "Outcome Event: Hazard Function\n\nHazard rate: conditional incidence for those currently at risk \\[\\lambda(t)\\dd t=\\pr(t\\leq T&lt;t+\\dd t\\mid T\\geq t)=\\frac{\\dd F(t)}{S(t-)}\\]\n\nSo \\(\\lambda(t) = f(t)/S(t-)\\)\n\nDensity vs hazard functions"
+  },
+  {
+    "objectID": "chap2.html#outcome-event-distributions",
+    "href": "chap2.html#outcome-event-distributions",
+    "title": "Applied Survival Analysis",
+    "section": "Outcome Event: Distributions",
+    "text": "Outcome Event: Distributions\n\nConversions\n\n\\(\\lambda(t)\\d t = - \\d S(t)/S(t -) = -\\d\\log S(t)\\)\n\\(S(t) = \\exp\\{-\\Lambda(t)\\}\\), where \\(\\Lambda(t)=\\int_0^t \\lambda(u)\\d u\\) (cumulative hazard)\n\nExamples\n\nExponential distribution: \\(\\lambda(t)\\equiv \\lambda &gt; 0\\), \\(S(t)=\\exp(-\\lambda t)\\)\n\nConstant risk, also “memoryless”: \\(\\pr(T &gt; t + u\\mid T &gt; t) = \\pr(T &gt; u)\\)\n\nWeibull distribution: \\(\\lambda(t;\\alpha,\\gamma)=\\alpha\\gamma^{-\\alpha} t^{\\alpha-1}\\) with \\(\\gamma, \\alpha&gt;0\\)\n\n\\(0 &lt; \\alpha &lt; 1\\): risk \\(\\downarrow\\) (infant mortality)\n\\(\\alpha &gt; 1\\): risk \\(\\uparrow\\) (aging effect)\n\\(\\alpha = 1\\): Exponential (constant risk)\n\\(\\gamma\\): scale parameter such that \\(E(T)\\propto \\gamma\\)"
+  },
+  {
+    "objectID": "chap2.html#outcome-event-the-weibull",
+    "href": "chap2.html#outcome-event-the-weibull",
+    "title": "Applied Survival Analysis",
+    "section": "Outcome Event: The Weibull",
+    "text": "Outcome Event: The Weibull\n\nWeibull\\((\\alpha, \\gamma)\\)"
+  },
+  {
+    "objectID": "chap2.html#outcome-event-counting-process",
+    "href": "chap2.html#outcome-event-counting-process",
+    "title": "Applied Survival Analysis",
+    "section": "Outcome Event: Counting Process",
+    "text": "Outcome Event: Counting Process\n\nDefinition\n\n\\(N^*(t)=I(T\\leq t)\\): number of event (0 or 1) by \\(t\\) (cumulative)\n\\(\\d N^*(t)=N^*(t) - N^*(t-) = I (T=t)\\): number of event at \\(t\\) (incident)  \\[E\\{N^*(t)\\} = F(t),\\,\\,\\, E\\{\\d N^*(t)\\} = \\d F(t)\\] \\[E\\{\\d N^*(t)\\mid N^*(t -) = 0\\} = E\\{\\d N^*(t)\\mid T\\geq t\\}=\\d\\Lambda(t)\\]"
+  },
+  {
+    "objectID": "chap2.html#observed-data",
+    "href": "chap2.html#observed-data",
+    "title": "Applied Survival Analysis",
+    "section": "Observed Data",
+    "text": "Observed Data\n\nObserved data: \\((X, \\delta)\\)\n\n\\(X = T\\wedge C\\): duration of follow-up (time variable) \\((a\\wedge b = \\min(a, b))\\)\n\\(\\delta = I(T\\leq C)\\): event indicator (status variable)\n\\(C\\): (right) censoring time\n\nObserved counting process\n\n\\(N(t) = I(X\\leq t, \\delta = 1)\\)\nSo \\(\\d N(t) = \\d N^*(t)I(C\\geq t)\\)\n\nIndependent censoring assumption\n\n\\[C\\indep T\\]"
+  },
+  {
+    "objectID": "chap2.html#likelihood-function",
+    "href": "chap2.html#likelihood-function",
+    "title": "Applied Survival Analysis",
+    "section": "Likelihood Function",
+    "text": "Likelihood Function\n\nLikelihood on a single subject \\[p(X, \\delta)\\propto f(X)^\\delta S(X)^{1-\\delta}=\\lambda(X)^\\delta S(X)\\]\nLog-likelihood on a random \\(n\\)-sample\n\nUnder a model with parameter \\(\\theta\\): \\(\\lambda(t) = \\lambda(t; \\theta)\\), \\(\\Lambda(t) = \\Lambda(t; \\theta)\\) \\[\\begin{align}\nl_n(\\theta)&= n^{-1}\\sum_{i=1}^n\\log p(X_i, \\delta_i)\\\\\n&=n^{-1}\\sum_{i=1}^n\\left\\{\\delta_i\\log\\lambda(X_i;\\theta) -\\Lambda(X_i;\\theta)\\right\\}\\\\\n&= n^{-1}\\sum_{i=1}^n\\left\\{\\delta_i\\log\\lambda(X_i;\\theta)-\\int_0^\\infty I(X_i\\geq t) \\lambda(t;\\theta)\\dd t\\right\\}\n\\end{align}\\]"
+  },
+  {
+    "objectID": "chap2.html#score-function",
+    "href": "chap2.html#score-function",
+    "title": "Applied Survival Analysis",
+    "section": "Score Function",
+    "text": "Score Function\n\nScore function can be derived as \\[\\frac{\\partial}{\\partial\\theta} l_n(\\theta)=n^{-1}\\sum_{i=1}^n \\left\\{\\delta_ih(X_i;\\theta)-\\int_0^\\infty h(t;\\theta) I(X_i\\geq t)\\lambda(t;\\theta)\\dd t\\right\\}\\]\n\nwhere \\(h(t;\\theta)=\\frac{\\partial}{\\partial\\theta}\\log\\lambda(t;\\theta)\\) (hazard score function)\nSolve \\(\\frac{\\partial}{\\partial\\theta} l_n(\\hat\\theta)=0\\) to obtain maximum likelihood estimator (MLE) \\(\\hat\\theta\\)\n\nExample: exponential distribution \\(\\lambda(t; \\theta) = \\lambda\\)\n\n\\(h(t;\\theta) =\\lambda^{-1}\\)\nSolving score equation to obtain (in general, use Newton-Raphson algorithm) \\[\\hat\\lambda=\\frac{\\sum_{i=1}^n\\delta_i}{\\sum_{i=1}^n X_i}\\]"
+  },
+  {
+    "objectID": "chap2.html#stochastic-integration",
+    "href": "chap2.html#stochastic-integration",
+    "title": "Applied Survival Analysis",
+    "section": "Stochastic Integration",
+    "text": "Stochastic Integration\n\nTransformation by some \\(h(\\cdot)\\)\n\n\\(h(T)\\) if \\(T\\) is observed to lie in \\([0, t]\\)\n0 otherwise\n\nClearly, this is \\(\\delta I(X\\leq t) h(X)\\)\nCompact notation \\[\\delta I(X\\leq t) h(X) = \\int_0^t h(u)\\dd N(u)\\]\n\n\\(\\dd N(u) = 1\\) only if \\(\\delta = 1\\) and \\(T= u\\in[0, t]\\)\n\\(\\dd N(u) \\equiv 0\\) otherwise"
+  },
+  {
+    "objectID": "chap2.html#stochastic-integration-examples",
+    "href": "chap2.html#stochastic-integration-examples",
+    "title": "Applied Survival Analysis",
+    "section": "Stochastic Integration: Examples",
+    "text": "Stochastic Integration: Examples\n\nLog-likelihood \\[\nl_n(\\theta)=n^{-1}\\sum_{i=1}^n\\left\\{\\int_0^\\infty \\log\\lambda(t;\\theta)\\dd N_i(t)-\\int_0^\\infty I(X_i\\geq t)\\lambda(t;\\theta)\\dd t\\right\\}\n\\]\n\n\\(N_i(t)= I(X_i\\leq t, \\delta_i =1)\\), i.e., \\(N(t)\\) on subject \\(i\\)\n\nScore (subject-level) \\[\n\\begin{align}\n\\dot l(\\theta)&=\\int_0^\\infty h(t;\\theta)\\dd N(t)-\\int_0^\\infty h(t;\\theta) I(X\\geq t)\\dd\\Lambda(t;\\theta)\\\\\n&=\\int_0^\\infty h(t;\\theta)\\left\\{\\dd N(t)-I(X\\geq t)\\dd\\Lambda(t;\\theta)\\right\\}\n\\end{align}\n\\]"
+  },
+  {
+    "objectID": "chap2.html#martingale-definition",
+    "href": "chap2.html#martingale-definition",
+    "title": "Applied Survival Analysis",
+    "section": "Martingale: Definition",
+    "text": "Martingale: Definition\n\nIn previous score example, \\[\\dot l(\\theta) = \\int_0^\\infty h(t;\\theta)\\dd M(t;\\ \\theta)\\]\n\n\\(\\dd M(t;\\theta)=\\dd N(t) - I(X\\geq t)\\dd\\Lambda(t;\\theta)\\)\n\nGeneral martingale residual \\[\n\\begin{align}\n  \\dd M(t)&=\\dd N(t) - I(X\\geq t)\\dd\\Lambda(t)\\\\\n      &= \\dd N(t) - E\\{\\dd N(t)\\mid\\mbox{Data prior to }t\\}\n\\end{align}\n\\]\n\nSo \\(E\\{\\dd M(t)\\mid\\mbox{Data prior to }t\\}=0\\)"
+  },
+  {
+    "objectID": "chap2.html#martingale-construction",
+    "href": "chap2.html#martingale-construction",
+    "title": "Applied Survival Analysis",
+    "section": "Martingale: Construction",
+    "text": "Martingale: Construction\n\nData observed up to \\(t\\) \\[\n\\mathcal H(t) =\\{N(u), N_C(u):0\\leq u\\leq t\\}\n\\]\n\n\\(\\mathcal H(t-) =\\) Data prior to \\(t\\)\n\nShow \\[E\\{\\dd N(t)\\mid\\mathcal H(t-)\\} = I(X\\geq t)\\dd\\Lambda(t)\\]\n\nHow can the past influence the current incidence (risk)?\nOnly through the at-risk status \\({X\\geq t}\\)"
+  },
+  {
+    "objectID": "chap2.html#martingale-derivation",
+    "href": "chap2.html#martingale-derivation",
+    "title": "Applied Survival Analysis",
+    "section": "Martingale: Derivation",
+    "text": "Martingale: Derivation\n\nConsider not-at-risk \\((X &lt; t)\\) and at-risk \\((X\\geq t)\\) separately: \\[\n\\begin{align}\nE\\{\\dd N(t)\\mid\\mathcal H(t-)\\}&=I(X&lt;t)E\\{\\dd N(t)\\mid X&lt;t, \\mathcal H(t-)\\}\\notag\\\\\n&\\hspace{15mm}+I(X\\geq t)E\\{\\dd N(t)\\mid X\\geq t, \\mathcal H(t-)\\}\\notag\\\\\n& = 0 + I(X\\geq t)E\\{\\dd N(t)\\mid X\\geq t\\}\\notag\\\\\n&=I(X\\geq t)\\frac{\\pr\\{\\dd N^*(t)=1, C\\geq t\\}}{\\pr(T\\geq t, C\\geq t)}\n\\notag\\\\\n&=I(X\\geq t)E\\{\\dd N^*(t)\\mid T\\geq t\\}\\notag\\\\\n&=I(X\\geq t)\\dd\\Lambda(t),\n\\end{align}\n\\]\n\nQuestion: why is the 4th equality true?"
+  },
+  {
+    "objectID": "chap2.html#martingale-properties",
+    "href": "chap2.html#martingale-properties",
+    "title": "Applied Survival Analysis",
+    "section": "Martingale: Properties",
+    "text": "Martingale: Properties\n\nInterpretation \\[\\underbrace{\\dd M(t)}_{\\mbox{residual}}\n=\\underbrace{\\dd N(t)}_{\\mbox{observed response}} - \\underbrace{I(X\\geq t)\\dd\\Lambda(t)}_{\\mbox{systematic part}}\\]\nConditional mean & variance \\[\nE\\{\\dd M(t)\\mid\\mathcal H(t-)\\}=0,\\,\\,\\,\nE\\{\\dd M(t)^2\\mid\\mathcal H(t-)\\}=I(X\\geq t)\\dd\\Lambda(t)\n\\]\nUncorrelated increments (UCI) (for \\(t&lt;s\\)) \\[\nE\\{\\dd M(t)\\dd M(s)\\}=E\\left[\\dd M(t)E\\{\\dd M(s)\\mid\\mathcal H(s-)\\}\\right]\n=0\n\\]"
+  },
+  {
+    "objectID": "chap2.html#martingale-integral",
+    "href": "chap2.html#martingale-integral",
+    "title": "Applied Survival Analysis",
+    "section": "Martingale Integral",
+    "text": "Martingale Integral\n\nMany centered statistic take the form \\[\n\\sum_{i=1}^n\\int_0^t h(u)\\dd M_i(u)\n\\]\n\nWeighted sum of the \\(\\dd M_i(u)\\)\n\n\n\n\n\n\n\n\nMean and variance of martingale integral\n\n\n\\[E\\left\\{\\int_0^t h(u)\\dd M(u)\\right\\}=\\int_0^t h(u)E\\left\\{\\dd M(u)\\right\\}=0\\]\n\\[\n\\begin{align}\nE\\left\\{\\int_0^t h(u)\\dd M(u)\\right\\}^2 \\stackrel{\\mbox{UCI}}{=}\\int_0^t h(u)^2E\\left\\{\\dd M(u)^2\\right\\}\n=\\int_0^t h(u)^2\\pr(X\\geq u)\\dd\\Lambda(u)\n\\end{align}\n\\]"
+  },
+  {
+    "objectID": "chap2.html#martingale-integral-example",
+    "href": "chap2.html#martingale-integral-example",
+    "title": "Applied Survival Analysis",
+    "section": "Martingale Integral: Example",
+    "text": "Martingale Integral: Example\n\nScore function \\[\n\\dot l(\\theta) = \\int_0^\\infty h(t;\\theta)\\dd M(t; \\theta)\n\\]\n\nInformation \\[\n\\mathcal I(\\theta) = E\\{\\dot l(\\theta)^2\\} =\n\\int_0^\\infty h(t;\\theta)^2\\pr(X\\geq t)\\dd\\Lambda(t;\\theta)\n\\]\n\nExample: exponential distribution \\(h(t;\\theta)=\\lambda^{-1}\\) \\[\n\\mathcal I(\\theta) = \\int_0^\\infty \\lambda^{-2}\\pr(X\\geq t)\\lambda\\dd t=\n\\lambda^{-1}\\int_0^\\infty\\pr(X\\geq t)\\dd t\n\\]\n\nCompare with standard one by taking negative quadrature of log-likelihood"
+  },
+  {
+    "objectID": "chap2.html#notes",
+    "href": "chap2.html#notes",
+    "title": "Applied Survival Analysis",
+    "section": "Notes",
+    "text": "Notes\n\nMore parametric families in KP (2002) and KM (2003)\n\n(Inverse) Gamma; Log-normal/logistic; Gompertz; Generalized \\(F\\)\n\nMartingale first introduced in survival analysis by O. O. Aalen (1975, 1978)\n\nSimplifies derivation of statistical properties\nIntegrand \\(h(u)\\) can depend on \\(\\mathcal H(u-)\\)\nLess useful with multivariate outcomes (correlated increments)\n\nCurrent risk depends on past in complex ways"
+  },
+  {
+    "objectID": "chap2.html#summary-i",
+    "href": "chap2.html#summary-i",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (I)",
+    "text": "Summary (I)\n\nNotation\n\nOutcome data: \\(T\\)\nObserved data: \\(𝑋=𝑇∧𝐶\\) (time), \\(𝛿=𝐼(𝑇≤𝐶)\\) (status)\nCounting process: \\(𝑁(𝑡)=𝐼(𝑋≤𝑡,𝛿=1)\\)\nCounting process integral \\[\\delta I(X\\leq t) h(X) = \\int_0^t h(u)\\dd N(u)\\]\n\nMartingale residual \\[\\underbrace{\\dd M(t)}_{\\mbox{residual}}\n=\\underbrace{\\dd N(t)}_{\\mbox{observed response}} - \\underbrace{I(X\\geq t)\\dd\\Lambda(t)}_{\\mbox{systematic part}}\\]"
+  },
+  {
+    "objectID": "chap2.html#summary-ii",
+    "href": "chap2.html#summary-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (II)",
+    "text": "Summary (II)\n\nMartingale integral (e.g., score function) \\[\n\\int_0^t h(u)\\dd M(u)=\\int_0^t h(u)\\left\\{\\dd N(u)-I(X\\geq u)\\dd\\Lambda(u)\\right\\}\n\\]\n\nMean zero with easily computable variance"
   }
 ]
