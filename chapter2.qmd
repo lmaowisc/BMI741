@@ -1,0 +1,7 @@
+---
+title: "Chapter 2 - Mathematical Foundations"
+---
+
+## Slides
+
+Lecture slides [here](chap2.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)

@@ -1,0 +1,8 @@
+---
+title: "Welcome to BMI/STAT 741"
+---
+
+This site will post additional study materials for BMI/STAT 741 in Spring 2025. These include slides, extra data/code examples or mathematical results.
+
+Please check updated [syllabus](about.html) for course schedule and other information.
+

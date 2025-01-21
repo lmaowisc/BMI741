@@ -1,0 +1,190 @@
+---
+title: "Chapter 6 - Sample Size Calculation and Study Design"
+---
+
+## Slides
+
+Lecture slides [here](chap6.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
+
+## Base R Code
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| eval: false
+
+##################################################################
+# This code generates all numerical results in chapter 6.      ##
+##################################################################
+
+
+################################################################
+# Part I. Compile functions needed for sample size calculation #
+################################################################
+
+
+###########################################
+# Compile the following code for function
+# psi_fun(lambda0,lambdaL,b, c)
+# which computes the event proportion psi
+# needed for sample size calculation for
+# Cox model
+# INPUT: lambda0 = hazard rate for T
+#        lambdaL = hazard rate for LTFU
+#        b = length of accrual
+#        c = additional length of follow-up
+##########################################
+
+psi_fun <- function(lambda0, lambdaL, b, c){
+        lambda <- lambda0 + lambdaL
+   psi <- lambda0 / lambda * (1 - exp(- lambda * c) * (1 - exp(- lambda * b)) / (lambda * b))
+   return(psi)
+}
+
+
+
+###########################################
+# Compile the following code for function
+# zeta_fun(tau,lambda0,lambdaL,b, c)
+# which computes the RMST variance
+# needed for sample size calculation.
+# INPUT: tau = restricting time
+#       lambda0 = hazard rate for T
+#       lambdaL = hazard rate for LTFU
+#       b = length of accural
+#       c = additional length of follow-up
+##########################################
+
+## Survival function for censoring
+Gfun <- function(t, lambdaL, b, c){
+  Gt <- ifelse(t <= c, exp(- lambdaL * t),
+    ifelse(t < c + b, exp(- lambdaL * t) * (b + c -t ) / b, 0))
+  return(Gt)
+}
+
+## The integrand of zeta
+zeta_integrand <- function(t, tau, lambda0,lambdaL, b, c){
+  integrand <- (exp(- lambda0 * t) - exp( - lambda0 * tau))^2*
+      exp(lambda0 * t)/(Gfun(t, lambdaL, b, c) * lambda0)
+  return(integrand)
+}
+
+## Use the integrate() for numerical integration
+# ?integrate
+zeta_fun <- function(tau, lambda0, lambdaL, b, c){
+  f <- function(t){
+   return(zeta_integrand(t, tau, lambda0, lambdaL, b, c))
+  }
+  zeta <- integrate(f, lower = 0, upper = tau)
+  return(zeta$value)
+}
+
+
+
+################################################################
+# Part II. Generate the numerical results in Section 6.2.2     #
+################################################################
+
+
+zeta_fun(tau=5,lambda0=0.2,lambdaL=0.01,b=2,c=4)
+
+
+
+library(survival)
+
+##############################################
+# GBC study
+#############################################
+#read in the complete data
+gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
+
+#subset to first event data
+#Sort the data by time within each id
+o <- order(gbc$id,gbc$time)
+gbc <- gbc[o,]
+#get the first row for each id
+data.CE <- gbc[!duplicated(gbc$id),]
+
+#set status=1 if status==2 or 1
+data.CE$status <- (data.CE$status>0)+0
+
+## restrict to the subgroup of post-menopausal
+## women with no hormonal treatment
+
+pilot <- data.CE[data.CE$meno==2&data.CE$hormone==1,]
+n <- nrow(pilot)
+## n=209, consistent with the # in Table 1.1 of Chapter 1
+
+# calculate the event rate
+# convert time from month to year
+pilot$time <- pilot$time/12
+lambda0 <- sum(pilot$status>0)/sum(pilot$time)
+# lambda0=0.174
+
+### Design for the new study
+# Accrual period: b=2 years
+# Additional follow-up: c=3.5 years
+# LTFU rate: lambda=0.01 per year. 
+lambdaL <- 0.01
+b <- 2
+c <- 3.5 
+
+# calculate the parameters psi and zeta(tau=3, 5)
+psi <- psi_fun(lambda0,lambdaL,b, c)
+zeta3 <- zeta_fun(tau=3,lambda0,lambdaL,b, c)
+zeta5 <- zeta_fun(tau=5,lambda0,lambdaL,b, c)
+
+
+# Hypothetical treatment group
+# A spectrum of hypothetical hazard ratios
+HR <- seq(0.6,0.9,by=0.01)
+# log(HR) is the effect size for Cox model
+
+# Hazard rate in the treatment
+lambda1 <- lambda0*HR
+## Function to compute the corresponding effect size in RMST
+## based on the exponential distribution
+RMST_diff <- function(tau,lambda0,lambda1){
+     return(lambda1^{-1}*(1-exp(-lambda1*tau))-lambda0^{-1}*(1-exp(-lambda0*tau)))
+}
+
+## for tau=3 and 5.
+theta3 <- RMST_diff(tau=3,lambda0,lambda1)
+theta5 <- RMST_diff(tau=5,lambda0,lambda1)
+
+# Sample size calculation for q=1/2 and alpha=0.05
+q <- 0.5
+za <- qnorm(0.975)
+# Power=0.8, 0.9
+gamma_list <- c(0.8,0.9)
+
+# For each gamma, compute the sample size needed 
+# for log-rank test and RMST tests
+# as a function of HR
+
+par(mfrow=c(1,2))
+
+for (i in 1:2){
+   gamma <- gamma_list[i]
+   zg <- qnorm(gamma)
+   
+   # n for log-rank, 3-RMST, and 5-RMST
+   ncox <- (za+zg)^2/(q*(1-q)*psi*log(HR)^2)
+   nRMST3 <- zeta3*(za+zg)^2/(q*(1-q)*theta3^2)
+   nRMST5 <- zeta5*(za+zg)^2/(q*(1-q)*theta5^2)
+   
+   plot(HR,ncox,type="l",lwd=2,ylim=c(0,7000),ylab="Sample size",
+        xlab="Hazard ratio", main=paste0("Power = ",gamma),
+        cex.lab=1.2,cex.axis=1.2)
+   lines(HR,nRMST5,lty=2,lwd=2)
+   lines(HR,nRMST3,lty=3,lwd=2)
+   legend("topleft",lty=1:3,c("Log-rank","5-RMST","3-RMST"),lwd=2,
+          cex=1.2)
+}
+
+## sample sizes at HR=0.8 and power=0.9
+
+ncox[HR==0.8]
+nRMST3[HR==0.8]
+nRMST5[HR==0.8]
+```

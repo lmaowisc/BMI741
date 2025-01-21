@@ -1,0 +1,8 @@
+---
+title: "Defining estimand for the win ratio"
+subtitle: "Separate the true effect from censoring"
+---
+
+This is a talk I give at the [FDA/AdvaMed Medical Device Statistical Issues (MDSI) Conference](https://www.advamed.org/events/fda-advamed-mdsi-conference/) on April 3rd, 2024 in Washington, DC.
+
+Talk slides [here](win_ratio_estimand.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)

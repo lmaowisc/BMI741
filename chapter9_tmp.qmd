@@ -1,0 +1,205 @@
+---
+title: "Chapter 9 - Recurrent Events"
+---
+
+## Slides
+
+Lecture slides [here](chap9.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
+
+## Base R Code
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| eval: false
+
+
+##################################################################
+# This code generates all numerical results in chapter 9.       ##
+##################################################################
+
+
+
+library(survival)
+
+# read in the cgd dataset in counting process format
+cgd <- read.table("Data\\Chronic Granulomatous Disease Study\\cgd_counting.txt")
+head(cgd)
+
+
+# Andersen-Gill model
+obj.AG <- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids +
+                 propylac, data = cgd)
+summary(obj.AG)
+
+# Frailty model
+obj.frail <- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids +
+                    propylac + frailty(id, distribution = "gamma"), data = cgd)
+
+summary(obj.frail)
+
+
+# proportional mean model (LWYY)
+obj.pm <- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids +
+                 propylac + cluster(id), data = cgd)
+
+summary(obj.pm)
+
+
+# extract the beta's from the three models
+coeff.AG <- summary(obj.AG)$coeff
+coeff.frail <- summary(obj.frail)$coeff
+coeff.pm <- summary(obj.pm)$coeff
+
+
+#########################################
+# Table 9.1. beta, se(beta), and p-vaues
+# from the three models
+#########################################
+
+## Andersen-Gill model
+c1 <- coeff.AG[,1]
+c2 <- coeff.AG[,3]
+c3 <- coeff.AG[,5]
+
+# Frailty model
+c4 <- coeff.frail[1:6,1]
+c5 <- coeff.frail[1:6,2]
+c6 <- coeff.frail[1:6,6]
+
+# Proportional means model
+c7 <- coeff.pm[1:6,1]
+c8 <- coeff.pm[1:6,4]
+c9 <- coeff.pm[1:6,6]
+
+#print out Table 9.1
+noquote(round(cbind(c1,c2,c3,c4,c5,c6,c7,c8,c9),3))
+
+
+### Figure 9.2 #############################################
+# predicted  mean functions by treatment
+# for a female/male patient of 12 years old with X-linked 
+# inheritance pattern and use of both steroids and 
+#  prophylactic antibiotics
+############################################################
+
+# get beta
+beta <- obj.pm$coeff
+
+# get baseline mean function mu_0(t)
+# and t
+Lt <- basehaz(obj.pm,centered = F)
+t <- Lt$time
+mu0 <- Lt$hazard
+
+# covariate vector (besides treatement) for female patient
+zf <- c(0,12,1,1,1)
+# covariate vector (besides treatement) for male patient
+zm <- c(1,12,1,1,1)
+
+# female in treatment and control
+mu.f.trt <- exp(sum(c(1,zf)*beta))*mu0
+mu.f.contr <- exp(sum(c(0,zf)*beta))*mu0
+
+# male in treatment and control
+mu.m.trt <- exp(sum(c(1,zm)*beta))*mu0
+mu.m.contr <- exp(sum(c(0,zm)*beta))*mu0
+
+# Plot the figure
+par(mfrow=c(1,2))
+
+# for female (left panel)
+plot(t/30.5, mu.f.trt, type="s",xlim=c(0, 12), ylim=c(0,6),frame.plot =F,lty=1, main="Female",
+     xlab="Time (months)",ylab = "Mean number of infections", lwd=2)
+lines(t/30.5,mu.f.contr,lty=3,lwd=2)
+
+#for male (right panel)
+plot(t/30.5, mu.m.trt, type="s", xlim=c(0, 12), ylim=c(0,6),frame.plot =F,lty=1,main="Male",
+     xlab="Time (months)",ylab = "Mean number of infections",lwd=2)
+lines(t/30.5,mu.m.contr,lty=3,lwd=2)
+```
+
+## Graphics for CGD Study
+
+```{r}
+library(tidyverse)
+# read in the cgd dataset in counting process format
+cgd <- read.table("Data\\Chronic Granulomatous Disease Study\\cgd_counting.txt")
+head(cgd)
+
+# number of patients by sex
+sex_n <- cgd |> count(sex)
+
+# panel labeller by sex
+sex_labeller <- str_c(c("Female", "Male"),
+                      " (N = ", sex_n$n, ")"
+                      )
+names(sex_labeller) <- c("female", "male")
+
+
+rec_cgd_hist <- cgd |> 
+  group_by(treat, sex, id) |> 
+  summarize(
+    N = sum(status)
+  ) |> 
+  ggplot(aes(x = N)) +
+  geom_bar(aes(fill = treat), 
+           position = position_dodge(0.8, preserve = "single"), 
+           width = 0.8) +
+  facet_wrap( ~ sex, labeller = labeller(sex = sex_labeller)) +
+  scale_x_continuous("Infection count per patient", 
+                   breaks = 0:7, labels = 0:7) +
+  scale_y_continuous("Number of patients", expand = c(0, 1)) + 
+  scale_fill_manual(values = c("gray80", "gray20"), labels = c("Placebo", "rIFN-g")) +
+  theme_bw() +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "top",
+    legend.title = element_blank()
+  )
+  
+ggsave("rec_cgd_hist.pdf", rec_cgd_hist, width = 8, height = 4.5)
+ggsave("rec_cgd_hist.eps", rec_cgd_hist, width = 8, height = 4.5)
+
+```
+
+```{r}
+
+rec_cgd_fu <- cgd |> 
+  left_join(
+    cgd |> group_by(id) |> summarize(max_fu = max(tstop)),
+    join_by(id)
+  ) |> 
+    mutate(
+    id = factor(id),
+    status = factor(status),
+    tstart = tstart / 30.5,
+    tstop = tstop / 30.5,
+    max_fu = max_fu / 30.5,
+    treat = if_else(treat == "placebo", "Placebo", treat)
+  ) |> 
+  ggplot(aes(y = reorder(id, max_fu))) +
+  geom_linerange(aes(xmin = tstart, xmax = tstop)) +
+  geom_point(aes(x = tstop, shape = status), size = 2, fill = "white") +
+  geom_vline(xintercept = 0, linewidth = 1) +
+  scale_shape_manual(values = c(23, 15), labels = c("Censoring", "Infection")) + 
+  scale_x_continuous("Time (months)", limits = c(0, 15), breaks = seq(0, 15, by = 3),
+                     expand= c(0, 0.5)) +
+  scale_y_discrete("Patients") +
+  facet_wrap( ~ treat, scales = "free") +
+  theme_minimal() +
+  theme(
+    legend.position = "top",
+    legend.title = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.grid.major.y = element_blank()
+  )
+  
+ggsave("rec_cgd_fu.pdf", rec_cgd_fu, width = 8, height = 8.5)
+ggsave("rec_cgd_fu.eps", rec_cgd_fu, width = 8, height = 8.5)
+
+
+```

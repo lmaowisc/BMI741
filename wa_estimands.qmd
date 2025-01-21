@@ -1,0 +1,8 @@
+---
+title: "While-alive estimands for recurrent events in presence of death"
+subtitle: "Summarize patient experience under differential length of exposure"
+---
+
+This is a talk I give at the [2024 Society for Clinical Trials Annual Meeting](https://www.sctweb.org/meeting/#home) on May 21st, 2024 in Boston, MA.
+
+Talk slides [here](wa.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)

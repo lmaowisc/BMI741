@@ -1,0 +1,65 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "BMI/STAT 741 Course Study Site"
+  site-url: https://lmaowisc.github.io/BMI741
+  image: dc.jpg
+  open-graph: true
+  twitter-card:
+    creator: "@lmaowisc"
+    image: surv_hex.png
+    card-style: summary
+  navbar:
+    background: "#C5050C"
+    left:
+      - href: index.qmd
+        text: Home
+      - href: about.qmd
+        text: Syllabus
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - section: "Part I - Univariate Events"
+        contents:
+          - chapter1.qmd
+          - chapter2.qmd
+          # - chapter3.qmd
+          # - chapter4.qmd
+          # - chapter5.qmd
+          # - chapter6.qmd
+          # - chapter7.qmd
+      - section: "Part II - Complex Outcomes" 
+        contents:
+          # - chapter8.qmd
+          # - chapter9.qmd
+          # - chapter10.qmd
+          # - chapter11.qmd
+          # - chapter12.qmd
+          # - chapter13.qmd
+      - section: "Part III - Special Topics" 
+        contents:
+          # - chapter14.qmd
+          # - chapter15.qmd
+      - section: "Miscellaneous"
+        contents:
+          - test.qmd
+          # - rmtif.qmd
+          # - wa_estimands.qmd
+       
+        
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 4
+    toc-expand: true
+    linkcolor: "#C5050C"
+    backgroundcolor: "#FFFFFF"
+
+    
+editor: visual
+

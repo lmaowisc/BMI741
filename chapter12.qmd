@@ -1,0 +1,110 @@
+---
+title: "Chapter 12 - Multistate Modeling of Life History"
+---
+
+## Slides
+
+Lecture slides [here](chap12.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
+
+## Base R Code
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| eval: false
+
+
+##################################################################
+# This code generates all numerical results in chapter 12.      ##
+##################################################################
+
+
+############################################################
+# Table 12.1
+# Multi-state analysis of the GBC Study
+############################################################
+
+library("survival")
+
+ # read data
+gbc_ms <- read.table("Data//German Breast Cancer Study//gbc_ms.txt")
+
+# categorize age into three groups
+# <=40, >40 & <=60, >60
+gbc_ms$agec <- (gbc_ms$age<=40) + 2*(gbc_ms$age>40&gbc_ms$age<=60) +
+        3*(gbc_ms$age>60)
+
+# B(t): time spent in current state
+gbc_ms$Bt <- gbc_ms$stop - gbc_ms$start
+
+# change unit to 10 fmol/mg
+gbc_ms$prog <- gbc_ms$prog/10
+gbc_ms$estrg <- gbc_ms$estrg/10
+
+# convert variables to factors
+gbc_ms$hormone <- factor(gbc_ms$hormone)
+gbc_ms$meno <- factor(gbc_ms$meno)
+gbc_ms$agec <- factor(gbc_ms$agec)
+
+###############################
+#Fit the transition models
+#############################
+
+### 0->1: remission to relapse
+obj01 <- coxph(Surv(start, stop, status) ~ hormone + meno
+                     + agec + size + prog + estrg + strata(grade), data = gbc_ms,
+               subset = ((from==0) & (to == 1)))
+
+### 0->2: remission to death
+obj02 <- coxph(Surv(start, stop, status) ~ hormone + meno
+            + size + prog + estrg + strata(grade), data = gbc_ms,
+            subset = ((from == 0) & (to == 2)))
+
+### 1->2: relapse to death
+obj12 <- coxph(Surv(start, stop, status) ~ Bt + hormone + meno
+            + agec + size + prog + estrg + strata(grade), data = gbc_ms,
+            subset = ((from == 1) & (to == 2)))
+
+##########################################
+### Tabulate the results 
+##########################################
+
+### 0->1: remission to relapse
+beta01 <- obj01$coefficients
+se01 <- sqrt(diag(obj01$var))
+p01 <- 1-pchisq((beta01/se01)^2,1)
+
+c1 <- round(exp(beta01),3)
+c2 <- paste0("(",round(exp(beta01-1.96*se01),3),", ",
+          round(exp(beta01+1.96*se01),3),")")
+c3 <- round(p01,3)
+# print out the sub-table
+noquote(cbind(c1,c2,c3))
+
+
+
+### 0->2: remission to death
+beta02 <- obj02$coefficients
+se02 <- sqrt(diag(obj02$var))
+p02 <- 1-pchisq((beta02/se02)^2,1)
+
+c1 <- round(exp(beta02),3)
+c2 <- paste0("(",round(exp(beta02-1.96*se02),3),", ",
+          round(exp(beta02+1.96*se02),3),")")
+c3 <- round(p02,3)
+# print out the sub-table
+noquote(cbind(c1,c2,c3))
+
+
+### 1->2: relapse to death
+beta12 <- obj12$coefficients
+se12 <- sqrt(diag(obj12$var))
+p12 <- 1-pchisq((beta12/se12)^2,1)
+
+c1 <- round(exp(beta12),3)
+c2 <- paste0("(",round(exp(beta12-1.96*se12),3),", ",
+          round(exp(beta12+1.96*se12),3),")")
+c3 <- round(p12,3)
+# print out the sub-table
+noquote(cbind(c1,c2,c3))
+```

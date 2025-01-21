@@ -1,0 +1,206 @@
+---
+title: "Chapter 3 - Nonparametric Estimation and Testing"
+---
+
+## Slides
+
+Lecture slides [here](chap3.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
+
+## Base R Code
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| eval: false
+
+
+##################################################################
+# This code generates all numerical results in  chapter 3.      ##
+##################################################################
+
+###################################################
+# Figure 3.3 and Table 3.2                 
+# Nelsen-Aalen estimator of cumulative hazard function
+# for the rat study
+###################################################
+
+library(survival)
+# ##################################################
+# Description of "rats" dataset
+# 
+# Rat treatment data from Mantel et al. Three rats were chosen from each of 100 litters, 
+# one of which was treated with a drug, and then all followed for tumor incidence.
+# Usage
+# 
+# 
+# 
+# Format
+# litter:	litter number from 1 to 100
+# rx:	treatment,(1=drug, 0=control)
+# time:	time to tumor or last follow-up
+# status:	event status, 1=tumor and 0=censored
+# sex:	male or female
+# 
+# N. Mantel, N. R. Bohidar and J. L. Ciminera. Mantel-Haenszel analyses of litter-matched 
+# time to response data, with modifications for recovery of interlitter information. 
+# Cancer Research, 37:3863-3868, 1977.
+##############################################################
+
+rats <- read.table("Data//Rat Tumorigenicity Study//rats.txt",header=T)
+
+head(rats)
+
+#subset to treatment arm
+rats.rx <- rats[rats$rx==1,]
+
+#X and delta
+time <- rats.rx$time
+status <- rats.rx$status
+
+#ordered unique  event times
+ts <- unique(sort(time[status==1]))
+m <- length(ts)
+ts
+#numbers of failures at each point in ts
+ds <- table(time[status==1])
+##numbers at risk at each point in ts
+ns <- rep(NA,m)
+##Nelsen-Aalen estimator
+## for dLambda 
+dL <- rep(NA,m)
+## and Lambda
+L <- rep(NA,m)
+for (j in 1:m){
+  ns[j] <- sum(time>=ts[j])
+  dL[j] <- ds[j]/ns[j]
+  L[j] <- sum(dL[1:j])
+}
+
+results <- cbind(ts,ds,ns,dL,L)
+#print the table
+round(results,3)
+
+#plot the estimated cumulative hazard function
+par(mfrow=c(1,1))
+plot(stepfun(ts,c(0,L)),do.points = F,ylim=c(0,0.4),xlim=c(0,120), lwd=2, 
+     frame.plot=FALSE, xlab="Time (days)",ylab="Cumulative hazard function",
+     main="", cex.lab=1.5, cex.axis=1.5)
+
+
+
+###################################################
+# Table 3.3                 
+# Kaplan-Meier (KM) estimator of survival function
+# for the rat study
+###################################################
+
+#csurv (conditional survival): 1-d_j/n_j
+csurv <- 1-dL
+#variance of csurv by Greenwoods's formula
+var.csurv <- ds/(ns*(ns-ds))
+
+#KM estimates of survival function
+KMsurv <- rep(NA,m)
+##Greenwoods formula for se
+se <- rep(NA,m)
+
+# Compute the KM estimates and Greenwood's se
+for (j in 1:m){
+  KMsurv[j] <- prod(csurv[1:j])
+  se[j] <- KMsurv[j]*sqrt(sum(var.csurv[1:j]))
+}
+
+results2 <- cbind(ts,ds,ns,csurv,KMsurv,se)
+#print the table
+round(results2,3)
+  
+
+
+
+###################################################
+# Figure 3.4                 
+# Kaplan-Meier (KM) estimator of survival function
+# for the rat study
+###################################################
+
+obj <- survfit(Surv(time,status) ~ 1, data = rats.rx, conf.type = "log-log")
+
+summary(obj)
+
+# plot the estimated survival function
+plot(obj, ylim = c(0,1), xlim = c(0, 100), lwd = 2, frame.plot = FALSE,
+     xlab = "Time (days)", ylab = "Tumor-free probabilities", main = "")
+
+legend(1, 0.2, c("Kaplan-Meier curve", "95% Confidence limits"),
+       lty = 1:2, lwd = 2)
+
+
+#################################################
+#   log-rank test for rat study
+#   comparing treatment and control
+#################################################
+#dataset
+head(rats)
+
+# log-rank test on treatment difference
+survdiff(Surv(time,status)~ rx+ strata(sex),
+         data=rats, rho=0)
+
+##############################################
+# GBC study: Figure 3.7 and related test results 
+#############################################
+#read in the complete data
+gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
+
+#subset to first event data
+#Sort the data by time within each id
+o <- order(gbc$id,gbc$time)
+gbc <- gbc[o,]
+#get the first row for each id
+data.CE <- gbc[!duplicated(gbc$id),]
+
+#set status=1 if status==2 or 1
+data.CE$status <- (data.CE$status>0)+0
+
+
+
+################################################
+# Figure 3.7  Plot the KM curves by hormonal group 
+# stratified by menopausal status for GBC study
+################################################
+
+par(mfrow=c(1,3))
+## overall
+obj <- survfit(Surv(time,status)~hormone,data=data.CE)
+plot(obj, xlim=c(0,80),lwd=2,frame=F, lty=c(2,1),
+     xlab="Time (months)",ylab="Relaspe-free survival probabilities",main="Overall",
+     cex.lab=1.5,cex.axis=1.5,cex.main=1.5)
+legend(1,0.2,lty=2:1,c("No Hormone","Hormone"),
+       lwd=2,cex=1.5)
+
+## pre-menopausal
+obj.pre <- survfit(Surv(time,status)~hormone,data=data.CE[data.CE$meno==1,])
+plot(obj.pre, xlim=c(0,80),lwd=2,frame=F, lty=c(2,1),
+     xlab="Time (months)",ylab="Relaspe-free survival probabilities",main="Pre-Menopausal",
+     cex.lab=1.5,cex.axis=1.5,cex.main=1.5)
+legend(1,0.2,lty=2:1,c("No Hormone","Hormone"),
+       lwd=2,cex=1.5)
+
+## post-menopausal
+obj.post<- survfit(Surv(time,status)~hormone,data=data.CE[data.CE$meno==2,])
+plot(obj.post, xlim=c(0,80),lwd=2,frame=F, lty=c(2,1),
+     xlab="Time (months)",ylab="Relaspe-free survival probabilities",main="Post-Menopausal",
+     cex.lab=1.5,cex.axis=1.5,cex.main=1.5)
+legend(1,0.2,lty=2:1,c("No Hormone","Hormone"),
+       lwd=2,cex=1.5)
+
+
+
+## Stratified log-rank test (by menopausal status)
+survdiff(Surv(time, status) ~ hormone + strata(meno),
+         data = data.CE)
+## Unstratified log-rank test
+survdiff(Surv(time, status) ~ hormone,
+         data = data.CE)
+
+```

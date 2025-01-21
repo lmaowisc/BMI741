@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+/docs/site_libs/revealjs
+/.quarto/
+Data
+.Rdata
+.httr-oauth
+.DS_Store
+.quarto

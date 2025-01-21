@@ -1,0 +1,29 @@
+/* css styles */
+a:hover {color: darkred}
+a {text-decoration: none; }
+
+
+/* Change dropdown menu background color */
+.dropdown-menu {
+    background-color: #C5050C; /* Light grey background */
+}
+.dropdown li { font-size: 16.3px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
+}
+
+/* Change text color inside dropdown */
+.dropdown-menu a {
+    color: #FFFFFF; /* Black text */
+}
+
+/* Change text color on hover */
+.dropdown-menu a:hover {
+    background-color: #C5050C; /* Blue background on hover */
+    color: rgba(253,254,255,.8); /* White text on hover */
+}
+
+/* Add optional borders for dropdown */
+ .dropdown-menu {
+    border: 1px solid #ddd;
+}
+

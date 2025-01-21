@@ -1,0 +1,126 @@
+---
+title: "Chapter 14 - Causal Inference in Survival Analysis"
+---
+
+## Slides
+
+Lecture slides [here](chap14.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
+
+## Base R Code
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| eval: false
+
+##################################################################
+# This code generates all numerical results in chapter 14.     ##
+##################################################################
+
+
+library(survival)
+##############################################
+# GBC study
+#############################################
+#read in the complete data
+gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
+
+#subset to first event data
+#Sort the data by time within each id
+o <- order(gbc$id,gbc$time)
+gbc <- gbc[o,]
+#get the first row for each id
+data.CE <- gbc[!duplicated(gbc$id),]
+
+#set status=1 if status==2 or 1
+data.CE$status <- (data.CE$status>0)+0
+
+head(data.CE)
+
+
+######################
+# Section 14.2.3
+######################
+
+# create treatment variable A
+# A=1: hormone treatment
+# A=0: non-treatment
+data.CE$A <- data.CE$hormone - 1
+
+
+
+# Load the ipw package for propensity score calculation
+library(ipw)
+
+# compute propensity score for A against
+# menopausal status, tumor size, grade, nodes,
+# progesterone and estrogen receptor levels
+tmp <- ipwpoint(exposure=A,family="binomial",link="logit",
+              denominator=~ meno+size+factor(grade)+nodes+
+                  prog+estrg, data=data.CE)
+
+# naive version (unweighted)
+obj.naive <- survfit(Surv(time,status)~A,data=data.CE)
+# IPTW version (weighted by temp$ipw.weights computed from the
+#   ipwpoint() function)
+obj <- survfit(Surv(time,status) ~ A,weights = tmp$ipw.weights, data = data.CE)
+
+
+# IPTW Cox model (essentially a marginal structural Cox model)
+coxph(Surv(time,status)~A,weights=tmp$ipw.weights,data=data.CE)
+
+coxph(Surv(time,status)~A,data=data.CE)
+
+
+#########################################################
+# Figure 15.3 Naive and IPTW-adjusted Kaplan--Meier 
+# curves for the German Breast Cancer study by treatment
+#########################################################
+plot(obj.naive, xlim=c(0,80),lwd=2,frame=F, lty=c(2,1),
+     xlab="Time (months)",ylab="Relaspe-free survival probabilities",
+     cex.lab=1.5,cex.axis=1.5)
+
+lines(obj,col='red',lty=c(2,1), cex.lab=1.5,cex.axis=1.5)
+legend(1,0.3,lty=c(2:1,2:1), col=rep(c("black","red"),each=2),
+       c("No Hormone (naive)","Hormone (naive)",
+         "No Hormone (IPTW)","Hormone (IPTW)"),
+       lwd=2,cex=1.5)
+
+
+
+################################
+# Section 14.3.3 HIV/AIDS study 
+################################
+
+# need the ipw package
+data("haartdat")
+colnames(haartdat)[8] <- "cd4"
+
+head(haartdat)
+
+
+
+# Compute the IPTW weights
+iptw <- ipwtm(exposure = haartind, family = "survival",
+          numerator = ~ sex + age, denominator = ~ cd4 + sex + age,
+          id = patient, tstart = tstart, timevar = fuptime, type = "first",
+          data = haartdat)
+
+# Compute the IPCW weights
+ipcw <- ipwtm(exposure = dropout, family = "survival",
+              numerator = ~ sex + age, denominator = ~ cd4 + sex + age,
+              id = patient, tstart = tstart, timevar = fuptime, type = "first",
+              data = haartdat)
+
+# Fit IPTW/IPCW marginal structural Cox model
+obj <- coxph(Surv(tstart, fuptime, event) ~ haartind + sex + age+ 
+               cluster(patient), data = haartdat, 
+             weights = iptw$ipw.weights*ipcw$ipw.weights)
+summary(obj)
+
+
+# Naive Cox model with time-varying treatment
+obj_naive <- coxph(Surv(tstart, fuptime, event) ~ haartind + sex + age+ 
+               cluster(patient), data = haartdat)
+summary(obj_naive)
+```

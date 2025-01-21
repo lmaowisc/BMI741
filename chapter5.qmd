@@ -1,0 +1,175 @@
+---
+title: "Chapter 5 - Other Non- and Semi-parametric Methods"
+---
+
+## Slides
+
+Lecture slides [here](chap5.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
+
+## Base R Code
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| eval: false
+
+##################################################################
+# This code generates all numerical results in chapter 5.      ##
+##################################################################
+
+
+library(survival)
+
+##############################################
+# GBC study
+#############################################
+#read in the complete data
+gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
+
+#subset to first event data
+#Sort the data by time within each id
+o <- order(gbc$id,gbc$time)
+gbc <- gbc[o,]
+#get the first row for each id
+data.CE <- gbc[!duplicated(gbc$id),]
+
+#set status=1 if status==2 or 1
+data.CE$status <- (data.CE$status>0)+0
+
+
+
+############################################
+# Restricted mean surval time (RMST) analysis
+# with the "survRM2" package
+##########################################
+
+#install the package
+install.packages("survRM2")
+library(survRM2)
+
+
+# Two-sample testing between hormonal and non-hormonal
+# groups on 5-year RMST
+obj <- rmst2(time = data.CE$time/12, status = data.CE$status, 
+            arm = data.CE$hormone - 1, tau=5)
+
+# print out results
+obj
+# more compact results
+obj$unadjusted.result
+
+
+# Graphical display of the group-specific RMST 
+# as area under the KM curves
+plot(obj, xlab="Time (years)", ylab = "Relapse-free survival",
+     col.RMST = "gray", col.RMTL = "white", cex.lab=1.2,
+     cex.axis=1.2, col="black", xlim=c(0,5))
+
+
+# Regression with all the other covariate
+obj.reg <- rmst2(time = data.CE$time / 12, status = data.CE$status, 
+            arm = data.CE$hormone-1, covariates = data.CE[, 5:11], tau = 5)
+
+#overall results
+obj.reg
+
+# additive model on RMST
+round(obj.reg$RMST.difference.adjusted, 3)
+
+# multiplicative model on RMST
+round(obj.reg$RMST.ratio.adjusted, 3)
+
+# multiplicative model on RMTL
+round(obj.reg$RMTL.ratio.adjusted, 3)
+
+# for hormone treatment only 
+obj.reg$adjusted.result
+
+
+####################################
+### Additive hazards analysis
+## using the "addhazard" package
+####################################
+
+install.packages("addhazard")
+library(addhazard)
+ 
+ # Fit additive hazards model
+ 
+## preparation
+data.CE$hormone <- factor(data.CE$hormone)
+data.CE$meno <- factor(data.CE$meno) 
+
+# Add an infinitesimal random number to time
+ # to get rid of ties
+data.CE$time.dties <- data.CE$time/12 + runif(nrow(data.CE),0, 1e-12) 
+
+
+# fit an additive hazard model
+obj <- ah(Surv(time.dties,status) ~ hormone + meno
+       + age + size + grade + prog + estrg,
+       data = data.CE, ties = FALSE)
+
+# print out the summary
+ summary(obj)
+ 
+ ## Aalen's model
+ # 
+ # library(timereg)
+ # 
+ # obj_aalen <- aalen(Surv(time.dties,status) ~ factor(hormone), data = data.CE)
+ # 
+ # obj_aalen$cum
+ # obj_aalen$var.cum
+ # summary(obj_aalen)
+ 
+ 
+ 
+ ####################################
+ ### Proportional odds analysis
+ ## using the "timereg" package
+ ####################################
+ 
+ install.packages("timereg")
+ library(timereg)
+ 
+ # Fit a proportional odds model
+ ## need to convert hormone and meno from numeric to factor
+ obj <- prop.odds(Event(time, status) ~ hormone + meno
+        + age + size + grade + prog + estrg,
+        data = data.CE)
+
+ summary(obj)
+ 
+ # Baseline cumulative odds function
+ t <- obj$cum[,1]
+ base_odds <- obj$cum[,2]
+ 
+ # Plot baseline cumulative odds
+ par(mfrow = c(1, 1))
+ plot(stepfun(t, c(0, base_odds)), do.points = FALSE, lwd = 2,
+      xlim=c(0,80), ylim=c(0,1.4), frame.plot = FALSE,
+      ylab="Baseline cumulative odds", xlab="Time (months)", main ="")
+ 
+
+ 
+ ###########################################
+ ### Accelerated failure time (AFT) analysis
+ ## using the "aftgee" package
+ ##########################################
+ 
+ install.packages("aftgee")
+ library(aftgee)
+ 
+ # fit an AFT model
+ ## need to convert hormone and meno from numeric to factor
+ ## (will take a little longer than usual...)
+ obj <- aftgee(Surv(time, status) ~ hormone + meno
+               + age + size + grade + prog + estrg,
+               data = data.CE)
+  # print out summary
+  summary(obj)
+ 
+ exp(obj$coef.res) ## acceleration factors exp(beta)
+ 
+```

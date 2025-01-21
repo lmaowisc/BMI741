@@ -1,0 +1,138 @@
+---
+title: "Chapter 10 - Competing and Semi-Competing Risks"
+---
+
+## Slides
+
+Lecture slides [here](chap10.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
+
+## Base R Code
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| eval: false
+
+
+##################################################################
+# This code generates all numerical results in chapter 10.      ##
+##################################################################
+
+
+############################################################
+# Analysis of the Bone Marrow Transplantation Study
+############################################################
+
+library("survival")
+
+# read in the study dataset
+cibmtr <- read.table("Data//Bone Marrow Transplantation Study//cibmtr.txt")
+head(cibmtr)
+
+#load the cmprsk package
+library(cmprsk)
+
+# Gray's (unweighted) log-rank-type test
+obj <- cuminc(cibmtr$time, cibmtr$status, cibmtr$donor, rho = 0)
+
+# test results
+obj$Tests
+
+# a naive plot: everything in one plot
+# plot(obj)
+
+
+##################################
+# obj$`a k`: kth risk in group a #
+##################################
+
+# Obtain the estimated cumulative incidence functions
+# for kth (k=1, 2) risk in group a (a=1, 0)
+# k=1: relapse; k=2: TRM
+obj.rlp.sib <- obj$`0 1`
+obj.rlp.nonsib <- obj$`1 1`
+obj.trm.sib <- obj$`0 2`
+obj.trm.nonsib <- obj$`1 2`
+
+#############################################
+# Figure 10.2
+# plot the cumulative incidence functions
+##############################################
+par(mfrow=c(1,2))
+
+plot(obj.rlp.sib$time,obj.rlp.sib$est,type='s', frame.plot = F,
+     main="Relapse",xlim=c(0,120),ylim=c(0,0.6),
+     xlab="Time (months)", ylab="Cumulative incidence", lwd=2)
+lines(obj.rlp.nonsib$time,obj.rlp.nonsib$est,lty=3,lwd=2)
+
+plot(obj.trm.sib$time,obj.trm.sib$est,type='s', frame.plot = F,
+     main="Treatment-related mortality",xlim=c(0,120),ylim=c(0,0.6),
+     xlab="Time (months)", ylab="Cumulative incidence", lwd=2)
+lines(obj.trm.nonsib$time,obj.trm.nonsib$est,lty=3,lwd=2)
+
+
+
+###########################
+# Table 10.2              #
+###########################
+
+######################################################
+# Fine-Gray proportional sub-distribution hazard model
+# and cause-specific hazard model
+######################################################
+
+#change k
+k <- 1
+
+#### proportional cause-specific hazards
+obj.cs <- coxph(Surv(time, status == k) ~ cohort + donor + hist + wait,
+                data = cibmtr)
+
+#### Fine and Gray #################
+obj.fg <- crr(cibmtr$time, cibmtr$status, cibmtr[,3:6], failcode = k)
+
+# beta estimates and se's
+beta.fg <- obj.fg$coef
+se.fg <- sqrt(diag(obj.fg$var))
+
+# construct HR, 95% CI, and p-values
+c1 <- round(exp(beta.fg),2)
+c2 <- paste0("(",round(exp(beta.fg-1.96*se.fg),2),"-",round(exp(beta.fg+1.96*se.fg),2),")")
+c3 <- round(1-pchisq((beta.fg/se.fg)^2,1),3)
+
+### Cause-specific hazard ############
+obj.csh <- coxph(Surv(time,status==k)~cohort+donor+hist+wait,data=cibmtr)
+
+# beta estimates and se's
+beta.csh <- obj.csh$coef
+se.csh <- sqrt(diag(obj.csh$var))
+
+# construct HR, 95% CI, and p-values
+c4 <- round(exp(beta.csh),2)
+c5 <- paste0("(",round(exp(beta.csh-1.96*se.csh),2),"-",round(exp(beta.csh+1.96*se.csh),2),")")
+c6 <- round(1-pchisq((beta.csh/se.csh)^2,1),3)
+
+# print the results
+noquote(cbind(c1,c2,c3,c4,c5,c6))
+
+#######################################
+## prediction of covariate-specific CIF
+# example 
+#######################################
+z <- c(1, 0, 1, 0)
+
+# Method 1
+# --- Method 1: use predict.crr() 
+obj_pred1 <- predict(obj.fg, z)
+# --- Method 2: manual calculation
+beta <- obj.fg$coef
+Lambda <- cumsum(obj.fg$bfitj)
+time <- obj.fg$uftime
+## calculate CIF based on FG model
+cif <- 1- exp(- exp(sum(beta * z)) * Lambda)
+## Same as obj_pred from Method 1
+obj_pred2 <- cbind(time, cif)
+
+## same results
+cbind(obj_pred1, obj_pred2)
+```
