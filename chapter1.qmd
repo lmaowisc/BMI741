@@ -20,8 +20,6 @@ Lecture slides [here](chap1.html){target="_blank"}. (To convert html to pdf, pre
 #| code-summary: "Show the code"
 #| eval: false
 
-usethis::use_github()
-usethis::use_git_remote("origin", url = NULL, overwrite = TRUE)
 ###########################################################################
 # The following code generates Figure 1.2 and Table 1.11 of chapter 1.   ##
 ###########################################################################
