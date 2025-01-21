@@ -2,8 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-/.quarto/
 Data
-.Rdata
-.DS_Store
-.quarto
+.quarto/
