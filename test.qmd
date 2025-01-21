@@ -8,3 +8,13 @@ format: revealjs
 ## Slide 2
 
 -   Topic 1
+
+```{r}
+
+x <- 1:10
+y <- x^2
+
+plot(x, y)
+
+```
+
