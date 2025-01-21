@@ -18,3 +18,7 @@ plot(x, y)
 
 ```
 
+## Slide 3
+
+-   Play with some graphics
+
