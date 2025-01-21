@@ -21,7 +21,7 @@ include-in-header:
 
 ## Outline
 
-1.  Random variable and counting process notations
+1.  Random variable and counting process notations 
 2.  Likelihood and score functions
 3.  Martingale residuals and integrals $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\dd}{{\rm d}}$$ $$\newcommand{\pr}{{\rm pr}}$$ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
 
@@ -53,7 +53,7 @@ include-in-header:
 
 ## Outcome Event: Distributions
 
--   Conversions
+-   Relationship
 
     -   $\lambda(t)\d t = - \d S(t)/S(t -) = -\d\log S(t)$
     -   $S(t) = \exp\{-\Lambda(t)\}$, where $\Lambda(t)=\int_0^t \lambda(u)\d u$ (cumulative hazard)
