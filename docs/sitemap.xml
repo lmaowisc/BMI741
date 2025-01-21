@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://lmaowisc.github.io/BMI741/index.html</loc>
-    <lastmod>2025-01-21T01:47:39.988Z</lastmod>
-  </url>
-  <url>
     <loc>https://lmaowisc.github.io/BMI741/win_ratio.html</loc>
     <lastmod>2024-04-02T23:05:28.000Z</lastmod>
   </url>
   <url>
-    <loc>https://lmaowisc.github.io/BMI741/rmtif.html</loc>
-    <lastmod>2024-10-19T23:01:42.886Z</lastmod>
+    <loc>https://lmaowisc.github.io/BMI741/test.html</loc>
+    <lastmod>2025-01-21T02:19:01.413Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmaowisc.github.io/BMI741/index.html</loc>
+    <lastmod>2025-01-21T01:47:39.988Z</lastmod>
   </url>
   <url>
     <loc>https://lmaowisc.github.io/BMI741/HW1_solution.html</loc>
@@ -58,7 +58,7 @@
   </url>
   <url>
     <loc>https://lmaowisc.github.io/BMI741/chapter1.html</loc>
-    <lastmod>2025-01-15T19:34:59.722Z</lastmod>
+    <lastmod>2025-01-21T02:17:13.224Z</lastmod>
   </url>
   <url>
     <loc>https://lmaowisc.github.io/BMI741/chapter11.html</loc>
@@ -101,11 +101,11 @@
     <lastmod>2024-01-14T04:17:31.665Z</lastmod>
   </url>
   <url>
-    <loc>https://lmaowisc.github.io/BMI741/wa_estimands.html</loc>
-    <lastmod>2024-05-20T21:06:48.000Z</lastmod>
+    <loc>https://lmaowisc.github.io/BMI741/rmtif.html</loc>
+    <lastmod>2024-10-19T23:01:42.886Z</lastmod>
   </url>
   <url>
-    <loc>https://lmaowisc.github.io/BMI741/test.html</loc>
-    <lastmod>2025-01-21T02:19:01.413Z</lastmod>
+    <loc>https://lmaowisc.github.io/BMI741/wa_estimands.html</loc>
+    <lastmod>2024-05-20T21:06:48.000Z</lastmod>
   </url>
 </urlset>

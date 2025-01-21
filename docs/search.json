@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Welcome to BMI/STAT 741",
-    "section": "",
-    "text": "This site will post additional study materials for BMI/STAT 741 in Spring 2025. These include slides, extra data/code examples or mathematical results.\nPlease check updated syllabus for course schedule and other information."
-  },
-  {
     "objectID": "win_ratio.html",
     "href": "win_ratio.html",
     "title": "Defining estimand for the win ratio",
@@ -14,11 +7,25 @@
     "text": "This is a talk I give at the FDA/AdvaMed Medical Device Statistical Issues (MDSI) Conference on April 3rd, 2024 in Washington, DC.\nTalk slides here. (To convert html to pdf, press E \\(\\to\\) Print \\(\\to\\) Destination: Save to pdf)"
   },
   {
-    "objectID": "rmtif.html",
-    "href": "rmtif.html",
-    "title": "Retricted mean time in favor of treatment",
+    "objectID": "test.html#slide-1",
+    "href": "test.html#slide-1",
+    "title": "Test presentations",
+    "section": "Slide 1",
+    "text": "Slide 1"
+  },
+  {
+    "objectID": "test.html#slide-2",
+    "href": "test.html#slide-2",
+    "title": "Test presentations",
+    "section": "Slide 2",
+    "text": "Slide 2\n\nTopic 1"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to BMI/STAT 741",
     "section": "",
-    "text": "This is a talk I give at the 2024 Duke Industry Statistics Symposium (DISS) on April 4th, 2024 in Durham, NC.\nTalk slides here. (To convert html to pdf, press E \\(\\to\\) Print \\(\\to\\) Destination: Save to pdf)\nAnother talk on October 22nd, 2024 in the Department of Statistics and Actuarial Science at the University of Waterloo."
+    "text": "This site will post additional study materials for BMI/STAT 741 in Spring 2025. These include slides, extra data/code examples or mathematical results.\nPlease check updated syllabus for course schedule and other information."
   },
   {
     "objectID": "HW1_solution.html",
@@ -506,24 +513,17 @@
     "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2\n\n\n\ntest"
   },
   {
+    "objectID": "rmtif.html",
+    "href": "rmtif.html",
+    "title": "Retricted mean time in favor of treatment",
+    "section": "",
+    "text": "This is a talk I give at the 2024 Duke Industry Statistics Symposium (DISS) on April 4th, 2024 in Durham, NC.\nTalk slides here. (To convert html to pdf, press E \\(\\to\\) Print \\(\\to\\) Destination: Save to pdf)\nAnother talk on October 22nd, 2024 in the Department of Statistics and Actuarial Science at the University of Waterloo."
+  },
+  {
     "objectID": "wa_estimands.html",
     "href": "wa_estimands.html",
     "title": "While-alive estimands for recurrent events in presence of death",
     "section": "",
     "text": "This is a talk I give at the 2024 Society for Clinical Trials Annual Meeting on May 21st, 2024 in Boston, MA.\nTalk slides here. (To convert html to pdf, press E \\(\\to\\) Print \\(\\to\\) Destination: Save to pdf)"
-  },
-  {
-    "objectID": "test.html#slide-1",
-    "href": "test.html#slide-1",
-    "title": "Test presentations",
-    "section": "Slide 1",
-    "text": "Slide 1"
-  },
-  {
-    "objectID": "test.html#slide-2",
-    "href": "test.html#slide-2",
-    "title": "Test presentations",
-    "section": "Slide 2",
-    "text": "Slide 2\n\nTopic 1"
   }
 ]
