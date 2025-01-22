@@ -17,7 +17,7 @@ include-in-header:
   - text: |
       <style type="text/css">
       ul li ul li {
-        font-size: 0.75em;
+        font-size: 0.80em;
       }
       </style>
 ---
@@ -32,26 +32,27 @@ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
 
 # Data and Examples
 
-## What are time-to-event data
+## What are time-to-event data?
 
--   A common type of outcome in medical studies
-    -   Subjects followed from a predefined **starting point**: randomization, entry into study, birth, etc. until outcome event occurs or study ends
-    -   Outcome event (**endpoint**): death, hospitalization, onset of disease, etc.
-    -   Reliability test in engineering: failure of a machine part
--   **(Right) Censoring**: incomplete data if event does not occur by the time study ends of subject drops out
-    -   Only knows event time $>$ (lies to the right of) censoring time
--   **Survival analysis**: statistical methodology for censored data (any outcome events)
+- Common outcome type in medical studies
+  - **Starting point**: Randomization, study entry, birth, etc.
+  - **Endpoint**: Death, hospitalization, disease onset, etc.
+  - In engineering: Machine failure times (reliability analysis)
+- **Right censoring**  
+  - Event does not occur by study end or dropout  
+  - Only know event time $>$ censoring time
+- **Survival analysis**: Statistical methods for censored data
 
 ## Example: Univariate event (I)
 
--   **German Breast Cancer (GBC) study**
-    -   **Study population**: 686 patients with primary node positive breast cancer
-    -   **Aim**: evaluate effect of hormonal treatment with tamoxifen in addition to standard chemotherapy in reducing overall mortality
-    -   **Baseline information**: age (years), tumor size (mm), number of positive lymph nodes, progesterone and estrogen receptor levels (fmol/mg), menopausal status, and tumor grade (1—3)
-    -   **Follow-up**: median length 44 months
-        -   171 deaths $\to$ exact survival times known
-        -   515 survived to end of study or dropped out $\to$ censored (survival time $>$ censoring time)
-
+- **German Breast Cancer (GBC) Study**
+  - **Population**: 686 patients with node-positive breast cancer  
+  - **Objective**: Assess if tamoxifen + chemo reduces mortality  
+  - **Baseline info**: Age, tumor size, hormone levels, menopausal status, etc.  
+  - **Follow-up**: Median 44 months  
+    - 171 deaths $\to$ exact times known  
+    - 515 censored $\to$ survival time $>$ censoring time  
+    
 ## Example: Univariate event (II)
 
 -   **German Breast Cancer (GBC) Study**
@@ -60,14 +61,13 @@ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
 
 ## Example: Recurrent events (I)
 
--   **Chronic Granulomatous Disease (CGD) Study**
-    -   **Study population**: 128 CGD patients in a placebo-controlled randomized trial
-    -   **Aim**: Assess effect of gamma interferon on incidence of repeated CGD infections
-    -   **Follow-up**: median length 293 days
-        -   From randomization to study end or dropout (no death)
-        -   Number of infections per patient: maximum 7; minimum 0
-    -   **Challenge**: correlation of recurrent events within patients
-    -   **Data** in "long" format (multiple records per patient)
+- **Chronic Granulomatous Disease (CGD) Study**
+  - **Population**: 128 patients in a randomized placebo-controlled trial  
+  - **Objective**: Assess gamma interferon effect on recurrent infections  
+  - **Follow-up**: Median 293 days  
+    - Infections: Min = 0, Max = 7  
+  - **Challenge**: Correlated events within individuals
+  - **Data** in "long" format (multiple records per patient)
 
 ## Example: Recurrent events (II)
 
@@ -75,14 +75,16 @@ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
 
 ![](images/intro_cgd.png){fig-align="center" width="75%"}
 
+
 ## Example: Multivariate/Clustered Events (I)
 
--   **Diabetic Retinopathy Study**
+- **Diabetic Retinopathy Study**
+  - **Population**: 197 high-risk diabetic patients in a randomized controlled trial
+  - **Objective**: Determine if photocoagulation (a laser treatment) delays blindness onset
+  - **Design**: One eye treated (by either xenon or argon), the other untreated (control)
+  - **Challenge**: Correlation between eyes
 
-    -   **Study population**: 197 high-risk diabetic patients in a randomized controlled trial
-    -   **Aim**: Determine whether photocoagulation (a laser treatment) can delay the onset of blindness
-    -   **Study design**: One eye randomly selected to received photocoagulation (by either *xenon* or *argon*); the other eye left untreated as control
-    -   **Challenge**: Correlation between the eyes
+
 
 ## Example: Multivariate/Clustered Events (II)
 
@@ -92,7 +94,7 @@ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
 
 ## Example: Competing Risks (I)
 
--   **Definition**: multiple event types; occurrence of one prevents others from occurring afterward
+- **Definition**: Multiple types of events where one prevents the occurrence of the others
     -   Natural example: different causes of death
 -   **Competing risk vs censoring**:
     -   Both terminate follow-up
@@ -102,14 +104,18 @@ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
     -   Death from other (metastasized) cancers $\to$ competing risk
     -   Death from traffic accidents $\to$ censoring
 
+
+
 ## Example: Competing Risks (II)
 
 -   **Bone Marrow Transplant Study**
 
-    -   **Study population**: 864 multiple-myeloma leukemia patients undergoing allogeneic haematopoietic cell transplantation (HCT)
-    -   **Aim**: Evaluate risk factors for treatment-related mortality (TRM) and relapse of leukemia
+    -   **population**: 864 multiple-myeloma leukemia patients undergoing allogeneic haematopoietic cell transplantation (HCT)
+    -   **Objective**: Evaluate risk factors for treatment-related mortality (TRM) and relapse of leukemia
     -   **Competing risks**: TRM defined as death in remission (i.e., before relapse); thus is precluded by relapse
     -   **Risk factors**: cohort indicator (years 1995–2000 or 2001–2005), type of donor (unrelated or identical sibling), history of a prior transplant, time from diagnosis to transplantation (\<24 months, or ≥ 24 months)
+
+
 
 ## Example: Competing Risks (III)
 
@@ -152,10 +158,12 @@ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
     -   **Composite approach**: combines components
         -   Progression/relapse-free survival (time to the earlier of progression/relapse or death)
 
+
+
 ## Example: Composite Endpoints(II)
 
 -   Advantages:
-    -   Concentrates information → Statistical efficiency
+    -   Concentrates information $\to$ Statistical efficiency
     -   No need for multiple testing adjustment
     -   A single measure of overall effect size
 -   Preferred for primary analysis of Phase-III clinical trials by
@@ -164,6 +172,8 @@ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
 -   Challenges:
     -   Statistical efficiency (e.g., beyond first event)
     -   Scientific relevance (e.g., relative importance of components)
+
+
 
 # Censoring mechanisms and implications
 
@@ -180,7 +190,7 @@ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
 
 -   LTFU may not be independent of outcome (e.g., sicker patients withdraw early)
 
--   Collect information on reason of withdrawal if possible
+-   Collect withdrawal reasons if possible
 
 -   Censoring or competing risk? $\leftarrow$ Domain knowledge
 :::
@@ -196,10 +206,11 @@ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
 -   Censored observation
     -   Not completely missing!
     -   Partial information: event time $>$ censoring time
-    -   Not accounting for the partial information $\to$ bias in inference
--   Naïve approaches
-    -   Treat censoring as event (event-imputation analysis) $\to$ underestimates time to event
-    -   Exclude censored observations (complete-case analysis) $\to$ underestimates time to event (longer event times are more likely to be censored)
+    - Ignoring partial information $\to$ Bias in inference
+- Naive approaches
+    - Treat censoring as event $\to$ Underestimates time to event
+    - Exclude censored observations $\to$ Underestimates time to event (longer event times more likely censored)
+
 
 ## Statistical Implications (II)
 
@@ -217,6 +228,8 @@ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
     $$ C \indep T$$
 
     -   **Estimand**: $S(t)={\rm pr}(T > t)$, i.e., probability of subject “surviving” to time $t$, using a random sample of $(X_i, \delta_i)$ $(i=1,\ldots, n)$
+
+
 
 ## Statistical Implications (III)
 
@@ -248,10 +261,12 @@ $$\newcommand{\indep}{\perp \!\!\! \perp}$$
     -   Subject-level characteristics (baseline variables, number of events per subject)
     -   Event rates (over aggregate length of follow-up)
 
+
+
 ## How to Calculate Event Rate (I)
 
 -   Length of follow-up is **event-specific**
-    -   If an event is by definition "non-recurrent", its occurrence means patient is no longer at risk for it
+    -   If an event is "non-recurrent", its occurrence means patient is no longer at risk for it
 
 ![](images/intro_erate_form.png){fig-align="center" width="75%"}
 
@@ -301,7 +316,7 @@ Denominator is called person-year (or person-time) of follow-up.
     -   Include numerical/graphical results only if they contribute to your narrative
     -   All tables and figures should be properly titled/captioned, with informative labels/legends
     -   Use full names instead of abbreviations/acronyms
-        -   E.g., “meno” → “Menopause (yes v no)”; “est” → “Estrogen (fmol/mg)”
+        -   E.g., “meno” $\to$ “Menopause (yes v no)”; “est” $\to$ “Estrogen (fmol/mg)”
     -   Specify the unit of variable, e.g., "Age (years)"
     -   See Table 1.11 and Fig. 1.2 for examples
 -   Append the full code for diagnostic purposes

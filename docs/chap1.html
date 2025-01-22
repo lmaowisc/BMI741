@@ -124,7 +124,7 @@
   </style>
   <style type="text/css">
   ul li ul li {
-    font-size: 0.75em;
+    font-size: 0.80em;
   }
   </style>
 <meta property="og:title" content="Applied Survival Analysis – BMI/STAT 741 Course Study Site">
@@ -180,33 +180,39 @@ Lu Mao
 
 </section>
 <section id="what-are-time-to-event-data" class="slide level2">
-<h2>What are time-to-event data</h2>
+<h2>What are time-to-event data?</h2>
 <ul>
-<li>A common type of outcome in medical studies
+<li>Common outcome type in medical studies
 <ul>
-<li>Subjects followed from a predefined <strong>starting point</strong>: randomization, entry into study, birth, etc. until outcome event occurs or study ends</li>
-<li>Outcome event (<strong>endpoint</strong>): death, hospitalization, onset of disease, etc.</li>
-<li>Reliability test in engineering: failure of a machine part</li>
+<li><strong>Starting point</strong>: Randomization, study entry, birth, etc.</li>
+<li><strong>Endpoint</strong>: Death, hospitalization, disease onset, etc.</li>
+<li>In engineering: Machine failure times (reliability analysis)</li>
 </ul></li>
-<li><strong>(Right) Censoring</strong>: incomplete data if event does not occur by the time study ends of subject drops out
+<li><strong>Right censoring</strong>
 <ul>
-<li>Only knows event time <span class="math inline">\(&gt;\)</span> (lies to the right of) censoring time</li>
+<li>Event does not occur by study end or dropout<br>
+</li>
+<li>Only know event time <span class="math inline">\(&gt;\)</span> censoring time</li>
 </ul></li>
-<li><strong>Survival analysis</strong>: statistical methodology for censored data (any outcome events)</li>
+<li><strong>Survival analysis</strong>: Statistical methods for censored data</li>
 </ul>
 </section>
 <section id="example-univariate-event-i" class="slide level2">
 <h2>Example: Univariate event (I)</h2>
 <ul>
-<li><strong>German Breast Cancer (GBC) study</strong>
+<li><strong>German Breast Cancer (GBC) Study</strong>
 <ul>
-<li><strong>Study population</strong>: 686 patients with primary node positive breast cancer</li>
-<li><strong>Aim</strong>: evaluate effect of hormonal treatment with tamoxifen in addition to standard chemotherapy in reducing overall mortality</li>
-<li><strong>Baseline information</strong>: age (years), tumor size (mm), number of positive lymph nodes, progesterone and estrogen receptor levels (fmol/mg), menopausal status, and tumor grade (1—3)</li>
-<li><strong>Follow-up</strong>: median length 44 months
+<li><strong>Population</strong>: 686 patients with node-positive breast cancer<br>
+</li>
+<li><strong>Objective</strong>: Assess if tamoxifen + chemo reduces mortality<br>
+</li>
+<li><strong>Baseline info</strong>: Age, tumor size, hormone levels, menopausal status, etc.<br>
+</li>
+<li><strong>Follow-up</strong>: Median 44 months
 <ul>
-<li>171 deaths <span class="math inline">\(\to\)</span> exact survival times known</li>
-<li>515 survived to end of study or dropped out <span class="math inline">\(\to\)</span> censored (survival time <span class="math inline">\(&gt;\)</span> censoring time)</li>
+<li>171 deaths <span class="math inline">\(\to\)</span> exact times known<br>
+</li>
+<li>515 censored <span class="math inline">\(\to\)</span> survival time <span class="math inline">\(&gt;\)</span> censoring time</li>
 </ul></li>
 </ul></li>
 </ul>
@@ -227,14 +233,16 @@ Lu Mao
 <ul>
 <li><strong>Chronic Granulomatous Disease (CGD) Study</strong>
 <ul>
-<li><strong>Study population</strong>: 128 CGD patients in a placebo-controlled randomized trial</li>
-<li><strong>Aim</strong>: Assess effect of gamma interferon on incidence of repeated CGD infections</li>
-<li><strong>Follow-up</strong>: median length 293 days
+<li><strong>Population</strong>: 128 patients in a randomized placebo-controlled trial<br>
+</li>
+<li><strong>Objective</strong>: Assess gamma interferon effect on recurrent infections<br>
+</li>
+<li><strong>Follow-up</strong>: Median 293 days
 <ul>
-<li>From randomization to study end or dropout (no death)</li>
-<li>Number of infections per patient: maximum 7; minimum 0</li>
+<li>Infections: Min = 0, Max = 7<br>
+</li>
 </ul></li>
-<li><strong>Challenge</strong>: correlation of recurrent events within patients</li>
+<li><strong>Challenge</strong>: Correlated events within individuals</li>
 <li><strong>Data</strong> in “long” format (multiple records per patient)</li>
 </ul></li>
 </ul>
@@ -253,12 +261,12 @@ Lu Mao
 <section id="example-multivariateclustered-events-i" class="slide level2">
 <h2>Example: Multivariate/Clustered Events (I)</h2>
 <ul>
-<li><p><strong>Diabetic Retinopathy Study</strong></p>
+<li><strong>Diabetic Retinopathy Study</strong>
 <ul>
-<li><strong>Study population</strong>: 197 high-risk diabetic patients in a randomized controlled trial</li>
-<li><strong>Aim</strong>: Determine whether photocoagulation (a laser treatment) can delay the onset of blindness</li>
-<li><strong>Study design</strong>: One eye randomly selected to received photocoagulation (by either <em>xenon</em> or <em>argon</em>); the other eye left untreated as control</li>
-<li><strong>Challenge</strong>: Correlation between the eyes</li>
+<li><strong>Population</strong>: 197 high-risk diabetic patients in a randomized controlled trial</li>
+<li><strong>Objective</strong>: Determine if photocoagulation (a laser treatment) delays blindness onset</li>
+<li><strong>Design</strong>: One eye treated (by either xenon or argon), the other untreated (control)</li>
+<li><strong>Challenge</strong>: Correlation between eyes</li>
 </ul></li>
 </ul>
 </section>
@@ -276,7 +284,7 @@ Lu Mao
 <section id="example-competing-risks-i" class="slide level2">
 <h2>Example: Competing Risks (I)</h2>
 <ul>
-<li><strong>Definition</strong>: multiple event types; occurrence of one prevents others from occurring afterward
+<li><strong>Definition</strong>: Multiple types of events where one prevents the occurrence of the others
 <ul>
 <li>Natural example: different causes of death</li>
 </ul></li>
@@ -298,8 +306,8 @@ Lu Mao
 <ul>
 <li><p><strong>Bone Marrow Transplant Study</strong></p>
 <ul>
-<li><strong>Study population</strong>: 864 multiple-myeloma leukemia patients undergoing allogeneic haematopoietic cell transplantation (HCT)</li>
-<li><strong>Aim</strong>: Evaluate risk factors for treatment-related mortality (TRM) and relapse of leukemia</li>
+<li><strong>population</strong>: 864 multiple-myeloma leukemia patients undergoing allogeneic haematopoietic cell transplantation (HCT)</li>
+<li><strong>Objective</strong>: Evaluate risk factors for treatment-related mortality (TRM) and relapse of leukemia</li>
 <li><strong>Competing risks</strong>: TRM defined as death in remission (i.e., before relapse); thus is precluded by relapse</li>
 <li><strong>Risk factors</strong>: cohort indicator (years 1995–2000 or 2001–2005), type of donor (unrelated or identical sibling), history of a prior transplant, time from diagnosis to transplantation (&lt;24 months, or ≥ 24 months)</li>
 </ul></li>
@@ -387,7 +395,7 @@ Lu Mao
 <ul>
 <li>Advantages:
 <ul>
-<li>Concentrates information → Statistical efficiency</li>
+<li>Concentrates information <span class="math inline">\(\to\)</span> Statistical efficiency</li>
 <li>No need for multiple testing adjustment</li>
 <li>A single measure of overall effect size</li>
 </ul></li>
@@ -429,7 +437,7 @@ Lu Mao
 <ul>
 <li><p>Event/censoring time <span class="math inline">\(=\)</span> time <em>from starting point</em> (e.g., randomization) to event/censoring (as opposed to time on the calendar)</p></li>
 <li><p>LTFU may not be independent of outcome (e.g., sicker patients withdraw early)</p></li>
-<li><p>Collect information on reason of withdrawal if possible</p></li>
+<li><p>Collect withdrawal reasons if possible</p></li>
 <li><p>Censoring or competing risk? <span class="math inline">\(\leftarrow\)</span> Domain knowledge</p></li>
 </ul>
 </div>
@@ -454,12 +462,12 @@ Lu Mao
 <ul>
 <li>Not completely missing!</li>
 <li>Partial information: event time <span class="math inline">\(&gt;\)</span> censoring time</li>
-<li>Not accounting for the partial information <span class="math inline">\(\to\)</span> bias in inference</li>
+<li>Ignoring partial information <span class="math inline">\(\to\)</span> Bias in inference</li>
 </ul></li>
-<li>Naïve approaches
+<li>Naive approaches
 <ul>
-<li>Treat censoring as event (event-imputation analysis) <span class="math inline">\(\to\)</span> underestimates time to event</li>
-<li>Exclude censored observations (complete-case analysis) <span class="math inline">\(\to\)</span> underestimates time to event (longer event times are more likely to be censored)</li>
+<li>Treat censoring as event <span class="math inline">\(\to\)</span> Underestimates time to event</li>
+<li>Exclude censored observations <span class="math inline">\(\to\)</span> Underestimates time to event (longer event times more likely censored)</li>
 </ul></li>
 </ul>
 </section>
@@ -536,7 +544,7 @@ Lu Mao
 <ul>
 <li>Length of follow-up is <strong>event-specific</strong>
 <ul>
-<li>If an event is by definition “non-recurrent”, its occurrence means patient is no longer at risk for it</li>
+<li>If an event is “non-recurrent”, its occurrence means patient is no longer at risk for it</li>
 </ul></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
@@ -632,7 +640,7 @@ Lu Mao
 <li>All tables and figures should be properly titled/captioned, with informative labels/legends</li>
 <li>Use full names instead of abbreviations/acronyms
 <ul>
-<li>E.g., “meno” → “Menopause (yes v no)”; “est” → “Estrogen (fmol/mg)”</li>
+<li>E.g., “meno” <span class="math inline">\(\to\)</span> “Menopause (yes v no)”; “est” <span class="math inline">\(\to\)</span> “Estrogen (fmol/mg)”</li>
 </ul></li>
 <li>Specify the unit of variable, e.g., “Age (years)”</li>
 <li>See Table 1.11 and Fig. 1.2 for examples</li>
