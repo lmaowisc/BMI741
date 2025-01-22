@@ -6,3 +6,4 @@ This site will post additional study materials for BMI/STAT 741 in Spring 2025. 
 
 Please check updated [syllabus](about.html) for course schedule and other information.
 
+![](images/wordcloud.png)
