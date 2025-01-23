@@ -269,6 +269,13 @@ window.Quarto = {
    
   <ul>
   <li><a href="#slides" id="toc-slides" class="nav-link active" data-scroll-target="#slides">Slides</a></li>
+  <li><a href="#chapter-summary" id="toc-chapter-summary" class="nav-link" data-scroll-target="#chapter-summary">Chapter Summary</a>
+  <ul>
+  <li><a href="#real-examples" id="toc-real-examples" class="nav-link" data-scroll-target="#real-examples">Real examples</a></li>
+  <li><a href="#implications-of-censoring" id="toc-implications-of-censoring" class="nav-link" data-scroll-target="#implications-of-censoring">Implications of censoring</a></li>
+  <li><a href="#descriptive-analysis" id="toc-descriptive-analysis" class="nav-link" data-scroll-target="#descriptive-analysis">Descriptive analysis</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul></li>
   <li><a href="#base-r-code" id="toc-base-r-code" class="nav-link" data-scroll-target="#base-r-code">Base R Code</a></li>
   <li><a href="#tidyverse-solutions" id="toc-tidyverse-solutions" class="nav-link" data-scroll-target="#tidyverse-solutions">Tidyverse Solutions</a>
   <ul>
@@ -304,6 +311,26 @@ window.Quarto = {
 <section id="slides" class="level2">
 <h2 class="anchored" data-anchor-id="slides">Slides</h2>
 <p>Lecture slides <a href="chap1.html" target="_blank">here</a>. (To convert html to pdf, press E <span class="math inline">\(\to\)</span> Print <span class="math inline">\(\to\)</span> Destination: Save to pdf)</p>
+</section>
+<section id="chapter-summary" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-summary">Chapter Summary</h2>
+<p>Time-to-event (or survival) data are collected by following subjects from a clearly defined starting point until a particular event occurs or until they are censored. The latter occurs when the subject does not experience the event by the time the study ends or they withdraw, leaving the exact event time unknown. Properly integrating the partial information contained in <em>censored</em> observations—rather than discarding or misclassifying them—is essential to avoid systematic bias.</p>
+<section id="real-examples" class="level3">
+<h3 class="anchored" data-anchor-id="real-examples">Real examples</h3>
+<p>Numerous real studies illustrate the complexity of time-to-event data. In some settings, a single (univariate) endpoint—such as death—drives the analysis, as in the German Breast Cancer (GBC) Study. In others, such as the Chronic Granulomatous Disease (CGD) Study, individuals can experience <em>recurrent</em> events (e.g., repeated infections), leading to correlated outcomes within each subject. Meanwhile, the Diabetic Retinopathy Study (DRS) exemplifies a scenario where each subject has more than one at-risk unit (two eyes), so the events of interest (vision loss) are <em>clustered</em> within the same person. Still other investigations involve <em>competing risks</em>, as with bone marrow transplant patients whose relapse and treatment-related mortality exclude each other, or <em>semi-competing risks</em>, where a nonfatal event can occur only before death. Some studies collect longitudinal biomarkers (e.g., serial CD4 measurements) in conjunction with survival outcomes, and many modern trials unify multiple event types into a <em>composite</em> endpoint, providing a holistic view of patient experience.</p>
+</section>
+<section id="implications-of-censoring" class="level3">
+<h3 class="anchored" data-anchor-id="implications-of-censoring">Implications of censoring</h3>
+<p>Underneath these variations, censoring remains the main factor complicating statistical inference. When subjects drop out early or when the study reaches its planned end date, the only information gained is that a subject’s event time exceeds the last observation time. A naive approach—such as imputing the event time at the censoring point or discarding censored subjects—typically lead to bias, as longer-living or later-failing subjects are censored more often. To address this bias, many standard methods (e.g., Kaplan–Meier, Cox regression) assume <em>independent</em> censoring. If this assumption does not hold and censoring depends on unobserved factors linked to the event, more advanced techniques or sensitivity analyses become necessary.</p>
+</section>
+<section id="descriptive-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="descriptive-analysis">Descriptive analysis</h3>
+<p>A thorough descriptive analysis of the data is recommended before applying any model-based approach. This generally includes an initial “Table 1” that compares baseline characteristics (such as age, sex, tumor size, or hormone status) across treatment or exposure groups, ensuring any key differences or imbalances are made explicit. It may also involve calculating event rates—defined as total events divided by total person-time at risk. Care must be taken to distinguish between overall follow-up (lasting until a terminal event or the study’s end) and event-specific follow-up (which may end sooner if the event of interest has occurred). Aligning the numerator (events) with the relevant denominator (time at risk) ensures clarity and consistency in summarizing outcomes.</p>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>These fundamental ideas—awareness of different event structures, accurate handling of censoring, and proper descriptive summaries—form the bedrock upon which future methods will build.</p>
+</section>
 </section>
 <section id="base-r-code" class="level2">
 <h2 class="anchored" data-anchor-id="base-r-code">Base R Code</h2>
