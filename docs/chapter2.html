@@ -213,6 +213,13 @@ window.Quarto = {
    
   <ul>
   <li><a href="#slides" id="toc-slides" class="nav-link active" data-scroll-target="#slides">Slides</a></li>
+  <li><a href="#chapter-summary" id="toc-chapter-summary" class="nav-link" data-scroll-target="#chapter-summary">Chapter Summary</a>
+  <ul>
+  <li><a href="#notation-and-basic-quantities" id="toc-notation-and-basic-quantities" class="nav-link" data-scroll-target="#notation-and-basic-quantities">Notation and basic quantities</a></li>
+  <li><a href="#observed-data-and-likelihood" id="toc-observed-data-and-likelihood" class="nav-link" data-scroll-target="#observed-data-and-likelihood">Observed data and likelihood</a></li>
+  <li><a href="#stochastic-integrals-and-martingales" id="toc-stochastic-integrals-and-martingales" class="nav-link" data-scroll-target="#stochastic-integrals-and-martingales">Stochastic integrals and martingales</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -241,8 +248,58 @@ window.Quarto = {
 <section id="slides" class="level2">
 <h2 class="anchored" data-anchor-id="slides">Slides</h2>
 <p>Lecture slides <a href="chap2.html" target="_blank">here</a>. (To convert html to pdf, press E <span class="math inline">\(\to\)</span> Print <span class="math inline">\(\to\)</span> Destination: Save to pdf)</p>
+</section>
+<section id="chapter-summary" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-summary">Chapter Summary</h2>
+<p>Time-to-event data require specialized techniques for analysis. These tend to focus on the survival function <span class="math inline">\(S(t)\)</span> and the hazard function <span class="math inline">\(\lambda(t)\)</span> of the latent (uncensored) event time <span class="math inline">\(T\)</span>. Some methods rely on parametric models, while others leverage counting processes and martingales for robust inference.</p>
+<section id="notation-and-basic-quantities" class="level3">
+<h3 class="anchored" data-anchor-id="notation-and-basic-quantities">Notation and basic quantities</h3>
+<p>An outcome event time can be represented either as a random variable <span class="math inline">\(T\)</span> or as a counting process <span class="math inline">\(N^*(t) = I(T \le t)\)</span>. The survival function is defined as <span class="math display">\[
+S(t) = \mathrm{pr}(T &gt; t),
+\]</span> while the hazard function <span class="math inline">\(\lambda(t)\)</span> quantifies the instantaneous risk of experiencing the event at time <span class="math inline">\(t\)</span>, conditional on survival up to that point. The cumulative hazard function is obtained by integrating <span class="math inline">\(\lambda(t)\)</span> over <span class="math inline">\([0, t]\)</span>: <span class="math inline">\(\Lambda(t) = \int_0^t \lambda(u)\,\mathrm{d}u\)</span>, and relates to <span class="math inline">\(S(t)\)</span> via <span class="math display">\[
+\Lambda(t) = -\log\bigl\{S(t)\bigr\} \quad\Longleftrightarrow\quad S(t) = \exp\bigl\{-\Lambda(t)\bigr\}.
+\]</span> This relationship is central in survival analysis.</p>
+<p>Simple parametric models for <span class="math inline">\(T\)</span> include the exponential, Weibull, Gamma, and log-normal distributions, each with distinct hazard functions. The exponential model assumes constant hazard, while the Weibull model allows for time-varying (but still monotone) hazards.</p>
+</section>
+<section id="observed-data-and-likelihood" class="level3">
+<h3 class="anchored" data-anchor-id="observed-data-and-likelihood">Observed data and likelihood</h3>
+<p>In practice, the event time is subject to censoring by time <span class="math inline">\(C\)</span>. As a result, we only observe <span class="math inline">\(X = \min(T, C)\)</span>, along with the event indicator <span class="math inline">\(\delta = I(T \le C)\)</span>. Under independent censoring, the likelihood function for the observed data <span class="math inline">\((X, \delta)\)</span> is given by <span class="math display">\[
+p\bigl(X,\delta\bigr)
+\;=\;
+\lambda\bigl(X\bigr)^{\delta}\,S\bigl(X\bigr).
+\]</span> This means that, for a sample of size <span class="math inline">\(n\)</span>, the log-likelihood is <span class="math display">\[
+\ell_n(\theta) =  
+n^{-1}\sum_{i=1}^n
+\Bigl\{
+  \delta_i\,\log \lambda\bigl(X_i;\theta\bigr)
+  \;-\;
+  \int_{0}^{\infty}
+    I\bigl(X_i \ge t\bigr)\,\lambda\bigl(t;\theta\bigr)\,\mathrm{d}t.
+\Bigr\}
+\]</span> where <span class="math inline">\(\lambda(t;\theta)\)</span> is the hazard function parametrized by <span class="math inline">\(\theta\)</span>. We can use this general expression for the log-likelihood to derive maximum likelihood estimator for any parametric models.</p>
+</section>
+<section id="stochastic-integrals-and-martingales" class="level3">
+<h3 class="anchored" data-anchor-id="stochastic-integrals-and-martingales">Stochastic integrals and martingales</h3>
+<p>To count the observed event under censoring, define <span class="math inline">\(N(t) = N^*(t\wedge C)\)</span>, where <span class="math inline">\(x\wedge y = \min(x, y)\)</span>. The step function <span class="math inline">\(N(t)\)</span> takes a jump of size 1, i.e., <span class="math inline">\(\mathrm{d}N(t)=1\)</span>, at <span class="math inline">\(t = X\)</span> if <span class="math inline">\(\delta = 1\)</span>; it stays flat if <span class="math inline">\(\delta = 0\)</span>. Hence, any function of the form <span class="math inline">\(\delta h(X)\)</span> can be re-written as a stochastic integral <span class="math inline">\(\int_0^\infty h(t)\mathrm{d}N(t)\)</span>.</p>
+<p>If we consider <span class="math inline">\(\mathrm{d}N(t)\)</span> as the Bernoulli response of event occurrence at time <span class="math inline">\(t\)</span>, then we can decompose it into <span class="math inline">\(\mathrm{d}N(t) = I(X\ge t)\lambda(t)\mathrm{d} t + \mathrm{d}M(t)\)</span>, where <span class="math display">\[
+\mathrm{d}M(t)
+\;=\;
+\underbrace{\mathrm{d}N(t)}_{\text{Observed}}
+\;-\;
+\underbrace{I\bigl(X \ge t\bigr)\,\lambda(t)\,\mathrm{d}t}_{\text{Expectation given data
+prior to $t$}}.
+\]</span> is the martingale increment.</p>
+<p>The martingale property of <span class="math inline">\(M(t)\)</span> implies that the expectation of <span class="math inline">\(\mathrm{d}M(t)\)</span>, given the event history up to time <span class="math inline">\(t\)</span>, is zero. It also implies that the increments at different times are uncorrelated. This property of uncorrelated increments simplifies the variance calculation for martingale integrals of the form: <span class="math display">\[
+\int_0^t h(u)\,\mathrm{d}M(u)
+\]</span> Many test statistics, estimators, and score functions can be expressed in the above form, and the martingale properties facilitate their asymptotic analysis.</p>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>Although <span class="math inline">\(T\)</span> may not be directly observed, the partial information in <span class="math inline">\((X, \delta)\)</span> still supports principled inferences about its distribution. Parametric models describe <span class="math inline">\(\lambda(t)\)</span> or <span class="math inline">\(S(t)\)</span> via a likelihood-based approach, while a martingale-based framework captures event processes through residuals and their properties. The latter approach will be utilized extensively in the non- and semi-parametric analysis presented in later chapters.</p>
 
 
+
+</section>
 </section>
 
 </main> <!-- /main -->

@@ -181,53 +181,45 @@ Lu Mao
 <section id="outcome-event-notation" class="slide level2">
 <h2>Outcome Event: Notation</h2>
 <ul>
-<li><p>Time to outcome event (latent, w.o. censoring): <span class="math inline">\(T\)</span></p>
+<li><strong>Time to outcome event</strong> (latent, w.o. censoring): <span class="math inline">\(T\)</span>
 <ul>
 <li>Cumulative distribution function (cdf): <span class="math inline">\(F(t)={\rm pr}(T\leq t)\)</span></li>
 <li>Survival function: <span class="math inline">\(S(t) = 1- F(t) = {\rm pr}(T &gt; t)\)</span></li>
 <li>Density function: <span class="math inline">\(f(t) = \d F(t)/\d t = - \d S(t)/ \d t\)</span></li>
 </ul></li>
-<li><p>Leibniz notation</p>
+<li><strong>Leibniz notation</strong>
 <ul>
-<li><span class="math inline">\(\d F(t) = f(t)\d t = \pr(t \leq T &lt; t + \d t)\)</span>: infinitesimal (marginal) event rate (i.e.&nbsp;incidence) over <span class="math inline">\([t, t + \d t)\)</span></li>
+<li><span class="math inline">\(\d F(t) = f(t)\d t = \pr(t \leq T &lt; t + \d t)\)</span>: infinitesimal (marginal) event rate (i.e., incidence) over <span class="math inline">\([t, t + \d t)\)</span></li>
+</ul></li>
 </ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/basic_dens.png" class="quarto-figure quarto-figure-center" style="width:48.0%"></p>
-</figure>
-</div></li>
-</ul>
-</section>
+
+<img data-src="images/basic_dens.png" class="quarto-figure quarto-figure-center r-stretch" style="width:48.0%"></section>
 <section id="outcome-event-hazard-function" class="slide level2">
 <h2>Outcome Event: Hazard Function</h2>
 <ul>
-<li><p>Hazard rate: conditional incidence for those currently at risk <span class="math display">\[\lambda(t)\dd t=\pr(t\leq T&lt;t+\dd t\mid T\geq t)=\frac{\dd F(t)}{S(t-)}\]</span></p>
+<li><strong>Hazard rate</strong>: conditional incidence given at risk <span class="math display">\[\lambda(t)\dd t=\pr(t\leq T&lt;t+\dd t\mid T\geq t)=\frac{\dd F(t)}{S(t-)}\]</span>
 <ul>
 <li>So <span class="math inline">\(\lambda(t) = f(t)/S(t-)\)</span></li>
 </ul></li>
-<li><p>Density vs hazard functions</p>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/basic_dens_haz.png" class="quarto-figure quarto-figure-center" style="width:55.0%"></p>
-</figure>
-</div></li>
+<li><strong>Density vs hazard</strong> functions</li>
 </ul>
-</section>
+
+<img data-src="images/basic_dens_haz.png" class="quarto-figure quarto-figure-center r-stretch" style="width:55.0%"></section>
 <section id="outcome-event-distributions" class="slide level2">
 <h2>Outcome Event: Distributions</h2>
 <ul>
-<li><p>Relationship</p>
+<li><strong>Relationship</strong>
 <ul>
 <li><span class="math inline">\(\lambda(t)\d t = - \d S(t)/S(t -) = -\d\log S(t)\)</span></li>
 <li><span class="math inline">\(S(t) = \exp\{-\Lambda(t)\}\)</span>, where <span class="math inline">\(\Lambda(t)=\int_0^t \lambda(u)\d u\)</span> (cumulative hazard)</li>
 </ul></li>
-<li><p>Examples</p>
+<li><strong>Examples</strong>
 <ul>
-<li>Exponential distribution: <span class="math inline">\(\lambda(t)\equiv \lambda &gt; 0\)</span>, <span class="math inline">\(S(t)=\exp(-\lambda t)\)</span>
+<li><strong>Exponential distribution</strong>: <span class="math inline">\(\lambda(t)\equiv \lambda &gt; 0\)</span>, <span class="math inline">\(S(t)=\exp(-\lambda t)\)</span>
 <ul>
 <li>Constant risk, also “memoryless”: <span class="math inline">\(\pr(T &gt; t + u\mid T &gt; t) = \pr(T &gt; u)\)</span></li>
 </ul></li>
-<li>Weibull distribution: <span class="math inline">\(\lambda(t;\alpha,\gamma)=\alpha\gamma^{-\alpha} t^{\alpha-1}\)</span> with <span class="math inline">\(\gamma, \alpha&gt;0\)</span>
+<li><strong>Weibull distribution</strong>: <span class="math inline">\(\lambda(t;\alpha,\gamma)=\alpha\gamma^{-\alpha} t^{\alpha-1}\)</span> with <span class="math inline">\(\gamma, \alpha&gt;0\)</span>
 <ul>
 <li><span class="math inline">\(0 &lt; \alpha &lt; 1\)</span>: risk <span class="math inline">\(\downarrow\)</span> (infant mortality)</li>
 <li><span class="math inline">\(\alpha &gt; 1\)</span>: risk <span class="math inline">\(\uparrow\)</span> (aging effect)</li>
@@ -247,7 +239,7 @@ Lu Mao
 <section id="outcome-event-counting-process" class="slide level2">
 <h2>Outcome Event: Counting Process</h2>
 <ul>
-<li>Definition
+<li><strong>Definition</strong>
 <ul>
 <li><p><span class="math inline">\(N^*(t)=I(T\leq t)\)</span>: number of event (0 or 1) <strong>by</strong> <span class="math inline">\(t\)</span> (cumulative)</p></li>
 <li><p><span class="math inline">\(\d N^*(t)=N^*(t) - N^*(t-) = I (T=t)\)</span>: number of event <strong>at</strong> <span class="math inline">\(t\)</span> (incident) <img data-src="images/basic_counting.png" class="quarto-figure quarto-figure-center" style="width:85.0%"> <span class="math display">\[E\{N^*(t)\} = F(t),\,\,\, E\{\d N^*(t)\} = \d F(t)\]</span> <span class="math display">\[E\{\d N^*(t)\mid N^*(t -) = 0\} = E\{\d N^*(t)\mid T\geq t\}=\d\Lambda(t)\]</span></p></li>
@@ -257,18 +249,18 @@ Lu Mao
 <section id="observed-data" class="slide level2">
 <h2>Observed Data</h2>
 <ul>
-<li>Observed data: <span class="math inline">\((X, \delta)\)</span>
+<li><strong>Observed data</strong>: <span class="math inline">\((X, \delta)\)</span>
 <ul>
 <li><span class="math inline">\(X = T\wedge C\)</span>: duration of follow-up (<code>time</code> variable) <span class="math inline">\((a\wedge b = \min(a, b))\)</span></li>
 <li><span class="math inline">\(\delta = I(T\leq C)\)</span>: event indicator (<code>status</code> variable)</li>
 <li><span class="math inline">\(C\)</span>: (right) censoring time</li>
 </ul></li>
-<li>Observed counting process
+<li><strong>Observed counting process</strong>
 <ul>
 <li><span class="math inline">\(N(t) = I(X\leq t, \delta = 1)\)</span></li>
 <li>So <span class="math inline">\(\d N(t) = \d N^*(t)I(C\geq t)\)</span></li>
 </ul></li>
-<li>Independent censoring assumption</li>
+<li><strong>Independent censoring assumption</strong></li>
 </ul>
 <p><span class="math display">\[C\indep T\]</span></p>
 </section></section>
@@ -294,7 +286,7 @@ l_n(\theta)&amp;= n^{-1}\sum_{i=1}^n\log p(X_i, \delta_i)\\
 <section id="score-function" class="slide level2">
 <h2>Score Function</h2>
 <ul>
-<li><strong>Score function</strong> can be derived as <span class="math display">\[\frac{\partial}{\partial\theta} l_n(\theta)=n^{-1}\sum_{i=1}^n \left\{\delta_ih(X_i;\theta)-\int_0^\infty h(t;\theta) I(X_i\geq t)\lambda(t;\theta)\dd t\right\}\]</span>
+<li><strong>Score function</strong> <span class="math display">\[\frac{\partial}{\partial\theta} l_n(\theta)=n^{-1}\sum_{i=1}^n \left\{\delta_ih(X_i;\theta)-\int_0^\infty h(t;\theta) I(X_i\geq t)\lambda(t;\theta)\dd t\right\}\]</span>
 <ul>
 <li>where <span class="math inline">\(h(t;\theta)=\frac{\partial}{\partial\theta}\log\lambda(t;\theta)\)</span> (hazard score function)</li>
 <li>Solve <span class="math inline">\(\frac{\partial}{\partial\theta} l_n(\hat\theta)=0\)</span> to obtain maximum likelihood estimator (MLE) <span class="math inline">\(\hat\theta\)</span></li>
@@ -302,7 +294,7 @@ l_n(\theta)&amp;= n^{-1}\sum_{i=1}^n\log p(X_i, \delta_i)\\
 <li><strong>Example</strong>: exponential distribution <span class="math inline">\(\lambda(t; \theta) = \lambda\)</span>
 <ul>
 <li><span class="math inline">\(h(t;\theta) =\lambda^{-1}\)</span></li>
-<li>Solving score equation to obtain (in general, use Newton-Raphson algorithm) <span class="math display">\[\hat\lambda=\frac{\sum_{i=1}^n\delta_i}{\sum_{i=1}^n X_i}\]</span></li>
+<li>Closed-form solution (Newton-Raphson algorithm in general) <span class="math display">\[\hat\lambda=\frac{\sum_{i=1}^n\delta_i}{\sum_{i=1}^n X_i}\]</span></li>
 </ul></li>
 </ul>
 </section></section>
@@ -314,12 +306,12 @@ l_n(\theta)&amp;= n^{-1}\sum_{i=1}^n\log p(X_i, \delta_i)\\
 <section id="stochastic-integration" class="slide level2">
 <h2>Stochastic Integration</h2>
 <ul>
-<li><p><strong>Transformation</strong> by some <span class="math inline">\(h(\cdot)\)</span></p>
+<li><p><strong>Transformation</strong> of <span class="math inline">\(T\)</span> by some <span class="math inline">\(h(\cdot)\)</span></p>
 <ul>
 <li><span class="math inline">\(h(T)\)</span> if <span class="math inline">\(T\)</span> is <em>observed</em> to lie in <span class="math inline">\([0, t]\)</span></li>
 <li>0 otherwise</li>
+<li>I.e., <span class="math inline">\(\delta I(X\leq t) h(X)\)</span></li>
 </ul></li>
-<li><p>Clearly, this is <span class="math inline">\(\delta I(X\leq t) h(X)\)</span></p></li>
 <li><p><strong>Compact notation</strong> <span class="math display">\[\delta I(X\leq t) h(X) = \int_0^t h(u)\dd N(u)\]</span></p>
 <ul>
 <li><span class="math inline">\(\dd N(u) = 1\)</span> only if <span class="math inline">\(\delta = 1\)</span> and <span class="math inline">\(T= u\in[0, t]\)</span></li>
@@ -330,13 +322,13 @@ l_n(\theta)&amp;= n^{-1}\sum_{i=1}^n\log p(X_i, \delta_i)\\
 <section id="stochastic-integration-examples" class="slide level2">
 <h2>Stochastic Integration: Examples</h2>
 <ul>
-<li>Log-likelihood <span class="math display">\[
+<li><strong>Log-likelihood</strong> <span class="math display">\[
 l_n(\theta)=n^{-1}\sum_{i=1}^n\left\{\int_0^\infty \log\lambda(t;\theta)\dd N_i(t)-\int_0^\infty I(X_i\geq t)\lambda(t;\theta)\dd t\right\}
 \]</span>
 <ul>
 <li><span class="math inline">\(N_i(t)= I(X_i\leq t, \delta_i =1)\)</span>, i.e., <span class="math inline">\(N(t)\)</span> on subject <span class="math inline">\(i\)</span></li>
 </ul></li>
-<li>Score (subject-level) <span class="math display">\[
+<li><strong>Score</strong> (subject-level) <span class="math display">\[
 \begin{align}
 \dot l(\theta)&amp;=\int_0^\infty h(t;\theta)\dd N(t)-\int_0^\infty h(t;\theta) I(X\geq t)\dd\Lambda(t;\theta)\\
 &amp;=\int_0^\infty h(t;\theta)\left\{\dd N(t)-I(X\geq t)\dd\Lambda(t;\theta)\right\}
@@ -347,7 +339,7 @@ l_n(\theta)=n^{-1}\sum_{i=1}^n\left\{\int_0^\infty \log\lambda(t;\theta)\dd N_i(
 <section id="martingale-definition" class="slide level2">
 <h2>Martingale: Definition</h2>
 <ul>
-<li>In previous score example, <span class="math display">\[\dot l(\theta) = \int_0^\infty h(t;\theta)\dd M(t;\ \theta)\]</span>
+<li><strong>Score re-expression</strong> <span class="math display">\[\dot l(\theta) = \int_0^\infty h(t;\theta)\dd M(t;\ \theta)\]</span>
 <ul>
 <li><span class="math inline">\(\dd M(t;\theta)=\dd N(t) - I(X\geq t)\dd\Lambda(t;\theta)\)</span></li>
 </ul></li>
@@ -381,7 +373,7 @@ l_n(\theta)=n^{-1}\sum_{i=1}^n\left\{\int_0^\infty \log\lambda(t;\theta)\dd N_i(
 <section id="martingale-derivation" class="slide level2">
 <h2>Martingale: Derivation</h2>
 <ul>
-<li>Consider not-at-risk <span class="math inline">\((X &lt; t)\)</span> and at-risk <span class="math inline">\((X\geq t)\)</span> separately: <span class="math display">\[
+<li><strong>Two scenarios</strong>: not-at-risk <span class="math inline">\((X &lt; t)\)</span> vs at-risk <span class="math inline">\((X\geq t)\)</span> <span class="math display">\[
 \begin{align}
 E\{\dd N(t)\mid\mathcal H(t-)\}&amp;=I(X&lt;t)E\{\dd N(t)\mid X&lt;t, \mathcal H(t-)\}\notag\\
 &amp;\hspace{15mm}+I(X\geq t)E\{\dd N(t)\mid X\geq t, \mathcal H(t-)\}\notag\\
@@ -415,7 +407,7 @@ E\{\dd M(t)\dd M(s)\}=E\left[\dd M(t)E\{\dd M(s)\mid\mathcal H(s-)\}\right]
 <section id="martingale-integral" class="slide level2">
 <h2>Martingale Integral</h2>
 <ul>
-<li>Many centered statistic take the form <span class="math display">\[
+<li><strong><em>Centered</em> statistics</strong> take the form <span class="math display">\[
 \sum_{i=1}^n\int_0^t h(u)\dd M_i(u)
 \]</span>
 <ul>
@@ -445,11 +437,11 @@ E\left\{\int_0^t h(u)\dd M(u)\right\}^2 \stackrel{\mbox{UCI}}{=}\int_0^t h(u)^2E
 <section id="martingale-integral-example" class="slide level2">
 <h2>Martingale Integral: Example</h2>
 <ul>
-<li>Score function <span class="math display">\[
+<li><strong>Score function</strong> <span class="math display">\[
 \dot l(\theta) = \int_0^\infty h(t;\theta)\dd M(t; \theta)
 \]</span>
 <ul>
-<li>Information <span class="math display">\[
+<li><strong>Information</strong> <span class="math display">\[
 \mathcal I(\theta) = E\{\dot l(\theta)^2\} =
 \int_0^\infty h(t;\theta)^2\pr(X\geq t)\dd\Lambda(t;\theta)
 \]</span></li>
@@ -474,6 +466,7 @@ E\left\{\int_0^t h(u)\dd M(u)\right\}^2 \stackrel{\mbox{UCI}}{=}\int_0^t h(u)^2E
 <li>More parametric families in KP (2002) and KM (2003)
 <ul>
 <li>(Inverse) Gamma; Log-normal/logistic; Gompertz; Generalized <span class="math inline">\(F\)</span></li>
+<li>Notes of textbook</li>
 </ul></li>
 <li>Martingale first introduced in survival analysis by O. O. Aalen (1975, 1978)
 <ul>

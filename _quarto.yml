@@ -58,6 +58,7 @@ format:
     toc-expand: true
     linkcolor: "#C5050C"
     backgroundcolor: "#FFFFFF"
+    math: mathjax
 
     
 editor: visual

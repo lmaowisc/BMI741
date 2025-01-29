@@ -135,6 +135,43 @@ legend(1, 0.2, c("Kaplan-Meier curve", "95% Confidence limits"),
        lty = 1:2, lwd = 2)
 
 
+###################################################
+# Table 3.4
+###########################################
+# install.packages("gtsummary")
+library(gtsummary)
+
+# A single-group KM model
+obj <- survfit(Surv(time, status) ~ 1, data = rats.rx)
+
+# 1) Summaries at specific times
+tbl_time <- tbl_survfit(
+  x = obj,
+  times = seq(40, 100, by = 20),
+  label_header = "{time} days"
+)
+
+tbl_time
+
+# install.packages("ggsurvfit")
+library(ggsurvfit)
+obj <- survfit(Surv(time, status) ~ 1, data = rats.rx)
+
+# Create a KM plot with confidence intervals and an at-risk table
+ggsurvfit(obj) +
+  add_confidence_interval() +  # shaded 95% CI region
+  add_risktable() +  # Show risk table 
+  scale_x_continuous(breaks= seq(0, 100, by = 20)) + # x-axis breaks
+  ylim(0, 1) + # y-axis limits
+  labs(
+    x = "Time (days)",
+    y = "Tumor-free probabilities"
+  ) +
+  theme_minimal()
+
+ggsave("images//rats_KM_gg.png", width = 7.5, height = 4)
+ggsave("images//rats_KM_gg.eps", device = cairo_ps, width = 7.5, height = 4)
+
 #################################################
 #   log-rank test for rat study
 #   comparing treatment and control

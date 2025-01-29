@@ -17,9 +17,12 @@
   font-variant: small-caps
 }
 
+.math.inline .MathJax  {
+  font-size: 100% !important;
+}
 
 .MathJax_Display {
-  font-size: 75% !important; /* Adjust size for display math */
+  font-size: 70% !important; /* Adjust size for display math */
   line-height: 1.2;          /* Ensure proper spacing */
 }
 
