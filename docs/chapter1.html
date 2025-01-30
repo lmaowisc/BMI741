@@ -341,12 +341,12 @@ window.Quarto = {
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">###############################################################################</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Chapter 1 R Code: Figure 1.2 and Table 1.11</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Chapter 1 R Code: Figure 1.2 and Table 1.12</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This script generates:</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  1. Figure 1.2: Demonstration of proper (Kaplan–Meier) vs. </span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     improper (event-imputation, complete-case) survival estimates.</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  2. Table 1.11: Baseline characteristics for the German Breast Cancer (GBC) study.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  2. Table 1.12: Baseline characteristics for the German Breast Cancer (GBC) study.</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># It also computes event rates (death, composite event) for each hormone group.</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">###############################################################################</span></span>
@@ -420,7 +420,7 @@ window.Quarto = {
 <span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(obj2_cc<span class="sc">$</span>t, obj2_cc<span class="sc">$</span>S, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
 <span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="co"># --------------------------------------------------------</span></span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Table 1.11: Baseline Characteristics by Hormone Group</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Table 1.12: Baseline Characteristics by Hormone Group</span></span>
 <span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="co"># --------------------------------------------------------</span></span>
 <span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="co"># (a) Define helper functions for summarizing quantitative and categorical variables</span></span>
@@ -486,7 +486,7 @@ window.Quarto = {
 <span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Mean.IQR.by.trt</span>(<span class="at">y =</span> gbc_mort<span class="sc">$</span>estrg, <span class="at">trt =</span> gbc_mort<span class="sc">$</span>hormone)</span>
 <span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">=== Table 1.11: Baseline Characteristics by Hormone Group ===</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">=== Table 1.12: Baseline Characteristics by Hormone Group ===</span><span class="sc">\n</span><span class="st">"</span>)</span>
 <span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">noquote</span>(table1_data))</span>
 <span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------------------------------------</span></span>
@@ -711,7 +711,7 @@ window.Quarto = {
 </section>
 <section id="table-1" class="level3">
 <h3 class="anchored" data-anchor-id="table-1">Table 1</h3>
-<p>Let’s recreate Table 1.11, that is, “Table 1” for the German Breast Cancer study. Because the summary statistics are grouped by hormone status and overall, we add a replica to the original data where <code>hormone</code> is set to “Overall”, thereby creating three levels: “No hormone”, “Hormone”, “Overall”. Then we can use <code>summarize()</code> to calculate the summary statistics within each level of <code>hormone</code> after <code>group_by(hormone)</code>.</p>
+<p>Let’s recreate Table 1.12, that is, “Table 1” for the German Breast Cancer study. Because the summary statistics are grouped by hormone status and overall, we add a replica to the original data where <code>hormone</code> is set to “Overall”, thereby creating three levels: “No hormone”, “Hormone”, “Overall”. Then we can use <code>summarize()</code> to calculate the summary statistics within each level of <code>hormone</code> after <code>group_by(hormone)</code>.</p>
 <p>To do so, we will define three summary functions:</p>
 <ul>
 <li>One calculating median (IQR) for a quantitative variable;</li>
@@ -1043,7 +1043,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
 </div>
 <section id="using-gtsummary" class="level4">
 <h4 class="anchored" data-anchor-id="using-gtsummary">Using <code>gtsummary</code></h4>
-<p>There is a simpler way to create Table 1.11 using the <code>gtsummary</code> package.</p>
+<p>There is a simpler way to create Table 1.12 using the <code>gtsummary</code> package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary) </span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(labelled) <span class="co"># For labelling variables</span></span>
@@ -1083,23 +1083,23 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
 <span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>tbl1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="duealpikoi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#duealpikoi table {
+<div id="qlpsgeratc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qlpsgeratc table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#duealpikoi thead, #duealpikoi tbody, #duealpikoi tfoot, #duealpikoi tr, #duealpikoi td, #duealpikoi th {
+#qlpsgeratc thead, #qlpsgeratc tbody, #qlpsgeratc tfoot, #qlpsgeratc tr, #qlpsgeratc td, #qlpsgeratc th {
   border-style: none;
 }
 
-#duealpikoi p {
+#qlpsgeratc p {
   margin: 0;
   padding: 0;
 }
 
-#duealpikoi .gt_table {
+#qlpsgeratc .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1125,12 +1125,12 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   border-left-color: #D3D3D3;
 }
 
-#duealpikoi .gt_caption {
+#qlpsgeratc .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#duealpikoi .gt_title {
+#qlpsgeratc .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1142,7 +1142,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   border-bottom-width: 0;
 }
 
-#duealpikoi .gt_subtitle {
+#qlpsgeratc .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1154,7 +1154,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   border-top-width: 0;
 }
 
-#duealpikoi .gt_heading {
+#qlpsgeratc .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1166,13 +1166,13 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   border-right-color: #D3D3D3;
 }
 
-#duealpikoi .gt_bottom_border {
+#qlpsgeratc .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#duealpikoi .gt_col_headings {
+#qlpsgeratc .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1187,7 +1187,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   border-right-color: #D3D3D3;
 }
 
-#duealpikoi .gt_col_heading {
+#qlpsgeratc .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1207,7 +1207,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   overflow-x: hidden;
 }
 
-#duealpikoi .gt_column_spanner_outer {
+#qlpsgeratc .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1219,15 +1219,15 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   padding-right: 4px;
 }
 
-#duealpikoi .gt_column_spanner_outer:first-child {
+#qlpsgeratc .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#duealpikoi .gt_column_spanner_outer:last-child {
+#qlpsgeratc .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#duealpikoi .gt_column_spanner {
+#qlpsgeratc .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1239,11 +1239,11 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   width: 100%;
 }
 
-#duealpikoi .gt_spanner_row {
+#qlpsgeratc .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#duealpikoi .gt_group_heading {
+#qlpsgeratc .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1269,7 +1269,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   text-align: left;
 }
 
-#duealpikoi .gt_empty_group_heading {
+#qlpsgeratc .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1284,15 +1284,15 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   vertical-align: middle;
 }
 
-#duealpikoi .gt_from_md > :first-child {
+#qlpsgeratc .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#duealpikoi .gt_from_md > :last-child {
+#qlpsgeratc .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#duealpikoi .gt_row {
+#qlpsgeratc .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1311,7 +1311,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   overflow-x: hidden;
 }
 
-#duealpikoi .gt_stub {
+#qlpsgeratc .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1324,7 +1324,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   padding-right: 5px;
 }
 
-#duealpikoi .gt_stub_row_group {
+#qlpsgeratc .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1338,15 +1338,15 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   vertical-align: top;
 }
 
-#duealpikoi .gt_row_group_first td {
+#qlpsgeratc .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#duealpikoi .gt_row_group_first th {
+#qlpsgeratc .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#duealpikoi .gt_summary_row {
+#qlpsgeratc .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1356,16 +1356,16 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   padding-right: 5px;
 }
 
-#duealpikoi .gt_first_summary_row {
+#qlpsgeratc .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#duealpikoi .gt_first_summary_row.thick {
+#qlpsgeratc .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#duealpikoi .gt_last_summary_row {
+#qlpsgeratc .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1375,7 +1375,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   border-bottom-color: #D3D3D3;
 }
 
-#duealpikoi .gt_grand_summary_row {
+#qlpsgeratc .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1385,7 +1385,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   padding-right: 5px;
 }
 
-#duealpikoi .gt_first_grand_summary_row {
+#qlpsgeratc .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1395,7 +1395,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   border-top-color: #D3D3D3;
 }
 
-#duealpikoi .gt_last_grand_summary_row_top {
+#qlpsgeratc .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1405,11 +1405,11 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   border-bottom-color: #D3D3D3;
 }
 
-#duealpikoi .gt_striped {
+#qlpsgeratc .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#duealpikoi .gt_table_body {
+#qlpsgeratc .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1418,7 +1418,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   border-bottom-color: #D3D3D3;
 }
 
-#duealpikoi .gt_footnotes {
+#qlpsgeratc .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1432,7 +1432,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   border-right-color: #D3D3D3;
 }
 
-#duealpikoi .gt_footnote {
+#qlpsgeratc .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1441,7 +1441,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   padding-right: 5px;
 }
 
-#duealpikoi .gt_sourcenotes {
+#qlpsgeratc .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1455,7 +1455,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   border-right-color: #D3D3D3;
 }
 
-#duealpikoi .gt_sourcenote {
+#qlpsgeratc .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1463,63 +1463,63 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
   padding-right: 5px;
 }
 
-#duealpikoi .gt_left {
+#qlpsgeratc .gt_left {
   text-align: left;
 }
 
-#duealpikoi .gt_center {
+#qlpsgeratc .gt_center {
   text-align: center;
 }
 
-#duealpikoi .gt_right {
+#qlpsgeratc .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#duealpikoi .gt_font_normal {
+#qlpsgeratc .gt_font_normal {
   font-weight: normal;
 }
 
-#duealpikoi .gt_font_bold {
+#qlpsgeratc .gt_font_bold {
   font-weight: bold;
 }
 
-#duealpikoi .gt_font_italic {
+#qlpsgeratc .gt_font_italic {
   font-style: italic;
 }
 
-#duealpikoi .gt_super {
+#qlpsgeratc .gt_super {
   font-size: 65%;
 }
 
-#duealpikoi .gt_footnote_marks {
+#qlpsgeratc .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#duealpikoi .gt_asterisk {
+#qlpsgeratc .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#duealpikoi .gt_indent_1 {
+#qlpsgeratc .gt_indent_1 {
   text-indent: 5px;
 }
 
-#duealpikoi .gt_indent_2 {
+#qlpsgeratc .gt_indent_2 {
   text-indent: 10px;
 }
 
-#duealpikoi .gt_indent_3 {
+#qlpsgeratc .gt_indent_3 {
   text-indent: 15px;
 }
 
-#duealpikoi .gt_indent_4 {
+#qlpsgeratc .gt_indent_4 {
   text-indent: 20px;
 }
 
-#duealpikoi .gt_indent_5 {
+#qlpsgeratc .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1615,6 +1615,7 @@ Table&nbsp;1: Patient characteristics in the German Breast Cancer study.
 </div>
 </div>
 <p>However, we still need to “manually” calculate the event rates.</p>
+
 
 
 

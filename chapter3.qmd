@@ -179,9 +179,90 @@ ggsave("images//rats_KM_gg.eps", device = cairo_ps, width = 7.5, height = 4)
 #dataset
 head(rats)
 
-# log-rank test on treatment difference
-survdiff(Surv(time,status)~ rx+ strata(sex),
-         data=rats, rho=0)
+# Log-rank test on treatment difference in tumorigenicity
+obj <- survdiff(Surv(time,status)~ rx + strata(sex),
+          data = rats, rho = 0)
+# Print out test results
+obj
+#> Call:
+#> survdiff(formula = Surv(time, status) ~ rx + strata(sex), data = rats, 
+#>     rho = 0)
+#> 
+#>        N Observed Expected (O-E)^2/E (O-E)^2/V
+#> rx=0 200       21     28.9      2.16      6.99
+#> rx=1 100       21     13.1      4.77      6.99
+#> 
+#>  Chisq= 7  on 1 degrees of freedom, p= 0.008 
+ 
+ 
+obj$pvalue
+
+####
+# Tidy tools
+#
+
+# A two-group KM model
+obj <- survfit(Surv(time, status) ~ rx, data = rats)
+
+# Summaries at specific times with labeled treatment groups
+tbl_surv <- tbl_survfit(
+  x = obj,                         # Provide the fitted survfit object
+  times = seq(40, 100, by = 20),   # Time points for survival rates
+  label_header = "{time} days",    # Column label: "xx days"
+  label = list(rx ~ "Treatment")   # Rename 'rx' to 'Treatment'
+)
+
+# Print out the table
+tbl_surv
+
+## graphics
+
+# Load required packages
+library(ggsurvfit)  # For Kaplan-Meier survival curves
+library(ggplot2)    # For plot customization
+
+# Use survfit2 as recommended by ggsurvfit
+obj2 <- survfit2(Surv(time, status) ~ rx, data = rats)
+
+
+# Create a KM plot with confidence intervals and an at-risk table
+ggsurvfit(obj2, linetype_aes = TRUE, linewidth = 1) +  # Use line types instead of colors
+  add_pvalue(caption = "Log-rank {p.value}") +  # Add log-rank test p-value
+  add_risktable(                    
+    risktable_stats = "n.risk",  # Include only numbers at risk
+    theme = list(
+      theme_risktable_default(),  # Apply default risk table theme
+      scale_y_discrete(labels = c('Drug', 'Control'))  # Properly label treatment groups
+    )
+  ) +  
+  labs(
+    x = "Time (days)",  # Label for X-axis
+    y = "Tumor-free probabilities"  # Label for Y-axis
+  ) +
+  scale_linetype_manual(
+    values = c(2, 1),  # Use different line types (dashed for Control, solid for Drug)
+    labels = c("Control", "Drug")  # Label groups in the legend
+  ) +  
+  scale_color_discrete(
+    labels = c("Control", "Drug")  # Ensure correct labeling of groups
+  ) +  
+  # scale_x_continuous(breaks = seq(0, 100, by = 20), expand = c(0, 0.01)) +  # X-axis breaks (commented out)
+  scale_y_continuous(
+    limits = c(0, 1),  # Ensure Y-axis covers full probability range
+    breaks = seq(0, 1, by = 0.2),  # Set Y-axis tick marks at 0, 0.2, ..., 1
+    expand = c(0, 0)  # Prevent extra padding on Y-axis
+  ) +  
+  theme_classic() +
+  theme(
+    legend.position = "top", # Move legend to the top
+    legend.key.width = unit(1, "cm"), # Make legend key longer
+    panel.grid.major.y = element_line(), # Add horizontal grid lines
+    legend.text = element_text(size = 10), # Increase legend text size
+    caption = element_text(size = 10)  # Increase caption text size
+  )
+
+ggsave("images//rats_KM_gg2.png", width = 7, height = 5)
+ggsave("images//rats_KM_gg2.eps", device = cairo_ps, width = 7, height = 5)
 
 ##############################################
 # GBC study: Figure 3.7 and related test results 

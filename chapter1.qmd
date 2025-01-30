@@ -38,12 +38,12 @@ These fundamental ideas---awareness of different event structures, accurate hand
 #| eval: false
 
 ###############################################################################
-# Chapter 1 R Code: Figure 1.2 and Table 1.11
+# Chapter 1 R Code: Figure 1.2 and Table 1.12
 # 
 # This script generates:
 #  1. Figure 1.2: Demonstration of proper (Kaplan–Meier) vs. 
 #     improper (event-imputation, complete-case) survival estimates.
-#  2. Table 1.11: Baseline characteristics for the German Breast Cancer (GBC) study.
+#  2. Table 1.12: Baseline characteristics for the German Breast Cancer (GBC) study.
 #
 # It also computes event rates (death, composite event) for each hormone group.
 ###############################################################################
@@ -117,7 +117,7 @@ lines(obj2_imp$t, obj2_imp$S, lty = 2, lwd = 2)
 lines(obj2_cc$t, obj2_cc$S, lty = 3, lwd = 2)
 
 # --------------------------------------------------------
-# 3. Table 1.11: Baseline Characteristics by Hormone Group
+# 3. Table 1.12: Baseline Characteristics by Hormone Group
 # --------------------------------------------------------
 
 # (a) Define helper functions for summarizing quantitative and categorical variables
@@ -183,7 +183,7 @@ table1_data <- rbind(
   Mean.IQR.by.trt(y = gbc_mort$estrg, trt = gbc_mort$hormone)
 )
 
-cat("\n=== Table 1.11: Baseline Characteristics by Hormone Group ===\n")
+cat("\n=== Table 1.12: Baseline Characteristics by Hormone Group ===\n")
 print(noquote(table1_data))
 
 # -------------------------------------------------------
@@ -429,7 +429,7 @@ Prettier than Fig. 1.2?
 
 ### Table 1
 
-Let's recreate Table 1.11, that is, "Table 1" for the German Breast Cancer study. Because the summary statistics are grouped by hormone status and overall, we add a replica to the original data where `hormone` is set to "Overall", thereby creating three levels: "No hormone", "Hormone", "Overall". Then we can use `summarize()` to calculate the summary statistics within each level of `hormone` after `group_by(hormone)`.
+Let's recreate Table 1.12, that is, "Table 1" for the German Breast Cancer study. Because the summary statistics are grouped by hormone status and overall, we add a replica to the original data where `hormone` is set to "Overall", thereby creating three levels: "No hormone", "Hormone", "Overall". Then we can use `summarize()` to calculate the summary statistics within each level of `hormone` after `group_by(hormone)`.
 
 To do so, we will define three summary functions:
 
@@ -699,7 +699,7 @@ kable(tabone)
 
 #### Using `gtsummary`
 
-There is a simpler way to create Table 1.11 using the `gtsummary` package.
+There is a simpler way to create Table 1.12 using the `gtsummary` package.
 
 ```{r}
 library(gtsummary) 
