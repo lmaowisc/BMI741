@@ -361,6 +361,8 @@ l_n(\theta)=n^{-1}\sum_{i=1}^n\left\{\int_0^\infty \log\lambda(t;\theta)\dd N_i(
 \mathcal H(t) =\{N(u), N_C(u):0\leq u\leq t\}
 \]</span>
 <ul>
+<li><span class="math inline">\(N_C(u) = I(X\leq u, delta = 0)\)</span>: censoring process<br>
+</li>
 <li><span class="math inline">\(\mathcal H(t-) =\)</span> Data prior to <span class="math inline">\(t\)</span></li>
 </ul></li>
 <li>Show <span class="math display">\[E\{\dd N(t)\mid\mathcal H(t-)\} = I(X\geq t)\dd\Lambda(t)\]</span>
@@ -407,7 +409,7 @@ E\{\dd M(t)\dd M(s)\}=E\left[\dd M(t)E\{\dd M(s)\mid\mathcal H(s-)\}\right]
 <section id="martingale-integral" class="slide level2">
 <h2>Martingale Integral</h2>
 <ul>
-<li><strong><em>Centered</em> statistics</strong> take the form <span class="math display">\[
+<li><strong><em>Centered</em></strong> <strong>statistics</strong> take the form <span class="math display">\[
 \sum_{i=1}^n\int_0^t h(u)\dd M_i(u)
 \]</span>
 <ul>

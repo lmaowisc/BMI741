@@ -29,44 +29,40 @@ include-in-header:
 
 ## Outcome Event: Notation
 
-- **Time to outcome event** (latent, w.o. censoring): $T$
-  - Cumulative distribution function (cdf): $F(t)={\rm pr}(T\leq t)$
-  - Survival function: $S(t) = 1- F(t) = {\rm pr}(T > t)$
-  - Density function: $f(t) = \d F(t)/\d t = - \d S(t)/ \d t$
-
-- **Leibniz notation**
-  - $\d F(t) = f(t)\d t = \pr(t \leq T < t + \d t)$: infinitesimal (marginal) event rate (i.e., incidence) over $[t, t + \d t)$
+-   **Time to outcome event** (latent, w.o. censoring): $T$
+    -   Cumulative distribution function (cdf): $F(t)={\rm pr}(T\leq t)$
+    -   Survival function: $S(t) = 1- F(t) = {\rm pr}(T > t)$
+    -   Density function: $f(t) = \d F(t)/\d t = - \d S(t)/ \d t$
+-   **Leibniz notation**
+    -   $\d F(t) = f(t)\d t = \pr(t \leq T < t + \d t)$: infinitesimal (marginal) event rate (i.e., incidence) over $[t, t + \d t)$
 
 ![](images/basic_dens.png){fig-align="center" width="48%"}
 
----
+------------------------------------------------------------------------
 
 ## Outcome Event: Hazard Function
 
-- **Hazard rate**: conditional incidence given at risk $$\lambda(t)\dd t=\pr(t\leq T<t+\dd t\mid T\geq t)=\frac{\dd F(t)}{S(t-)}$$
-  - So $\lambda(t) = f(t)/S(t-)$
-
-- **Density vs hazard** functions
+-   **Hazard rate**: conditional incidence given at risk $$\lambda(t)\dd t=\pr(t\leq T<t+\dd t\mid T\geq t)=\frac{\dd F(t)}{S(t-)}$$
+    -   So $\lambda(t) = f(t)/S(t-)$
+-   **Density vs hazard** functions
 
 ![](images/basic_dens_haz.png){fig-align="center" width="55%"}
 
----
+------------------------------------------------------------------------
 
 ## Outcome Event: Distributions
 
-- **Relationship**
-  - $\lambda(t)\d t = - \d S(t)/S(t -) = -\d\log S(t)$
-  - $S(t) = \exp\{-\Lambda(t)\}$, where $\Lambda(t)=\int_0^t \lambda(u)\d u$ (cumulative hazard)
-
-- **Examples**
-  - **Exponential distribution**: $\lambda(t)\equiv \lambda > 0$, $S(t)=\exp(-\lambda t)$
-    - Constant risk, also "memoryless": $\pr(T > t + u\mid T > t) = \pr(T > u)$
-  - **Weibull distribution**: $\lambda(t;\alpha,\gamma)=\alpha\gamma^{-\alpha} t^{\alpha-1}$ with $\gamma, \alpha>0$
-    - $0 < \alpha < 1$: risk $\downarrow$ (infant mortality)
-    - $\alpha > 1$: risk $\uparrow$ (aging effect)
-    - $\alpha = 1$: Exponential (constant risk)
-    - $\gamma$: scale parameter such that $E(T)\propto \gamma$
-
+-   **Relationship**
+    -   $\lambda(t)\d t = - \d S(t)/S(t -) = -\d\log S(t)$
+    -   $S(t) = \exp\{-\Lambda(t)\}$, where $\Lambda(t)=\int_0^t \lambda(u)\d u$ (cumulative hazard)
+-   **Examples**
+    -   **Exponential distribution**: $\lambda(t)\equiv \lambda > 0$, $S(t)=\exp(-\lambda t)$
+        -   Constant risk, also "memoryless": $\pr(T > t + u\mid T > t) = \pr(T > u)$
+    -   **Weibull distribution**: $\lambda(t;\alpha,\gamma)=\alpha\gamma^{-\alpha} t^{\alpha-1}$ with $\gamma, \alpha>0$
+        -   $0 < \alpha < 1$: risk $\downarrow$ (infant mortality)
+        -   $\alpha > 1$: risk $\uparrow$ (aging effect)
+        -   $\alpha = 1$: Exponential (constant risk)
+        -   $\gamma$: scale parameter such that $E(T)\propto \gamma$
 
 ## Outcome Event: The Weibull
 
@@ -110,7 +106,7 @@ $$C\indep T$$
 
 ## Score Function
 
--   **Score function**  $$\frac{\partial}{\partial\theta} l_n(\theta)=n^{-1}\sum_{i=1}^n \left\{\delta_ih(X_i;\theta)-\int_0^\infty h(t;\theta) I(X_i\geq t)\lambda(t;\theta)\dd t\right\}$$
+-   **Score function** $$\frac{\partial}{\partial\theta} l_n(\theta)=n^{-1}\sum_{i=1}^n \left\{\delta_ih(X_i;\theta)-\int_0^\infty h(t;\theta) I(X_i\geq t)\lambda(t;\theta)\dd t\right\}$$
     -   where $h(t;\theta)=\frac{\partial}{\partial\theta}\log\lambda(t;\theta)$ (hazard score function)
     -   Solve $\frac{\partial}{\partial\theta} l_n(\hat\theta)=0$ to obtain maximum likelihood estimator (MLE) $\hat\theta$
 -   **Example**: exponential distribution $\lambda(t; \theta) = \lambda$
@@ -162,6 +158,7 @@ $$C\indep T$$
 -   Data observed up to $t$ $$
     \mathcal H(t) =\{N(u), N_C(u):0\leq u\leq t\}
     $$
+    -   $N_C(u) = I(X\leq u, delta = 0)$: censoring process    
     -   $\mathcal H(t-) =$ Data prior to $t$
 -   Show $$E\{\dd N(t)\mid\mathcal H(t-)\} = I(X\geq t)\dd\Lambda(t)$$
     -   How can the past influence the current incidence (risk)?
@@ -199,7 +196,7 @@ $$C\indep T$$
 
 ## Martingale Integral
 
--   ***Centered* statistics** take the form $$
+-   ***Centered*** **statistics** take the form $$
     \sum_{i=1}^n\int_0^t h(u)\dd M_i(u)
     $$
     -   Weighted sum of the $\dd M_i(u)$

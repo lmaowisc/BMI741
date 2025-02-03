@@ -9,50 +9,27 @@ execute:
 
 Lecture slides [here](chap2.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-
 ## Chapter Summary
 
-Time-to-event data require specialized techniques for analysis.
-These tend to focus on the survival function $S(t)$ and the hazard function $\lambda(t)$
-of the latent (uncensored) event time $T$.
-Some methods rely on parametric models, while others leverage counting processes and martingales 
-for robust inference.
+Time-to-event data require specialized techniques for analysis. These tend to focus on the survival function $S(t)$ and the hazard function $\lambda(t)$ of the latent (uncensored) event time $T$. Some methods rely on parametric models, while others leverage counting processes and martingales for robust inference.
 
 ### Notation and basic quantities
-An outcome event time can be represented either as a random variable $T$ or as a counting process 
-$N^*(t) = I(T \le t)$. The survival function is defined as
-$$
-S(t) = \mathrm{pr}(T > t),
-$$
-while the hazard function $\lambda(t)$ quantifies the instantaneous risk of experiencing the event at time $t$, 
-conditional on survival up to that point. The cumulative hazard function is obtained by integrating 
-$\lambda(t)$ over $[0, t]$:
-$\Lambda(t) = \int_0^t \lambda(u)\,\mathrm{d}u$,
-and relates to $S(t)$ via
-$$
-\Lambda(t) = -\log\bigl\{S(t)\bigr\} \quad\Longleftrightarrow\quad S(t) = \exp\bigl\{-\Lambda(t)\bigr\}.
-$$
-This relationship is central in survival analysis. 
 
-Simple parametric models for $T$ include the exponential, Weibull, Gamma,
-and log-normal distributions, each with distinct hazard functions.
-The exponential model assumes constant hazard, while the Weibull model allows for time-varying
-(but still monotone) hazards.
+An outcome event time can be represented either as a random variable $T$ or as a counting process $N^*(t) = I(T \le t)$. The survival function is defined as $$
+S(t) = \mathrm{pr}(T > t),
+$$ while the hazard function $\lambda(t)$ quantifies the instantaneous risk of experiencing the event at time $t$, conditional on survival up to that point. The cumulative hazard function is obtained by integrating $\lambda(t)$ over $[0, t]$: $\Lambda(t) = \int_0^t \lambda(u)\,\mathrm{d}u$, and relates to $S(t)$ via $$
+\Lambda(t) = -\log\bigl\{S(t)\bigr\} \quad\Longleftrightarrow\quad S(t) = \exp\bigl\{-\Lambda(t)\bigr\}.
+$$ This relationship is central in survival analysis.
+
+Simple parametric models for $T$ include the exponential, Weibull, Gamma, and log-normal distributions, each with distinct hazard functions. The exponential model assumes constant hazard, while the Weibull model allows for time-varying (but still monotone) hazards.
 
 ### Observed data and likelihood
 
-In practice, the event time is subject to censoring by time $C$.
-As a result, we only observe $X = \min(T, C)$, along with the event indicator
-$\delta = I(T \le C)$. Under independent censoring, 
-the likelihood function for the observed data $(X, \delta)$
-is given by
-$$
+In practice, the event time is subject to censoring by time $C$. As a result, we only observe $X = \min(T, C)$, along with the event indicator $\delta = I(T \le C)$. Under independent censoring, the likelihood function for the observed data $(X, \delta)$ is given by $$
 p\bigl(X,\delta\bigr)
 \;=\;
 \lambda\bigl(X\bigr)^{\delta}\,S\bigl(X\bigr).
-$$
-This means that, for a sample of size $n$, the log-likelihood is
-$$
+$$ This means that, for a sample of size $n$, the log-likelihood is $$
 \ell_n(\theta) =  
 n^{-1}\sum_{i=1}^n
 \Bigl\{
@@ -61,44 +38,25 @@ n^{-1}\sum_{i=1}^n
   \int_{0}^{\infty} 
     I\bigl(X_i \ge t\bigr)\,\lambda\bigl(t;\theta\bigr)\,\mathrm{d}t.
 \Bigr\}
-$$
-where $\lambda(t;\theta)$ is the hazard function parametrized by $\theta$.
-We can use this general expression for the log-likelihood to derive maximum likelihood
-estimator for any parametric models.
+$$ where $\lambda(t;\theta)$ is the hazard function parametrized by $\theta$. We can use this general expression for the log-likelihood to derive maximum likelihood estimator for any parametric models.
 
 ### Stochastic integrals and martingales
- To count the observed event under censoring, define
-$N(t) = N^*(t\wedge C)$, where $x\wedge y = \min(x, y)$.
-The step function $N(t)$ takes a jump of size 1, i.e., $\mathrm{d}N(t)=1$,
-at $t = X$ if $\delta = 1$; it stays flat if $\delta = 0$. Hence, 
-any function of the form $\delta h(X)$ can be re-written as 
-a stochastic integral $\int_0^\infty h(t)\mathrm{d}N(t)$.
 
-If we consider $\mathrm{d}N(t)$ as the Bernoulli response of event occurrence at time $t$,
-then we can decompose it into $\mathrm{d}N(t) = I(X\ge t)\lambda(t)\mathrm{d} t + \mathrm{d}M(t)$,
-where
-$$
+To count the observed event under censoring, define $N(t) = N^*(t\wedge C)$, where $x\wedge y = \min(x, y)$. The step function $N(t)$ takes a jump of size 1, i.e., $\mathrm{d}N(t)=1$, at $t = X$ if $\delta = 1$; it stays flat if $\delta = 0$. Hence, any function of the form $\delta h(X)$ can be re-written as a stochastic integral $\int_0^\infty h(t)\mathrm{d}N(t)$.
+
+If we consider $\mathrm{d}N(t)$ as the Bernoulli response of event occurrence at time $t$, then we can decompose it into $\mathrm{d}N(t) = I(X\ge t)\lambda(t)\mathrm{d} t + \mathrm{d}M(t)$, where $$
 \mathrm{d}M(t)
 \;=\;
 \underbrace{\mathrm{d}N(t)}_{\text{Observed}} 
 \;-\;
 \underbrace{I\bigl(X \ge t\bigr)\,\lambda(t)\,\mathrm{d}t}_{\text{Expectation given data
 prior to $t$}}.
-$$
-is the martingale increment. 
+$$ is the martingale increment.
 
-The martingale property of $M(t)$ implies that the expectation of $\mathrm{d}M(t)$, given the event history up to time $t$, is zero. It also implies that the increments at different times are uncorrelated. This property of uncorrelated increments simplifies the variance calculation for martingale integrals of the form:
-$$
+The martingale property of $M(t)$ implies that the expectation of $\mathrm{d}M(t)$, given the event history up to time $t$, is zero. It also implies that the increments at different times are uncorrelated. This property of uncorrelated increments simplifies the variance calculation for martingale integrals of the form: $$
 \int_0^t h(u)\,\mathrm{d}M(u)
-$$
-Many test statistics, estimators, and score functions can be expressed in the above form, and the  martingale properties facilitate their asymptotic analysis.
+$$ Many test statistics, estimators, and score functions can be expressed in the above form, and the martingale properties facilitate their asymptotic analysis.
 
 ### Conclusion
 
-Although $T$ may not be directly observed, the partial information in $(X, \delta)$ 
-still supports principled inferences about its distribution. Parametric models 
-describe $\lambda(t)$ or $S(t)$ via a likelihood-based approach, while a martingale-based 
-framework captures event processes through residuals and their properties. 
-The latter approach will be utilized extensively in the non- and semi-parametric
-analysis presented in later chapters.
-
+Although $T$ may not be directly observed, the partial information in $(X, \delta)$ still supports principled inferences about its distribution. Parametric models describe $\lambda(t)$ or $S(t)$ via a likelihood-based approach, while a martingale-based framework captures event processes through residuals and their properties. The latter approach will be utilized extensively in the non- and semi-parametric analysis presented in later chapters.

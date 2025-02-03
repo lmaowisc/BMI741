@@ -34,3 +34,9 @@ code.sourceCode {
 .big-code{
   font-size: 120%  
 }
+
+
+/* If needed, you can also target adjacent fragments to ensure no extra spacing */
+.reveal .fragment + .fragment {
+  margin-top: 0 !important;
+}
