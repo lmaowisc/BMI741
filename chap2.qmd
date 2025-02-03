@@ -158,7 +158,7 @@ $$C\indep T$$
 -   Data observed up to $t$ $$
     \mathcal H(t) =\{N(u), N_C(u):0\leq u\leq t\}
     $$
-    -   $N_C(u) = I(X\leq u, delta = 0)$: censoring process    
+    -   $N_C(u) = I(X\leq u, \delta = 0)$: censoring process    
     -   $\mathcal H(t-) =$ Data prior to $t$
 -   Show $$E\{\dd N(t)\mid\mathcal H(t-)\} = I(X\geq t)\dd\Lambda(t)$$
     -   How can the past influence the current incidence (risk)?

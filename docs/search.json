@@ -383,7 +383,7 @@
     "href": "chap2.html#martingale-construction",
     "title": "Applied Survival Analysis",
     "section": "Martingale: Construction",
-    "text": "Martingale: Construction\n\nData observed up to \\(t\\) \\[\n\\mathcal H(t) =\\{N(u), N_C(u):0\\leq u\\leq t\\}\n\\]\n\n\\(N_C(u) = I(X\\leq u, delta = 0)\\): censoring process\n\n\\(\\mathcal H(t-) =\\) Data prior to \\(t\\)\n\nShow \\[E\\{\\dd N(t)\\mid\\mathcal H(t-)\\} = I(X\\geq t)\\dd\\Lambda(t)\\]\n\nHow can the past influence the current incidence (risk)?\nOnly through the at-risk status \\({X\\geq t}\\)"
+    "text": "Martingale: Construction\n\nData observed up to \\(t\\) \\[\n\\mathcal H(t) =\\{N(u), N_C(u):0\\leq u\\leq t\\}\n\\]\n\n\\(N_C(u) = I(X\\leq u, \\delta = 0)\\): censoring process\n\n\\(\\mathcal H(t-) =\\) Data prior to \\(t\\)\n\nShow \\[E\\{\\dd N(t)\\mid\\mathcal H(t-)\\} = I(X\\geq t)\\dd\\Lambda(t)\\]\n\nHow can the past influence the current incidence (risk)?\nOnly through the at-risk status \\({X\\geq t}\\)"
   },
   {
     "objectID": "chap2.html#martingale-derivation",
