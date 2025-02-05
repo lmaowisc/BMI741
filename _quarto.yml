@@ -26,7 +26,7 @@ website:
         contents:
           - chapter1.qmd
           - chapter2.qmd
-          # - chapter3.qmd
+          - chapter3.qmd
           # - chapter4.qmd
           # - chapter5.qmd
           # - chapter6.qmd
