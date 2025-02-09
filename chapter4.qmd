@@ -6,249 +6,386 @@ title: "Chapter 4 - Cox Proportional Hazards Regression"
 
 Lecture slides [here](chap4.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-## Base R Code
+
+## R Code
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 #| eval: false
 
-##################################################################
-# This code generates all numerical results in chapter 4.      ##
-##################################################################
+###############################################################################
+# Chapter 4 R Code
+#
+# This script reproduces all major numerical results in Chapter 4, including:
+#   1. A Cox proportional hazards model on the German Breast Cancer (GBC) study
+#      (Figure 4.2, Table 4.1)
+#   2. Residual analysis and model diagnostics (Figures 4.3–4.6, Tables 4.2–4.4)
+#   3. Cox model with time-varying covariates for Stanford Heart study (Table 4.6)
+###############################################################################
 
 
-###################################################
-# Section 4.2.6 (Figure 4.2)                
-# Cox proportional hazards model on GBC study data
-###################################################
+#==============================================================================
+# (A) Cox Proportional Hazards Model on GBC Data 
+#     (Section 4.2.6, Figure 4.2)
+#==============================================================================
 library(survival)
-##############################################
-# GBC study
-#############################################
-# read in the complete data
+library(tidyverse) # for data manipulation and visualization
+
+#------------------------------------------------------------------------------
+# 1. Read GBC data, subset to first events, set up for Cox PH
+#------------------------------------------------------------------------------
 gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
 
-# subset to first event data
 # Sort the data by time within each id
-o <- order(gbc$id,gbc$time)
+o <- order(gbc$id, gbc$time)
 gbc <- gbc[o,]
-# get the first row for each id
-data.CE <- gbc[!duplicated(gbc$id),]
 
-# set status=1 if status==2 or 1
-data.CE$status <- (data.CE$status>0)+0
+# Keep the first row for each id (first event)
+df <- gbc[!duplicated(gbc$id), ]
 
+# Set status = 1 if status == 2 or 1
+df$status <- (df$status > 0) + 0
 
-# fit the Cox proportional hazards model
-## preparation
+#------------------------------------------------------------------------------
+# 2. Fit the Cox proportional hazards model
+#------------------------------------------------------------------------------
+# Convert categorical variables to factors
+df$hormone <- factor(df$hormone)
+df$meno    <- factor(df$meno)
+df$grade   <- factor(df$grade)
 
-data.CE$hormone <- factor(data.CE$hormone)
-data.CE$meno <- factor(data.CE$meno)
-data.CE$grade <- factor(data.CE$grade)
-  
-obj <- coxph(Surv(time, status)~ hormone + meno + age + size + grade
-           + prog + estrg, data = data.CE)
+# Reduce the scales of prog and estrg by 100
+df$prog  <- df$prog / 100
+df$estrg <- df$estrg / 100
 
-#summarize results
+obj <- coxph(
+  Surv(time, status) ~ hormone + meno + age + size + grade + prog + estrg,
+  data = df
+)
+
+# beta estimates
+obj$coefficients
+
+# variance matrix
+obj$var
+
+# Summarize results
 summary(obj)
 
-# Wald test on tumor grade
-# H_0: beta_5=beta_6=0
-beta_q <- obj$coefficients[5:6]
-Sigma_q <- obj$var[5:6,5:6]
+# Wald test on tumor grade (H_0: beta_grade2 = beta_grade3 = 0)
+beta_q  <- obj$coefficients[5:6]
+Sigma_q <- obj$var[5:6, 5:6]
+chisq2  <- t(beta_q) %*% solve(Sigma_q) %*% beta_q
+pval    <- 1 - pchisq(chisq2, 2)
+pval
 
-#chisq statistic with 2 d.f.
-chisq2 <- t(beta_q) %*% solve(Sigma_q) %*% beta_q
-#p-value
-pval <- 1 - pchisq(chisq2, 2)
+#------------------------------------------------------------------------------
+# 3. Breslow estimates of the baseline cumulative hazard
+#------------------------------------------------------------------------------
+Lambda0 <- basehaz(obj, centered = FALSE)
 
+# Plot the baseline hazard function
+plot(
+  stepfun(Lambda0$time, c(0, Lambda0$hazard)), 
+  do.points   = FALSE,
+  cex.axis    = 0.9,
+  lwd         = 2,
+  frame.plot  = FALSE,
+  xlim        = c(0, 100),
+  ylim        = c(0, 0.8),
+  xlab        = "Time (months)",
+  ylab        = "Baseline cumulative hazard",
+  main        = ""
+)
 
-### explore forest plot
+#------------------------------------------------------------------------------
+# 4. Enhanced tabulation via gtsummary
+#------------------------------------------------------------------------------
+library(gtsummary)
+
+obj <- coxph(
+  Surv(time, status) ~ hormone + meno + age + size + grade + prog + estrg,
+  data = df
+)
+
+tbl <- tbl_regression(
+  obj, 
+  exponentiate = TRUE,
+  label = list(
+    hormone = "Hormone", 
+    meno    = "Menopause",
+    age     = "Age (years)",
+    size    = "Tumor size (mm)",
+    grade   = "Tumor grade (1-3)",
+    prog    = "Progesterone (fmol/mg)",
+    estrg   = "Estrogen  (fmol/mg)"
+  )
+)
+tbl
+
+#------------------------------------------------------------------------------
+# 5. Forest plot via survminer
+#------------------------------------------------------------------------------
 library(survminer)
-ggforest(obj, data = data.CE)
-####
+ggforest(obj, data = df)
 
 
-### Get the Breslow estimates of baseline
-### cumulative hazard function
-Lambda0 <- basehaz(obj,centered = FALSE)
-#plot the baseline hazard function
-par(mfrow=c(1,1))
-plot(stepfun(Lambda0$time,c(0,Lambda0$hazard)),
-     do.points=F,xlim=c(0,100),ylim=c(0,0.8),lwd=2,frame.plot=F, 
-     xlab="Time (months)",ylab="Baseline cumulative hazard function", 
-     main="")
-
-
-
-
-
+#==============================================================================
+# (B) Residual Analysis (Figures 4.3–4.6)
+#==============================================================================
 ############################
-# Residual analysis
-# (Figures 4.3--4.6)
+# Cox-Snell residuals, etc.
 ############################
 
+#------------------------------------------------------------------------------
+# 1. Cox-Snell residuals
+#------------------------------------------------------------------------------
+coxsnellres <- df$status - resid(obj, type = "martingale")
 
+# Then use the N–A method to estimate the cumulative hazard of residuals
+fit <- survfit(Surv(coxsnellres, df$status) ~ 1)
+Htilde <- cumsum(fit$n.event / fit$n.risk)
 
-#####################################
-
-## First get the Cox-Snell residuals.;
-## The default residuals of coxph in R are the martingale residuals.
-## resid(obj,type=c("martingale", "deviance", "score", "schoenfeld",
-##                   "dfbeta", "dfbetas", "scaledsch","partial"))
-
-
-
-## Use relationship between cox-snell and martingal
-## residuals
-
-coxsnellres <- data.CE$status-resid(obj, type="martingale")
-## Then use N-A method to estimate the cumulative 
-## hazard function for residuals;
-fit <- survfit(Surv(coxsnellres,data.CE$status) ~ 1)
-Htilde <- cumsum(fit$n.event/fit$n.risk)
-plot(log(fit$time),log(Htilde), xlab="log(t)", frame.plot = FALSE,
-     ylab="log-cumulative hazard", xlim = c(-8, 2), ylim = c(-8, 2))
+par(mfrow = c(1, 1))
+plot(
+  log(fit$time), log(Htilde), 
+  xlab       = "log(t)",
+  ylab       = "log-cumulative hazard",
+  frame.plot = FALSE,
+  xlim       = c(-8, 2),
+  ylim       = c(-8, 2)
+)
 abline(0, 1, lty = 3, lwd = 1.5)
 
+# ggplot version of Cox-Snell
+tibble(
+  time   = fit$time,
+  Htilde = Htilde
+) %>%
+  ggplot(aes(x = log(time), y = log(Htilde))) +
+  geom_point(size = 2) +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", linewidth = 1) +
+  xlab("log(t)") +
+  ylab("Log-cumulative hazard") +
+  theme_minimal() +
+  coord_fixed()
 
-# rescaled Schoelfeld residuals
-sch <- cox.zph(obj) 
+ggsave("images/cox_cox_snell.png", width = 4, height = 4)
+ggsave("images/cox_cox_snell.eps", width = 4, height = 4)
 
-# chi-square test results for proportionality
-# of each covariate and overall
-sch$table
+#------------------------------------------------------------------------------
+# 2. Schoenfeld residuals (test proportional hazards)
+#------------------------------------------------------------------------------
+sch <- cox.zph(obj)
+sch$table  # p-values for each covariate and the global test
 
-### calculated residuals ###
-sch_time <- sch$time # the X_i's (m-vector)
-sch_resids <-  sch$y # rescaled residuals (m x p matrix)
+# Base R plots
+par(mar = c(4, 4, 2, 2), mfrow = c(4, 2))
+plot(
+  sch, 
+  xlab    = "Time (months)", 
+  lwd     = 2, 
+  cex.lab = 1.2, 
+  cex.axis= 1.2,
+  ylab    = c("Hormone", "Menopause", "Age", "Tumor size",
+              "Tumor grade", "Progesterone", "Estrogen")
+)
 
-# Plot rescaled Schoelfeld residuals for each covariate
-# using the object sch directly
-par(mar = c(4, 4, 2, 2), mfrow=c(4,2))
-plot(sch, xlab="Time (months)", lwd=2, cex.lab=1.2, cex.axis=1.2,
-     ylab = c("Hormone", "Menopause", "Age", "Tumor size",
-               "Tumor grade", "Progesterone", "Estrogen"))
+# survminer version
+ggcoxzph(sch)
 
-## an alternative graphic provided in survminer package
-# ggcoxzph(sch)
+#------------------------------------------------------------------------------
+# 3. Re-fit with stratification by tumor grade
+#------------------------------------------------------------------------------
+obj_stra <- coxph(
+  Surv(time, status) ~ hormone + meno + age + size + prog + estrg + strata(grade),
+  data = df
+)
+
+# Check PH with stratification
+sch_stra <- cox.zph(obj_stra)
+round(sch_stra$table, 4)
+
+ggcoxzph(sch_stra)
+
+# Residual plots for stratified model
+par(mfrow = c(3, 2))
+plot(
+  sch_stra, 
+  xlab     = "Time (months)",
+  lwd      = 2,
+  cex.lab  = 1.2,
+  cex.axis = 1.2,
+  ylab     = c("Hormone", "Menopause", "Age", "Tumor size",
+               "Progesterone", "Estrogen")
+)
+
+#------------------------------------------------------------------------------
+# 4. Martingale/deviance residuals
+#------------------------------------------------------------------------------
+mart_resid <- resid(obj_stra, type = "martingale")
+dev_resid  <- resid(obj_stra, type = "deviance")
+
+# Plot martingale residuals vs. quantitative covariates
+par(mfrow = c(2, 2))
+
+# Age
+plot(
+  df$age, mart_resid,
+  xlab = "Age (years)", 
+  ylab = "Martingale residuals",
+  main = "Age", 
+  cex.lab = 1.2, 
+  cex.axis= 1.2
+)
+lines(lowess(df$age, mart_resid), lwd = 2)
+abline(0, 0, lty = 3, lwd = 2)
+
+# Tumor size
+plot(
+  df$size, mart_resid,
+  xlab = "Tumor size (mm)", 
+  ylab = "Martingale residuals",
+  main = "Tumor size", 
+  cex.lab = 1.2, 
+  cex.axis= 1.2
+)
+lines(lowess(df$size, mart_resid), lwd = 2)
+abline(0, 0, lty = 3, lwd = 2)
+
+# Progesterone
+plot(
+  df$prog, mart_resid,
+  xlab = "Progesterone receptor (100 fmol/mg)",
+  ylab = "Martingale Residuals",
+  main = "Progesterone",
+  cex.lab = 1.2, 
+  cex.axis= 1.2
+)
+lines(lowess(df$prog, mart_resid), lwd = 2)
+abline(0, 0, lty = 3, lwd = 2)
+
+# Estrogen
+plot(
+  df$estrg, mart_resid,
+  xlab = "Estrogen receptor (100 fmol/mg)",
+  ylab = "Martingale Residuals",
+  main = "Estrogen",
+  cex.lab = 1.2, 
+  cex.axis= 1.2
+)
+lines(lowess(df$estrg, mart_resid), lwd = 2)
+abline(0, 0, lty = 3, lwd = 2)
+
+#------------------------------------------------------------------------------
+# 5. Addressing non-linear age effect
+#------------------------------------------------------------------------------
+df$agec <- (df$age <= 40) + 2 * (df$age > 40 & df$age <= 60) + 3 * (df$age > 60)
+df$agec <- factor(df$agec)
+
+obj_stra_final <- coxph(
+  Surv(time, status) ~ hormone + meno + agec + size + prog + estrg + strata(grade),
+  data = df
+)
+
+final_sum <- summary(obj_stra_final)
+final_sum
+
+# Tabulate final model results
+tbl_final <- tbl_regression(
+  obj_stra_final, 
+  exponentiate = TRUE,
+  label = list(
+    hormone = "Hormone", 
+    meno    = "Menopause",
+    agec    = "Age group",
+    size    = "Tumor size (mm)",
+    prog    = "Progesterone (100 fmol/mg)",
+    estrg   = "Estrogen  (100 fmol/mg)"
+  )
+)
+
+# Plot the age-group-specific HR and confidence intervals (Figure 4.6)
+ci.table <- final_sum$conf.int
+hr       <- ci.table[3:4, 1]
+hr.low   <- ci.table[3:4, 3]
+hr.up    <- ci.table[3:4, 4]
+
+par(mfrow = c(1, 1))
+plot(
+  1:3, c(1, hr),
+  ylim     = c(0, 1.2),
+  frame    = FALSE,
+  xaxt     = 'n',
+  xlab     = "Age (years)",
+  ylab     = "Hazard ratio",
+  pch      = 19,
+  cex      = 1.5,
+  cex.lab  = 1.2,
+  cex.axis = 1.2
+)
+axis(1, at = c(1, 2, 3), labels = c("(20, 40]", "(40, 60]", "(60, 80]"), cex.axis = 1.2)
+arrows(2:3, hr.low, 2:3, hr.up, length = 0.05, angle = 90, code = 3, lwd = 2)
+lines(1:3, c(1, hr), lty = 3, lwd = 2)
+
+# ggplot version
+tibble(
+  age_group = c("(20, 40]", "(40, 60]", "(60, 80]"),
+  HR       = c(1, hr),
+  HR_low   = c(1, hr.low),
+  HR_up    = c(1, hr.up)
+) %>%
+  ggplot(aes(x = age_group, y = HR)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = HR_low, ymax = HR_up), width = 0.2, linewidth = 0.8) +
+  geom_line(group = 1, linetype = "dashed", linewidth = 0.8) +
+  xlab("Age group (years)") +
+  ylab("Hazard ratio") +
+  theme_minimal() +
+  scale_y_log10(
+    limits = c(0.125, 1.05),
+    breaks = c(0.125, 0.25, 0.5, 0.75, 1),
+    labels = scales::label_percent(accuracy = 1)
+  ) +
+  theme(axis.text = element_text(size = 10))
+
+ggsave("images/cox_nonlinear_age.png", width = 7.5, height = 4)
+ggsave("images/cox_nonlinear_age.eps", width = 7.5, height = 4)
 
 
-# To address non-proportionality of tumor grade
-# re-fit the Cox proportional hazards model
-# stratified by tumor grade
-obj.stra <- coxph(Surv(time, status) ~ hormone + meno
-         + age + size + prog + estrg + strata(grade), data = data.CE)
-#Schoelfeld
-#produce proportionality test results
-sch.stra <- cox.zph(obj.stra) 
-round(sch.stra$table, 4)
-
-## residual plots for stratified model
-par(mfrow=c(3,2))
-plot(sch.stra, xlab="Time (months)", lwd=2, cex.lab=1.2, cex.axis=1.2,
-     ylab = c("Hormone", "Menopause", "Age", "Tumor size",
-              "Progesterone", "Estrogen"))
-
-
-
-## Martingale residuals
-mart_resid <- resid(obj.stra,type = 'martingale')
-## Deviance residuals
-dev_resid <- resid(obj.stra,type = 'deviance')
-
-
-#plot the martingale residuals against
-# the fours quantitative covariates:
-# age, tumor size, progesterone and
-# estrogen receptor levels
-
-## Age
-par(mfrow=c(2,2))
-plot(data.CE$age, mart_resid,
-     xlab="Age (years)", ylab="Martingale residuals",
-     main='Age',cex.lab=1.2,cex.axis=1.2)
-lines(lowess(data.CE$age, mart_resid), lwd = 2)
-abline(0,0,lty=3,lwd=2)
-
-## Tumor size
-plot(data.CE$size, mart_resid,
-     xlab="Tumor size (mm)", ylab="Martingale residuals",
-     main='Tumor size',cex.lab=1.2,cex.axis=1.2)
-lines(lowess(data.CE$size, mart_resid),lwd=2)
-abline(0,0,lty=3,lwd=2)
-
-## Progesterone
-plot(data.CE$prog, mart_resid,
-     xlab="Progesterone receptor (fmol/mg)", ylab="Martingale Residuals",
-     main='Progesterone',cex.lab=1.2,cex.axis=1.2)
-lines(lowess(data.CE$prog, mart_resid),lwd=2)
-abline(0,0,lty=3,lwd=2)
-
-
-## Estrogen
-plot(data.CE$estrg, mart_resid,
-     xlab="Estrogen receptor (fmol/mg)", ylab="Martingale Residuals",
-     main='Estrogen',cex.lab=1.2,cex.axis=1.2)
-lines(lowess(data.CE$estrg, mart_resid),lwd=2)
-abline(0,0,lty=3,lwd=2)
-
-
-# To address non-linear age
-# categorize age in agec
-# age<=40: agec=1
-# 40<age<=60: agec=2
-# age>60: agec=3
-data.CE$agec <- (data.CE$age<=40)+2*(data.CE$age>40&data.CE$age<=60)+
-    3*(data.CE$age>60)
-data.CE$agec <- factor(data.CE$agec)
-
-
-#re-fit the model with agec
-obj.stra.final <- coxph(Surv(time,status)~ hormone + meno
-               + agec + size + prog + estrg + strata(grade), data = data.CE)
-
-
-#plot the estimated HRs for agec (Figure 4.6)
-# and confidence intervals
-final.sum <- summary(obj.stra.final)
-final.sum
-
-
-# Plot the age-group-specific HR and confidence
-# intervals from the re-fitted model
-ci.table=final.sum$conf.int
-hr=ci.table[3:4,1]
-hr.low=ci.table[3:4,3]
-hr.up=ci.table[3:4,4]
-
-par(mfrow=c(1,1))
-plot(1:3,c(1,hr),ylim=c(0,1.2),frame=F,xaxt='n',
-     xlab="Age (years)", ylab="Hazard ratio",pch=19,cex=1.5,cex.lab=1.2,
-     cex.axis=1.2)
-axis(1, at=c(1,2,3),labels=c("(20, 40]","(40, 60]","(60, 80]"),cex.axis=1.2)
-# horizontal error bars
-arrows(2:3, hr.low, 2:3, hr.up, length=0.05, angle=90, code=3,lwd=2)
-lines(1:3,c(1,hr),lty=3,lwd=2)
-
-
-
-
-###########################################
-# Illustration with time-varying covariates
-# Stanford heart study
-###########################################
+#==============================================================================
+# (C) Illustration with Time-Varying Covariates 
+#     (Stanford Heart Study)
+#==============================================================================
 head(heart)
-## change variable name "year" -> "accpt"
+
+# Rename variable "year" -> "accpt"
 colnames(heart)[5] <- "accpt"
 
-#sample size
+# Sample size
 n <- length(unique(heart$id))
 
-# fit a Cox model with time-dependent "transplant"
-obj <- coxph(Surv(start, stop, event) ~ age + accpt + surgery + transplant, data=heart)
-#summarize results
+#------------------------------------------------------------------------------
+# 1. Fit a Cox model with a time-dependent "transplant" variable
+#------------------------------------------------------------------------------
+obj <- coxph(Surv(start, stop, event) ~ age + accpt + surgery + transplant, data = heart)
+
 summary(obj)
 
+# Tabulate using gtsummary
+heart_tbl <- tbl_regression(
+  obj, 
+  exponentiate = TRUE,
+  label = list(
+    age       = "Age (years)",
+    accpt     = "Acceptance",
+    surgery   = "Surgery",
+    transplant= "Transplant"
+  )
+)
+
+heart_tbl
+
 ```
+
