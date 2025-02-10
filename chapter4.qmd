@@ -306,6 +306,9 @@ tbl_final <- tbl_regression(
   )
 )
 
+# Print table
+tbl_final
+
 # Plot the age-group-specific HR and confidence intervals (Figure 4.6)
 ci.table <- final_sum$conf.int
 hr       <- ci.table[3:4, 1]
@@ -352,7 +355,6 @@ tibble(
 
 ggsave("images/cox_nonlinear_age.png", width = 7.5, height = 4)
 ggsave("images/cox_nonlinear_age.eps", width = 7.5, height = 4)
-
 
 #==============================================================================
 # (C) Illustration with Time-Varying Covariates 

@@ -749,7 +749,7 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 <span id="cb6-10"><a></a></span>
 <span id="cb6-11"><a></a><span class="co">#--- Model fitting ------------------</span></span>
 <span id="cb6-12"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status)<span class="sc">~</span> hormone <span class="sc">+</span> meno <span class="sc">+</span> age <span class="sc">+</span> size <span class="sc">+</span> grade</span>
-<span id="cb6-13"><a></a>           <span class="sc">+</span> prog <span class="sc">+</span> estrg, <span class="at">data =</span> data.CE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-13"><a></a>           <span class="sc">+</span> prog <span class="sc">+</span> estrg, <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -862,6 +862,7 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 </section>
 <section id="assumptions-in-cox-model" class="slide level2">
 <h2>Assumptions in Cox Model</h2>
+<div class="fragment">
 <ul>
 <li><strong>Cox model assumptions</strong> <span class="math display">\[\begin{equation}
 \lambda(t\mid Z)=\lambda_0(t)\exp(\beta^\T Z)
@@ -871,6 +872,10 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 <li>Functional form of <span class="math inline">\(Z_{\cdot k}\)</span> (linear? quadratic? categorical?)</li>
 <li>Link function <span class="math inline">\(\exp(\cdot)\)</span> for <span class="math inline">\(\beta^\T Z\)</span></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Residuals</strong>
 <ul>
 <li>Observed vs model-predicted</li>
@@ -878,15 +883,21 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 <li>Pattern in residuals <span class="math inline">\(\to\)</span> inadequate fit</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="cox-snell-residuals-i" class="slide level2">
 <h2>Cox-Snell Residuals (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Standard result</strong>
 <ul>
 <li><span class="math inline">\(S(T)\sim\mbox{Unif}[0, 1]\)</span></li>
 <li><span class="math inline">\(\Lambda(T)=-\log S(T) \sim \mbox{Expn}(1)\)</span> (exponential with unit hazard rate)</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Under Cox model</strong> <span class="math display">\[
 \Lambda(t\mid Z;\beta,\Lambda_0)=\exp(\beta^\T Z)\Lambda_0(t)
 \]</span>
@@ -899,15 +910,21 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="cox-snell-residuals-ii" class="slide level2">
 <h2>Cox-Snell Residuals (II)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Nelsen-Aalen estimates</strong> <span class="math inline">\(\hat\Lambda_{\rm CS}(t)\)</span>
 <ul>
 <li>Based on <span class="math inline">\((\hat s_i, \delta_i)\)</span> <span class="math inline">\((i=1,\ldots, n)\)</span></li>
 <li>Recovers cumulative hazard of <span class="math inline">\(\mbox{Expn}(1)\)</span>, i.e., <span class="math inline">\(\Lambda(t)=t\)</span></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Graphical check</strong>
 <ul>
 <li>Overall fit: <span class="math inline">\(\hat\Lambda_{\rm CS}(\hat s_i)\approx \hat s_i\)</span></li>
@@ -918,63 +935,71 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="schoenfeld-residuals-i" class="slide level2">
 <h2>Schoenfeld Residuals (I)</h2>
+<div>
 <ul>
-<li><strong>Defined only for failed subjects</strong> <span class="math display">\[\begin{equation}\label{eq:cox:schoenfeld}
+<li class="fragment"><strong>Defined only for failed subjects</strong> <span class="math display">\[\begin{equation}\label{eq:cox:schoenfeld}
 \hat r_i=Z_i-\mathcal E(X_i;\hat\beta) \hspace{10mm} (\delta_i=1; i=1,\ldots,n).
 \end{equation}\]</span>
 <ul>
-<li><span class="math inline">\(\mathcal E(t_j;\beta) = E(Z_{(j)}\mid \mathcal R_j, d_j=1)=\frac{\sum_{j=1}^nI(X_j\geq t)Z_j\exp(\beta^\T Z_j)}{\sum_{j=1}^nI(X_j\geq t)\exp(\beta^\T Z_j)}\)</span></li>
-<li>Observed minus (conditionally) expected covariates</li>
-<li>Sensitive to proportionality (canceling of <span class="math inline">\(\lambda_0(\cdot)\)</span>)</li>
-<li><span class="math inline">\(\hat r_{ik}\)</span> (rescaled) vs <span class="math inline">\(X_i\)</span>: mean zero if proportionality holds on <span class="math inline">\(Z_{\cdot k}\)</span></li>
-<li>Formal <span class="math inline">\(\chi^2\)</span> tests based on the <span class="math inline">\(\hat r_{ik}\)</span> (with proportionality as <span class="math inline">\(H_0\)</span>)
+<li class="fragment"><span class="math inline">\(\mathcal E(t_j;\beta) = E(Z_{(j)}\mid \mathcal R_j, d_j=1)=\frac{\sum_{j=1}^nI(X_j\geq t)Z_j\exp(\beta^\T Z_j)}{\sum_{j=1}^nI(X_j\geq t)\exp(\beta^\T Z_j)}\)</span></li>
+<li class="fragment">Observed minus (conditionally) expected covariates</li>
+<li class="fragment">Sensitive to proportionality (canceling of <span class="math inline">\(\lambda_0(\cdot)\)</span>)</li>
+<li class="fragment"><span class="math inline">\(\hat r_{ik}\)</span> (rescaled) vs <span class="math inline">\(X_i\)</span>: mean zero if proportionality holds on <span class="math inline">\(Z_{\cdot k}\)</span></li>
+<li class="fragment">Formal <span class="math inline">\(\chi^2\)</span> tests based on the <span class="math inline">\(\hat r_{ik}\)</span> (with proportionality as <span class="math inline">\(H_0\)</span>)
 <ul>
-<li>Serve only as guidelines to graphical results</li>
+<li class="fragment">Serve only as <em>guidelines</em> to graphical results</li>
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="schoenfeld-residuals-ii" class="slide level2">
 <h2>Schoenfeld Residuals (II)</h2>
+<div>
 <ul>
-<li><strong>In case of non-proportionality</strong>
+<li class="fragment"><strong>In case of non-proportionality</strong>
 <ul>
-<li>HR changes over time</li>
-<li>Stratify rather than set as covariate</li>
-<li>Include covariate <span class="math inline">\(\times\)</span> time interaction, e.g., <span class="math inline">\(Z_{\cdot k}\log(t)\)</span></li>
-<li>Choose alternatives over Cox model (Chapter 5)
+<li class="fragment">HR changes over time</li>
+<li class="fragment">Stratify rather than set as covariate</li>
+<li class="fragment">Include covariate <span class="math inline">\(\times\)</span> time interaction, e.g., <span class="math inline">\(Z_{\cdot k}\log(t)\)</span></li>
+<li class="fragment">Choose alternatives over Cox model (Chapter 5)
 <ul>
-<li>Restricted mean life</li>
-<li>Additive hazards</li>
-<li>Proportional odds</li>
-<li>Accelerate failure time (AFT)</li>
+<li class="fragment">Restricted mean life</li>
+<li class="fragment">Additive hazards</li>
+<li class="fragment">Proportional odds</li>
+<li class="fragment">Accelerate failure time (AFT)</li>
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="martingaledeviance-residuals" class="slide level2">
 <h2>Martingale/Deviance Residuals</h2>
+<div>
 <ul>
-<li><strong>Usual residuals</strong>: observed response minus expected <span class="math display">\[\begin{align*}
+<li class="fragment"><strong>Usual residuals</strong>: observed response minus expected <span class="math display">\[\begin{align*}
 M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\hat\beta^\T Z_i)\dd \hat\Lambda_0(t)\\
 &amp;=\delta_i-\exp(\hat\beta^\T Z_i)\hat\Lambda_0(X_i)
 \end{align*}\]</span>
 <ul>
-<li><span class="math inline">\(\exp(\hat\beta^\T Z_i)\hat\Lambda_0(X_i)\)</span> is Cox-Snell residual</li>
-<li><strong>Functional form of</strong> <span class="math inline">\(Z_{\cdot k}\)</span>: plot <span class="math inline">\(M_i(X_i; \hat\beta,\hat\Lambda_0)\)</span> against <span class="math inline">\(Z_{ik}\)</span> <span class="math inline">\((i=1,\ldots, n)\)</span>
+<li class="fragment"><span class="math inline">\(\exp(\hat\beta^\T Z_i)\hat\Lambda_0(X_i)\)</span> is Cox-Snell residual</li>
+<li class="fragment"><strong>Functional form of</strong> <span class="math inline">\(Z_{\cdot k}\)</span>: plot <span class="math inline">\(M_i(X_i; \hat\beta,\hat\Lambda_0)\)</span> against <span class="math inline">\(Z_{ik}\)</span> <span class="math inline">\((i=1,\ldots, n)\)</span>
 <ul>
-<li>Inappropriate form <span class="math inline">\(\to\)</span> transform by log, square root, power, or grouping</li>
+<li class="fragment">Inappropriate form <span class="math inline">\(\to\)</span> transform by log, square root, power, or grouping</li>
 </ul></li>
-<li><strong>Link function</strong>: plot <span class="math inline">\(M_i(X_i; \hat\beta,\hat\Lambda_0)\)</span> against <span class="math inline">\(\hat\beta^\T Z_i\)</span></li>
-<li><strong>Deviance residuals</strong>: Standardized/symmetrized martingale residuals <span class="math inline">\(\to\)</span> outlier detection</li>
+<li class="fragment"><strong>Link function</strong>: plot <span class="math inline">\(M_i(X_i; \hat\beta,\hat\Lambda_0)\)</span> against <span class="math inline">\(\hat\beta^\T Z_i\)</span></li>
+<li class="fragment"><strong>Deviance residuals</strong>: Standardized/symmetrized martingale residuals <span class="math inline">\(\to\)</span> outlier detection</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="software-survivalresid-i" class="slide level2">
 <h2>Software: <code>survival::resid()</code> (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Basic syntax for Cox model residuals</strong></li>
 </ul>
@@ -983,23 +1008,28 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <span id="cb10-2"><a></a><span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"martingale"</span>, <span class="st">"deviance"</span>, <span class="st">"score"</span>, <span class="st">"schoenfeld"</span>, </span>
 <span id="cb10-3"><a></a>                    <span class="st">"dfbeta"</span>, <span class="st">"dfbetas"</span>, <span class="st">"scaledsch"</span>, <span class="st">"partial"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
+<div class="fragment">
 <ul>
 <li><strong>Cox-Snell residuals</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a><span class="do">## calculate cox-snell by martingale residuals (data frame: df)</span></span>
-<span id="cb11-2"><a></a>coxsnellres <span class="ot">&lt;-</span> df<span class="sc">$</span>status <span class="sc">-</span> <span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="st">"martingale"</span>)</span>
-<span id="cb11-3"><a></a><span class="do">## Use Nelsen-Aalen for cumulative hazard</span></span>
-<span id="cb11-4"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(coxsnellres, df<span class="sc">$</span>status) <span class="sc">~</span> <span class="dv">1</span>)</span>
-<span id="cb11-5"><a></a>Lambda <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(fit<span class="sc">$</span>n.event<span class="sc">/</span>fit<span class="sc">$</span>n.risk)</span>
-<span id="cb11-6"><a></a><span class="do">## scatter plot</span></span>
-<span id="cb11-7"><a></a><span class="fu">plot</span>(<span class="fu">log</span>(fit<span class="sc">$</span>time), <span class="fu">log</span>(Lambda), <span class="at">xlab =</span> <span class="st">"log(t)"</span>, </span>
-<span id="cb11-8"><a></a>     <span class="at">ylab =</span> <span class="st">"log-cumulative hazard"</span>)</span>
-<span id="cb11-9"><a></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">3</span>) <span class="co"># add a reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="1-3|4-6|7-10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a><span class="co"># Calculate Cox-Snell by martingale residuals </span></span>
+<span id="cb11-2"><a></a><span class="co"># df: data frame</span></span>
+<span id="cb11-3"><a></a>coxsnellres <span class="ot">&lt;-</span> df<span class="sc">$</span>status <span class="sc">-</span> <span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="st">"martingale"</span>)</span>
+<span id="cb11-4"><a></a><span class="co"># Compute Nelsen-Aalen estimates for cumulative hazard</span></span>
+<span id="cb11-5"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(coxsnellres, df<span class="sc">$</span>status) <span class="sc">~</span> <span class="dv">1</span>)</span>
+<span id="cb11-6"><a></a>Lambda <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(fit<span class="sc">$</span>n.event <span class="sc">/</span> fit<span class="sc">$</span>n.risk)</span>
+<span id="cb11-7"><a></a><span class="co"># Scatter plot</span></span>
+<span id="cb11-8"><a></a><span class="fu">plot</span>(<span class="fu">log</span>(fit<span class="sc">$</span>time), <span class="fu">log</span>(Lambda), <span class="at">xlab =</span> <span class="st">"log(t)"</span>, </span>
+<span id="cb11-9"><a></a>     <span class="at">ylab =</span> <span class="st">"log-cumulative hazard"</span>)</span>
+<span id="cb11-10"><a></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">3</span>) <span class="co"># add a dotted reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </section>
 <section id="software-survivalcox.zph" class="slide level2">
 <h2>Software: <code>survival::cox.zph()</code></h2>
+<div class="fragment">
 <ul>
 <li><strong>Rescaled Schoenfeld residuals</strong></li>
 </ul>
@@ -1007,18 +1037,22 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="co"># rescaled Schoenfeld residuals and tests</span></span>
 <span id="cb12-2"><a></a>sch <span class="ot">&lt;-</span> <span class="fu">cox.zph</span>(obj) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
+<div class="fragment">
 <ul>
 <li><strong>Output</strong>
 <ul>
-<li><code>sch$table</code>: <span class="math inline">\(\chi^2\)</span> tests of proportionality for each covariate and overall</li>
+<li><code>sch$table</code>: <span class="math inline">\(\chi^2\)</span> tests of proportionality (each covariate and overall)</li>
 <li><code>sch$time</code>: <span class="math inline">\(m\)</span>-vector of the <span class="math inline">\(X_i\)</span></li>
 <li><code>sch$y</code>: <span class="math inline">\((m\times p)\)</span>-matrix of the rescaled <span class="math inline">\(\hat r_i\)</span></li>
 <li><code>plot(sch)</code>: plot the residuals, one covariate per panel</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="software-survivalresid-ii" class="slide level2">
 <h2>Software: <code>survival::resid()</code> (II)</h2>
+<div class="fragment">
 <ul>
 <li><p><strong>Martingale/Deviance residuals</strong></p>
 <ul>
@@ -1026,62 +1060,73 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <li><code>zk</code>: name of covariate of interest</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a><span class="co"># get the residuals</span></span>
+<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="1-3|4-9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a><span class="co"># Get the residuals</span></span>
 <span id="cb13-2"><a></a>mart_resid <span class="ot">&lt;-</span> <span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="st">'martingale'</span>) <span class="co"># n-vector of martingale</span></span>
 <span id="cb13-3"><a></a>dev_resid <span class="ot">&lt;-</span> <span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="st">'deviance'</span>) <span class="co"># n-vector of deviance</span></span>
-<span id="cb13-4"><a></a><span class="co"># scatter plot residuals against covariate</span></span>
+<span id="cb13-4"><a></a><span class="co"># Scatter plot residuals against covariate</span></span>
 <span id="cb13-5"><a></a><span class="fu">plot</span>(df<span class="sc">$</span>zk, mart_resid)</span>
 <span id="cb13-6"><a></a><span class="fu">lines</span>(<span class="fu">lowess</span>(df<span class="sc">$</span>zk, mart_resid)) <span class="co"># add a smooth line through points</span></span>
 <span id="cb13-7"><a></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">3</span>) <span class="co"># add a dotted reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
+</div>
 </section>
 <section id="example-german-breast-cancer-viii" class="slide level2">
 <h2>Example: German Breast Cancer (VIII)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Overall fit - Cox-Snell residuals</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>coxsnellres <span class="ot">&lt;-</span> data.CE<span class="sc">$</span>status<span class="sc">-</span><span class="fu">resid</span>(obj, <span class="at">type=</span><span class="st">"martingale"</span>)</span>
-<span id="cb14-2"><a></a><span class="do">## Then use N-A method to estimate the cumulative </span></span>
-<span id="cb14-3"><a></a><span class="do">## hazard function for residuals</span></span>
-<span id="cb14-4"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(coxsnellres,data.CE<span class="sc">$</span>status) <span class="sc">~</span> <span class="dv">1</span>)</span>
-<span id="cb14-5"><a></a>Htilde <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(fit<span class="sc">$</span>n.event<span class="sc">/</span>fit<span class="sc">$</span>n.risk)</span>
-<span id="cb14-6"><a></a><span class="do">## scatter plot</span></span>
-<span id="cb14-7"><a></a><span class="fu">plot</span>(<span class="fu">log</span>(fit<span class="sc">$</span>time), <span class="fu">log</span>(Htilde), <span class="at">xlab=</span><span class="st">"log(t)"</span>, <span class="at">frame.plot =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb14-8"><a></a>     <span class="at">ylab=</span><span class="st">"log-cumulative hazard"</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>, <span class="dv">2</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>, <span class="dv">2</span>))</span>
-<span id="cb14-9"><a></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="co"># add a reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="1-4|5-6|7-10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a><span class="co"># Compute the residuals</span></span>
+<span id="cb14-2"><a></a>coxsnellres <span class="ot">&lt;-</span> df<span class="sc">$</span>status<span class="sc">-</span><span class="fu">resid</span>(obj, <span class="at">type=</span><span class="st">"martingale"</span>)</span>
+<span id="cb14-3"><a></a><span class="do">## Then use N-A method to estimate the cumulative </span></span>
+<span id="cb14-4"><a></a><span class="do">## hazard function for residuals</span></span>
+<span id="cb14-5"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(coxsnellres,df<span class="sc">$</span>status) <span class="sc">~</span> <span class="dv">1</span>)</span>
+<span id="cb14-6"><a></a>Htilde <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(fit<span class="sc">$</span>n.event<span class="sc">/</span>fit<span class="sc">$</span>n.risk)</span>
+<span id="cb14-7"><a></a><span class="co"># Scatter plot</span></span>
+<span id="cb14-8"><a></a><span class="fu">plot</span>(<span class="fu">log</span>(fit<span class="sc">$</span>time), <span class="fu">log</span>(Htilde), <span class="at">xlab=</span><span class="st">"log(t)"</span>, <span class="at">frame.plot =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb14-9"><a></a>     <span class="at">ylab=</span><span class="st">"log-cumulative hazard"</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>, <span class="dv">2</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>, <span class="dv">2</span>))</span>
+<span id="cb14-10"><a></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="co"># add a reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </section>
 <section id="example-german-breast-cancer-ix" class="slide level2">
 <h2>Example: German Breast Cancer (IX)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Overall fit - Cox-Snell residuals</strong></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/cox_cox_snell.png" class="quarto-figure quarto-figure-center" style="width:65.0%"></p>
+<p><img data-src="images/cox_cox_snell.png" class="quarto-figure quarto-figure-center" style="width:50.0%"></p>
 </figure>
+</div>
 </div>
 </section>
 <section id="example-german-breast-cancer-x" class="slide level2">
 <h2>Example: German Breast Cancer (X)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Proportionality - Schoenfeld residuals</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a><span class="co"># rescaled Schoelfeld residuals</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a><span class="co"># Rescaled Schoelfeld residuals</span></span>
 <span id="cb15-2"><a></a>sch <span class="ot">&lt;-</span> <span class="fu">cox.zph</span>(obj) </span>
 <span id="cb15-3"><a></a>sch<span class="sc">$</span>table <span class="co"># chi-square tests</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
+<div class="fragment">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="images/cox_gbc_sch_tab1.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="example-german-breast-cancer-xi" class="slide level2">
 <h2>Example: German Breast Cancer (XI)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Proportionality - Schoenfeld residuals</strong></li>
 </ul>
@@ -1091,46 +1136,56 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <span id="cb16-3"><a></a>     <span class="at">ylab =</span> <span class="fu">c</span>(<span class="st">"Hormone"</span>, <span class="st">"Menopause"</span>, <span class="st">"Age"</span>, <span class="st">"Tumor size"</span>,</span>
 <span id="cb16-4"><a></a>               <span class="st">"Tumor grade"</span>, <span class="st">"Progesterone"</span>, <span class="st">"Estrogen"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
+<div class="fragment">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="images/cox_gbc_sch_plot.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="example-german-breast-cancer-xii" class="slide level2">
 <h2>Example: German Breast Cancer (XII)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Stratification by tumor grade</strong></li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a><span class="co"># fit a Cox model stratified by tumor grade</span></span>
-<span id="cb17-2"><a></a>obj.stra <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno</span>
-<span id="cb17-3"><a></a>         <span class="sc">+</span> age <span class="sc">+</span> size <span class="sc">+</span> prog <span class="sc">+</span> estrg <span class="sc">+</span> <span class="fu">strata</span>(grade), <span class="at">data =</span> data.CE)</span>
-<span id="cb17-4"><a></a><span class="fu">cox.zph</span>(obj.stra)<span class="sc">$</span>table <span class="co"># proportionality tests </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-2"><a></a>obj_stra <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno</span>
+<span id="cb17-3"><a></a>         <span class="sc">+</span> age <span class="sc">+</span> size <span class="sc">+</span> prog <span class="sc">+</span> estrg <span class="sc">+</span> <span class="fu">strata</span>(grade), <span class="at">data =</span> df)</span>
+<span id="cb17-4"><a></a><span class="fu">cox.zph</span>(obj_stra)<span class="sc">$</span>table <span class="co"># proportionality tests </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
+<div class="fragment">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="images/cox_gbc_sch_tab2.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="example-german-breast-cancer-xiii" class="slide level2">
 <h2>Example: German Breast Cancer (XIII)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Covariate form - Martingale (deviance) residuals</strong></li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a><span class="do">## Martingale residuals</span></span>
-<span id="cb18-2"><a></a>mart_resid <span class="ot">&lt;-</span> <span class="fu">resid</span>(obj.stra,<span class="at">type =</span> <span class="st">'martingale'</span>)</span>
+<span id="cb18-2"><a></a>mart_resid <span class="ot">&lt;-</span> <span class="fu">resid</span>(obj_stra,<span class="at">type =</span> <span class="st">'martingale'</span>)</span>
 <span id="cb18-3"><a></a><span class="co">#plot residuals against, e.g., age</span></span>
-<span id="cb18-4"><a></a><span class="fu">plot</span>(data.CE<span class="sc">$</span>age, mart_resid, <span class="at">main=</span><span class="st">'Age'</span>, <span class="at">cex.lab=</span><span class="fl">1.2</span>, <span class="at">cex.axis=</span><span class="fl">1.2</span>,</span>
+<span id="cb18-4"><a></a><span class="fu">plot</span>(df<span class="sc">$</span>age, mart_resid, <span class="at">main=</span><span class="st">'Age'</span>, <span class="at">cex.lab=</span><span class="fl">1.2</span>, <span class="at">cex.axis=</span><span class="fl">1.2</span>,</span>
 <span id="cb18-5"><a></a>     <span class="at">xlab=</span><span class="st">"Age (years)"</span>, <span class="at">ylab=</span><span class="st">"Martingale residuals"</span>)</span>
-<span id="cb18-6"><a></a><span class="fu">lines</span>(<span class="fu">lowess</span>(data.CE<span class="sc">$</span>age, mart_resid), <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add a smooth line</span></span>
+<span id="cb18-6"><a></a><span class="fu">lines</span>(<span class="fu">lowess</span>(df<span class="sc">$</span>age, mart_resid), <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add a smooth line</span></span>
 <span id="cb18-7"><a></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add a reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </section>
 <section id="example-german-breast-cancer-xiv" class="slide level2">
 <h2>Example: German Breast Cancer (XIV)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Covariate form - Martingale (deviance) residuals</strong></li>
 </ul>
@@ -1139,9 +1194,11 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <p><img data-src="images/cox_gbc_age.png" class="quarto-figure quarto-figure-center" style="width:60.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="example-german-breast-cancer-xv" class="slide level2">
 <h2>Example: German Breast Cancer (XV)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Categorize age</strong>
 <ul>
@@ -1150,9 +1207,9 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a><span class="co"># Call:</span></span>
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="7-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a><span class="co"># Call:</span></span>
 <span id="cb19-2"><a></a><span class="co"># coxph(formula = Surv(time, status) ~ hormone + meno + agec + </span></span>
-<span id="cb19-3"><a></a><span class="co">#     size + prog + estrg + strata(grade), data = data.CE)</span></span>
+<span id="cb19-3"><a></a><span class="co">#     size + prog + estrg + strata(grade), data = df)</span></span>
 <span id="cb19-4"><a></a><span class="co">#                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    </span></span>
 <span id="cb19-5"><a></a><span class="co"># hormone2 -0.3788600  0.6846415  0.1294642 -2.926  0.00343 ** </span></span>
 <span id="cb19-6"><a></a><span class="co"># meno2     0.2804119  1.3236749  0.1567576  1.789  0.07364 .  </span></span>
@@ -1163,9 +1220,11 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <span id="cb19-11"><a></a><span class="co"># estrg     0.0001254  1.0001254  0.0004718  0.266  0.79041    </span></span>
 <span id="cb19-12"><a></a><span class="co"># ---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
 </section>
 <section id="example-german-breast-cancer-xvi" class="slide level2">
 <h2>Example: German Breast Cancer (XVI)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Categorize age</strong>
 <ul>
@@ -1174,8 +1233,46 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/cox_gbc_age_cat.png" class="quarto-figure quarto-figure-center" style="width:60.0%"></p>
+<p><img data-src="images/cox_gbc_age_cat.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
 </figure>
+</div>
+</div>
+</section>
+<section id="example-german-breast-cancer-xvii" class="slide level2">
+<h2>Example: German Breast Cancer (XVII)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Tabulate final model</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="1-2|3|4-12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a><span class="co"># Tabulate final model results</span></span>
+<span id="cb20-2"><a></a>tbl_final <span class="ot">&lt;-</span> <span class="fu">tbl_regression</span>(</span>
+<span id="cb20-3"><a></a>  obj_stra_final, <span class="co"># coxph object for final model</span></span>
+<span id="cb20-4"><a></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb20-5"><a></a>    <span class="at">hormone =</span> <span class="st">"Hormone"</span>, </span>
+<span id="cb20-6"><a></a>    <span class="at">meno    =</span> <span class="st">"Menopause"</span>,</span>
+<span id="cb20-7"><a></a>    <span class="at">agec    =</span> <span class="st">"Age group"</span>,</span>
+<span id="cb20-8"><a></a>    <span class="at">size    =</span> <span class="st">"Tumor size (mm)"</span>,</span>
+<span id="cb20-9"><a></a>    <span class="at">prog    =</span> <span class="st">"Progesterone (100 fmol/mg)"</span>,</span>
+<span id="cb20-10"><a></a>    <span class="at">estrg   =</span> <span class="st">"Estrogen  (100 fmol/mg)"</span></span>
+<span id="cb20-11"><a></a>  )</span>
+<span id="cb20-12"><a></a>)</span>
+<span id="cb20-13"><a></a></span>
+<span id="cb20-14"><a></a>tbl_final</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="example-german-breast-cancer-xviii" class="slide level2">
+<h2>Example: German Breast Cancer (XVIII)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Final model</strong></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cox_gbc_final.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
+</figure>
+</div>
 </div>
 </section></section>
 <section>
@@ -1185,24 +1282,39 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 </section>
 <section id="internal-vs-external-covariates" class="slide level2">
 <h2>Internal vs External Covariates</h2>
+<div class="fragment">
 <ul>
 <li><strong>Notation</strong>: <span class="math inline">\(Z(t)=\{Z_{\cdot 1}(t),\ldots, Z_{\cdot p}(t)\}^\T\)</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Internal covariates</strong>
 <ul>
-<li>Measured on same subject during follow-up, influenced by failure process</li>
+<li>Measured on <em>same subject</em> during follow-up, influenced by failure process
+<ul>
 <li>Biomarkers (CD4 cell count), quality of life, other events</li>
+</ul></li>
 <li><strong>Modeling</strong>: current (instantaneous) risk vs covariate history</li>
 </ul></li>
-<li><strong>External covariates</strong>:
+</ul>
+</div>
+<div class="fragment">
 <ul>
-<li>Extraneous factors, changes unaffected by subject’s failure process</li>
-<li>Pre-planned treatment sequence, environmental factors, interactions of baseline covariates with time</li>
+<li><strong>External covariates</strong>
+<ul>
+<li>Extraneous factors, changes unaffected by subject’s failure process
+<ul>
+<li>Pre-planned treatment sequence, environmental factors, baseline covariates <span class="math inline">\(\times\)</span> time</li>
+</ul></li>
 <li><strong>Modeling</strong>: risk profile vs entire covariate path</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="internal-covariates" class="slide level2">
 <h2>Internal Covariates</h2>
+<div class="fragment">
 <ul>
 <li><strong>Modeling target</strong> (intensity function) <span class="math display">\[
 \lambda\{t\mid\overline Z(t)\}\dd t=\pr\{t\leq T&lt;t+\dd t\mid T\geq t, \overline Z(t)\}
@@ -1210,7 +1322,11 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <ul>
 <li><span class="math inline">\(\overline Z(t)=\{Z(u): 0\leq u\leq t\}\)</span>: covariate path up to <span class="math inline">\(t\)</span></li>
 </ul></li>
-<li><strong>Modeling specification</strong> <span class="math display">\[\begin{equation}\label{eq:cox:time_varying_model}
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Model specification</strong> <span class="math display">\[\begin{equation}\label{eq:cox:time_varying_model}
 \lambda\{t\mid\overline Z(t)\}=\lambda_0(t)\exp\{\beta^\T Z(t)\}.
 \end{equation}\]</span>
 <ul>
@@ -1219,12 +1335,14 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <ul>
 <li>should not be “current” measurements due to delay in cause and effect</li>
 </ul></li>
-<li>Example: frequency of drug use in past week, month, or year</li>
+<li>Example: frequency of drug use in <em>past week</em>, <em>month</em>, or <em>year</em></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="external-covariates-i" class="slide level2">
 <h2>External Covariates (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Modeling target</strong> (hazard function) <span class="math display">\[
 \lambda(t\mid Z)\dd t=\pr(t\leq T&lt;t+\dd t\mid T\geq t, Z)
@@ -1232,7 +1350,11 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <ul>
 <li><span class="math inline">\(Z=\{Z(t):0\leq t\leq \infty\}\)</span>: entire covariate path</li>
 </ul></li>
-<li><strong>Modeling specification</strong> <span class="math display">\[\begin{equation}\label{eq:cox:time_varying_model_ex}
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Model specification</strong> <span class="math display">\[\begin{equation}\label{eq:cox:time_varying_model_ex}
 \lambda(t\mid Z)=\lambda_0(t)\exp\{\beta^\T Z(t)\}.
 \end{equation}\]</span>
 <ul>
@@ -1242,30 +1364,42 @@ S(t\mid Z)=\exp\left\{-\int_0^t\lambda(s\mid Z)\dd s\right\}=\exp\left[-\int_0^t
 \]</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="external-covariates-ii" class="slide level2">
 <h2>External Covariates (II)</h2>
+<div class="fragment">
 <ul>
-<li><strong>Interaction of baseline covariates with time</strong>
+<li><strong>Baseline covariates <span class="math inline">\(times\)</span> time</strong>
 <ul>
 <li>Addressing non-proportionality</li>
 </ul></li>
-<li><strong>Example</strong>: single baseline covariate <span class="math inline">\(Z_1 = 1, 0\)</span>
+</ul>
+</div>
+<div class="fragment">
 <ul>
-<li>Non-proportionality: <span class="math inline">\(\lambda(t\mid Z_1 =1)/\lambda(t\mid Z_1 =0)\)</span> changes with <span class="math inline">\(t\)</span></li>
-<li>Add <span class="math inline">\(Z_2(t) = Z_1 t\)</span>, then <span class="math inline">\(\lambda(t\mid Z_1, Z_2)=\exp\{\beta_1Z_1 + \beta_2Z_2(t)\}\lambda_0(t)\)</span> means <span class="math display">\[
-\frac{\lambda(t\mid Z_1=1)}{\lambda(t\mid Z_1=0)}=\exp(\beta_1+\beta_2 t)
+<li><strong>Example</strong>: <span class="math inline">\(Z_{\cdot 1} = 1, 0\)</span>
+<ul>
+<li>Non-proportionality: <span class="math inline">\(\lambda(t\mid Z_{\cdot 1} =1)/\lambda(t\mid Z_{\cdot 1} =0)\)</span> changes with <span class="math inline">\(t\)</span></li>
+<li>Add <span class="math inline">\(Z_{\cdot 2}(t) = Z_{\cdot 1} t\)</span>, then <span class="math display">\[\lambda(t\mid Z_{\cdot 1}, Z_{\cdot 2})=\exp\{\beta_1Z_{\cdot 1} + \beta_2Z_{\cdot 2}(t)\}\lambda_0(t)\]</span> So <span class="math display">\[
+\frac{\lambda(t\mid Z_{\cdot 1}=1)}{\lambda(t\mid Z_{\cdot 1}=0)}=\exp(\beta_1+\beta_2 t)
 \]</span></li>
 <li>Hopefully captures temporal pattern of effect size</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="estimation-and-inference" class="slide level2">
 <h2>Estimation and Inference</h2>
+<div class="fragment">
 <ul>
 <li><strong>Same inference procedure</strong>: partial likelihood <span class="math display">\[\begin{align*}
 PL_n(\beta)=\prod_{j=1}^m\frac{\exp\{\beta^\T Z_{(j)}(t_j)\}}{\sum_{i\in\mathcal R_j}\exp\{\beta^\T Z_i(t_j)\}}.
 \end{align*}\]</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Partial-likelihood score</strong> <span class="math display">\[
 U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X_j\geq t)Z_j(t)\exp\{\beta^\T Z_j(t)\}}{\sum_{j=1}^n I(X_j\geq t)\exp\{\beta^\T Z_j(t)\}}
 \right\}\dd N_i(t)
@@ -1274,19 +1408,23 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 <li>Same Newton-Raphson algorithm</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="software-survivalcoxph-iv" class="slide level2">
 <h2>Software: <code>survival::coxph()</code> (IV)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Basic syntax</strong> for time-varying covariates</li>
 </ul>
 <div class="big-code">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a><span class="co"># (start, stop): left and right ends of time period</span></span>
-<span id="cb20-2"><a></a><span class="co"># event: 1 = event; 0 = no event</span></span>
-<span id="cb20-3"><a></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, event) <span class="sc">~</span> covariates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a></a><span class="co"># (start, stop): left and right ends of time period</span></span>
+<span id="cb21-2"><a></a><span class="co"># event: 1 = event; 0 = no event</span></span>
+<span id="cb21-3"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, event) <span class="sc">~</span> covariates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
+<div class="fragment">
 <ul>
 <li><strong>Input</strong>
 <ul>
@@ -1297,26 +1435,54 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 <li><code>event = 0</code> need not mean censoring (why?)</li>
 </ul></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Output</strong>: <code>coxph</code> object</li>
 </ul>
+</div>
+</section>
+<section id="software-survivalcoxph-v" class="slide level2">
+<h2>Software: <code>survival::coxph()</code> (V)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Residual analysis</strong>
+<ul>
+<li>Subject indexing to aggregate residuals</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a><span class="co"># Residual calculations for Cox model with time-varying covariates</span></span>
+<span id="cb22-2"><a></a><span class="fu">residuals</span>(obj, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"martingale"</span>, <span class="st">"deviance"</span>, <span class="st">"schoenfeld"</span>, <span class="st">"score"</span>,</span>
+<span id="cb22-3"><a></a>                        <span class="st">"scaledsch"</span>, <span class="st">"dfbeta"</span>, <span class="st">"dfbetas"</span>, <span class="st">"partial"</span>),</span>
+<span id="cb22-4"><a></a>               <span class="at">collapse =</span> df<span class="sc">$</span>id <span class="co"># specify subject ID</span></span>
+<span id="cb22-5"><a></a>            )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 </section>
 <section id="example-stanford-heart-study-i" class="slide level2">
 <h2>Example: Stanford Heart Study (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Heart transplant study</strong> (1967–74)
 <ul>
-<li>Study population: 103 cardiac patients in transplantation program</li>
-<li>Aim: effect of transplant (time-varying) on time from enrollment to death</li>
+<li><strong>Population</strong>: 103 cardiac patients in transplantation program</li>
+<li><strong>Objective</strong>: Evaluate effect of transplant (time-varying) on time from enrollment to death</li>
 </ul></li>
 </ul>
+</div>
+<div class="fragment">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="images/cox_stanford_dat.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="example-stanford-heart-study-ii" class="slide level2">
 <h2>Example: Stanford Heart Study (II)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Results</strong>
 <ul>
@@ -1324,24 +1490,71 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a></a><span class="co"># Call:</span></span>
-<span id="cb21-2"><a></a><span class="co"># coxph(formula = Surv(start, stop, event) ~ age + accpt + surgery + </span></span>
-<span id="cb21-3"><a></a><span class="co">#       transplant, data = heart)</span></span>
-<span id="cb21-4"><a></a><span class="co"># </span></span>
-<span id="cb21-5"><a></a><span class="co">#   n= 172, number of events= 75 </span></span>
-<span id="cb21-6"><a></a><span class="co"># </span></span>
-<span id="cb21-7"><a></a><span class="co">#                 coef exp(coef) se(coef)      z Pr(&gt;|z|)  </span></span>
-<span id="cb21-8"><a></a><span class="co"># age          0.02717   1.02754  0.01371  1.981   0.0476 *</span></span>
-<span id="cb21-9"><a></a><span class="co"># accpt       -0.14635   0.86386  0.07047 -2.077   0.0378 *</span></span>
-<span id="cb21-10"><a></a><span class="co"># surgery     -0.63721   0.52877  0.36723 -1.735   0.0827 .</span></span>
-<span id="cb21-11"><a></a><span class="co"># transplant1 -0.01025   0.98980  0.31375 -0.033   0.9739  </span></span>
-<span id="cb21-12"><a></a><span class="sc">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a></a><span class="co"># Call:</span></span>
+<span id="cb23-2"><a></a><span class="co"># coxph(formula = Surv(start, stop, event) ~ age + accpt + surgery + </span></span>
+<span id="cb23-3"><a></a><span class="co">#       transplant, data = heart)</span></span>
+<span id="cb23-4"><a></a><span class="co"># </span></span>
+<span id="cb23-5"><a></a><span class="co">#   n= 172, number of events= 75 </span></span>
+<span id="cb23-6"><a></a><span class="co"># </span></span>
+<span id="cb23-7"><a></a><span class="co">#                 coef exp(coef) se(coef)      z Pr(&gt;|z|)  </span></span>
+<span id="cb23-8"><a></a><span class="co"># age          0.02717   1.02754  0.01371  1.981   0.0476 *</span></span>
+<span id="cb23-9"><a></a><span class="co"># accpt       -0.14635   0.86386  0.07047 -2.077   0.0378 *</span></span>
+<span id="cb23-10"><a></a><span class="co"># surgery     -0.63721   0.52877  0.36723 -1.735   0.0827 .</span></span>
+<span id="cb23-11"><a></a><span class="co"># transplant1 -0.01025   0.98980  0.31375 -0.033   0.9739  </span></span>
+<span id="cb23-12"><a></a><span class="sc">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="example-stanford-heart-study-iii" class="slide level2">
+<h2>Example: Stanford Heart Study (III)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Internal or external</strong>
+<ul>
+<li><strong>External</strong>: if donor matching follows predetermined protocol</li>
+<li><strong>Internal</strong>: if donor matching depends on patient’s health status
+<ul>
+<li>Critically ill more likely to receive transplant sooner</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Model diagnostics</strong>
+<ul>
+<li>Exercise</li>
+</ul></li>
+</ul>
 </div>
 </section></section>
 <section>
 <section id="conclusion" class="title-slide slide level1 center">
 <h1>Conclusion</h1>
 
+</section>
+<section id="notes" class="slide level2">
+<h2>Notes</h2>
+<div class="fragment">
+<ul>
+<li><strong>Partial likelihood</strong>
+<ul>
+<li>Original introduced by Sir David R. Cox (Cox, 1972)</li>
+<li>Statistically efficient ($$5.2 of Tsiatis, 2006)</li>
+<li>Widely used by statisticians and medical researchers alike</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Residual analysis</strong>
+<ul>
+<li>Cox–Snell residuals by Kay (1977)</li>
+<li>Schoenfeld residuals by Schoenfeld (1980, 1982)</li>
+<li>Proportionality tests implemented in <code>cox.zph()</code> based on Grambsch and Therneau (1994)</li>
+</ul></li>
+</ul>
+</div>
 </section>
 <section id="summary-i" class="slide level2">
 <h2>Summary (I)</h2>
@@ -1367,7 +1580,7 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 <ul>
 <li><strong>Cox-Snell</strong>: Overall fit
 <ul>
-<li><code>df$status - resid(obj, type = "martingale")</code></li>
+<li><code>df$status - residuals(obj, type = "martingale")</code></li>
 </ul></li>
 <li><strong>Schoenfeld</strong>: Proportionality
 <ul>
@@ -1375,7 +1588,7 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 </ul></li>
 <li><strong>Martingale/Deviance</strong>: Covariate form, link function, outlier
 <ul>
-<li><code>resid(obj, type = c("martingale", "deviance"))</code></li>
+<li><code>residuals(obj, type = c("martingale", "deviance"))</code></li>
 </ul></li>
 </ul></li>
 <li><strong>Time-varying covariates</strong>
@@ -1391,6 +1604,7 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 <li>Problem 4.8</li>
 <li>Problem 4.14</li>
 <li>Problems 4.15 and 4.21</li>
+<li>Extra credit: Problem 4.22</li>
 </ul>
 
 
