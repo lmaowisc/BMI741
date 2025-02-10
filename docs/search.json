@@ -1549,7 +1549,7 @@
     "href": "chap4.html#example-german-breast-cancer-ii",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (II)",
-    "text": "Example: German Breast Cancer (II)\n\n\nModel fitting\n\n\n#--- Data frame ---------------------\nhead(df)\n#   id      time status hormone age meno size grade nodes prog estrg\n# 1  1 43.836066      1       1  38    1   18     3     5  141   105\n# 3  2 46.557377      1       1  52    1   20     1     1   78    14\n# 5  3 41.934426      1       1  47    1   30     2     1  422    89\n# 7  4  4.852459      0       1  40    1   24     1     3   25    11\n# 8  5 61.081967      0       2  64    2   19     2     1   19     9\n# 9  6 63.377049      0       2  49    2   56     1     3  356    64\n\n#--- Model fitting ------------------\nobj &lt;- coxph(Surv(time, status)~ hormone + meno + age + size + grade\n           + prog + estrg, data = data.CE)"
+    "text": "Example: German Breast Cancer (II)\n\n\nModel fitting\n\n\n#--- Data frame ---------------------\nhead(df)\n#   id      time status hormone age meno size grade nodes prog estrg\n# 1  1 43.836066      1       1  38    1   18     3     5  141   105\n# 3  2 46.557377      1       1  52    1   20     1     1   78    14\n# 5  3 41.934426      1       1  47    1   30     2     1  422    89\n# 7  4  4.852459      0       1  40    1   24     1     3   25    11\n# 8  5 61.081967      0       2  64    2   19     2     1   19     9\n# 9  6 63.377049      0       2  49    2   56     1     3  356    64\n\n#--- Model fitting ------------------\nobj &lt;- coxph(Surv(time, status)~ hormone + meno + age + size + grade\n           + prog + estrg, data = df)"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-iii",
@@ -1591,182 +1591,182 @@
     "href": "chap4.html#assumptions-in-cox-model",
     "title": "Applied Survival Analysis",
     "section": "Assumptions in Cox Model",
-    "text": "Assumptions in Cox Model\n\nCox model assumptions \\[\\begin{equation}\n\\lambda(t\\mid Z)=\\lambda_0(t)\\exp(\\beta^\\T Z)\n\\end{equation}\\]\n\nProportionality (\\(\\beta\\) is time-constant)\nFunctional form of \\(Z_{\\cdot k}\\) (linear? quadratic? categorical?)\nLink function \\(\\exp(\\cdot)\\) for \\(\\beta^\\T Z\\)\n\nResiduals\n\nObserved vs model-predicted\nModel fits data \\(\\to\\) predictions capture systematic trend \\(\\to\\) random residuals\nPattern in residuals \\(\\to\\) inadequate fit"
+    "text": "Assumptions in Cox Model\n\n\nCox model assumptions \\[\\begin{equation}\n\\lambda(t\\mid Z)=\\lambda_0(t)\\exp(\\beta^\\T Z)\n\\end{equation}\\]\n\nProportionality (\\(\\beta\\) is time-constant)\nFunctional form of \\(Z_{\\cdot k}\\) (linear? quadratic? categorical?)\nLink function \\(\\exp(\\cdot)\\) for \\(\\beta^\\T Z\\)\n\n\n\n\n\nResiduals\n\nObserved vs model-predicted\nModel fits data \\(\\to\\) predictions capture systematic trend \\(\\to\\) random residuals\nPattern in residuals \\(\\to\\) inadequate fit"
   },
   {
     "objectID": "chap4.html#cox-snell-residuals-i",
     "href": "chap4.html#cox-snell-residuals-i",
     "title": "Applied Survival Analysis",
     "section": "Cox-Snell Residuals (I)",
-    "text": "Cox-Snell Residuals (I)\n\nStandard result\n\n\\(S(T)\\sim\\mbox{Unif}[0, 1]\\)\n\\(\\Lambda(T)=-\\log S(T) \\sim \\mbox{Expn}(1)\\) (exponential with unit hazard rate)\n\nUnder Cox model \\[\n\\Lambda(t\\mid Z;\\beta,\\Lambda_0)=\\exp(\\beta^\\T Z)\\Lambda_0(t)\n\\]\n\n\\(\\Lambda(T\\mid Z;\\beta,\\Lambda_0)\\sim \\mbox{Expn}(1)\\)\n\\(\\Lambda(X\\mid Z;\\beta,\\Lambda_0)\\): Censored version of \\(\\Lambda(T\\mid Z;\\beta,\\Lambda_0)\\sim \\mbox{Expn}(1)\\)\n\\(\\{\\hat s_i\\equiv \\Lambda(X_i\\mid Z_i;\\hat\\beta,\\hat\\Lambda_0), \\delta_i\\}\\): A sample of censored “times” from \\(\\mbox{Expn}(1)\\)\n\n\\(\\hat s_i\\) \\((i=1,\\ldots, n)\\): Cox-Snell residuals"
+    "text": "Cox-Snell Residuals (I)\n\n\nStandard result\n\n\\(S(T)\\sim\\mbox{Unif}[0, 1]\\)\n\\(\\Lambda(T)=-\\log S(T) \\sim \\mbox{Expn}(1)\\) (exponential with unit hazard rate)\n\n\n\n\n\nUnder Cox model \\[\n\\Lambda(t\\mid Z;\\beta,\\Lambda_0)=\\exp(\\beta^\\T Z)\\Lambda_0(t)\n\\]\n\n\\(\\Lambda(T\\mid Z;\\beta,\\Lambda_0)\\sim \\mbox{Expn}(1)\\)\n\\(\\Lambda(X\\mid Z;\\beta,\\Lambda_0)\\): Censored version of \\(\\Lambda(T\\mid Z;\\beta,\\Lambda_0)\\sim \\mbox{Expn}(1)\\)\n\\(\\{\\hat s_i\\equiv \\Lambda(X_i\\mid Z_i;\\hat\\beta,\\hat\\Lambda_0), \\delta_i\\}\\): A sample of censored “times” from \\(\\mbox{Expn}(1)\\)\n\n\\(\\hat s_i\\) \\((i=1,\\ldots, n)\\): Cox-Snell residuals"
   },
   {
     "objectID": "chap4.html#cox-snell-residuals-ii",
     "href": "chap4.html#cox-snell-residuals-ii",
     "title": "Applied Survival Analysis",
     "section": "Cox-Snell Residuals (II)",
-    "text": "Cox-Snell Residuals (II)\n\nNelsen-Aalen estimates \\(\\hat\\Lambda_{\\rm CS}(t)\\)\n\nBased on \\((\\hat s_i, \\delta_i)\\) \\((i=1,\\ldots, n)\\)\nRecovers cumulative hazard of \\(\\mbox{Expn}(1)\\), i.e., \\(\\Lambda(t)=t\\)\n\nGraphical check\n\nOverall fit: \\(\\hat\\Lambda_{\\rm CS}(\\hat s_i)\\approx \\hat s_i\\)\n\\(\\log\\hat\\Lambda_{\\rm CS}(\\hat s_i)\\) vs \\(\\log\\hat s_i\\): straight line passing through origin (similar to Q-Q plot)\nDeparture (e.g., curvature) suggests lack of fit\n\nDoesn’t tell which assumptions are violated"
+    "text": "Cox-Snell Residuals (II)\n\n\nNelsen-Aalen estimates \\(\\hat\\Lambda_{\\rm CS}(t)\\)\n\nBased on \\((\\hat s_i, \\delta_i)\\) \\((i=1,\\ldots, n)\\)\nRecovers cumulative hazard of \\(\\mbox{Expn}(1)\\), i.e., \\(\\Lambda(t)=t\\)\n\n\n\n\n\nGraphical check\n\nOverall fit: \\(\\hat\\Lambda_{\\rm CS}(\\hat s_i)\\approx \\hat s_i\\)\n\\(\\log\\hat\\Lambda_{\\rm CS}(\\hat s_i)\\) vs \\(\\log\\hat s_i\\): straight line passing through origin (similar to Q-Q plot)\nDeparture (e.g., curvature) suggests lack of fit\n\nDoesn’t tell which assumptions are violated"
   },
   {
     "objectID": "chap4.html#schoenfeld-residuals-i",
     "href": "chap4.html#schoenfeld-residuals-i",
     "title": "Applied Survival Analysis",
     "section": "Schoenfeld Residuals (I)",
-    "text": "Schoenfeld Residuals (I)\n\nDefined only for failed subjects \\[\\begin{equation}\\label{eq:cox:schoenfeld}\n\\hat r_i=Z_i-\\mathcal E(X_i;\\hat\\beta) \\hspace{10mm} (\\delta_i=1; i=1,\\ldots,n).\n\\end{equation}\\]\n\n\\(\\mathcal E(t_j;\\beta) = E(Z_{(j)}\\mid \\mathcal R_j, d_j=1)=\\frac{\\sum_{j=1}^nI(X_j\\geq t)Z_j\\exp(\\beta^\\T Z_j)}{\\sum_{j=1}^nI(X_j\\geq t)\\exp(\\beta^\\T Z_j)}\\)\nObserved minus (conditionally) expected covariates\nSensitive to proportionality (canceling of \\(\\lambda_0(\\cdot)\\))\n\\(\\hat r_{ik}\\) (rescaled) vs \\(X_i\\): mean zero if proportionality holds on \\(Z_{\\cdot k}\\)\nFormal \\(\\chi^2\\) tests based on the \\(\\hat r_{ik}\\) (with proportionality as \\(H_0\\))\n\nServe only as guidelines to graphical results"
+    "text": "Schoenfeld Residuals (I)\n\n\nDefined only for failed subjects \\[\\begin{equation}\\label{eq:cox:schoenfeld}\n\\hat r_i=Z_i-\\mathcal E(X_i;\\hat\\beta) \\hspace{10mm} (\\delta_i=1; i=1,\\ldots,n).\n\\end{equation}\\]\n\n\\(\\mathcal E(t_j;\\beta) = E(Z_{(j)}\\mid \\mathcal R_j, d_j=1)=\\frac{\\sum_{j=1}^nI(X_j\\geq t)Z_j\\exp(\\beta^\\T Z_j)}{\\sum_{j=1}^nI(X_j\\geq t)\\exp(\\beta^\\T Z_j)}\\)\nObserved minus (conditionally) expected covariates\nSensitive to proportionality (canceling of \\(\\lambda_0(\\cdot)\\))\n\\(\\hat r_{ik}\\) (rescaled) vs \\(X_i\\): mean zero if proportionality holds on \\(Z_{\\cdot k}\\)\nFormal \\(\\chi^2\\) tests based on the \\(\\hat r_{ik}\\) (with proportionality as \\(H_0\\))\n\nServe only as guidelines to graphical results"
   },
   {
     "objectID": "chap4.html#schoenfeld-residuals-ii",
     "href": "chap4.html#schoenfeld-residuals-ii",
     "title": "Applied Survival Analysis",
     "section": "Schoenfeld Residuals (II)",
-    "text": "Schoenfeld Residuals (II)\n\nIn case of non-proportionality\n\nHR changes over time\nStratify rather than set as covariate\nInclude covariate \\(\\times\\) time interaction, e.g., \\(Z_{\\cdot k}\\log(t)\\)\nChoose alternatives over Cox model (Chapter 5)\n\nRestricted mean life\nAdditive hazards\nProportional odds\nAccelerate failure time (AFT)"
+    "text": "Schoenfeld Residuals (II)\n\n\nIn case of non-proportionality\n\nHR changes over time\nStratify rather than set as covariate\nInclude covariate \\(\\times\\) time interaction, e.g., \\(Z_{\\cdot k}\\log(t)\\)\nChoose alternatives over Cox model (Chapter 5)\n\nRestricted mean life\nAdditive hazards\nProportional odds\nAccelerate failure time (AFT)"
   },
   {
     "objectID": "chap4.html#martingaledeviance-residuals",
     "href": "chap4.html#martingaledeviance-residuals",
     "title": "Applied Survival Analysis",
     "section": "Martingale/Deviance Residuals",
-    "text": "Martingale/Deviance Residuals\n\nUsual residuals: observed response minus expected \\[\\begin{align*}\nM_i(X_i; \\hat\\beta,\\hat\\Lambda_0)&=N_i(X_i)-\\int_0^{X_i} I(X_i\\geq t)\\exp(\\hat\\beta^\\T Z_i)\\dd \\hat\\Lambda_0(t)\\\\\n&=\\delta_i-\\exp(\\hat\\beta^\\T Z_i)\\hat\\Lambda_0(X_i)\n\\end{align*}\\]\n\n\\(\\exp(\\hat\\beta^\\T Z_i)\\hat\\Lambda_0(X_i)\\) is Cox-Snell residual\nFunctional form of \\(Z_{\\cdot k}\\): plot \\(M_i(X_i; \\hat\\beta,\\hat\\Lambda_0)\\) against \\(Z_{ik}\\) \\((i=1,\\ldots, n)\\)\n\nInappropriate form \\(\\to\\) transform by log, square root, power, or grouping\n\nLink function: plot \\(M_i(X_i; \\hat\\beta,\\hat\\Lambda_0)\\) against \\(\\hat\\beta^\\T Z_i\\)\nDeviance residuals: Standardized/symmetrized martingale residuals \\(\\to\\) outlier detection"
+    "text": "Martingale/Deviance Residuals\n\n\nUsual residuals: observed response minus expected \\[\\begin{align*}\nM_i(X_i; \\hat\\beta,\\hat\\Lambda_0)&=N_i(X_i)-\\int_0^{X_i} I(X_i\\geq t)\\exp(\\hat\\beta^\\T Z_i)\\dd \\hat\\Lambda_0(t)\\\\\n&=\\delta_i-\\exp(\\hat\\beta^\\T Z_i)\\hat\\Lambda_0(X_i)\n\\end{align*}\\]\n\n\\(\\exp(\\hat\\beta^\\T Z_i)\\hat\\Lambda_0(X_i)\\) is Cox-Snell residual\nFunctional form of \\(Z_{\\cdot k}\\): plot \\(M_i(X_i; \\hat\\beta,\\hat\\Lambda_0)\\) against \\(Z_{ik}\\) \\((i=1,\\ldots, n)\\)\n\nInappropriate form \\(\\to\\) transform by log, square root, power, or grouping\n\nLink function: plot \\(M_i(X_i; \\hat\\beta,\\hat\\Lambda_0)\\) against \\(\\hat\\beta^\\T Z_i\\)\nDeviance residuals: Standardized/symmetrized martingale residuals \\(\\to\\) outlier detection"
   },
   {
     "objectID": "chap4.html#software-survivalresid-i",
     "href": "chap4.html#software-survivalresid-i",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::resid() (I)",
-    "text": "Software: survival::resid() (I)\n\nBasic syntax for Cox model residuals\n\n\n# obj: object returned by coxph()\nresid(obj, type = c(\"martingale\", \"deviance\", \"score\", \"schoenfeld\", \n                    \"dfbeta\", \"dfbetas\", \"scaledsch\", \"partial\"))\n\n\nCox-Snell residuals\n\n\n## calculate cox-snell by martingale residuals (data frame: df)\ncoxsnellres &lt;- df$status - resid(obj, type = \"martingale\")\n## Use Nelsen-Aalen for cumulative hazard\nfit &lt;- survfit(Surv(coxsnellres, df$status) ~ 1)\nLambda &lt;- cumsum(fit$n.event/fit$n.risk)\n## scatter plot\nplot(log(fit$time), log(Lambda), xlab = \"log(t)\", \n     ylab = \"log-cumulative hazard\")\nabline(0, 1, lty = 3) # add a reference line"
+    "text": "Software: survival::resid() (I)\n\n\nBasic syntax for Cox model residuals\n\n\n# obj: object returned by coxph()\nresid(obj, type = c(\"martingale\", \"deviance\", \"score\", \"schoenfeld\", \n                    \"dfbeta\", \"dfbetas\", \"scaledsch\", \"partial\"))\n\n\n\n\nCox-Snell residuals\n\n\n# Calculate Cox-Snell by martingale residuals \n# df: data frame\ncoxsnellres &lt;- df$status - resid(obj, type = \"martingale\")\n# Compute Nelsen-Aalen estimates for cumulative hazard\nfit &lt;- survfit(Surv(coxsnellres, df$status) ~ 1)\nLambda &lt;- cumsum(fit$n.event / fit$n.risk)\n# Scatter plot\nplot(log(fit$time), log(Lambda), xlab = \"log(t)\", \n     ylab = \"log-cumulative hazard\")\nabline(0, 1, lty = 3) # add a dotted reference line"
   },
   {
     "objectID": "chap4.html#software-survivalcox.zph",
     "href": "chap4.html#software-survivalcox.zph",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::cox.zph()",
-    "text": "Software: survival::cox.zph()\n\nRescaled Schoenfeld residuals\n\n\n# rescaled Schoenfeld residuals and tests\nsch &lt;- cox.zph(obj) \n\n\nOutput\n\nsch$table: \\(\\chi^2\\) tests of proportionality for each covariate and overall\nsch$time: \\(m\\)-vector of the \\(X_i\\)\nsch$y: \\((m\\times p)\\)-matrix of the rescaled \\(\\hat r_i\\)\nplot(sch): plot the residuals, one covariate per panel"
+    "text": "Software: survival::cox.zph()\n\n\nRescaled Schoenfeld residuals\n\n\n# rescaled Schoenfeld residuals and tests\nsch &lt;- cox.zph(obj) \n\n\n\n\nOutput\n\nsch$table: \\(\\chi^2\\) tests of proportionality (each covariate and overall)\nsch$time: \\(m\\)-vector of the \\(X_i\\)\nsch$y: \\((m\\times p)\\)-matrix of the rescaled \\(\\hat r_i\\)\nplot(sch): plot the residuals, one covariate per panel"
   },
   {
     "objectID": "chap4.html#software-survivalresid-ii",
     "href": "chap4.html#software-survivalresid-ii",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::resid() (II)",
-    "text": "Software: survival::resid() (II)\n\nMartingale/Deviance residuals\n\ndf: data frame\nzk: name of covariate of interest\n\n\n# get the residuals\nmart_resid &lt;- resid(obj, type = 'martingale') # n-vector of martingale\ndev_resid &lt;- resid(obj, type = 'deviance') # n-vector of deviance\n# scatter plot residuals against covariate\nplot(df$zk, mart_resid)\nlines(lowess(df$zk, mart_resid)) # add a smooth line through points\nabline(0, 0, lty = 3) # add a dotted reference line"
+    "text": "Software: survival::resid() (II)\n\n\nMartingale/Deviance residuals\n\ndf: data frame\nzk: name of covariate of interest\n\n\n# Get the residuals\nmart_resid &lt;- resid(obj, type = 'martingale') # n-vector of martingale\ndev_resid &lt;- resid(obj, type = 'deviance') # n-vector of deviance\n# Scatter plot residuals against covariate\nplot(df$zk, mart_resid)\nlines(lowess(df$zk, mart_resid)) # add a smooth line through points\nabline(0, 0, lty = 3) # add a dotted reference line"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-viii",
     "href": "chap4.html#example-german-breast-cancer-viii",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (VIII)",
-    "text": "Example: German Breast Cancer (VIII)\n\nOverall fit - Cox-Snell residuals\n\n\ncoxsnellres &lt;- data.CE$status-resid(obj, type=\"martingale\")\n## Then use N-A method to estimate the cumulative \n## hazard function for residuals\nfit &lt;- survfit(Surv(coxsnellres,data.CE$status) ~ 1)\nHtilde &lt;- cumsum(fit$n.event/fit$n.risk)\n## scatter plot\nplot(log(fit$time), log(Htilde), xlab=\"log(t)\", frame.plot = FALSE,\n     ylab=\"log-cumulative hazard\", xlim = c(-8, 2), ylim = c(-8, 2))\nabline(0, 1, lty = 3, lwd = 1.5) # add a reference line"
+    "text": "Example: German Breast Cancer (VIII)\n\n\nOverall fit - Cox-Snell residuals\n\n\n# Compute the residuals\ncoxsnellres &lt;- df$status-resid(obj, type=\"martingale\")\n## Then use N-A method to estimate the cumulative \n## hazard function for residuals\nfit &lt;- survfit(Surv(coxsnellres,df$status) ~ 1)\nHtilde &lt;- cumsum(fit$n.event/fit$n.risk)\n# Scatter plot\nplot(log(fit$time), log(Htilde), xlab=\"log(t)\", frame.plot = FALSE,\n     ylab=\"log-cumulative hazard\", xlim = c(-8, 2), ylim = c(-8, 2))\nabline(0, 1, lty = 3, lwd = 1.5) # add a reference line"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-ix",
     "href": "chap4.html#example-german-breast-cancer-ix",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (IX)",
-    "text": "Example: German Breast Cancer (IX)\n\nOverall fit - Cox-Snell residuals"
+    "text": "Example: German Breast Cancer (IX)\n\n\nOverall fit - Cox-Snell residuals"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-x",
     "href": "chap4.html#example-german-breast-cancer-x",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (X)",
-    "text": "Example: German Breast Cancer (X)\n\nProportionality - Schoenfeld residuals\n\n\n# rescaled Schoelfeld residuals\nsch &lt;- cox.zph(obj) \nsch$table # chi-square tests"
+    "text": "Example: German Breast Cancer (X)\n\n\nProportionality - Schoenfeld residuals\n\n\n# Rescaled Schoelfeld residuals\nsch &lt;- cox.zph(obj) \nsch$table # chi-square tests"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-xi",
     "href": "chap4.html#example-german-breast-cancer-xi",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (XI)",
-    "text": "Example: German Breast Cancer (XI)\n\nProportionality - Schoenfeld residuals\n\n\n# Plot rescaled Schoenfeld residuals for each covariate directly\nplot(sch, xlab=\"Time (months)\", lwd=2, cex.lab=1.2, cex.axis=1.2,\n     ylab = c(\"Hormone\", \"Menopause\", \"Age\", \"Tumor size\",\n               \"Tumor grade\", \"Progesterone\", \"Estrogen\"))"
+    "text": "Example: German Breast Cancer (XI)\n\n\nProportionality - Schoenfeld residuals\n\n\n# Plot rescaled Schoenfeld residuals for each covariate directly\nplot(sch, xlab=\"Time (months)\", lwd=2, cex.lab=1.2, cex.axis=1.2,\n     ylab = c(\"Hormone\", \"Menopause\", \"Age\", \"Tumor size\",\n               \"Tumor grade\", \"Progesterone\", \"Estrogen\"))"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-xii",
     "href": "chap4.html#example-german-breast-cancer-xii",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (XII)",
-    "text": "Example: German Breast Cancer (XII)\n\nStratification by tumor grade\n\n\n# fit a Cox model stratified by tumor grade\nobj.stra &lt;- coxph(Surv(time, status) ~ hormone + meno\n         + age + size + prog + estrg + strata(grade), data = data.CE)\ncox.zph(obj.stra)$table # proportionality tests"
+    "text": "Example: German Breast Cancer (XII)\n\n\nStratification by tumor grade\n\n\n# fit a Cox model stratified by tumor grade\nobj_stra &lt;- coxph(Surv(time, status) ~ hormone + meno\n         + age + size + prog + estrg + strata(grade), data = df)\ncox.zph(obj_stra)$table # proportionality tests"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-xiii",
     "href": "chap4.html#example-german-breast-cancer-xiii",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (XIII)",
-    "text": "Example: German Breast Cancer (XIII)\n\nCovariate form - Martingale (deviance) residuals\n\n\n## Martingale residuals\nmart_resid &lt;- resid(obj.stra,type = 'martingale')\n#plot residuals against, e.g., age\nplot(data.CE$age, mart_resid, main='Age', cex.lab=1.2, cex.axis=1.2,\n     xlab=\"Age (years)\", ylab=\"Martingale residuals\")\nlines(lowess(data.CE$age, mart_resid), lwd = 2) # add a smooth line\nabline(0, 0, lty = 3, lwd = 2) # add a reference line"
+    "text": "Example: German Breast Cancer (XIII)\n\n\nCovariate form - Martingale (deviance) residuals\n\n\n## Martingale residuals\nmart_resid &lt;- resid(obj_stra,type = 'martingale')\n#plot residuals against, e.g., age\nplot(df$age, mart_resid, main='Age', cex.lab=1.2, cex.axis=1.2,\n     xlab=\"Age (years)\", ylab=\"Martingale residuals\")\nlines(lowess(df$age, mart_resid), lwd = 2) # add a smooth line\nabline(0, 0, lty = 3, lwd = 2) # add a reference line"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-xiv",
     "href": "chap4.html#example-german-breast-cancer-xiv",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (XIV)",
-    "text": "Example: German Breast Cancer (XIV)\n\nCovariate form - Martingale (deviance) residuals"
+    "text": "Example: German Breast Cancer (XIV)\n\n\nCovariate form - Martingale (deviance) residuals"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-xv",
     "href": "chap4.html#example-german-breast-cancer-xv",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (XV)",
-    "text": "Example: German Breast Cancer (XV)\n\nCategorize age\n\nMore events in younger women than accounted for by linear age\nRefit model with agec=1: \\(\\leq 40\\) yrs; agec=2: \\((40, 60]\\) yrs; agec=3: \\(&gt; 60\\) yrs\n\n\n\n# Call:\n# coxph(formula = Surv(time, status) ~ hormone + meno + agec + \n#     size + prog + estrg + strata(grade), data = data.CE)\n#                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    \n# hormone2 -0.3788600  0.6846415  0.1294642 -2.926  0.00343 ** \n# meno2     0.2804119  1.3236749  0.1567576  1.789  0.07364 .  \n# agec2    -0.5315678  0.5876829  0.1984112 -2.679  0.00738 ** \n# agec3    -0.4965589  0.6086214  0.2497403 -1.988  0.04678 *  \n# size      0.0164114  1.0165468  0.0036964  4.440 9.00e-06 ***\n# prog     -0.0022708  0.9977318  0.0005812 -3.907 9.36e-05 ***\n# estrg     0.0001254  1.0001254  0.0004718  0.266  0.79041    \n# ---"
+    "text": "Example: German Breast Cancer (XV)\n\n\nCategorize age\n\nMore events in younger women than accounted for by linear age\nRefit model with agec=1: \\(\\leq 40\\) yrs; agec=2: \\((40, 60]\\) yrs; agec=3: \\(&gt; 60\\) yrs\n\n\n\n# Call:\n# coxph(formula = Surv(time, status) ~ hormone + meno + agec + \n#     size + prog + estrg + strata(grade), data = df)\n#                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    \n# hormone2 -0.3788600  0.6846415  0.1294642 -2.926  0.00343 ** \n# meno2     0.2804119  1.3236749  0.1567576  1.789  0.07364 .  \n# agec2    -0.5315678  0.5876829  0.1984112 -2.679  0.00738 ** \n# agec3    -0.4965589  0.6086214  0.2497403 -1.988  0.04678 *  \n# size      0.0164114  1.0165468  0.0036964  4.440 9.00e-06 ***\n# prog     -0.0022708  0.9977318  0.0005812 -3.907 9.36e-05 ***\n# estrg     0.0001254  1.0001254  0.0004718  0.266  0.79041    \n# ---"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-xvi",
     "href": "chap4.html#example-german-breast-cancer-xvi",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (XVI)",
-    "text": "Example: German Breast Cancer (XVI)\n\nCategorize age\n\nAge differences masked by inappropriate linear form (\\(p\\)-value 0.348)"
+    "text": "Example: German Breast Cancer (XVI)\n\n\nCategorize age\n\nAge differences masked by inappropriate linear form (\\(p\\)-value 0.348)"
   },
   {
     "objectID": "chap4.html#internal-vs-external-covariates",
     "href": "chap4.html#internal-vs-external-covariates",
     "title": "Applied Survival Analysis",
     "section": "Internal vs External Covariates",
-    "text": "Internal vs External Covariates\n\nNotation: \\(Z(t)=\\{Z_{\\cdot 1}(t),\\ldots, Z_{\\cdot p}(t)\\}^\\T\\)\nInternal covariates\n\nMeasured on same subject during follow-up, influenced by failure process\nBiomarkers (CD4 cell count), quality of life, other events\nModeling: current (instantaneous) risk vs covariate history\n\nExternal covariates:\n\nExtraneous factors, changes unaffected by subject’s failure process\nPre-planned treatment sequence, environmental factors, interactions of baseline covariates with time\nModeling: risk profile vs entire covariate path"
+    "text": "Internal vs External Covariates\n\n\nNotation: \\(Z(t)=\\{Z_{\\cdot 1}(t),\\ldots, Z_{\\cdot p}(t)\\}^\\T\\)\n\n\n\n\nInternal covariates\n\nMeasured on same subject during follow-up, influenced by failure process\n\nBiomarkers (CD4 cell count), quality of life, other events\n\nModeling: current (instantaneous) risk vs covariate history\n\n\n\n\n\nExternal covariates\n\nExtraneous factors, changes unaffected by subject’s failure process\n\nPre-planned treatment sequence, environmental factors, baseline covariates \\(\\times\\) time\n\nModeling: risk profile vs entire covariate path"
   },
   {
     "objectID": "chap4.html#internal-covariates",
     "href": "chap4.html#internal-covariates",
     "title": "Applied Survival Analysis",
     "section": "Internal Covariates",
-    "text": "Internal Covariates\n\nModeling target (intensity function) \\[\n\\lambda\\{t\\mid\\overline Z(t)\\}\\dd t=\\pr\\{t\\leq T&lt;t+\\dd t\\mid T\\geq t, \\overline Z(t)\\}\n\\]\n\n\\(\\overline Z(t)=\\{Z(u): 0\\leq u\\leq t\\}\\): covariate path up to \\(t\\)\n\nModeling specification \\[\\begin{equation}\\label{eq:cox:time_varying_model}\n\\lambda\\{t\\mid\\overline Z(t)\\}=\\lambda_0(t)\\exp\\{\\beta^\\T Z(t)\\}.\n\\end{equation}\\]\n\nCurrent risk depends on past only through \\(Z(t)\\)\nDefine \\(Z(t)\\) to be useful summary of past\n\nshould not be “current” measurements due to delay in cause and effect\n\nExample: frequency of drug use in past week, month, or year"
+    "text": "Internal Covariates\n\n\nModeling target (intensity function) \\[\n\\lambda\\{t\\mid\\overline Z(t)\\}\\dd t=\\pr\\{t\\leq T&lt;t+\\dd t\\mid T\\geq t, \\overline Z(t)\\}\n\\]\n\n\\(\\overline Z(t)=\\{Z(u): 0\\leq u\\leq t\\}\\): covariate path up to \\(t\\)\n\n\n\n\n\nModel specification \\[\\begin{equation}\\label{eq:cox:time_varying_model}\n\\lambda\\{t\\mid\\overline Z(t)\\}=\\lambda_0(t)\\exp\\{\\beta^\\T Z(t)\\}.\n\\end{equation}\\]\n\nCurrent risk depends on past only through \\(Z(t)\\)\nDefine \\(Z(t)\\) to be useful summary of past\n\nshould not be “current” measurements due to delay in cause and effect\n\nExample: frequency of drug use in past week, month, or year"
   },
   {
     "objectID": "chap4.html#external-covariates-i",
     "href": "chap4.html#external-covariates-i",
     "title": "Applied Survival Analysis",
     "section": "External Covariates (I)",
-    "text": "External Covariates (I)\n\nModeling target (hazard function) \\[\n\\lambda(t\\mid Z)\\dd t=\\pr(t\\leq T&lt;t+\\dd t\\mid T\\geq t, Z)\n\\]\n\n\\(Z=\\{Z(t):0\\leq t\\leq \\infty\\}\\): entire covariate path\n\nModeling specification \\[\\begin{equation}\\label{eq:cox:time_varying_model_ex}\n\\lambda(t\\mid Z)=\\lambda_0(t)\\exp\\{\\beta^\\T Z(t)\\}.\n\\end{equation}\\]\n\n\\(Z(t)\\): useful summary before \\(t\\)\nConditional survival (not applicable to internal covariates) \\[\nS(t\\mid Z)=\\exp\\left\\{-\\int_0^t\\lambda(s\\mid Z)\\dd s\\right\\}=\\exp\\left[-\\int_0^t\\exp\\{\\beta^\\T Z(s)\\}\\lambda_0(s)\\dd s\\right]\n\\]"
+    "text": "External Covariates (I)\n\n\nModeling target (hazard function) \\[\n\\lambda(t\\mid Z)\\dd t=\\pr(t\\leq T&lt;t+\\dd t\\mid T\\geq t, Z)\n\\]\n\n\\(Z=\\{Z(t):0\\leq t\\leq \\infty\\}\\): entire covariate path\n\n\n\n\n\nModel specification \\[\\begin{equation}\\label{eq:cox:time_varying_model_ex}\n\\lambda(t\\mid Z)=\\lambda_0(t)\\exp\\{\\beta^\\T Z(t)\\}.\n\\end{equation}\\]\n\n\\(Z(t)\\): useful summary before \\(t\\)\nConditional survival (not applicable to internal covariates) \\[\nS(t\\mid Z)=\\exp\\left\\{-\\int_0^t\\lambda(s\\mid Z)\\dd s\\right\\}=\\exp\\left[-\\int_0^t\\exp\\{\\beta^\\T Z(s)\\}\\lambda_0(s)\\dd s\\right]\n\\]"
   },
   {
     "objectID": "chap4.html#external-covariates-ii",
     "href": "chap4.html#external-covariates-ii",
     "title": "Applied Survival Analysis",
     "section": "External Covariates (II)",
-    "text": "External Covariates (II)\n\nInteraction of baseline covariates with time\n\nAddressing non-proportionality\n\nExample: single baseline covariate \\(Z_1 = 1, 0\\)\n\nNon-proportionality: \\(\\lambda(t\\mid Z_1 =1)/\\lambda(t\\mid Z_1 =0)\\) changes with \\(t\\)\nAdd \\(Z_2(t) = Z_1 t\\), then \\(\\lambda(t\\mid Z_1, Z_2)=\\exp\\{\\beta_1Z_1 + \\beta_2Z_2(t)\\}\\lambda_0(t)\\) means \\[\n\\frac{\\lambda(t\\mid Z_1=1)}{\\lambda(t\\mid Z_1=0)}=\\exp(\\beta_1+\\beta_2 t)\n\\]\nHopefully captures temporal pattern of effect size"
+    "text": "External Covariates (II)\n\n\nBaseline covariates \\(times\\) time\n\nAddressing non-proportionality\n\n\n\n\n\nExample: \\(Z_{\\cdot 1} = 1, 0\\)\n\nNon-proportionality: \\(\\lambda(t\\mid Z_{\\cdot 1} =1)/\\lambda(t\\mid Z_{\\cdot 1} =0)\\) changes with \\(t\\)\nAdd \\(Z_{\\cdot 2}(t) = Z_{\\cdot 1} t\\), then \\[\\lambda(t\\mid Z_{\\cdot 1}, Z_{\\cdot 2})=\\exp\\{\\beta_1Z_{\\cdot 1} + \\beta_2Z_{\\cdot 2}(t)\\}\\lambda_0(t)\\] So \\[\n\\frac{\\lambda(t\\mid Z_{\\cdot 1}=1)}{\\lambda(t\\mid Z_{\\cdot 1}=0)}=\\exp(\\beta_1+\\beta_2 t)\n\\]\nHopefully captures temporal pattern of effect size"
   },
   {
     "objectID": "chap4.html#estimation-and-inference",
     "href": "chap4.html#estimation-and-inference",
     "title": "Applied Survival Analysis",
     "section": "Estimation and Inference",
-    "text": "Estimation and Inference\n\nSame inference procedure: partial likelihood \\[\\begin{align*}\nPL_n(\\beta)=\\prod_{j=1}^m\\frac{\\exp\\{\\beta^\\T Z_{(j)}(t_j)\\}}{\\sum_{i\\in\\mathcal R_j}\\exp\\{\\beta^\\T Z_i(t_j)\\}}.\n\\end{align*}\\]\nPartial-likelihood score \\[\nU_n(\\beta)=n^{-1}\\sum_{i=1}^n\\int_0^\\infty \\left\\{Z_i(t)- \\frac{\\sum_{j=1}^n I(X_j\\geq t)Z_j(t)\\exp\\{\\beta^\\T Z_j(t)\\}}{\\sum_{j=1}^n I(X_j\\geq t)\\exp\\{\\beta^\\T Z_j(t)\\}}\n\\right\\}\\dd N_i(t)\n\\]\n\nSame Newton-Raphson algorithm"
+    "text": "Estimation and Inference\n\n\nSame inference procedure: partial likelihood \\[\\begin{align*}\nPL_n(\\beta)=\\prod_{j=1}^m\\frac{\\exp\\{\\beta^\\T Z_{(j)}(t_j)\\}}{\\sum_{i\\in\\mathcal R_j}\\exp\\{\\beta^\\T Z_i(t_j)\\}}.\n\\end{align*}\\]\n\n\n\n\nPartial-likelihood score \\[\nU_n(\\beta)=n^{-1}\\sum_{i=1}^n\\int_0^\\infty \\left\\{Z_i(t)- \\frac{\\sum_{j=1}^n I(X_j\\geq t)Z_j(t)\\exp\\{\\beta^\\T Z_j(t)\\}}{\\sum_{j=1}^n I(X_j\\geq t)\\exp\\{\\beta^\\T Z_j(t)\\}}\n\\right\\}\\dd N_i(t)\n\\]\n\nSame Newton-Raphson algorithm"
   },
   {
     "objectID": "chap4.html#software-survivalcoxph-iv",
     "href": "chap4.html#software-survivalcoxph-iv",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::coxph() (IV)",
-    "text": "Software: survival::coxph() (IV)\n\nBasic syntax for time-varying covariates\n\n\n\n# (start, stop): left and right ends of time period\n# event: 1 = event; 0 = no event\ncoxph(Surv(start, stop, event) ~ covariates)\n\n\n\nInput\n\nData in counting process (long) format (multiple records per subject)\n(start, stop): period during which covariate takes on a particular value\nevent: event indicator at time stop\n\nevent = 0 need not mean censoring (why?)\n\n\nOutput: coxph object"
+    "text": "Software: survival::coxph() (IV)\n\n\nBasic syntax for time-varying covariates\n\n\n\n# (start, stop): left and right ends of time period\n# event: 1 = event; 0 = no event\nobj &lt;- coxph(Surv(start, stop, event) ~ covariates)\n\n\n\n\n\nInput\n\nData in counting process (long) format (multiple records per subject)\n(start, stop): period during which covariate takes on a particular value\nevent: event indicator at time stop\n\nevent = 0 need not mean censoring (why?)\n\n\n\n\n\n\nOutput: coxph object"
   },
   {
     "objectID": "chap4.html#example-stanford-heart-study-i",
     "href": "chap4.html#example-stanford-heart-study-i",
     "title": "Applied Survival Analysis",
     "section": "Example: Stanford Heart Study (I)",
-    "text": "Example: Stanford Heart Study (I)\n\nHeart transplant study (1967–74)\n\nStudy population: 103 cardiac patients in transplantation program\nAim: effect of transplant (time-varying) on time from enrollment to death"
+    "text": "Example: Stanford Heart Study (I)\n\n\nHeart transplant study (1967–74)\n\nPopulation: 103 cardiac patients in transplantation program\nObjective: Evaluate effect of transplant (time-varying) on time from enrollment to death"
   },
   {
     "objectID": "chap4.html#example-stanford-heart-study-ii",
     "href": "chap4.html#example-stanford-heart-study-ii",
     "title": "Applied Survival Analysis",
     "section": "Example: Stanford Heart Study (II)",
-    "text": "Example: Stanford Heart Study (II)\n\nResults\n\nAdjusting for other predictors, receiving a transplant reduces the risk of mortality by \\(1-0.990=1.0\\%\\) (\\(p\\)-value 0.974)\n\n\n\n# Call:\n# coxph(formula = Surv(start, stop, event) ~ age + accpt + surgery + \n#       transplant, data = heart)\n# \n#   n= 172, number of events= 75 \n# \n#                 coef exp(coef) se(coef)      z Pr(&gt;|z|)  \n# age          0.02717   1.02754  0.01371  1.981   0.0476 *\n# accpt       -0.14635   0.86386  0.07047 -2.077   0.0378 *\n# surgery     -0.63721   0.52877  0.36723 -1.735   0.0827 .\n# transplant1 -0.01025   0.98980  0.31375 -0.033   0.9739  \n---"
+    "text": "Example: Stanford Heart Study (II)\n\n\nResults\n\nAdjusting for other predictors, receiving a transplant reduces the risk of mortality by \\(1-0.990=1.0\\%\\) (\\(p\\)-value 0.974)\n\n\n\n# Call:\n# coxph(formula = Surv(start, stop, event) ~ age + accpt + surgery + \n#       transplant, data = heart)\n# \n#   n= 172, number of events= 75 \n# \n#                 coef exp(coef) se(coef)      z Pr(&gt;|z|)  \n# age          0.02717   1.02754  0.01371  1.981   0.0476 *\n# accpt       -0.14635   0.86386  0.07047 -2.077   0.0378 *\n# surgery     -0.63721   0.52877  0.36723 -1.735   0.0827 .\n# transplant1 -0.01025   0.98980  0.31375 -0.033   0.9739  \n---"
   },
   {
     "objectID": "chap4.html#summary-i",
@@ -1780,7 +1780,7 @@
     "href": "chap4.html#summary-ii",
     "title": "Applied Survival Analysis",
     "section": "Summary (II)",
-    "text": "Summary (II)\n\nResidual analysis\n\nCox-Snell: Overall fit\n\ndf$status - resid(obj, type = \"martingale\")\n\nSchoenfeld: Proportionality\n\ncox.zph(obj)\n\nMartingale/Deviance: Covariate form, link function, outlier\n\nresid(obj, type = c(\"martingale\", \"deviance\"))\n\n\nTime-varying covariates\n\nInternal vs external\ncoxph(Surv(start, stop, event) ~ covariates)"
+    "text": "Summary (II)\n\nResidual analysis\n\nCox-Snell: Overall fit\n\ndf$status - residuals(obj, type = \"martingale\")\n\nSchoenfeld: Proportionality\n\ncox.zph(obj)\n\nMartingale/Deviance: Covariate form, link function, outlier\n\nresiduals(obj, type = c(\"martingale\", \"deviance\"))\n\n\nTime-varying covariates\n\nInternal vs external\ncoxph(Surv(start, stop, event) ~ covariates)"
   },
   {
     "objectID": "chap4.html#hw3-due-mar-6",
@@ -1808,6 +1808,62 @@
     "href": "chap4.html#hw3-due-mar-5",
     "title": "Applied Survival Analysis",
     "section": "HW3 (Due Mar 5)",
-    "text": "HW3 (Due Mar 5)\n\nProblem 4.8\nProblem 4.14\nProblems 4.15 and 4.21"
+    "text": "HW3 (Due Mar 5)\n\nProblem 4.8\nProblem 4.14\nProblems 4.15 and 4.21\nExtra credit: Problem 4.22"
+  },
+  {
+    "objectID": "chap4.html#example-german-breast-cancer-xvi-1",
+    "href": "chap4.html#example-german-breast-cancer-xvi-1",
+    "title": "Applied Survival Analysis",
+    "section": "Example: German Breast Cancer (XVI)",
+    "text": "Example: German Breast Cancer (XVI)\n\n\nTabulate final model\n\n\n# Tabulate final model results\ntbl_final &lt;- tbl_regression(\n  obj_stra_final, # coxph object for final model\n  label = list(\n    hormone = \"Hormone\", \n    meno    = \"Menopause\",\n    agec    = \"Age group\",\n    size    = \"Tumor size (mm)\",\n    prog    = \"Progesterone (100 fmol/mg)\",\n    estrg   = \"Estrogen  (100 fmol/mg)\"\n  )\n)\n\ntbl_final"
+  },
+  {
+    "objectID": "chap4.html#example-german-breast-cancer-xvii",
+    "href": "chap4.html#example-german-breast-cancer-xvii",
+    "title": "Applied Survival Analysis",
+    "section": "Example: German Breast Cancer (XVII)",
+    "text": "Example: German Breast Cancer (XVII)\n\n\nTabulate final model\n\n\n# Tabulate final model results\ntbl_final &lt;- tbl_regression(\n  obj_stra_final, # coxph object for final model\n  label = list(\n    hormone = \"Hormone\", \n    meno    = \"Menopause\",\n    agec    = \"Age group\",\n    size    = \"Tumor size (mm)\",\n    prog    = \"Progesterone (100 fmol/mg)\",\n    estrg   = \"Estrogen  (100 fmol/mg)\"\n  )\n)\n\ntbl_final"
+  },
+  {
+    "objectID": "chap4.html#example-german-breast-cancer-xviii",
+    "href": "chap4.html#example-german-breast-cancer-xviii",
+    "title": "Applied Survival Analysis",
+    "section": "Example: German Breast Cancer (XVIII)",
+    "text": "Example: German Breast Cancer (XVIII)\n\n\nFinal model"
+  },
+  {
+    "objectID": "chap4.html#software-survivalcoxph-v",
+    "href": "chap4.html#software-survivalcoxph-v",
+    "title": "Applied Survival Analysis",
+    "section": "Software: survival::coxph() (V)",
+    "text": "Software: survival::coxph() (V)\n\n\nResidual analysis\n\nSubject indexing to aggregate residuals\n\n\n\n# Residual calculations for Cox model with time-varying covariates\nresiduals(obj, type = c(\"martingale\", \"deviance\", \"schoenfeld\", \"score\",\n                        \"scaledsch\", \"dfbeta\", \"dfbetas\", \"partial\"),\n               collapse = df$id # specify subject ID\n            )"
+  },
+  {
+    "objectID": "chap4.html#example-stanford-heart-study-iii",
+    "href": "chap4.html#example-stanford-heart-study-iii",
+    "title": "Applied Survival Analysis",
+    "section": "Example: Stanford Heart Study (III)",
+    "text": "Example: Stanford Heart Study (III)\n\n\nInternal or external\n\nExternal: if donor matching follows predetermined protocol\nInternal: if donor matching depends on patient’s health status\n\nCritically ill more likely to receive transplant sooner\n\n\n\n\n\n\nModel diagnostics\n\nExercise"
+  },
+  {
+    "objectID": "chap4.html#notes",
+    "href": "chap4.html#notes",
+    "title": "Applied Survival Analysis",
+    "section": "Notes",
+    "text": "Notes\n\n\nPartial likelihood\n\nOriginal introduced by Sir David R. Cox (Cox, 1972)\nStatistically efficient (\\(\\S\\) 5.2 of Tsiatis, 2006)\nWidely used by statisticians and medical researchers alike\n\n\n\n\n\nResidual analysis\n\nCox–Snell residuals by Kay (1977)\nSchoenfeld residuals by Schoenfeld (1980, 1982)\nProportionality tests implemented in cox.zph() based on Grambsch and Therneau (1994)"
+  },
+  {
+    "objectID": "chap4.html#notes-i",
+    "href": "chap4.html#notes-i",
+    "title": "Applied Survival Analysis",
+    "section": "Notes (I)",
+    "text": "Notes (I)\n\n\nPartial likelihood\n\nOriginal introduced by Sir David R. Cox (Cox, 1972)\nStatistically efficient (\\(\\S\\) 5.2 of Tsiatis, 2006)\nWidely used by statisticians and medical researchers alike\n\n\n\n\n\nResidual analysis\n\nCox–Snell residuals by Kay (1977)\nSchoenfeld residuals by Schoenfeld (1980, 1982)\nProportionality tests implemented in cox.zph() based on Grambsch and Therneau (1994)"
+  },
+  {
+    "objectID": "chap4.html#notes-ii",
+    "href": "chap4.html#notes-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Notes (II)",
+    "text": "Notes (II)\n\n\nTime-varying coefficients\n\nHazard raio changing over time \\[\n\\lambda\\bigl(t \\mid Z\\bigr) = \\lambda_0(t) \\exp\\bigl\\{\\beta(t)^\\T Z\\bigr\\}\n\\]\nCovariate \\(\\times\\) time\n\n\ncoxph(Surv(time, status) ~ age + meno + hormone + prog + estrg  \n        + meno:log(time), data = df)\n\n\n\n\n\nSpline models\n\nFlexible forms for continuous covariates\n\n\n# Fit a Cox model with penalized splines for age\ncox_spline &lt;- coxph(Surv(time, status) ~ pspline(age, df = 4) + hormone \n                + meno + size + grade + prog + estrg, data = df)"
   }
 ]

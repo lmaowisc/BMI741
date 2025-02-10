@@ -987,11 +987,11 @@ residuals(obj, type = c("martingale", "deviance", "schoenfeld", "score",
 # Conclusion
 
 
-## Notes
+## Notes (I)
 :::{.fragment}
 -   **Partial likelihood**
     -   Original introduced by Sir David R. Cox (Cox, 1972)
-    -   Statistically efficient ($\S$5.2 of Tsiatis, 2006)
+    -   Statistically efficient ($\S$ 5.2 of Tsiatis, 2006)
     -   Widely used by statisticians and medical researchers alike
 :::
 :::{.fragment}
@@ -999,6 +999,35 @@ residuals(obj, type = c("martingale", "deviance", "schoenfeld", "score",
     -   Cox--Snell residuals by Kay (1977)
     -   Schoenfeld residuals by Schoenfeld (1980, 1982)
     -   Proportionality tests implemented in `cox.zph()` based on Grambsch and Therneau (1994)
+:::
+
+## Notes (II)
+:::{.fragment}
+-   **Time-varying coefficients**
+    -   Hazard raio changing over time
+    $$
+    \lambda\bigl(t \mid Z\bigr) = \lambda_0(t) \exp\bigl\{\beta(t)^\T Z\bigr\}
+    $$
+    -   Covariate $\times$ time 
+    ```{r}
+    #| eval: false
+    #| echo: true
+    coxph(Surv(time, status) ~ age + meno + hormone + prog + estrg  
+            + meno:log(time), data = df)
+    ```
+:::
+
+:::{.fragment}
+-   **Spline models**
+    -   Flexible forms for continuous covariates
+    ```{r}
+    #| eval: false
+    #| echo: true
+    # Fit a Cox model with penalized splines for age
+    cox_spline <- coxph(Surv(time, status) ~ pspline(age, df = 4) + hormone 
+                    + meno + size + grade + prog + estrg, data = df)
+    ```
+    
 :::
 
 ## Summary (I)

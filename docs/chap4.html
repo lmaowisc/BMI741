@@ -1533,14 +1533,14 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 <h1>Conclusion</h1>
 
 </section>
-<section id="notes" class="slide level2">
-<h2>Notes</h2>
+<section id="notes-i" class="slide level2">
+<h2>Notes (I)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Partial likelihood</strong>
 <ul>
 <li>Original introduced by Sir David R. Cox (Cox, 1972)</li>
-<li>Statistically efficient ($$5.2 of Tsiatis, 2006)</li>
+<li>Statistically efficient (<span class="math inline">\(\S\)</span> 5.2 of Tsiatis, 2006)</li>
 <li>Widely used by statisticians and medical researchers alike</li>
 </ul></li>
 </ul>
@@ -1553,6 +1553,37 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 <li>Schoenfeld residuals by Schoenfeld (1980, 1982)</li>
 <li>Proportionality tests implemented in <code>cox.zph()</code> based on Grambsch and Therneau (1994)</li>
 </ul></li>
+</ul>
+</div>
+</section>
+<section id="notes-ii" class="slide level2">
+<h2>Notes (II)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Time-varying coefficients</strong>
+<ul>
+<li>Hazard raio changing over time <span class="math display">\[
+\lambda\bigl(t \mid Z\bigr) = \lambda_0(t) \exp\bigl\{\beta(t)^\T Z\bigr\}
+\]</span></li>
+<li>Covariate <span class="math inline">\(\times\)</span> time</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> age <span class="sc">+</span> meno <span class="sc">+</span> hormone <span class="sc">+</span> prog <span class="sc">+</span> estrg  </span>
+<span id="cb24-2"><a></a>        <span class="sc">+</span> meno<span class="sc">:</span><span class="fu">log</span>(time), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Spline models</strong>
+<ul>
+<li>Flexible forms for continuous covariates</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a></a><span class="co"># Fit a Cox model with penalized splines for age</span></span>
+<span id="cb25-2"><a></a>cox_spline <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> <span class="fu">pspline</span>(age, <span class="at">df =</span> <span class="dv">4</span>) <span class="sc">+</span> hormone </span>
+<span id="cb25-3"><a></a>                <span class="sc">+</span> meno <span class="sc">+</span> size <span class="sc">+</span> grade <span class="sc">+</span> prog <span class="sc">+</span> estrg, <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
 </ul>
 </div>
 </section>
