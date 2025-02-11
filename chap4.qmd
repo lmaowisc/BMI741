@@ -42,7 +42,7 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::{.fragment}
 -   **Regression vs testing**
     -   *Multiple* (quantitative) predictors
-    -   *Quantify* tretment effect
+    -   *Quantify* treatment effect
 :::
 :::{.fragment}
 -   **Cox proportional hazards (PH) model**

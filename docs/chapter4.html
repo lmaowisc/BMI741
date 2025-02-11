@@ -253,6 +253,16 @@ window.Quarto = {
    
   <ul>
   <li><a href="#slides" id="toc-slides" class="nav-link active" data-scroll-target="#slides">Slides</a></li>
+  <li><a href="#chapter-summary" id="toc-chapter-summary" class="nav-link" data-scroll-target="#chapter-summary">Chapter Summary</a>
+  <ul>
+  <li><a href="#basic-model-specification" id="toc-basic-model-specification" class="nav-link" data-scroll-target="#basic-model-specification">Basic model specification</a></li>
+  <li><a href="#the-partial-likelihood-approach" id="toc-the-partial-likelihood-approach" class="nav-link" data-scroll-target="#the-partial-likelihood-approach">The partial-likelihood approach</a></li>
+  <li><a href="#residual-based-diagnostics" id="toc-residual-based-diagnostics" class="nav-link" data-scroll-target="#residual-based-diagnostics">Residual-based diagnostics</a></li>
+  <li><a href="#time-varying-covariates" id="toc-time-varying-covariates" class="nav-link" data-scroll-target="#time-varying-covariates">Time-varying covariates</a></li>
+  <li><a href="#statistical-properties-via-martingale" id="toc-statistical-properties-via-martingale" class="nav-link" data-scroll-target="#statistical-properties-via-martingale">Statistical properties via martingale</a></li>
+  <li><a href="#software-use" id="toc-software-use" class="nav-link" data-scroll-target="#software-use">Software use</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul></li>
   <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code">R Code</a></li>
   </ul>
 </nav>
@@ -282,6 +292,51 @@ window.Quarto = {
 <section id="slides" class="level2">
 <h2 class="anchored" data-anchor-id="slides">Slides</h2>
 <p>Lecture slides <a href="chap4.html" target="_blank">here</a>. (To convert html to pdf, press E <span class="math inline">\(\to\)</span> Print <span class="math inline">\(\to\)</span> Destination: Save to pdf)</p>
+</section>
+<section id="chapter-summary" class="level2">
+<h2 class="anchored" data-anchor-id="chapter-summary">Chapter Summary</h2>
+<p>The Cox proportional hazards model is a most popular semiparametric regression model for time-to-event data. Working with a partial-likelihood framework merges hazard-based thinking with multiple covariates in a semiparametric way. By comparing each subject’s event to those still at risk at each failure time, the Cox approach eliminates the baseline hazard from the core inference while retaining direct interpretations of log-hazard coefficients.</p>
+<section id="basic-model-specification" class="level3">
+<h3 class="anchored" data-anchor-id="basic-model-specification">Basic model specification</h3>
+<p>The Cox proportional hazards model expresses each subject’s hazard rate as a product of a baseline function and an exponential term involving covariates. For a subject with covariates <span class="math inline">\(Z\)</span>, the hazard at time <span class="math inline">\(t\)</span> is</p>
+<p><span class="math display">\[
+\lambda(t \mid Z) = \lambda_0(t)\exp\{\beta^\T Z\}.
+\]</span></p>
+<p>This decomposition leaves <span class="math inline">\(\lambda_0(t)\)</span> fully unspecified, focusing on the log-hazard coefficients <span class="math inline">\(\beta\)</span>. Under proportional hazards, any two covariate sets differ by a constant hazard ratio over time, enabling a direct interpretation of <span class="math inline">\(\exp(\beta_k)\)</span> as the risk multiplier per unit increase in the <span class="math inline">\(k\)</span>-th covariate.</p>
+</section>
+<section id="the-partial-likelihood-approach" class="level3">
+<h3 class="anchored" data-anchor-id="the-partial-likelihood-approach">The partial-likelihood approach</h3>
+<p>Estimation of <span class="math inline">\(\beta\)</span> proceeds through a partial-likelihood function that isolates each event’s contribution while conditioning on the subjects at risk. At each observed failure time <span class="math inline">\(t_j\)</span>, only the subject who fails and the corresponding at-risk set matter for inference on <span class="math inline">\(\beta\)</span>. The partial likelihood thus eliminates the baseline hazard from the core estimation, allowing <span class="math inline">\(\beta\)</span> to be estimated robustly without imposing parametric assumptions on <span class="math inline">\(\lambda_0(\cdot)\)</span>. The result is the maximum partial-likelihood estimator <span class="math inline">\(\hat{\beta}\)</span>, with standard errors and tests derived in a manner analogous to parametric likelihood theory.</p>
+</section>
+<section id="residual-based-diagnostics" class="level3">
+<h3 class="anchored" data-anchor-id="residual-based-diagnostics">Residual-based diagnostics</h3>
+<p>Model adequacy is assessed via residuals that reveal potential violations of proportional hazards or mis-specification of covariate functional forms.</p>
+<ul>
+<li><p><strong>Cox–Snell residuals</strong> transform observed times and event indicators so that, under correct modeling, they should behave like censored samples from an exponential distribution with unit mean.</p></li>
+<li><p><strong>Schoenfeld residuals</strong> target the time constancy of each covariate’s hazard ratio. If a covariate’s effect changes over time, its Schoenfeld residuals display systematic trends.</p></li>
+<li><p><strong>Martingale and deviance residuals</strong> detect nonlinearity or outliers in continuous covariates by measuring how observed outcomes differ from fitted values. Plotting these against each covariate often shows whether transformations or alternative model structures are needed.</p></li>
+</ul>
+</section>
+<section id="time-varying-covariates" class="level3">
+<h3 class="anchored" data-anchor-id="time-varying-covariates">Time-varying covariates</h3>
+<p>Some covariates evolve during follow-up (internal) or follow external factors independent of the subject’s health status (external). A time-varying <span class="math inline">\(Z(t)\)</span> replaces the static <span class="math inline">\(Z\)</span> in the hazard model:</p>
+<p><span class="math display">\[
+\lambda(t \mid Z(\cdot)) = \lambda_0(t)\exp\{\beta^\T Z(t)\}.
+\]</span></p>
+<p>For internal covariates, the hazard depends on the covariate history only through its most recent value. Estimation still uses the same partial-likelihood framework, but data must be organized in “start–stop” segments that reflect changing covariate levels over time.</p>
+</section>
+<section id="statistical-properties-via-martingale" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-properties-via-martingale">Statistical properties via martingale</h3>
+<p>Large-sample properties of the partial-likelihood estimator follow from writing the score function as a sum of martingale integrals. This perspective simplifies the derivation of asymptotic variance formulas for <span class="math inline">\(\hat{\beta}\)</span> and helps justify robust inferences under independent censoring. The Breslow estimator of the baseline hazard, <span class="math inline">\(\hat{\Lambda}_0(t)\)</span>, also arises through martingale arguments, matching how the Nelson–Aalen estimator can be viewed for simpler nonparametric settings.</p>
+</section>
+<section id="software-use" class="level3">
+<h3 class="anchored" data-anchor-id="software-use">Software use</h3>
+<p>In R, the <code>coxph()</code> function from the <code>survival</code> package fits Cox models, possibly with stratification or time-varying covariates. Model summaries include estimates of <span class="math inline">\(\hat{\beta}\)</span>, hazard ratios, confidence intervals, and <span class="math inline">\(p\)</span>-values. The <code>basehaz()</code> function retrieves Breslow estimates of <span class="math inline">\(\lambda_0(t)\)</span>, while <code>residuals()</code> provides martingale, deviance, and Schoenfeld residuals. For enhanced tables and graphics, <code>gtsummary</code> produces formatted regression summaries, and <code>survminer</code> or <code>ggsurvfit</code> offers diagnostic plots (e.g., <code>ggcoxzph</code> for Schoenfeld residuals) and forest plots of estimated hazard ratios.</p>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>The Cox proportional hazards model accommodates flexible, nonparametric baseline hazards while preserving a straightforward regression interpretation of covariate effects. Partial-likelihood estimation, together with martingale-based residuals, allows rigorous checks of the proportional hazards assumption and the functional forms of covariates. Time-varying covariates further expand its applicability to complex longitudinal settings. By combining robust inference with interpretability, the Cox model remains a central tool in regression-based survival analysis.</p>
+</section>
 </section>
 <section id="r-code" class="level2">
 <h2 class="anchored" data-anchor-id="r-code">R Code</h2>
@@ -580,86 +635,88 @@ window.Quarto = {
 <span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the age-group-specific HR and confidence intervals (Figure 4.6)</span></span>
-<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>ci.table <span class="ot">&lt;-</span> final_sum<span class="sc">$</span>conf.int</span>
-<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a>hr       <span class="ot">&lt;-</span> ci.table[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">1</span>]</span>
-<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a>hr.low   <span class="ot">&lt;-</span> ci.table[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">3</span>]</span>
-<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a>hr.up    <span class="ot">&lt;-</span> ci.table[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">4</span>]</span>
-<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="dv">1</span>, hr),</span>
-<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim     =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">1.2</span>),</span>
-<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a>  <span class="at">frame    =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a>  <span class="at">xaxt     =</span> <span class="st">'n'</span>,</span>
-<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab     =</span> <span class="st">"Age (years)"</span>,</span>
-<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab     =</span> <span class="st">"Hazard ratio"</span>,</span>
-<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch      =</span> <span class="dv">19</span>,</span>
-<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex      =</span> <span class="fl">1.5</span>,</span>
-<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.lab  =</span> <span class="fl">1.2</span>,</span>
-<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.axis =</span> <span class="fl">1.2</span></span>
-<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"(20, 40]"</span>, <span class="st">"(40, 60]"</span>, <span class="st">"(60, 80]"</span>), <span class="at">cex.axis =</span> <span class="fl">1.2</span>)</span>
-<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, hr.low, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, hr.up, <span class="at">length =</span> <span class="fl">0.05</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="dv">1</span>, hr), <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a><span class="co"># ggplot version</span></span>
-<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
-<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a>  <span class="at">age_group =</span> <span class="fu">c</span>(<span class="st">"(20, 40]"</span>, <span class="st">"(40, 60]"</span>, <span class="st">"(60, 80]"</span>),</span>
-<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a>  <span class="at">HR       =</span> <span class="fu">c</span>(<span class="dv">1</span>, hr),</span>
-<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a>  <span class="at">HR_low   =</span> <span class="fu">c</span>(<span class="dv">1</span>, hr.low),</span>
-<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a>  <span class="at">HR_up    =</span> <span class="fu">c</span>(<span class="dv">1</span>, hr.up)</span>
-<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> age_group, <span class="at">y =</span> HR)) <span class="sc">+</span></span>
-<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> HR_low, <span class="at">ymax =</span> HR_up), <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb1-326"><a href="#cb1-326" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">group =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb1-327"><a href="#cb1-327" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Age group (years)"</span>) <span class="sc">+</span></span>
-<span id="cb1-328"><a href="#cb1-328" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Hazard ratio"</span>) <span class="sc">+</span></span>
-<span id="cb1-329"><a href="#cb1-329" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb1-330"><a href="#cb1-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(</span>
-<span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="fl">0.125</span>, <span class="fl">1.05</span>),</span>
-<span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="fl">0.125</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>),</span>
-<span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_percent</span>(<span class="at">accuracy =</span> <span class="dv">1</span>)</span>
-<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>))</span>
-<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"images/cox_nonlinear_age.png"</span>, <span class="at">width =</span> <span class="fl">7.5</span>, <span class="at">height =</span> <span class="dv">4</span>)</span>
-<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"images/cox_nonlinear_age.eps"</span>, <span class="at">width =</span> <span class="fl">7.5</span>, <span class="at">height =</span> <span class="dv">4</span>)</span>
+<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a><span class="co"># Print table</span></span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>tbl_final</span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the age-group-specific HR and confidence intervals (Figure 4.6)</span></span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a>ci.table <span class="ot">&lt;-</span> final_sum<span class="sc">$</span>conf.int</span>
+<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a>hr       <span class="ot">&lt;-</span> ci.table[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">1</span>]</span>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>hr.low   <span class="ot">&lt;-</span> ci.table[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">3</span>]</span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a>hr.up    <span class="ot">&lt;-</span> ci.table[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">4</span>]</span>
+<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="dv">1</span>, hr),</span>
+<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim     =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">1.2</span>),</span>
+<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a>  <span class="at">frame    =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a>  <span class="at">xaxt     =</span> <span class="st">'n'</span>,</span>
+<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab     =</span> <span class="st">"Age (years)"</span>,</span>
+<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab     =</span> <span class="st">"Hazard ratio"</span>,</span>
+<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch      =</span> <span class="dv">19</span>,</span>
+<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex      =</span> <span class="fl">1.5</span>,</span>
+<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.lab  =</span> <span class="fl">1.2</span>,</span>
+<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.axis =</span> <span class="fl">1.2</span></span>
+<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"(20, 40]"</span>, <span class="st">"(40, 60]"</span>, <span class="st">"(60, 80]"</span>), <span class="at">cex.axis =</span> <span class="fl">1.2</span>)</span>
+<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, hr.low, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, hr.up, <span class="at">length =</span> <span class="fl">0.05</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="dv">1</span>, hr), <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a><span class="co"># ggplot version</span></span>
+<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a>  <span class="at">age_group =</span> <span class="fu">c</span>(<span class="st">"(20, 40]"</span>, <span class="st">"(40, 60]"</span>, <span class="st">"(60, 80]"</span>),</span>
+<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a>  <span class="at">HR       =</span> <span class="fu">c</span>(<span class="dv">1</span>, hr),</span>
+<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a>  <span class="at">HR_low   =</span> <span class="fu">c</span>(<span class="dv">1</span>, hr.low),</span>
+<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a>  <span class="at">HR_up    =</span> <span class="fu">c</span>(<span class="dv">1</span>, hr.up)</span>
+<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-326"><a href="#cb1-326" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> age_group, <span class="at">y =</span> HR)) <span class="sc">+</span></span>
+<span id="cb1-327"><a href="#cb1-327" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb1-328"><a href="#cb1-328" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> HR_low, <span class="at">ymax =</span> HR_up), <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb1-329"><a href="#cb1-329" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">group =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb1-330"><a href="#cb1-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Age group (years)"</span>) <span class="sc">+</span></span>
+<span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Hazard ratio"</span>) <span class="sc">+</span></span>
+<span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(</span>
+<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="fl">0.125</span>, <span class="fl">1.05</span>),</span>
+<span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="fl">0.125</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>),</span>
+<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_percent</span>(<span class="at">accuracy =</span> <span class="dv">1</span>)</span>
+<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>))</span>
 <span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
-<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a><span class="co"># (C) Illustration with Time-Varying Covariates </span></span>
-<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a><span class="co">#     (Stanford Heart Study)</span></span>
-<span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
-<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(heart)</span>
-<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename variable "year" -&gt; "accpt"</span></span>
-<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(heart)[<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="st">"accpt"</span></span>
-<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample size</span></span>
-<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">unique</span>(heart<span class="sc">$</span>id))</span>
-<span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Fit a Cox model with a time-dependent "transplant" variable</span></span>
+<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"images/cox_nonlinear_age.png"</span>, <span class="at">width =</span> <span class="fl">7.5</span>, <span class="at">height =</span> <span class="dv">4</span>)</span>
+<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"images/cox_nonlinear_age.eps"</span>, <span class="at">width =</span> <span class="fl">7.5</span>, <span class="at">height =</span> <span class="dv">4</span>)</span>
+<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
+<span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a><span class="co"># (C) Illustration with Time-Varying Covariates </span></span>
+<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a><span class="co">#     (Stanford Heart Study)</span></span>
+<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
+<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(heart)</span>
+<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename variable "year" -&gt; "accpt"</span></span>
+<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(heart)[<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="st">"accpt"</span></span>
+<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample size</span></span>
+<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">unique</span>(heart<span class="sc">$</span>id))</span>
+<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, event) <span class="sc">~</span> age <span class="sc">+</span> accpt <span class="sc">+</span> surgery <span class="sc">+</span> transplant, <span class="at">data =</span> heart)</span>
-<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj)</span>
+<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Fit a Cox model with a time-dependent "transplant" variable</span></span>
+<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
+<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, event) <span class="sc">~</span> age <span class="sc">+</span> accpt <span class="sc">+</span> surgery <span class="sc">+</span> transplant, <span class="at">data =</span> heart)</span>
 <span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabulate using gtsummary</span></span>
-<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a>heart_tbl <span class="ot">&lt;-</span> <span class="fu">tbl_regression</span>(</span>
-<span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a>  obj, </span>
-<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>  <span class="at">exponentiate =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>    <span class="at">age       =</span> <span class="st">"Age (years)"</span>,</span>
-<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a>    <span class="at">accpt     =</span> <span class="st">"Acceptance"</span>,</span>
-<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a>    <span class="at">surgery   =</span> <span class="st">"Surgery"</span>,</span>
-<span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a>    <span class="at">transplant=</span> <span class="st">"Transplant"</span></span>
-<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a>heart_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj)</span>
+<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabulate using gtsummary</span></span>
+<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>heart_tbl <span class="ot">&lt;-</span> <span class="fu">tbl_regression</span>(</span>
+<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>  obj, </span>
+<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>  <span class="at">exponentiate =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a>    <span class="at">age       =</span> <span class="st">"Age (years)"</span>,</span>
+<span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a>    <span class="at">accpt     =</span> <span class="st">"Acceptance"</span>,</span>
+<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a>    <span class="at">surgery   =</span> <span class="st">"Surgery"</span>,</span>
+<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a>    <span class="at">transplant=</span> <span class="st">"Transplant"</span></span>
+<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-373"><a href="#cb1-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-374"><a href="#cb1-374" aria-hidden="true" tabindex="-1"></a>heart_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 

@@ -6,6 +6,101 @@ title: "Chapter 4 - Cox Proportional Hazards Regression"
 
 Lecture slides [here](chap4.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
+## Chapter Summary
+
+The Cox proportional hazards model is a most popular semiparametric regression model
+for time-to-event data. Working with a partial-likelihood framework merges hazard-based 
+thinking with multiple covariates in a semiparametric way. By comparing each subject’s 
+event to those still at risk at each failure time, the Cox approach eliminates 
+the baseline hazard from the core inference while retaining direct interpretations 
+of log-hazard coefficients.
+
+### Basic model specification
+
+The Cox proportional hazards model expresses each subject’s hazard rate as a product 
+of a baseline function and an exponential term involving covariates. For a subject 
+with covariates $Z$, the hazard at time $t$ is
+
+$$
+\lambda(t \mid Z) = \lambda_0(t)\exp\{\beta^\T Z\}.
+$$
+
+This decomposition leaves $\lambda_0(t)$ fully unspecified, focusing on the 
+log-hazard coefficients $\beta$. Under proportional hazards, any two covariate sets 
+differ by a constant hazard ratio over time, enabling a direct interpretation of 
+$\exp(\beta_k)$ as the risk multiplier per unit increase in the $k$-th covariate.
+
+### The partial-likelihood approach
+
+Estimation of $\beta$ proceeds through a partial-likelihood function that isolates 
+each event’s contribution while conditioning on the subjects at risk. At each observed 
+failure time $t_j$, only the subject who fails and the corresponding at-risk set matter 
+for inference on $\beta$. The partial likelihood thus eliminates the baseline hazard 
+from the core estimation, allowing $\beta$ to be estimated robustly without imposing 
+parametric assumptions on $\lambda_0(\cdot)$. The result is the maximum 
+partial-likelihood estimator $\hat{\beta}$, with standard errors and tests derived 
+in a manner analogous to parametric likelihood theory.
+
+### Residual-based diagnostics
+
+Model adequacy is assessed via residuals that reveal potential violations of proportional 
+hazards or mis-specification of covariate functional forms.
+
+- **Cox–Snell residuals** transform observed times and event indicators so that, under 
+  correct modeling, they should behave like censored samples from an exponential distribution 
+  with unit mean.
+
+- **Schoenfeld residuals** target the time constancy of each covariate’s hazard ratio. If a 
+  covariate’s effect changes over time, its Schoenfeld residuals display systematic trends.
+
+- **Martingale and deviance residuals** detect nonlinearity or outliers in continuous covariates 
+  by measuring how observed outcomes differ from fitted values. Plotting these against each 
+  covariate often shows whether transformations or alternative model structures are needed.
+
+### Time-varying covariates
+
+Some covariates evolve during follow-up (internal) or follow external factors independent 
+of the subject’s health status (external). A time-varying $Z(t)$ replaces the static $Z$ 
+in the hazard model:
+
+$$
+\lambda(t \mid Z(\cdot)) = \lambda_0(t)\exp\{\beta^\T Z(t)\}.
+$$
+
+For internal covariates, the hazard depends on the covariate history only through its 
+most recent value. Estimation still uses the same partial-likelihood framework, but data 
+must be organized in “start–stop” segments that reflect changing covariate levels 
+over time.
+
+### Statistical properties via martingale
+
+Large-sample properties of the partial-likelihood estimator follow from writing the score 
+function as a sum of martingale integrals. This perspective simplifies the derivation of 
+asymptotic variance formulas for $\hat{\beta}$ and helps justify robust inferences under 
+independent censoring. The Breslow estimator of the baseline hazard, 
+$\hat{\Lambda}_0(t)$, also arises through martingale arguments, matching how the 
+Nelson–Aalen estimator can be viewed for simpler nonparametric settings.
+
+### Software use
+
+In R, the `coxph()` function from the `survival` package fits Cox models, possibly with 
+stratification or time-varying covariates. Model summaries include estimates of 
+$\hat{\beta}$, hazard ratios, confidence intervals, and $p$-values. The `basehaz()` 
+function retrieves Breslow estimates of $\lambda_0(t)$, while `residuals()` provides 
+martingale, deviance, and Schoenfeld residuals. For enhanced tables and graphics, 
+`gtsummary` produces formatted regression summaries, and `survminer` or `ggsurvfit` 
+offers diagnostic plots (e.g., `ggcoxzph` for Schoenfeld residuals) and forest plots 
+of estimated hazard ratios.
+
+### Conclusion
+
+The Cox proportional hazards model accommodates flexible, nonparametric baseline hazards 
+while preserving a straightforward regression interpretation of covariate effects. 
+Partial-likelihood estimation, together with martingale-based residuals, allows rigorous 
+checks of the proportional hazards assumption and the functional forms of covariates. 
+Time-varying covariates further expand its applicability to complex longitudinal settings. 
+By combining robust inference with interpretability, the Cox model remains a central tool 
+in regression-based survival analysis.
 
 ## R Code
 

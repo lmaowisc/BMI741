@@ -1,5 +1,5 @@
 ---
-title: "HW1 sample solution"
+title: "HW1 sample solution (Spring 2025)"
 execute: 
   eval: false
   echo: true
@@ -47,70 +47,48 @@ $$ which is strictly less than $S(t)$ if $\pr(C>t)<1$ and $S(t)>0$. That is, if 
 
 ::: callout-note
 ## Question
+
 Formulate a survival function estimator under the "nonevent-imputation" approach described in Section 1.2.2 and show that it overestimates $S(t)$ whether censoring is independent or not. Give a simple sufficient condition for strict overestimation under $C\indep T$.
 :::
 
-Non-event imputation means imputing event time to $\infty$ whenever censored, i.e.,
-$$
+Non-event imputation means imputing event time to $\infty$ whenever censored, i.e., $$
 \hat T_i = \left\{
 \begin{array}{cc}
 T_i, &\delta_i =1\\
 \infty,&\delta_i =0
 \end{array}
 \right.
-$$
-So the empirical survival function based on the $\hat T_i$ is
-\begin{align}
+$$ So the empirical survival function based on the $\hat T_i$ is \begin{align}
 n^{-1}\sum_{i=1}^n I(\hat T_i >t) &= n^{-1}\sum_{i=1}^n\left\{\delta_iI(T_i > t) + (1-\delta_i)\right\}\\
 &= 1 - n^{-1}\sum_{i=1}^n\delta_i I(T_i\leq t)\\
 &\to 1- \pr(T\leq t\wedge C)\\
 &= \pr(T > t\wedge C)\\
 &\geq \pr(T > t)\\
 & = S(t).
-\end{align}
-This shows that the estimator overestimates $S(t)$ regardless of whether censoring
-is independent. 
-Under $C\indep T$,
-$$
+\end{align} This shows that the estimator overestimates $S(t)$ regardless of whether censoring is independent. Under $C\indep T$, $$
 \pr(T > t\wedge C) = E\{S(C\wedge t)\}.
-$$
-It turns out that there is no "simple" condition for the right hand side
-to be strictly greater than $S(t)$. 
-But the following condition works: (1) there exists $t_0 < t$ such that $S(t_0)> S(t)$;
-and  (2) $\pr(C\leq t_0)>0$. That is, there is a positive probability of censoring before
-a point to the left of $t$ where the survival rate is strictly greater than $S(t)$.
-The proof is left as an exercise.
-
+$$ It turns out that there is no "simple" condition for the right hand side to be strictly greater than $S(t)$. But the following condition works: (1) there exists $t_0 < t$ such that $S(t_0)> S(t)$; and (2) $\pr(C\leq t_0)>0$. That is, there is a positive probability of censoring before a point to the left of $t$ where the survival rate is strictly greater than $S(t)$. The proof is left as an exercise.
 
 ## Problem 1.8
 
 ::: callout-note
 ## Question
-Summarize the CGD (chronic granulomatous disease) study data described in Example 1.3 
-by the randomized treatment group in terms of patient baseline 
-characteristics and event rates. Comment on the balance of baseline characteristics between
-the treatment arms. Also be sure to include the event rates for both 
 
-- the first infection;
-- recurrent infections (including the first).
+Summarize the CGD (chronic granulomatous disease) study data described in Example 1.3 by the randomized treatment group in terms of patient baseline characteristics and event rates. Comment on the balance of baseline characteristics between the treatment arms. Also be sure to include the event rates for both
 
-Organize your results in a table suitable for inclusion as "Table 1"
-in a medical research paper.
-(The study dataset is in `cgd.txt`.)
+-   the first infection;
+-   recurrent infections (including the first).
+
+Organize your results in a table suitable for inclusion as "Table 1" in a medical research paper. (The study dataset is in `cgd.txt`.)
 :::
 
-
-The baseline patient characteristics and events rates for the CGD study are summarized by treatment arm in Table 1 below.
-Most of the baseline characteristics are well balanced between the randomized arms,
-except that the proportion of X-linked inheritance is slightly higher in the treatment arm (71.4\%)
-than in the control arm (63.1\%).
-The event rates for both first and recurrent infections are substantially lower in the treatment arm.
+The baseline patient characteristics and events rates for the CGD study are summarized by treatment arm in Table 1 below. Most of the baseline characteristics are well balanced between the randomized arms, except that the proportion of X-linked inheritance is slightly higher in the treatment arm (71.4%) than in the control arm (63.1%). The event rates for both first and recurrent infections are substantially lower in the treatment arm.
 
 ![](Figures/cgd_table1.png){fig-align="center" width="65%"}
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Show the code"
+#| code-summary: "Base R approach"
 #| eval: false
 
 ## Read in the CGD  data
@@ -279,6 +257,50 @@ denom.rec <- c(sum(dat.last$time[dat.last$trt=="placebo"]),
 
 #recurrent event rate
 round(num.rec/denom.rec,3)
+
+```
+
+The following uses `gtsummary` to summarize the CGD study data.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Using gtsummary"
+#| eval: true
+#| warning: false
+
+library(gtsummary)
+library(tidyverse)
+
+
+## Read in the CGD  data
+df <- read.table("Data//Chronic Granulomatous Disease Study//cgd.txt")
+# head(df)
+
+# Patient-level summary
+df |> 
+  group_by(id) |> 
+  slice(1) |> # Take the first record for each patient
+  tbl_summary(
+  by = trt, # by treatment
+  include = c(age, sex, hght, wght, inherit, stero, proph) # variables tabulated
+  ) |> 
+  add_overall(last = TRUE) # add overall column to the *right*
+
+# Event rates
+df |> 
+  group_by(id, trt) |> # compute patient-level summary of events and follow-up times
+  summarize(
+    first_event = any(status == 1), # first event: 1 or 0
+    n_event = sum(status == 1), # number of events
+    first_event_fu = min(time) / 12, # follow-up time (yrs) for the first event
+    tot_event_fu = max(time) / 12 # total follow-up time (yrs)
+  ) |> 
+  group_by(trt) |> # summarize by group
+  summarize(
+    first_event_rate = sum(first_event) / sum(first_event_fu), # first event rate
+    rec_event_rate = sum(n_event) / sum(tot_event_fu) # recurrent event rate
+  ) |> 
+  knitr::kable(caption = "Event rates by treatment arm")
 
 ```
 
