@@ -2,15 +2,15 @@
 title: "Chapter 4 - Cox Proportional Hazards Regression"
 ---
 
+$$
+\def\T{\mathrm{T}}
+$$
+
 ## Slides
 
 Lecture slides [here](chap4.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
 ## Chapter Summary
-
-$$
-\def\T{\mathrm{T}}
-$$
 
 The Cox proportional hazards model is a most popular semiparametric regression model for time-to-event data. The partial likelihood provides a key tool for making inferences on parametric covariate effects in the presence of a nonparametric time trend.
 
