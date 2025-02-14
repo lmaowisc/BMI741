@@ -28,7 +28,7 @@ This decomposition leaves $\lambda_0(t)$ fully unspecified, focusing on the log-
 
 Estimation of $\beta$ proceeds through a partial-likelihood function that isolates each event’s contribution while conditioning on the subjects at risk. Suppose the observed sample has unique failure times $t_1 < \dots < t_m$, each with a single failing subject denoted by $(j)$. Let $\mathcal{R}_j$ be the risk set at $t_j$, meaning the indices of all subjects still under observation just before $t_j$. 
 
-![](images/cox_time_points.png){fig-align="center" width="80%"}
+![](images/cox_time_points.png){fig-align="center" width="70%"}
 
 Then the Cox partial likelihood is
 
