@@ -6,208 +6,347 @@ title: "Chapter 5 - Other Non- and Semi-parametric Methods"
 
 Lecture slides [here](chap5.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-## Base R Code
+
+
+
+## R Code
 
 ```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-#| eval: false
 
-##################################################################
-# This code generates all numerical results in chapter 5.      ##
-##################################################################
+###############################################################################
+# Chapter 5 R Code
+#
+# This script reproduces all major numerical results in Chapter 5, including:
+#   1. Restricted mean survival time (RMST) analysis (with survRM2)
+#   2. Additive hazards analyses (with addhazard, timereg)
+#   3. Proportional odds models (with timereg)
+#   4. Accelerated failure time (AFT) models (with aftgee, survival)
+#   5. Pseudo-observation approach to RMST (with pseudo)
+###############################################################################
 
 
+#==============================================================================
+# (A) GBC Data Setup
+#==============================================================================
 library(survival)
+library(tidyverse)
 
-##############################################
-# GBC study
-#############################################
-#read in the complete data
+#------------------------------------------------------------------------------
+# 1. Read and Prepare GBC Data
+#------------------------------------------------------------------------------
 gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
 
-#subset to first event data
-#Sort the data by time within each id
-o <- order(gbc$id,gbc$time)
-gbc <- gbc[o,]
-#get the first row for each id
-df <- gbc[!duplicated(gbc$id),]
+# Sort the data by time within each id
+o   <- order(gbc$id, gbc$time)
+gbc <- gbc[o, ]
 
-#set status=1 if status==2 or 1
+# Keep the first row for each id (first event)
+df <- gbc[!duplicated(gbc$id), ]
+
+# Set status = 1 if status == 2 or 1
 df$status <- (df$status > 0) + 0
 
 # Reduce the scales of prog and estrg by 100
 df$prog  <- df$prog / 100
 df$estrg <- df$estrg / 100
 
-############################################
-# Restricted mean surval time (RMST) analysis
-# with the "survRM2" package
-##########################################
 
+#==============================================================================
+# (B) Restricted Mean Survival Time (RMST) Analysis
+#     Using the "survRM2" Package
+#==============================================================================
 # install.packages("survRM2")
 library(survRM2)
 
+#------------------------------------------------------------------------------
+# 1. Two-Sample Comparison (Hormonal vs. Non-Hormonal) on 5-Year RMST
+#------------------------------------------------------------------------------
+obj <- rmst2(
+  time = df$time / 12,   # convert months to years
+  status = df$status,
+  arm = df$hormone - 1,  # hormone: {1, 2} => arm: {0, 1}
+  tau = 5
+)
 
-# Two-sample comparison between hormonal and non-hormonal
-# groups on 5-year RMST
-obj <- rmst2(time = df$time / 12, status = df$status, 
-            arm = df$hormone - 1, tau = 5)
-
-# print out results
+# Print results
 obj
-#> The truncation time: tau = 5  was specified. 
-#> 
-#> Restricted Mean Survival Time (RMST) by arm 
-#>              Est.    se lower .95 upper .95
-#> RMST (arm=1) 3.87 0.104     3.666     4.074
-#> RMST (arm=0) 3.46 0.084     3.295     3.625
-#> 
-#> 
-#> Restricted Mean Time Lost (RMTL) by arm 
-#>              Est.    se lower .95 upper .95
-#> RMTL (arm=1) 1.13 0.104     0.926     1.334
-#> RMTL (arm=0) 1.54 0.084     1.375     1.705
-#> 
-#> 
-#> Between-group contrast 
-#>                       Est. lower .95 upper .95     p
-#> RMST (arm=1)-(arm=0) 0.410     0.148     0.672 0.002
-#> RMST (arm=1)/(arm=0) 1.118     1.042     1.201 0.002
-#> RMTL (arm=1)/(arm=0) 0.734     0.595     0.905 0.004
-
-
-
-# more compact results
+# More compact results
 obj$unadjusted.result
 
-# obj$RMST.arm0
-# obj$RMST.arm1
+# Graphical display of group-specific RMST
+plot(
+  obj,
+  xlab     = "Time (years)",
+  ylab     = "Relapse-free survival",
+  col.RMST = "gray",
+  col.RMTL = "white",
+  col      = "black",
+  cex.lab  = 1.2,
+  cex.axis = 1.2,
+  xlim     = c(0, 5)
+)
 
-# Graphical display of the group-specific RMST 
-# as area under the KM curves
-plot(obj, xlab="Time (years)", ylab = "Relapse-free survival",
-     col.RMST = "gray", col.RMTL = "white", cex.lab=1.2,
-     cex.axis=1.2, col="black", xlim=c(0,5))
+#------------------------------------------------------------------------------
+# 2. Regression Adjustment for Additional Covariates
+#------------------------------------------------------------------------------
+obj_reg <- rmst2(
+  time       = df$time / 12,
+  status     = df$status,
+  arm        = df$hormone - 1,
+  covariates = df[, 5:11],  # columns 5-11 in df
+  tau        = 5
+)
 
-
-# Regression with all the other covariate
-obj_reg <- rmst2(time = df$time / 12, status = df$status, 
-            arm = df$hormone-1, covariates = df[, 5:11], tau = 5)
-
-#overall results
+# Print overall results
 obj_reg
 
-# additive model on RMST
+# Additive model on RMST
 round(obj_reg$RMST.difference.adjusted, 3)
 
-# multiplicative model on RMST
+# Multiplicative model on RMST
 round(obj_reg$RMST.ratio.adjusted, 3)
 
-# multiplicative model on RMTL
+# Multiplicative model on RMTL
 round(obj_reg$RMTL.ratio.adjusted, 3)
 
-# for hormone treatment only 
-obj.reg$adjusted.result
+# For hormone treatment only
+# (May require checking if the object contains this component)
+obj_reg$adjusted.result
 
 
-####################################
-### Additive hazards analysis
-## using the "addhazard" package
-####################################
-
-
+#==============================================================================
+# (C) Additive Hazards Analysis
+#==============================================================================
 # install.packages("addhazard")
 library(addhazard)
- 
-library(survival)
-library(addhazard)
 
-# Fit the additive hazards model to the data
-fit <- ah(Surv(time, status) ~ age + hormone, data = df, ties = FALSE)
-
-# Display the summary of the fitted model
-summary(fit)
-
-
-
- # Fit additive hazards model
- 
-## preparation
+#------------------------------------------------------------------------------
+# 1. Fitting an Additive Hazards Model (ah) from addhazard
+#------------------------------------------------------------------------------
+# Convert hormone/meno to factors
 df$hormone <- factor(df$hormone)
-df$meno <- factor(df$meno) 
+df$meno    <- factor(df$meno)
 
-# Add an infinitesimal random number to time
- # to get rid of ties
-df$time.dties <- df$time/12 + runif(nrow(df),0, 1e-12) 
+# Add a tiny random component to break ties
+set.seed(123)
+df$time.dties <- df$time / 12 + runif(nrow(df), 0, 1e-12)
+
+# Fit additive hazards model
+obj_ah <- ah(
+  Surv(time.dties, status) ~ hormone + meno + age + size + grade + nodes + prog + estrg,
+  data = df,
+  ties = FALSE
+)
+
+summary(obj_ah)
+beta <- obj_ah$coef  # estimated regression coefficients
+#------------------------------------------------------------------------------
+# 2. Aalen's Nonparametric Model (aalen) from timereg
+#------------------------------------------------------------------------------
+# install.packages("timereg")
+library(timereg)
+
+obj_aalen <- aalen(
+  Surv(time / 12, status) ~ hormone + meno + age + size + grade + nodes + prog + estrg,
+  data = df
+)
+
+summary(obj_aalen)
+
+Bt <- obj_aalen$cum  # cumulative regression function estimates
+
+par(mfrow = c(5, 2))
+plot(obj_aalen)
+
+#------------------------------------------------------------------------------
+# 3. Plotting the Estimated Cumulative Regression Coefficients
+#------------------------------------------------------------------------------
+aalen_beta <- as_tibble(Bt) %>%
+  select(-`(Intercept)`) %>%    # remove intercept
+  pivot_longer(
+    cols      = -time,
+    names_to  = "covariate",
+    values_to = "beta"
+  ) %>%
+  mutate(covariate = fct_inorder(covariate))
+
+# (Optional) If you intended a semiparametric overlay, 
+# you would need a 'beta' object. This is a placeholder:
+ly_beta <- tibble(
+  time = Bt[, "time"],
+  # example usage if 'beta' were a coefficient vector or matrix
+  as_tibble(Bt[, "time"] %*% t(beta))
+) %>%
+  pivot_longer(
+    cols      = -time,
+    names_to  = "covariate",
+    values_to = "beta"
+  ) %>%
+  mutate(covariate = fct_inorder(covariate))
+
+var_labeller <- c(
+  "hormone2" = "Hormone therapy (yes v. no)",
+  "meno2"    = "Menopausal (yes v. no)",
+  "age"      = "Age (years)",
+  "size"     = "Tumor size (mm)",
+  "grade"    = "Grade (1-3)",
+  "nodes"    = "Nodes",
+  "prog"     = "Progesterone (100 fmol/mg)",
+  "estrg"    = "Estrogen (100 fmol/mg)"
+)
+
+aalen_beta %>%
+  ggplot(aes(x = time, y = beta)) +
+  geom_step() +
+  # If you had a semiparametric line, you'd add:
+  geom_line(data = ly_beta, aes(x = time, y = beta),
+            color = "#C5050C", linetype = 2, linewidth = 1) +
+  scale_x_continuous(
+    "Time (years)",
+    limits = c(0, 6),
+    breaks = seq(0, 6, by = 1)
+  ) +
+  labs(y = expression("B(t) (year"^{-1} * ")")) +
+  facet_wrap(
+    ~covariate,
+    scales   = "free_y",
+    ncol     = 2,
+    labeller = labeller(covariate = var_labeller)
+  ) +
+  theme_minimal()
+
+ggsave("images/nonhaz_aalen_beta.png", width = 8, height = 8)
+ggsave("images/nonhaz_aalen_beta.eps", width = 8, height = 8)
+
+#------------------------------------------------------------------------------
+# 4. Cox-Aalen Model
+#------------------------------------------------------------------------------
+obj_cox_aalen <- cox.aalen(
+  Surv(time / 12, status) ~ prop(hormone) + meno + age + size + grade + nodes + prog + estrg,
+  data = df
+)
+
+summary(obj_cox_aalen)
+plot(obj_cox_aalen)
+
+obj_cox_aalen$gamma
+obj_cox_aalen$var.gamma
 
 
-# fit an additive hazard model
-obj <- ah(Surv(time.dties,status) ~ hormone + meno
-       + age + size + grade + prog + estrg,
-       data = df, ties = FALSE)
+#==============================================================================
+# (D) Proportional Odds Analysis
+#==============================================================================
+# install.packages("timereg")
+library(timereg)
 
-# print out the summary
- summary(obj)
- 
- 
- # Aalen's model
+obj_po <- prop.odds(
+  Event(time, status) ~ hormone + meno + age + size + grade + nodes + prog + estrg,
+  data = df
+)
 
- library(timereg)
+summary(obj_po)
 
- obj_aalen <- aalen(Surv(time.dties,status) ~ factor(hormone), data = df)
+t         = obj_po$cum[, 1]
+base_odds = obj_po$cum[, 2]
 
- obj_aalen$cum
- obj_aalen$var.cum
- summary(obj_aalen)
+#------------------------------------------------------------------------------
+# 1. Plot Baseline Cumulative Odds (Base R)
+#------------------------------------------------------------------------------
+par(mfrow = c(1, 1))
+plot(
+  stepfun(t, c(0, base_odds)),
+  do.points   = FALSE,
+  lwd         = 2,
+  xlim        = c(0, 80),
+  ylim        = c(0, 1.4),
+  frame.plot  = FALSE,
+  xlab        = "Time (months)",
+  ylab        = "Baseline cumulative odds",
+  main        = ""
+)
 
- 
- 
- ####################################
- ### Proportional odds analysis
- ## using the "timereg" package
- ####################################
- 
- install.packages("timereg")
- library(timereg)
- 
- # Fit a proportional odds model
- ## need to convert hormone and meno from numeric to factor
- obj <- prop.odds(Event(time, status) ~ hormone + meno
-        + age + size + grade + prog + estrg,
-        data = df)
+#------------------------------------------------------------------------------
+# 2. Plot Baseline Cumulative Odds (ggplot)
+#------------------------------------------------------------------------------
+tibble(
+  time = t,
+  odds = base_odds
+) %>%
+  ggplot(aes(x = time / 12, y = odds)) +
+  geom_step() +
+  scale_x_continuous(
+    "Time (years)",
+    limits = c(0, 6),
+    breaks = 1:6
+  ) +
+  scale_y_continuous("Baseline cumulative odds", limits = c(0, 1.25)) +
+  theme_minimal()
 
- summary(obj)
- 
- # Baseline cumulative odds function
- t <- obj$cum[,1]
- base_odds <- obj$cum[,2]
- 
- # Plot baseline cumulative odds
- par(mfrow = c(1, 1))
- plot(stepfun(t, c(0, base_odds)), do.points = FALSE, lwd = 2,
-      xlim=c(0,80), ylim=c(0,1.4), frame.plot = FALSE,
-      ylab="Baseline cumulative odds", xlab="Time (months)", main ="")
- 
+ggsave("images/nonhaz_po_base.png", width = 6, height = 4)
+ggsave("images/nonhaz_po_base.eps", width = 6, height = 4)
 
- 
- ###########################################
- ### Accelerated failure time (AFT) analysis
- ## using the "aftgee" package
- ##########################################
- 
- install.packages("aftgee")
- library(aftgee)
- 
- # fit an AFT model
- ## need to convert hormone and meno from numeric to factor
- ## (will take a little longer than usual...)
- obj <- aftgee(Surv(time, status) ~ hormone + meno
-               + age + size + grade + prog + estrg,
-               data = df)
-  # print out summary
-  summary(obj)
- 
- exp(obj$coef.res) ## acceleration factors exp(beta)
- 
+
+#==============================================================================
+# (E) Accelerated Failure Time (AFT) Analysis
+#==============================================================================
+# install.packages("aftgee")
+library(aftgee)
+
+#------------------------------------------------------------------------------
+# 1. Semiparametric AFT Model (aftgee)
+#------------------------------------------------------------------------------
+set.seed(123)  # SE is based on resampling
+obj_aftgee <- aftgee(
+  Surv(time, status) ~ hormone + meno + age + size + grade + nodes + prog + estrg,
+  data = df,
+  B    = 500
+)
+
+summary(obj_aftgee)
+
+# Acceleration factors exp(beta)
+exp(obj_aftgee$coef.res)
+
+# Variance of the log-acceleration factors
+obj_aftgee$var.res
+
+#------------------------------------------------------------------------------
+# 2. Parametric AFT Model (survreg)
+#------------------------------------------------------------------------------
+obj_aft <- survreg(
+  Surv(time, status) ~ hormone + meno + age + size + grade + nodes + prog + estrg,
+  data  = df,
+  dist  = "loglogistic"
+)
+
+summary(obj_aft)
+obj_aft$coefficients
+obj_aft$var
+obj_aft$scale
+
+
+#==============================================================================
+# (F) Pseudo-Observations Approach to RMST
+#==============================================================================
+# install.packages("pseudo")
+library(pseudo)
+
+# Example usage on df (instead of lung)
+tau          <- 5
+pseudo_rmst  <- pseudomean(df$time / 12, df$status, tmax = tau)
+
+# Fit a regression model using pseudo-observations
+library(geepack)
+fit_pseudo <- geese(
+  pseudo_rmst ~ hormone + meno + age + size + grade + nodes + prog + estrg,
+  data      = df,
+  mean.link = "identity"
+)
+# Alternatively: mean.link = "log"
+
+summary(fit_pseudo)
+
 ```
+
+
+

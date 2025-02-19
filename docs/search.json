@@ -165,7 +165,7 @@
     "href": "chapter5.html#base-r-code",
     "title": "Chapter 5 - Other Non- and Semi-parametric Methods",
     "section": "Base R Code",
-    "text": "Base R Code\n\n\nShow the code\n##################################################################\n# This code generates all numerical results in chapter 5.      ##\n##################################################################\n\n\nlibrary(survival)\n\n##############################################\n# GBC study\n#############################################\n#read in the complete data\ngbc &lt;- read.table(\"Data//German Breast Cancer Study//gbc.txt\")\n\n#subset to first event data\n#Sort the data by time within each id\no &lt;- order(gbc$id,gbc$time)\ngbc &lt;- gbc[o,]\n#get the first row for each id\ndf &lt;- gbc[!duplicated(gbc$id),]\n\n#set status=1 if status==2 or 1\ndf$status &lt;- (df$status &gt; 0) + 0\n\n# Reduce the scales of prog and estrg by 100\ndf$prog  &lt;- df$prog / 100\ndf$estrg &lt;- df$estrg / 100\n\n############################################\n# Restricted mean surval time (RMST) analysis\n# with the \"survRM2\" package\n##########################################\n\n# install.packages(\"survRM2\")\nlibrary(survRM2)\n\n\n# Two-sample comparison between hormonal and non-hormonal\n# groups on 5-year RMST\nobj &lt;- rmst2(time = df$time / 12, status = df$status, \n            arm = df$hormone - 1, tau = 5)\n\n# print out results\nobj\n#&gt; The truncation time: tau = 5  was specified. \n#&gt; \n#&gt; Restricted Mean Survival Time (RMST) by arm \n#&gt;              Est.    se lower .95 upper .95\n#&gt; RMST (arm=1) 3.87 0.104     3.666     4.074\n#&gt; RMST (arm=0) 3.46 0.084     3.295     3.625\n#&gt; \n#&gt; \n#&gt; Restricted Mean Time Lost (RMTL) by arm \n#&gt;              Est.    se lower .95 upper .95\n#&gt; RMTL (arm=1) 1.13 0.104     0.926     1.334\n#&gt; RMTL (arm=0) 1.54 0.084     1.375     1.705\n#&gt; \n#&gt; \n#&gt; Between-group contrast \n#&gt;                       Est. lower .95 upper .95     p\n#&gt; RMST (arm=1)-(arm=0) 0.410     0.148     0.672 0.002\n#&gt; RMST (arm=1)/(arm=0) 1.118     1.042     1.201 0.002\n#&gt; RMTL (arm=1)/(arm=0) 0.734     0.595     0.905 0.004\n\n\n\n# more compact results\nobj$unadjusted.result\n\n# obj$RMST.arm0\n# obj$RMST.arm1\n\n# Graphical display of the group-specific RMST \n# as area under the KM curves\nplot(obj, xlab=\"Time (years)\", ylab = \"Relapse-free survival\",\n     col.RMST = \"gray\", col.RMTL = \"white\", cex.lab=1.2,\n     cex.axis=1.2, col=\"black\", xlim=c(0,5))\n\n\n# Regression with all the other covariate\nobj_reg &lt;- rmst2(time = df$time / 12, status = df$status, \n            arm = df$hormone-1, covariates = df[, 5:11], tau = 5)\n\n#overall results\nobj_reg\n\n# additive model on RMST\nround(obj_reg$RMST.difference.adjusted, 3)\n\n# multiplicative model on RMST\nround(obj_reg$RMST.ratio.adjusted, 3)\n\n# multiplicative model on RMTL\nround(obj_reg$RMTL.ratio.adjusted, 3)\n\n# for hormone treatment only \nobj.reg$adjusted.result\n\n\n####################################\n### Additive hazards analysis\n## using the \"addhazard\" package\n####################################\n\n\n# install.packages(\"addhazard\")\nlibrary(addhazard)\n \nlibrary(survival)\nlibrary(addhazard)\n\n# Fit the additive hazards model to the data\nfit &lt;- ah(Surv(time, status) ~ age + hormone, data = df, ties = FALSE)\n\n# Display the summary of the fitted model\nsummary(fit)\n\n\n\n # Fit additive hazards model\n \n## preparation\ndf$hormone &lt;- factor(df$hormone)\ndf$meno &lt;- factor(df$meno) \n\n# Add an infinitesimal random number to time\n # to get rid of ties\ndf$time.dties &lt;- df$time/12 + runif(nrow(df),0, 1e-12) \n\n\n# fit an additive hazard model\nobj &lt;- ah(Surv(time.dties,status) ~ hormone + meno\n       + age + size + grade + prog + estrg,\n       data = df, ties = FALSE)\n\n# print out the summary\n summary(obj)\n \n \n # Aalen's model\n\n library(timereg)\n\n obj_aalen &lt;- aalen(Surv(time.dties,status) ~ factor(hormone), data = df)\n\n obj_aalen$cum\n obj_aalen$var.cum\n summary(obj_aalen)\n\n \n \n ####################################\n ### Proportional odds analysis\n ## using the \"timereg\" package\n ####################################\n \n install.packages(\"timereg\")\n library(timereg)\n \n # Fit a proportional odds model\n ## need to convert hormone and meno from numeric to factor\n obj &lt;- prop.odds(Event(time, status) ~ hormone + meno\n        + age + size + grade + prog + estrg,\n        data = df)\n\n summary(obj)\n \n # Baseline cumulative odds function\n t &lt;- obj$cum[,1]\n base_odds &lt;- obj$cum[,2]\n \n # Plot baseline cumulative odds\n par(mfrow = c(1, 1))\n plot(stepfun(t, c(0, base_odds)), do.points = FALSE, lwd = 2,\n      xlim=c(0,80), ylim=c(0,1.4), frame.plot = FALSE,\n      ylab=\"Baseline cumulative odds\", xlab=\"Time (months)\", main =\"\")\n \n\n \n ###########################################\n ### Accelerated failure time (AFT) analysis\n ## using the \"aftgee\" package\n ##########################################\n \n install.packages(\"aftgee\")\n library(aftgee)\n \n # fit an AFT model\n ## need to convert hormone and meno from numeric to factor\n ## (will take a little longer than usual...)\n obj &lt;- aftgee(Surv(time, status) ~ hormone + meno\n               + age + size + grade + prog + estrg,\n               data = df)\n  # print out summary\n  summary(obj)\n \n exp(obj$coef.res) ## acceleration factors exp(beta)"
+    "text": "Base R Code\n\n\nShow the code\n##################################################################\n# This code generates all numerical results in chapter 5.      ##\n##################################################################\n\n\nlibrary(survival)\nlibrary(tidyverse)\n##############################################\n# GBC study\n#############################################\n#read in the complete data\ngbc &lt;- read.table(\"Data//German Breast Cancer Study//gbc.txt\")\n\n#subset to first event data\n#Sort the data by time within each id\no &lt;- order(gbc$id,gbc$time)\ngbc &lt;- gbc[o,]\n#get the first row for each id\ndf &lt;- gbc[!duplicated(gbc$id),]\n\n#set status=1 if status==2 or 1\ndf$status &lt;- (df$status &gt; 0) + 0\n\n# Reduce the scales of prog and estrg by 100\ndf$prog  &lt;- df$prog / 100\ndf$estrg &lt;- df$estrg / 100\n\n############################################\n# Restricted mean surval time (RMST) analysis\n# with the \"survRM2\" package\n##########################################\n\n# install.packages(\"survRM2\")\nlibrary(survRM2)\n\n\n# Two-sample comparison between hormonal and non-hormonal\n# groups on 5-year RMST\nobj &lt;- rmst2(time = df$time / 12, status = df$status, \n            arm = df$hormone - 1, tau = 5)\n\n# print out results\nobj\n#&gt; The truncation time: tau = 5  was specified. \n#&gt; \n#&gt; Restricted Mean Survival Time (RMST) by arm \n#&gt;              Est.    se lower .95 upper .95\n#&gt; RMST (arm=1) 3.87 0.104     3.666     4.074\n#&gt; RMST (arm=0) 3.46 0.084     3.295     3.625\n#&gt; \n#&gt; \n#&gt; Restricted Mean Time Lost (RMTL) by arm \n#&gt;              Est.    se lower .95 upper .95\n#&gt; RMTL (arm=1) 1.13 0.104     0.926     1.334\n#&gt; RMTL (arm=0) 1.54 0.084     1.375     1.705\n#&gt; \n#&gt; \n#&gt; Between-group contrast \n#&gt;                       Est. lower .95 upper .95     p\n#&gt; RMST (arm=1)-(arm=0) 0.410     0.148     0.672 0.002\n#&gt; RMST (arm=1)/(arm=0) 1.118     1.042     1.201 0.002\n#&gt; RMTL (arm=1)/(arm=0) 0.734     0.595     0.905 0.004\n\n\n\n# more compact results\nobj$unadjusted.result\n\n# obj$RMST.arm0\n# obj$RMST.arm1\n\n# Graphical display of the group-specific RMST \n# as area under the KM curves\nplot(obj, xlab=\"Time (years)\", ylab = \"Relapse-free survival\",\n     col.RMST = \"gray\", col.RMTL = \"white\", cex.lab=1.2,\n     cex.axis=1.2, col=\"black\", xlim=c(0,5))\n\n\n# Regression with all the other covariate\nobj_reg &lt;- rmst2(time = df$time / 12, status = df$status, \n            arm = df$hormone-1, covariates = df[, 5:11], tau = 5)\n\n#overall results\nobj_reg\n\n# additive model on RMST\nround(obj_reg$RMST.difference.adjusted, 3)\n\n# multiplicative model on RMST\nround(obj_reg$RMST.ratio.adjusted, 3)\n\n# multiplicative model on RMTL\nround(obj_reg$RMTL.ratio.adjusted, 3)\n\n# for hormone treatment only \nobj.reg$adjusted.result\n\n\n####################################\n### Additive hazards analysis\n## using the \"addhazard\" package\n####################################\n\n\n# install.packages(\"addhazard\")\nlibrary(addhazard)\n \n\n\n# Fit the additive hazards model to the data\nfit &lt;- ah(Surv(time, status) ~ age + hormone, data = df, ties = FALSE)\n\n# Display the summary of the fitted model\nsummary(fit)\n\n\n\n # Fit additive hazards model\n \n## preparation\ndf$hormone &lt;- factor(df$hormone)\ndf$meno &lt;- factor(df$meno) \n\n# Add an infinitesimal random number to time\n # to get rid of ties\nset.seed(123)\ndf$time.dties &lt;- df$time / 12 + runif(nrow(df),0, 1e-12) \n\n\n# fit an additive hazard model\nobj &lt;- ah(Surv(time.dties, status) ~ hormone + meno\n       + age + size + grade + nodes + prog + estrg,\n       data = df, ties = FALSE)\n\n# print out the summary\n summary(obj)\n \n beta &lt;- obj$coef\n obj$var\n \n \n # Aalen's model\n\n library(timereg)\n\n obj_aalen &lt;- aalen(Surv(time / 12, status) ~ hormone + meno\n       + age + size + grade + nodes + prog + estrg, data = df)\n\n Bt &lt;- obj_aalen$cum\n # obj_aalen$var.cum\n \n summary(obj_aalen)\n\n \n \npar(mfrow = c(5, 2))\nplot(obj_aalen)\n\n# plot the estimated cumulative regression coefficients\n aalen_beta &lt;- as_tibble(Bt) |&gt; \n   select(-`(Intercept)`) |&gt; # remove intercept\n   pivot_longer(\n     cols = -time, \n     names_to = \"covariate\", \n     values_to = \"beta\") |&gt; \n   mutate(\n    covariate = fct(covariate) \n   )\n\n \n ly_beta &lt;- tibble(\n   time =  Bt[, \"time\"],\n   as_tibble(Bt[, \"time\"] %*% t(beta))\n ) |&gt; \n    pivot_longer(\n     cols = -time, \n     names_to = \"covariate\", \n     values_to = \"beta\") |&gt; \n   mutate(\n    covariate = fct(covariate) \n   )\n \n var_labeller &lt;- c(\n   \"hormone2\" = \"Hormone therapy (yes v. no)\",\n   \"meno2\" = \"Menopausal (yes v. no)\",\n   \"age\" = \"Age (years)\",\n   \"size\" = \"Tumor size (mm)\",\n   \"grade\" = \"Grade (1-3)\",\n   \"nodes\" = \"Nodes\",\n   \"prog\" = \"Progesterone (100 fmol/mg)\",\n   \"estrg\" = \"Estrogen (100 fmol/mg)\"\n )\n \n \n  aalen_beta |&gt; \n   ggplot(aes(x = time, y = beta)) +\n   geom_step() +\n    geom_line(data = ly_beta, aes(x = time, y = beta), color = \"#C5050C\", linetype = 2, linewidth = 1) +\n   scale_x_continuous(\"Time (years)\", limits = c(0, 6), breaks = seq(0, 6, by = 1)) +\n   labs(\n     y = expression(\"B(t) (year\"^{-1}*\")\"),\n   ) + \n   facet_wrap(~covariate, scales = \"free_y\", ncol = 2, labeller = labeller(covariate = var_labeller)) +\n   theme_minimal()\n \n ggsave(\"images/nonhaz_aalen_beta.png\", width = 8, height = 8)\n ggsave(\"images/nonhaz_aalen_beta.eps\", width = 8, height = 8)\n  \n # Explore Cox-Aalen model\n # Fits Cox-Aalen model\n obj_cox_aalen &lt;- cox.aalen(Surv(time / 12, status) ~ prop(hormone) + meno\n       + age + size + grade + nodes + prog + estrg, data = df)\n \n summary(obj_cox_aalen)\n plot(obj_cox_aalen)\n \n obj_cox_aalen$gamma\n  obj_cox_aalen$var.gamma\n  \n  \n  \n ####################################\n ### Proportional odds analysis\n ## using the \"timereg\" package\n ####################################\n \n install.packages(\"timereg\")\n library(timereg)\n \n # Fit a proportional odds model\n ## need to convert hormone and meno from numeric to factor\n obj &lt;- prop.odds(Event(time, status) ~ hormone + meno\n        + age + size + grade + nodes + prog + estrg,\n        data = df)\n\n summary(obj)\n \n # Baseline cumulative odds function\n t &lt;- obj$cum[,1]\n base_odds &lt;- obj$cum[,2]\n \n\n\n\n # Plot baseline cumulative odds\n par(mfrow = c(1, 1))\n plot(stepfun(t, c(0, base_odds)), do.points = FALSE, lwd = 2,\n      xlim=c(0,80), ylim=c(0,1.4), frame.plot = FALSE,\n      ylab=\"Baseline cumulative odds\", xlab=\"Time (months)\", main =\"\")\n \n # ggplot version\n tibble(\n   time = t,\n   odds = base_odds\n ) |&gt; \n   ggplot(aes(x = time / 12, y = odds)) +\n   geom_step() +\n   scale_x_continuous(\"Time (years)\", limits = c(0, 6), breaks = 1:6) +\n   scale_y_continuous(\"Baseline cumulative odds\", limits = c(0, 1.25)) +\n   theme_minimal()\n   \nggsave(\"images/nonhaz_po_base.png\", width = 6, height = 4)\nggsave(\"images/nonhaz_po_base.eps\", width = 6, height = 4)\n \n # Plot the estimated cumulative odds\n \n ###########################################\n ### Accelerated failure time (AFT) analysis\n ## using the \"aftgee\" package\n ##########################################\n \n # install.packages(\"aftgee\")\n library(aftgee)\n\n # fit an AFT model\n ## need to convert hormone and meno from numeric to factor\n ## (will take a little longer than usual...)\n set.seed(123) # se is based on resampling\n obj &lt;- aftgee(Surv(time, status) ~ hormone + meno\n               + age + size + grade + nodes + prog + estrg,\n               data = df, B = 500)\n  # print out summary\n  summary(obj)\n \n exp(obj$coef.res) ## acceleration factors exp(beta)\n \n obj$var.res ## variance of the estimated log-acceleration factors\n \n \n # Parametric aft MODEL\n obj_aft &lt;- survreg(Surv(time, status) ~ hormone + meno\n               + age + size + grade + nodes + prog + estrg,\n               data = df, dist = \"loglogistic\")\n \n summary(obj_aft)\n obj_aft$coefficients\n obj_aft$var\n obj_aft$scale"
   },
   {
     "objectID": "chapter3_tmp.html",
@@ -1892,5 +1892,264 @@
       "Part I - Univariate Events",
       "Chapter 4 - Cox Proportional Hazards Regression"
     ]
+  },
+  {
+    "objectID": "quiz.html",
+    "href": "quiz.html",
+    "title": "10-Minute In-Class Quiz: Survival Analysis (Chapters 1–5)",
+    "section": "",
+    "text": "You have 10 minutes to complete this quiz.\nAnswer all questions concisely.\nShow all relevant calculations where applicable."
+  },
+  {
+    "objectID": "quiz.html#instructions",
+    "href": "quiz.html#instructions",
+    "title": "10-Minute In-Class Quiz: Survival Analysis (Chapters 1–5)",
+    "section": "",
+    "text": "You have 10 minutes to complete this quiz.\nAnswer all questions concisely.\nShow all relevant calculations where applicable."
+  },
+  {
+    "objectID": "quiz.html#question-1-3-points",
+    "href": "quiz.html#question-1-3-points",
+    "title": "10-Minute In-Class Quiz: Survival Analysis (Chapters 1–5)",
+    "section": "Question 1 (3 points)",
+    "text": "Question 1 (3 points)\nThe table below shows survival data for 5 individuals in a study. The event times and status (1: event; 0: censoring) information are given:\n\n\n\nTime\nStatus\n\n\n\n\n2\n1\n\n\n4\n0\n\n\n6\n1\n\n\n7.5\n0\n\n\n8\n1\n\n\n\n\nCompute the Kaplan-Meier estimator \\(\\hat{S}(t)\\) at times \\(t = 2, 6, 8\\).\n\nInterpret \\(\\hat{S}(6)\\) in words."
+  },
+  {
+    "objectID": "quiz.html#question-2-2-points",
+    "href": "quiz.html#question-2-2-points",
+    "title": "10-Minute In-Class Quiz: Survival Analysis (Chapters 1–5)",
+    "section": "Question 2 (2 points)",
+    "text": "Question 2 (2 points)\nThe hazard function \\(h(t)\\) is defined as: \\[\n\\lambda(t) = \\lim_{\\Delta t \\to 0} \\frac{P(t \\leq T &lt; t+\\Delta t \\mid T \\geq t)}{\\Delta t}\n\\] (a) Explain what the hazard function represents in survival analysis.\n(b) How is it related to the survival function \\(S(t)\\)?"
+  },
+  {
+    "objectID": "quiz.html#question-3-2-points",
+    "href": "quiz.html#question-3-2-points",
+    "title": "10-Minute In-Class Quiz: Survival Analysis (Chapters 1–5)",
+    "section": "Question 3 (2 points)",
+    "text": "Question 3 (2 points)\nYou fit a Kaplan-Meier estimator to a dataset and obtain the following estimated survival probabilities at two time points: \\[\n\\hat{S}(3) = 0.80, \\quad \\hat{S}(5) = 0.65.\n\\] (a) For a subject who has already survived to 3 (years), what is their probability of surviving to 5 years?"
+  },
+  {
+    "objectID": "chap5.html#outline",
+    "href": "chap5.html#outline",
+    "title": "Applied Survival Analysis",
+    "section": "Outline",
+    "text": "Outline\n\n\nRestricted Mean Survival Time (RMST)\nAdditive Hazards (AH) Model\nProportional Odds (PO) Model\nAccelerated Failure Time (AFT) Model\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+  },
+  {
+    "objectID": "chap5.html#motivation",
+    "href": "chap5.html#motivation",
+    "title": "Applied Survival Analysis",
+    "section": "Motivation",
+    "text": "Motivation\n\n\nLimitations of hazard ratio\n\nProportionality\nDepends on time frame in case of non-proportionality\n\n\n\n\n\nAlternative metric\n\n\\(\\tau\\)-year survival rate \\(S(\\tau)\\) for a fixed \\(\\tau\\)\n\n\\(5\\)-year survival rates for cancer patients\n\n\\(S_1(\\tau) - S_0(\\tau)\\): increase in survival rate by treatment vs control\nLimitation: cross-sectional survival status at \\(\\tau\\)\n\nDistribution of \\(T\\) in \\([0, \\tau]\\) ignored\nDelay of death within \\([0, \\tau]\\) not captured"
+  },
+  {
+    "objectID": "chap5.html#definition-and-interpretation",
+    "href": "chap5.html#definition-and-interpretation",
+    "title": "Applied Survival Analysis",
+    "section": "Definition and Interpretation",
+    "text": "Definition and Interpretation\n\n\nRestricted mean survival time (RMST) \\[\\mu(\\tau)=E(T\\wedge\\tau)\\]\n\na.k.a. Restricted mean life\nAveraged time lived in the first \\(\\tau=5\\) years\nRestricted mean time lost (RMTL): \\(L(\\mu) = \\tau - \\mu(\\tau)\\)\nAlternate expression (area under survival curve, AUC) \\[\\begin{equation}\\label{eq:non_haz:auc}\n\\mu(\\tau)=\\int_0^\\tau S(t)\\dd t.\n\\end{equation}\\]\n\nEstimator \\(\\hat\\mu(\\tau)=\\int_0^\\tau \\hat S(t)\\dd t\\), where \\(\\hat S(t)\\) is KM estimator"
+  },
+  {
+    "objectID": "chap5.html#survival-rate-vs-rmst",
+    "href": "chap5.html#survival-rate-vs-rmst",
+    "title": "Applied Survival Analysis",
+    "section": "Survival Rate vs RMST",
+    "text": "Survival Rate vs RMST\n\n\n\\(S(\\tau)\\) vs \\(\\mu(\\tau)\\)\n\n\\(S(\\tau)\\): survival status at \\(\\tau\\)\n\\(\\mu(\\tau)\\): summary of survival experience in \\([0, \\tau]\\) (more information)"
+  },
+  {
+    "objectID": "chap5.html#two-sample-inference",
+    "href": "chap5.html#two-sample-inference",
+    "title": "Applied Survival Analysis",
+    "section": "Two-Sample Inference",
+    "text": "Two-Sample Inference\n\n\nEffect size (\\(a=1\\): treatment; 0: control)\n\nAdditive: \\(\\mu_1(\\tau)-\\mu_0(\\tau)\\)\n\nAverage survival (event-free) time gained in \\([0, \\tau]\\)\n\nMultiplicative: \\(\\mu_1(\\tau)/\\mu_0(\\tau)\\) or \\(L_1(\\tau)/L_0(\\tau)\\)\n\nFold change in average survival time (lost) in \\([0, \\tau]\\)\n\n\n\n\n\n\nEstimation and inference\n\nPlug in KM estimators \\(\\hat S_a(t)\\) \\((a= 1, 0)\\)\nObtain \\(\\hat\\var\\{\\hat\\mu_a(\\tau)\\}\\) by \\[\n\\hat\\mu_a(\\tau) = \\mbox{time-weighted sum of the }\\hat S_a(t_j)\n\\mbox{ up to }\\tau\n\\]\n\nGreenwood’s formula for \\(\\hat\\var\\{\\hat S_a(t_j)\\}\\)"
+  },
+  {
+    "objectID": "chap5.html#regression-models",
+    "href": "chap5.html#regression-models",
+    "title": "Applied Survival Analysis",
+    "section": "Regression Models",
+    "text": "Regression Models\n\n\nModeling target: conditional RMST \\[\n\\mu(\\tau\\mid Z)=E(T\\wedge \\tau\\mid Z)\n\\]\n\n\n\n\nModel specification \\[\ng\\{\\mu(\\tau\\mid Z)\\}=\\beta^\\T Z\n\\]\n\n\\(g(x) = x\\): Additive model on RMST\n\nUnit increases in \\(Z\\) increase \\(\\tau\\)-RMST by \\(\\beta\\)\n\n\\(g(x) = \\log(x) \\mbox{ or } \\log(\\tau -x)\\): Multiplicative model on RMST/RMTL\n\nUnit increases in \\(Z\\) change \\(\\tau\\)-RMST/RMTL by \\(\\exp(\\beta)\\) times\n\n\\(Z = 1, 0\\) \\(\\Rightarrow\\) Two-sample additive/multiplicative effect sizes"
+  },
+  {
+    "objectID": "chap5.html#fitting-regression-models",
+    "href": "chap5.html#fitting-regression-models",
+    "title": "Applied Survival Analysis",
+    "section": "Fitting Regression Models",
+    "text": "Fitting Regression Models\n\n\nObserved data\n\n\\[\n    (X_i, \\delta_i, Z_i)\\,\\,\\, i=1,\\ldots, n\n    \\]\n\n\n\nInverse probability censoring weighting (IPCW) \\[\\begin{equation}\\label{eq:nonhaz_rmst_ipcw}\nn^{-1}\\sum_{i=1}^n \\frac{\\delta_i}{G(X_i\\mid Z_i)}Z_i \\{X_i\\wedge\\tau - g^{-1}(\\hat\\beta^\\T Z_i)\\} = 0,\n\\end{equation}\\]\n\n\\(G(t\\mid Z) = \\pr(C&gt;t\\mid Z)\\): replace by model-based version\nWorks because \\(E\\left[\\frac{\\delta}{G(X\\mid Z)}Z\\{X\\wedge\\tau - g^{-1}(\\beta^\\T Z)\\}\\right]=0\\) under \\(C\\indep T\\mid Z\\) (Exercise)"
+  },
+  {
+    "objectID": "chap5.html#software-survrm2rmst2-i",
+    "href": "chap5.html#software-survrm2rmst2-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: survRM2::rmst2() (I)",
+    "text": "Software: survRM2::rmst2() (I)\n\n\nBasic syntax for RMST analysis\n\n\n\nlibrary(survRM2)\n# Two-sample or regression analysis of RMST\nobj &lt;- rmst2(time, status, arm, tau, covariates = NULL)\n\n\n\n\n\nInput\n\n(time, status): \\((X, \\delta)\\)\narm: vector of indicators (1-0) for treatment vs control\ntau: scaler \\(\\tau\\)\ncovariates: optional covariate matrix (or data frame)"
+  },
+  {
+    "objectID": "chap5.html#software-survrm2rmst2-ii",
+    "href": "chap5.html#software-survrm2rmst2-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: survRM2::rmst2() (II)",
+    "text": "Software: survRM2::rmst2() (II)\n\n\nTwo-sample output (covariates = NULL)\n\nobj$RMST.arm1 & obj$RMST.arm0: two lists of group-wise inference results for arm = 1 and 0\nobj$unadjusted.result: matrix containing estimates, 95% confidence intervals, and \\(p\\)-values for \\(\\mu_1(\\tau) - \\mu_0(\\tau)\\), \\(\\mu_1(\\tau)/\\mu_0(\\tau)\\), and \\(L_1(\\tau)/L_0(\\tau)\\)\n\n\n\n\n\nRegression output (covariates supplied)\n\nobj$RMST.difference.adjusted: regression results for \\(g(x) =x\\)\nobj$RMST.ratio.adjusted: regression results for \\(g(x) = \\log(x)\\)\nobj$RMTL.ratio.adjusted: regression results for \\(g(x) = \\log(\\tau - x)\\)"
+  },
+  {
+    "objectID": "chap5.html#rmst-german-breast-cancer-i",
+    "href": "chap5.html#rmst-german-breast-cancer-i",
+    "title": "Applied Survival Analysis",
+    "section": "RMST: German Breast Cancer (I)",
+    "text": "RMST: German Breast Cancer (I)\n\n\nEndpoint: 5-year restricted mean relapse-free survival time\n\nTwo-sample: Hormone (arm=1) vs non-hormone (arm=0)\n\n\n\n# Two sample: hormonal and non-hormonal groups on 5-year RMST\nobj &lt;- rmst2(time = df$time / 12, status = df$status, \n            arm = df$hormone - 1, tau = 5)\nobj\n# Restricted Mean Survival Time (RMST) by arm \n#              Est.    se lower .95 upper .95\n# RMST (arm=1) 3.87 0.104     3.666     4.074\n# RMST (arm=0) 3.46 0.084     3.295     3.625\n# \n# Restricted Mean Time Lost (RMTL) by arm \n#              Est.    se lower .95 upper .95\n# RMTL (arm=1) 1.13 0.104     0.926     1.334\n# RMTL (arm=0) 1.54 0.084     1.375     1.705"
+  },
+  {
+    "objectID": "chap5.html#rmst-german-breast-cancer-ii",
+    "href": "chap5.html#rmst-german-breast-cancer-ii",
+    "title": "Applied Survival Analysis",
+    "section": "RMST: German Breast Cancer (II)",
+    "text": "RMST: German Breast Cancer (II)\n\n\nTwo-sample\n\nHormone increases 5-year RMST by 0.41 years (\\(p\\)=0.002)\n\n\n# Between-group contrast \n#                       Est. lower .95 upper .95     p\n# RMST (arm=1)-(arm=0) 0.410     0.148     0.672 0.002\n# RMST (arm=1)/(arm=0) 1.118     1.042     1.201 0.002\n# RMTL (arm=1)/(arm=0) 0.734     0.595     0.905 0.004\n#\n#-----  Graphic -------------------------------------------------\n# Graphical display of the group-specific RMST \n# as area under the KM curves\nplot(obj, xlab=\"Time (years)\", ylab = \"Relapse-free survival\",\n     col.RMST = \"gray\", col.RMTL = \"white\", cex.lab = 1.2,\n     cex.axis = 1.2, col = \"black\", xlim = c(0,5))"
+  },
+  {
+    "objectID": "chap5.html#rmst-german-breast-cancer-iii",
+    "href": "chap5.html#rmst-german-breast-cancer-iii",
+    "title": "Applied Survival Analysis",
+    "section": "RMST: German Breast Cancer (III)",
+    "text": "RMST: German Breast Cancer (III)\n\n\nTwo-sample"
+  },
+  {
+    "objectID": "chap5.html#rmst-german-breast-cancer-iv",
+    "href": "chap5.html#rmst-german-breast-cancer-iv",
+    "title": "Applied Survival Analysis",
+    "section": "RMST: German Breast Cancer (IV)",
+    "text": "RMST: German Breast Cancer (IV)\n\n\nRegression\n\nHormone extends 5-year RMST by 1.137 - 1 = 13.7% (\\(p&lt;\\) 0.001)\n\n\n\n# Regression with all the other covariate\nobj_reg &lt;- rmst2(time = df$time / 12, status = df$status, \n            arm = df$hormone - 1, covariates = df[, 5:11], tau = 5)\n#----- Print out multiplicative model on RMST ---------------\nobj_reg$RMST.ratio.adjusted\n#             coef se(coef)      z     p exp(coef) lower .95 upper .95\n# intercept  1.574    0.153 10.257 0.000     4.824     3.571     6.516\n# arm        0.129    0.039  3.318 0.001     1.137     1.054     1.227\n# age        0.006    0.004  1.537 0.124     1.006     0.998     1.013\n# meno      -0.111    0.072 -1.539 0.124     0.895     0.777     1.031\n# size      -0.004    0.002 -2.132 0.033     0.996     0.992     1.000\n# grade     -0.120    0.035 -3.463 0.001     0.887     0.828     0.949\n# nodes     -0.032    0.006 -5.421 0.000     0.969     0.957     0.980\n# ..."
+  },
+  {
+    "objectID": "chap5.html#semiparametric-ah-model",
+    "href": "chap5.html#semiparametric-ah-model",
+    "title": "Applied Survival Analysis",
+    "section": "Semiparametric AH Model",
+    "text": "Semiparametric AH Model\n\n\nAdditive, not multiplicative (Cox), hazards \\[\\begin{equation}\\label{eq:non_haz:add_haz}\n\\lambda(t\\mid Z)=\\lambda_0(t)+\\beta^\\T Z,\n\\end{equation}\\]\n\n\\(\\beta_k\\): risk difference (attributable risk) with one unit increase in \\(Z_{\\cdot k}\\)\nUnit: per (person-)time\n\n“Score” equation\n\n\\(\\hat\\beta\\): explicit solution to \\(U_n(\\hat\\beta)=0\\) (Lin and Ying, 1994) \\[\\begin{equation}\nU_n(\\beta) = n^{-1}\\sum_{i=1}^n\\int_0^\\tau\\left\\{Z_i -\\frac{\\sum_{j=1}^n I(X_j\\geq t)Z_j}{\\sum_{j=1}^n I(X_j\\geq t)}\\right\\}\n\\{\\dd N_i(t) - I(X_i\\geq t)\\beta^\\T Z_i \\dd t\\},\n\\end{equation}\\]"
+  },
+  {
+    "objectID": "chap5.html#ah-model-extensions",
+    "href": "chap5.html#ah-model-extensions",
+    "title": "Applied Survival Analysis",
+    "section": "AH Model Extensions",
+    "text": "AH Model Extensions\n\n\nTime-varying covariates \\[\\begin{equation}\n\\lambda(t\\mid Z) =\\lambda_0(t)+\\beta^\\T Z(t)\n\\end{equation}\\]\n\n\n\n\nResiduals\n\nCox-Snell, score, martingale/deviance\n\n\n\n\n\nAalen’s nonparametric AH model \\[\\begin{equation}\\label{eq:non_haz:add_haz1}\n\\lambda(t\\mid Z)=\\lambda_0(t)+\\beta(t)^\\T Z(t),\n\\end{equation}\\]\n\nLeast-squares type estimates for \\(B(t)=\\int_0^t\\beta(s)\\dd s\\)\nCan be used to check constancy of \\(\\beta\\)"
+  },
+  {
+    "objectID": "chap5.html#software-addhazardah",
+    "href": "chap5.html#software-addhazardah",
+    "title": "Applied Survival Analysis",
+    "section": "Software: addhazard::ah()",
+    "text": "Software: addhazard::ah()\n\n\nBasic syntax for semiparametric AH\n\n\n\nlibrary(addhazard)\n# Fit semiparametric AH model\nobj &lt;- ah(Surv(time, status) ~ covariates, ties = FALSE)\n\n\n\n\n\nInput\n\nSurv(time, status) ~ covariates: same formula as in coxph()\nties = FALSE: specify and de-tie time (add a small noise)\n\n\n\n\n\nOutput: an object of class ah\n\nobj$coef: \\(\\hat\\beta\\), obj$var: \\(\\hat\\var(\\hat\\beta)\\)\nsummary(obj): outputs regression table"
+  },
+  {
+    "objectID": "chap5.html#software-timeregaalen",
+    "href": "chap5.html#software-timeregaalen",
+    "title": "Applied Survival Analysis",
+    "section": "Software: timereg::aalen()",
+    "text": "Software: timereg::aalen()\n\n\nBasic syntax for Aalen’s nonparametric AH\n\n\n\nlibrary(timereg)\n# Fit Aalen's nonparametric AH model\nobj &lt;- aalen(Surv(time, status) ~ covariates)\n\n\n\nInput\n\nSurv(time, status) ~ covariates: same formula as coxph()\n\nOutput: an object of class aalen\n\nobj$cum: matrix containing \\(t\\) and \\(\\hat B(t)\\)\nobj$var: matrix containing \\(t\\) and pointwise \\(\\hat\\var\\{\\hat B(t)\\}\\)\nsummary(obj): outputs test results for \\(H_0: \\beta(t)\\equiv 0\\)"
+  },
+  {
+    "objectID": "chap5.html#ah-german-breast-cancer",
+    "href": "chap5.html#ah-german-breast-cancer",
+    "title": "Applied Survival Analysis",
+    "section": "AH: German Breast Cancer",
+    "text": "AH: German Breast Cancer\n\n\nSemiparametric AH model\n\nHormone reduces relapse/death rate by 0.047 per person-year\n\n\n\n# Add a small random number to time to get rid of ties\ndata.CE$time.dties &lt;- data.CE$time/12 + runif(nrow(data.CE),0, 1e-12) \n# fit an additive hazard model\nobj &lt;- ah(Surv(time.dties,status) ~ hormone + meno + age + size + \n            grade + prog + estrg, data = data.CE, ties = FALSE)\n# print out summary\nsummary(obj)\n#               coef         se   lower.95   upper.95      z  p.value    \n# hormone -4.741e-02  1.705e-02 -8.082e-02 -1.400e-02 -2.782 0.005411 ** \n# meno     4.015e-02  2.417e-02 -7.218e-03  8.751e-02  1.661 0.096652 .  \n# age     -1.070e-03  1.391e-03 -3.796e-03  1.655e-03 -0.770 0.441488    \n# size     2.447e-03  7.095e-04  1.056e-03  3.838e-03  3.449 0.000563 ***\n# ..."
+  },
+  {
+    "objectID": "chap5.html#semiparametric-po-model",
+    "href": "chap5.html#semiparametric-po-model",
+    "title": "Applied Survival Analysis",
+    "section": "Semiparametric PO Model",
+    "text": "Semiparametric PO Model\n\n\nModel specification \\[\\begin{equation}\\label{eq:non_haz:po}\n\\log\\left\\{\\frac{1-S(t\\mid Z)}{S(t\\mid Z)}\\right\\}=h_0(t)+\\beta^\\T Z,\n\\end{equation}\\]\n\n\\(h_0(t)\\): nonparametric (non-decreasing) baseline cumulative log-odds\nFix \\(t\\) \\(\\to\\) logistic regression for \\(I(T\\leq t)\\)\n\nTime-varying intercept, constant odds ratio\n\nProportional odds \\[\\begin{equation}\\label{eq:non_haz:poprop}\n\\frac{\\{1-S(t\\mid z_1)\\}/S(t\\mid z_1)}{\\{1-S(t\\mid z_2)\\}/S(t\\mid z_2)}=\\exp\\{\\beta^\\T(z_1-z_2)\\}.\n\\end{equation}\\]\n\n\\(\\exp(\\beta_k)\\): odds ratio for an early event (regardless of cut-off) with one unit increase in \\(Z_{\\cdot k}\\)"
+  },
+  {
+    "objectID": "chap5.html#estimation-and-extension",
+    "href": "chap5.html#estimation-and-extension",
+    "title": "Applied Survival Analysis",
+    "section": "Estimation and Extension",
+    "text": "Estimation and Extension\n\n\nEstimation and inference\n\nNonparametric MLE: Joint maximization w.r.t. \\(\\beta\\) and the \\(\\Delta h(t_j)= h(t_j) - h(t_j-)\\) \\((j=1,\\ldots, m)\\)\n\n\n\n\n\nSemiparametric transformation models \\[\\begin{equation}\\label{eq:non_haz:linear_trans}\ng\\{F(t\\mid Z)\\}=h_0(t)+\\beta^\\T Z,\n\\end{equation}\\]\n\n\\(F(t\\mid Z)=1- S(t\\mid Z)\\)\n\\(\\log\\{x/(1-x)\\}\\): Proportional odds\n\\(\\log(-\\log(1 - x))\\): Proportional hazards (Cox)"
+  },
+  {
+    "objectID": "chap5.html#software-timeregprop.odds",
+    "href": "chap5.html#software-timeregprop.odds",
+    "title": "Applied Survival Analysis",
+    "section": "Software: timereg::prop.odds()",
+    "text": "Software: timereg::prop.odds()\n\n\nBasic syntax for semiparametric PO model\n\n\n\nlibrary(timereg)\n# Fit a semiparametric proportional odds model\nobj &lt;- prop.odds(Event(time, status) ~ covariates)\n\n\n\n\n\nInput\n\nEvent(time, status) ~ covariates: similar to Surv(time, status) ~ covariates in coxph()\n\nOutput: an object of class cox.aalen\n\nobj$gamma: \\(\\hat\\beta\\); obj$var.gamma: \\(\\hat\\var(\\hat\\beta)\\)\nobj$cum: matrix containing \\(t\\) and \\(\\exp\\{\\hat h_0(t)\\}\\)\nsummary(obj): summarizes regression results"
+  },
+  {
+    "objectID": "chap5.html#po-german-breast-cancer-i",
+    "href": "chap5.html#po-german-breast-cancer-i",
+    "title": "Applied Survival Analysis",
+    "section": "PO: German Breast Cancer (I)",
+    "text": "PO: German Breast Cancer (I)\n\n\nSemiparametric PO model\n\nHormone reduces odds of early relapse/death by \\(1-\\exp(-0.522)=40.7\\%\\) (\\(p\\)-value 0.002)\n\n\n\n# Fit a PO model\nobj &lt;- prop.odds(Event(time, status) ~ hormone + meno + age + size + \n                   grade + nodes + prog + estrg, data = df)\n# print out summary\nsummary(obj)\n#              Coef.  SE       z      P-val   lower2.5% upper97.5%\n# hormone2 -0.52200 0.17000  -3.0800 2.08e-03 -0.855000   -0.18900\n# meno2     0.49000 0.24300   1.9100 5.66e-02  0.013700    0.96600\n# age      -0.02240 0.01280  -1.7500 8.09e-02 -0.047500    0.00269\n# size      0.01150 0.00611   1.7800 7.57e-02 -0.000475    0.02350\n# ..."
+  },
+  {
+    "objectID": "chap5.html#po-german-breast-cancer-ii",
+    "href": "chap5.html#po-german-breast-cancer-ii",
+    "title": "Applied Survival Analysis",
+    "section": "PO: German Breast Cancer (II)",
+    "text": "PO: German Breast Cancer (II)\n\n # Plot baseline cumulative odds\n plot(stepfun(t, c(0, base_odds)), do.points = FALSE, lwd = 2,\n      xlim=c(0,80), ylim=c(0,1.4), frame.plot = FALSE,\n      ylab=\"Baseline cumulative odds\", xlab=\"Time (months)\", main =\"\")"
+  },
+  {
+    "objectID": "chap5.html#model-specification",
+    "href": "chap5.html#model-specification",
+    "title": "Applied Survival Analysis",
+    "section": "Model Specification",
+    "text": "Model Specification\n\n\nLog-linear model \\[\\begin{equation}\\label{eq:non_haz:aft}\n\\log T=\\beta^\\T Z + \\epsilon, \\hspace{10mm} \\epsilon\\indep Z,\n\\end{equation}\\]\n\n\\(\\epsilon\\): random error with unknow distribution\n\\(T=\\exp(\\beta^\\T Z)\\exp(\\epsilon)\\): multiplicative covariate effects on \\(T\\)\n\n\\(Z\\) changes survival time by \\(\\exp(\\beta^\\T Z)\\) fold\n\nAccelerated failure time (AFT): with \\(S_\\epsilon(t)=\\pr\\{\\exp(\\epsilon) &gt; t\\}\\) \\[\\begin{align*}\nS(t\\mid Z) &=\\pr\\left\\{\\exp(\\beta^\\T Z)\\exp(\\epsilon) &gt; t\\mid Z\\right\\}\\\\\n& = S_\\epsilon\\left\\{\\exp(-\\beta^\\T Z)t\\right\\}\n\\end{align*}\\]\n\nAccelerates time course by a factor of \\(\\exp(\\beta^\\T Z)\\)"
+  },
+  {
+    "objectID": "chap5.html#parametric-vs-semiparametric",
+    "href": "chap5.html#parametric-vs-semiparametric",
+    "title": "Applied Survival Analysis",
+    "section": "Parametric vs Semiparametric",
+    "text": "Parametric vs Semiparametric\n\n\nParametric AFT\n\n\\(\\exp(\\epsilon)\\sim\\) Weibull, log-normal, log-logistic, etc\nSimplifies estimation \\(\\to\\) MLE\nWeibull AFT model \\(\\Leftrightarrow\\) Weibull PH model (only distribution with this equivalency)\n\n\n\n\n\nSemiparametric AFT\n\n\\(\\exp(\\epsilon)\\sim\\) nonparametric distribution\nBuckley-James estimator \\[\n\\mbox{Least squares} \\stackrel{\\rm iterate}{\\longleftrightarrow}\n\\mbox{Imputing censored values}\n\\]"
+  },
+  {
+    "objectID": "chap5.html#software-aftgeeaftgee",
+    "href": "chap5.html#software-aftgeeaftgee",
+    "title": "Applied Survival Analysis",
+    "section": "Software: aftgee::aftgee()",
+    "text": "Software: aftgee::aftgee()\n\n\nBasic syntax for semiparametric AFT model\n\n\n\nlibrary(aftgee)\n# Fit a semiparametric AFT model\n obj &lt;- aftgee(Surv(time,status) ~ covariates)\n\n\n\n\n\nInput\n\nSurv(time,status) ~ covariates: same formula as in coxph()\n\nOutput: an object of class aftgee\n\nobj$coef.res: \\(\\hat\\beta\\)\nobj$var.res: \\(\\hat\\var(\\hat\\beta)\\)\nsummary(obj): summarizes regression results"
+  },
+  {
+    "objectID": "chap5.html#aft-german-breast-cancer",
+    "href": "chap5.html#aft-german-breast-cancer",
+    "title": "Applied Survival Analysis",
+    "section": "AFT: German Breast Cancer",
+    "text": "AFT: German Breast Cancer\n\nSemiparametric AFT model\n\nHormone increases relapse-free survival time by \\(\\exp(0.320) = 1.38\\) fold (\\(p\\)-value 0.001)\n\n\n\n# Fit an AFT model\nset.seed(123)  # SE is based on resampling\nobj &lt;- aftgee(Surv(time, status) ~ hormone + meno + age + size + grade + \n                nodes + prog + estrg, data = df,\n                B = 500) # Number of resamples\n# print out summary\nsummary(obj)\n#             Estimate StdErr z.value p.value    \n# (Intercept)    4.262  0.410   10.40  &lt;2e-16 ***\n# hormone2       0.320  0.092    3.47   0.001 ***\n# meno2         -0.270  0.148   -1.82   0.068 .  \n# age            0.013  0.007    1.69   0.092 .  \n# size          -0.006  0.003   -1.89   0.059 .  \n# ..."
+  },
+  {
+    "objectID": "chap5.html#summary-i",
+    "href": "chap5.html#summary-i",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (I)",
+    "text": "Summary (I)\n\n\\(\\tau\\)-RMST\n\nDifference/ratio in survival time by time \\(\\tau\\)\nTwo-sample and regression\nsurvRM2::rmst2()\n\nAdditive hazards\n\nDifference in risk (attributable risk)\naddhazard::ah() (semiparametric: constant difference)\ntimereg::aalen() (nonparametric: time-varying difference)"
+  },
+  {
+    "objectID": "chap5.html#summary-ii",
+    "href": "chap5.html#summary-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (II)",
+    "text": "Summary (II)\n\nProportional odds\n\nOdds ratio for an early event\ntimereg::prop.odds()\n\nAccelerated failure time\n\nRatio in survival time\naftgee::aftgee() (semiparametric: unspecified error distribution)\nsurvival::survreg() (parametric error distribution)"
+  },
+  {
+    "objectID": "chap5.html#ah-german-breast-cancer-i",
+    "href": "chap5.html#ah-german-breast-cancer-i",
+    "title": "Applied Survival Analysis",
+    "section": "AH: German Breast Cancer (I)",
+    "text": "AH: German Breast Cancer (I)\n\n\nSemiparametric AH model\n\nHormone reduces relapse/death rate by 0.050 per person-year\n\n\n\n# Add a small random number to time to get rid of ties\ndf$time.dties &lt;- df$time/12 + runif(nrow(df),0, 1e-12) \n# fit an additive hazard model\nobj &lt;- ah(Surv(time.dties, status) ~ hormone + meno + age + size + \n            grade + nodes + prog + estrg, data = df, ties = FALSE)\n# print out summary\nsummary(obj)\n#               coef         se   lower.95   upper.95      z  p.value    \n# hormone -0.0497713  0.0170343 -0.0831585 -0.0163842 -2.922  0.00348 ** \n# meno     0.0373581  0.0242005 -0.0100749  0.0847911  1.544  0.12266    \n# age     -0.0011667  0.0013891 -0.0038895  0.0015560 -0.840  0.40096    \n# size     0.0010200  0.0007299 -0.0004107  0.0024506  1.397  0.16231   \n# ..."
+  },
+  {
+    "objectID": "chap5.html#ah-german-breast-cancer-ii",
+    "href": "chap5.html#ah-german-breast-cancer-ii",
+    "title": "Applied Survival Analysis",
+    "section": "AH: German Breast Cancer (II)",
+    "text": "AH: German Breast Cancer (II)\n\nSemi- vs. Non-parametric"
+  },
+  {
+    "objectID": "chap5.html#notes",
+    "href": "chap5.html#notes",
+    "title": "Applied Survival Analysis",
+    "section": "Notes",
+    "text": "Notes\n\nPseudo-value approach to RMST regression \\[\n   \\hat{\\mu}_i(\\tau) = n \\hat{\\mu}(\\tau) - (n - 1) \\hat{\\mu}^{(-i)}(\\tau)\n\\]\n\n\\(\\hat{\\mu}^{(-i)}(\\tau)\\): RMST without \\(i\\)-th observation\nRegress \\(\\hat{\\mu}_i(\\tau)\\) on \\(Z_i\\)\npseudo package\n\nCox–Aalen model \\[\n\\lambda(t \\mid Z) \\;=\\; \\lambda_0(t) \\exp\\left(\\gamma^\\T Z_{(1)}\\right) + \\beta(t)^\\T Z_{(2)}\n\\]\n\nMultiplicative hazards for \\(Z_{(1)}\\), additive hazards for \\(Z_{(2)}\\)\ntimereg::cox.aalen()"
   }
 ]
