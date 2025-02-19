@@ -51,7 +51,7 @@ This implies a covariate’s effect is a constant odds ratio on “early” fail
 
 ### Accelerated failure time model
 
-The **accelerated failure time (AFT)** framework directly models log-time:
+The *accelerated failure time (AFT)* framework directly models log-time:
 $$
 \log T \;=\; \beta^\mathrm{T} Z \;+\; \varepsilon,
 $$
