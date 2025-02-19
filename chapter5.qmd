@@ -7,11 +7,132 @@ title: "Chapter 5 - Other Non- and Semi-parametric Methods"
 Lecture slides [here](chap5.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
 
+## Chapter Summary
 
+When the proportional hazards assumption is questionable or when alternative measures of treatment effect are desired, a variety of non- and semi-parametric approaches can be employed. *Restricted mean survival time (RMST)* focuses on time lived within a specified window, while *additive hazards models* quantify absolute rather than relative risk. The *proportional odds model* captures time-invariant covariate effects on the odds of failing early, and *accelerated failure time (AFT)* models directly relate log-time to covariates, often offering more intuitive interpretations of “time gained or lost.”
+
+
+### Restricted mean survival time
+
+The *restricted mean survival time* over $[0, \tau]$ is
+$$
+\mu(\tau) \;=\; E\bigl(T \wedge \tau\bigr) \;=\; \int_0^\tau S(t)\,dt,
+$$
+where $S(t)$ is the survival function. Compared to hazard ratios, RMST allows direct interpretation of how many additional event-free years (or months) are gained or lost under different conditions. For a two-sample comparison, one can compute the difference $\mu_1(\tau)-\mu_0(\tau)$ or the ratio $\mu_1(\tau)/\mu_0(\tau)$. Regression extends this to
+$$
+g\{\mu(\tau \mid Z)\} = \beta^\mathrm{T} Z,
+$$
+where $g$ could be the identity (additive on RMST) or log (multiplicative on RMST). Estimation often uses *inverse probability of censoring weights (IPCW)* or *pseudo-observations* and remains valid without a proportional hazards assumption.
+
+
+### Additive hazards model
+
+Where the Cox model uses the hazard ratio, the *additive hazards model* posits that covariates contribute additively:
+$$
+\lambda(t \mid Z) \;=\; \lambda_0(t) + \beta^\mathrm{T} Z.
+$$
+A coefficient $\beta_k$ has units of “events per person-time” rather than a ratio, providing an *absolute* effect size. Semiparametric estimation (Lin’s method) is analogous to partial likelihood, allowing estimation of $\beta$ and baseline $\lambda_0(t)$. If time-varying coefficients $\beta(t)$ are preferred, *Aalen’s nonparametric* additive model offers full flexibility, with the cumulative effect estimated in a stepwise manner.
+
+Finally, a *Cox–Aalen hybrid* model allows some covariates to act multiplicatively on the hazard and others additively over time, bridging the two approaches.
+
+---
+
+### Proportional odds model
+
+The *proportional odds model* targets survival functions via cumulative odds:
+$$
+\log\left[\frac{1-S(t\mid Z)}{S(t \mid Z)}\right]
+\;=\;
+h_0(t) \;+\; \beta^\mathrm{T} Z.
+$$
+This implies a covariate’s effect is a constant odds ratio on “early” failure. It often accommodates scenarios where hazard ratios decline over time, but the odds ratio remains more stable. Estimation proceeds via a nonparametric maximum likelihood for $h_0(t)$ and a finite-dimensional parameter $\beta$.
+
+
+
+### Accelerated failure time model
+
+The **accelerated failure time (AFT)** framework directly models log-time:
+$$
+\log T \;=\; \beta^\mathrm{T} Z \;+\; \varepsilon,
+$$
+so $\exp(\beta_k)$ is a *time ratio*. A unit increase in $Z_k$ multiplies median (or mean) survival time by $\exp(\beta_k)$. Parametric versions (e.g., log-normal, Weibull) are fit via standard maximum likelihood, while semiparametric AFT estimation uses iterative least squares or rank-based approaches (e.g., Buckley–James, rank-GEE). Such methods can be numerically sensitive when censoring is heavy or the underlying distribution is heavily skewed, but they provide an appealing direct interpretation of how survival time “speeds up” or “slows down.”
+
+
+
+### Example R commands
+
+Below is an illustration of core functions (in different packages) implementing these methods. Assume a data frame `df` with columns: `time`, `status`, and additional covariates.
+
+```{r}
+#| eval: false
+
+###############################
+# 1. RMST (two-sample/regression)
+###############################
+library(survRM2)
+obj_rmst <- rmst2(time = df$time, status = df$status, arm = df$arm, tau = 5)
+summary(obj_rmst)           # RMST difference, ratio, etc.
+plot(obj_rmst)              # KM curves with RMST shading
+
+# Regression (IPCW-based) for RMST
+obj_rmst_reg <- rmst2(time = df$time, status = df$status,
+                      arm = df$arm,
+                      covariates = df[, c("x1", "x2")],
+                      tau = 5)
+obj_rmst_reg$RMST.difference.adjusted  # Additive model
+obj_rmst_reg$RMST.ratio.adjusted       # Multiplicative model
+
+###############################
+# 2. Additive hazards
+###############################
+library(addhazard)
+obj_ah <- ah(Surv(time, status) ~ x1 + x2, data = df, ties = FALSE)
+summary(obj_ah)  # Semiparametric additive hazards
+
+library(timereg)
+obj_aalen <- aalen(Surv(time, status) ~ x1 + x2, data = df)
+summary(obj_aalen)  # Aalen’s nonparametric version
+plot(obj_aalen)
+
+# Cox-Aalen hybrid
+obj_coxaalen <- cox.aalen(Surv(time, status) ~ prop(x1) + x2, data = df)
+summary(obj_coxaalen)
+plot(obj_coxaalen)   # Time-varying additive effect for x2
+
+###############################
+# 3. Proportional odds
+###############################
+obj_po <- prop.odds(Event(time, status) ~ x1 + x2, data = df)
+summary(obj_po)
+# Baseline cumulative odds stored in obj_po$cum
+
+###############################
+# 4. AFT models
+###############################
+library(survival)
+# Parametric
+obj_weibull <- survreg(Surv(time, status) ~ x1 + x2,
+                       data = df, dist = "weibull")
+summary(obj_weibull)
+
+# Semiparametric (rank-based or weighted least squares)
+library(aftgee)
+obj_aft_sp <- aftgee(Surv(time, status) ~ x1 + x2,
+                     data = df, B=200)
+summary(obj_aft_sp)
+```
+
+### Conclusion
+
+Each of these methods introduced can be more appealing than the Cox model when hazard ratios vary over time or when the interpretation of “time gained” or “time ratio” is more intuitive for clinical or policy purposes. By integrating these options, practitioners have a broader and more robust toolkit for analyzing survival data across a wide range of scenarios.
 
 ## R Code
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| eval: false
+
 
 ###############################################################################
 # Chapter 5 R Code
