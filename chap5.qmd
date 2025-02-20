@@ -22,7 +22,8 @@ include-in-header:
 ---
 
 ## Outline
-:::{.incremental}
+
+::: incremental
 1.  Restricted Mean Survival Time (RMST)
 
 2.  Additive Hazards (AH) Model
@@ -37,13 +38,14 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 # Restricted Mean Survival Time (RMST)
 
 ## Motivation
-:::{.fragment}
+
+::: fragment
 -   **Limitations of hazard ratio**
     -   Proportionality
     -   Depends on time frame in case of non-proportionality
 :::
 
-:::{.fragment}
+::: fragment
 -   **Alternative metric**
     -   $\tau$-year survival rate $S(\tau)$ for a fixed $\tau$
         -   $5$-year survival rates for cancer patients
@@ -54,11 +56,12 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Definition and Interpretation
-:::{.incremental}
+
+::: incremental
 -   **Restricted mean survival time (RMST)** $$\mu(\tau)=E(T\wedge\tau)$$
     -   a.k.a. Restricted mean life
     -   Averaged time lived in the first $\tau=5$ years
-    -   Restricted mean time lost (RMTL): $L(\mu) = \tau - \mu(\tau)$
+    -   Restricted mean time lost (RMTL): $L(\tau) = \tau - \mu(\tau)$
     -   Alternate expression (area under survival curve, AUC) \begin{equation}\label{eq:non_haz:auc}
         \mu(\tau)=\int_0^\tau S(t)\dd t.
         \end{equation}
@@ -66,24 +69,28 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Survival Rate vs RMST
-:::{.fragment}
+
+::: fragment
 -   $S(\tau)$ vs $\mu(\tau)$
     -   $S(\tau)$: survival status at $\tau$
-    -   $\mu(\tau)$: summary of survival experience in $[0, \tau]$ (more information) 
+    -   $\mu(\tau)$: summary of survival experience in $[0, \tau]$ (more information)
 :::
-:::{.fragment}
+
+::: fragment
 ![](images/nonhaz_rmst_comp.png){fig-align="center" width="60%"}
 :::
 
 ## Two-Sample Inference
-:::{.fragment}
+
+::: fragment
 -   **Effect size** ($a=1$: treatment; 0: control)
     -   Additive: $\mu_1(\tau)-\mu_0(\tau)$
         -   Average survival (event-free) time gained in $[0, \tau]$
     -   Multiplicative: $\mu_1(\tau)/\mu_0(\tau)$ or $L_1(\tau)/L_0(\tau)$
         -   Fold change in average survival time (lost) in $[0, \tau]$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Estimation and inference**
     -   Plug in KM estimators $\hat S_a(t)$ $(a= 1, 0)$
     -   Obtain $\hat\var\{\hat\mu_a(\tau)\}$ by $$
@@ -94,12 +101,14 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Regression Models
-:::{.fragment}
+
+::: fragment
 -   **Modeling target**: conditional RMST $$
     \mu(\tau\mid Z)=E(T\wedge \tau\mid Z)
     $$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Model specification** $$
     g\{\mu(\tau\mid Z)\}=\beta^\T Z
     $$
@@ -111,14 +120,16 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Fitting Regression Models
-:::{.fragment}
--   **Observed data** 
+
+::: fragment
+-   **Observed data**
 
 $$
     (X_i, \delta_i, Z_i)\,\,\, i=1,\ldots, n
     $$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Inverse probability censoring weighting (IPCW)** \begin{equation}\label{eq:nonhaz_rmst_ipcw}
     n^{-1}\sum_{i=1}^n \frac{\delta_i}{G(X_i\mid Z_i)}Z_i \{X_i\wedge\tau - g^{-1}(\hat\beta^\T Z_i)\} = 0,
     \end{equation}
@@ -128,7 +139,8 @@ $$
 :::
 
 ## Software: `survRM2::rmst2()` (I)
-:::{.fragment}
+
+:::: fragment
 -   **Basic syntax for RMST analysis**
 
 ::: big-code
@@ -140,22 +152,25 @@ library(survRM2)
 obj <- rmst2(time, status, arm, tau, covariates = NULL)
 ```
 :::
-:::
-:::{.fragment}
+::::
+
+::: fragment
 -   **Input**
     -   `(time, status)`: $(X, \delta)$
     -   `arm`: vector of indicators (1-0) for treatment vs control
     -   `tau`: scaler $\tau$
-    -   `covariates`: optional covariate matrix (or data frame) 
+    -   `covariates`: optional covariate matrix (or data frame)
 :::
 
 ## Software: `survRM2::rmst2()` (II)
-:::{.fragment}
+
+::: fragment
 -   **Two-sample output** (`covariates = NULL`)
     -   `obj$RMST.arm1` & `obj$RMST.arm0`: two lists of group-wise inference results for `arm = 1` and `0`
     -   `obj$unadjusted.result`: matrix containing estimates, 95% confidence intervals, and $p$-values for $\mu_1(\tau) - \mu_0(\tau)$, $\mu_1(\tau)/\mu_0(\tau)$, and $L_1(\tau)/L_0(\tau)$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Regression output** (`covariates` supplied)
     -   `obj$RMST.difference.adjusted`: regression results for $g(x) =x$
     -   `obj$RMST.ratio.adjusted`: regression results for $g(x) = \log(x)$
@@ -163,7 +178,8 @@ obj <- rmst2(time, status, arm, tau, covariates = NULL)
 :::
 
 ## RMST: German Breast Cancer (I)
-:::{.fragment}
+
+::: fragment
 -   **Endpoint**: 5-year restricted mean relapse-free survival time
     -   **Two-sample**: Hormone (`arm=1`) vs non-hormone (`arm=0`)
 
@@ -186,8 +202,10 @@ obj
 # RMTL (arm=0) 1.54 0.084     1.375     1.705
 ```
 :::
+
 ## RMST: German Breast Cancer (II)
-:::{.fragment}
+
+::: fragment
 -   **Two-sample**
 
     -   Hormone increases 5-year RMST by 0.41 years ($p$=0.002)
@@ -209,15 +227,18 @@ obj
          cex.axis = 1.2, col = "black", xlim = c(0,5))
     ```
 :::
+
 ## RMST: German Breast Cancer (III)
-:::{.fragment}
+
+::: fragment
 -   **Two-sample**
 
 ![](images/nonhaz_rmst_gbc.png){fig-align="center" width="70%"}
 :::
 
 ## RMST: German Breast Cancer (IV)
-:::{.fragment}
+
+::: fragment
 -   **Regression**
     -   Hormone extends 5-year RMST by 1.137 - 1 = 13.7% ($p<$ 0.001)
 
@@ -244,7 +265,8 @@ obj_reg$RMST.ratio.adjusted
 # Additive Hazards (AH) Model
 
 ## Semiparametric AH Model
-:::{.incremental}
+
+::: incremental
 -   **Additive, not multiplicative (Cox), hazards** \begin{equation}\label{eq:non_haz:add_haz}
     \lambda(t\mid Z)=\lambda_0(t)+\beta^\T Z,
     \end{equation}
@@ -258,17 +280,20 @@ obj_reg$RMST.ratio.adjusted
 :::
 
 ## AH Model Extensions
-:::{.fragment}
+
+::: fragment
 -   **Time-varying covariates** \begin{equation}
     \lambda(t\mid Z) =\lambda_0(t)+\beta^\T Z(t)
     \end{equation}
 :::
-:::{.fragment}
+
+::: fragment
 -   **Residuals**
 
     -   Cox-Snell, score, martingale/deviance
 :::
-:::{.fragment}
+
+::: fragment
 -   **Aalen's nonparametric AH model** \begin{equation}\label{eq:non_haz:add_haz1}
     \lambda(t\mid Z)=\lambda_0(t)+\beta(t)^\T Z(t),
     \end{equation}
@@ -278,7 +303,8 @@ obj_reg$RMST.ratio.adjusted
 :::
 
 ## Software: `addhazard::ah()`
-:::{.fragment}
+
+:::: fragment
 -   **Basic syntax for semiparametric AH**
 
 ::: big-code
@@ -290,20 +316,23 @@ library(addhazard)
 obj <- ah(Surv(time, status) ~ covariates, ties = FALSE)
 ```
 :::
-:::
-:::{.fragment}
+::::
+
+::: fragment
 -   **Input**
     -   `Surv(time, status) ~ covariates`: same formula as in `coxph()`
     -   `ties = FALSE`: specify and de-tie `time` (add a small noise)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Output**: an object of class `ah`
     -   `obj$coef`: $\hat\beta$, `obj$var`: $\hat\var(\hat\beta)$
     -   `summary(obj)`: outputs regression table
 :::
 
 ## Software: `timereg::aalen()`
-:::{.fragment}
+
+:::: fragment
 -   **Basic syntax for Aalen's nonparametric AH**
 
 ::: big-code
@@ -322,10 +351,11 @@ obj <- aalen(Surv(time, status) ~ covariates)
     -   `obj$cum`: matrix containing $t$ and $\hat B(t)$
     -   `obj$var`: matrix containing $t$ and pointwise $\hat\var\{\hat B(t)\}$
     -   `summary(obj)`: outputs test results for $H_0: \beta(t)\equiv 0$
-:::
+::::
 
 ## AH: German Breast Cancer (I)
-:::{.fragment}
+
+::: fragment
 -   **Semiparametric AH model**
     -   Hormone reduces relapse/death rate by 0.050 per person-year
 
@@ -358,11 +388,12 @@ summary(obj)
 # Proportional Odds (PO) Model
 
 ## Semiparametric PO Model
-:::{.incremental}
+
+::: incremental
 -   **Model specification** \begin{equation}\label{eq:non_haz:po}
     \log\left\{\frac{1-S(t\mid Z)}{S(t\mid Z)}\right\}=h_0(t)+\beta^\T Z,
     \end{equation}
-    -   $h_0(t)$: nonparametric (non-decreasing) baseline cumulative log-odds 
+    -   $h_0(t)$: nonparametric (non-decreasing) baseline cumulative log-odds
     -   Fix $t$ $\to$ logistic regression for $I(T\leq t)$
         -   Time-varying intercept, constant odds ratio
     -   Proportional odds \begin{equation}\label{eq:non_haz:poprop}
@@ -372,11 +403,13 @@ summary(obj)
 :::
 
 ## Estimation and Extension
-:::{.fragment}
+
+::: fragment
 -   **Estimation and inference**
     -   **Nonparametric MLE**: Joint maximization w.r.t. $\beta$ and the $\Delta h(t_j)= h(t_j) - h(t_j-)$ $(j=1,\ldots, m)$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Semiparametric transformation models** \begin{equation}\label{eq:non_haz:linear_trans}
     g\{F(t\mid Z)\}=h_0(t)+\beta^\T Z,
     \end{equation}
@@ -386,7 +419,8 @@ summary(obj)
 :::
 
 ## Software: `timereg::prop.odds()`
-:::{.fragment}
+
+:::: fragment
 -   **Basic syntax for semiparametric PO model**
 
 ::: big-code
@@ -398,8 +432,9 @@ library(timereg)
 obj <- prop.odds(Event(time, status) ~ covariates)
 ```
 :::
-:::
-:::{.fragment}
+::::
+
+::: fragment
 -   **Input**
     -   `Event(time, status) ~ covariates`: similar to `Surv(time, status) ~ covariates` in `coxph()`
 -   **Output**: an object of class `cox.aalen`
@@ -409,7 +444,8 @@ obj <- prop.odds(Event(time, status) ~ covariates)
 :::
 
 ## PO: German Breast Cancer (I)
-:::{.fragment}
+
+::: fragment
 -   **Semiparametric PO model**
     -   Hormone reduces odds of early relapse/death by $1-\exp(-0.522)=40.7\%$ ($p$-value 0.002)
 
@@ -448,7 +484,7 @@ summary(obj)
 
 ## Model Specification
 
-:::{.incremental}
+::: incremental
 -   **Log-linear model** \begin{equation}\label{eq:non_haz:aft}
     \log T=\beta^\T Z + \epsilon, \hspace{10mm} \epsilon\indep Z,
     \end{equation}
@@ -463,13 +499,15 @@ summary(obj)
 :::
 
 ## Parametric vs Semiparametric
-:::{.fragment}
+
+::: fragment
 -   **Parametric AFT**
     -   $\exp(\epsilon)\sim$ Weibull, log-normal, log-logistic, etc
     -   Simplifies estimation $\to$ MLE
     -   Weibull AFT model $\Leftrightarrow$ Weibull PH model (only distribution with this equivalency)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Semiparametric AFT**
     -   $\exp(\epsilon)\sim$ nonparametric distribution
     -   **Buckley-James estimator** $$
@@ -479,7 +517,8 @@ summary(obj)
 :::
 
 ## Software: `aftgee::aftgee()`
-:::{.fragment}
+
+:::: fragment
 -   **Basic syntax for semiparametric AFT model**
 
 ::: big-code
@@ -491,9 +530,9 @@ library(aftgee)
  obj <- aftgee(Surv(time,status) ~ covariates)
 ```
 :::
-:::
+::::
 
-:::{.fragment}
+::: fragment
 -   **Input**
     -   `Surv(time,status) ~ covariates`: same formula as in `coxph()`
 -   **Output**: an object of class `aftgee`
@@ -530,20 +569,17 @@ summary(obj)
 
 ## Notes
 
--   **Pseudo-value approach to RMST regression**
-$$
-   \hat{\mu}_i(\tau) = n \hat{\mu}(\tau) - (n - 1) \hat{\mu}^{(-i)}(\tau)
-$$
+-   **Pseudo-value approach to RMST regression** $$
+       \hat{\mu}_i(\tau) = n \hat{\mu}(\tau) - (n - 1) \hat{\mu}^{(-i)}(\tau)
+    $$
     -   $\hat{\mu}^{(-i)}(\tau)$: RMST without $i$-th observation
     -   Regress $\hat{\mu}_i(\tau)$ on $Z_i$
     -   `pseudo` package
--   **Cox--Aalen model**
-$$
+-   **Cox--Aalen model** $$
     \lambda(t \mid Z) \;=\; \lambda_0(t) \exp\left(\gamma^\T Z_{(1)}\right) + \beta(t)^\T Z_{(2)}
-$$
+    $$
     -   Multiplicative hazards for $Z_{(1)}$, additive hazards for $Z_{(2)}$
     -   `timereg::cox.aalen()`
-
 
 ## Summary (I)
 
