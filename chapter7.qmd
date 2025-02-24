@@ -24,18 +24,38 @@ channing <- read.table("Data\\Channing House Study\\channing.txt")
 
 head(channing)
 
-# fit a Cox model to the Channing study data
-# with entry age as left-truncation time
-obj <- coxph(Surv(Entry.Age, End.Age, status) ~ factor(gender), data=channing)
+channing$gender <- factor(channing$gender)
 
+# Fit a Cox model to the Channing study data
+# with entry age as left-truncation time
+obj <- coxph(Surv(Entry.Age, End.Age, status) ~ gender, data = channing)
+# Summarize model
 summary(obj)
+#> Call:
+#> coxph(formula = Surv(Entry.Age, End.Age, status) ~ gender, data = channing)
+#> 
+#>   n= 458, number of events= 176 
+#> 
+#>            coef exp(coef) se(coef)      z Pr(>|z|)  
+#> gender2 -0.3163    0.7289   0.1731 -1.827   0.0677 .
+#> ---
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#> 
+#>         exp(coef) exp(-coef) lower .95 upper .95
+#> gender2    0.7289      1.372    0.5191     1.023
+#> 
+#> Concordance= 0.528  (se = 0.018 )
+#> Likelihood ratio test= 3.17  on 1 df,   p=0.07
+#> Wald test            = 3.34  on 1 df,   p=0.07
+#> Score (logrank) test = 3.36  on 1 df,   p=0.07
+
 
 ### proportionality of gender ####
 # Schoenfeld residuals
 obj_zph <- cox.zph(obj)
 # test result
 obj_zph
-# plot the rescaled residuals
+# Plot the rescaled residuals
 plot(obj_zph, ylab = "Gender", xlab = "Age (years)", lwd = 2)
 
 ### prediction of (conditional survival) ##
@@ -85,7 +105,7 @@ nrisk_fig <- nrisk |>
 
 # set cut-off 70 yo
 t0 <- 70
-# get model-based parameter estimates
+# Get model-based parameter estimates
 beta <- obj$coefficients
 Lambda0 <- basehaz(obj, centered = FALSE)
 Lambda0t0 <- Lambda0[Lambda0$time >= t0,]
@@ -134,32 +154,36 @@ chan_model <- nrisk_fig + surv_fig + plot_layout(ncol = 2, guides = "collect") &
 
 
 ## BMA HIV study
-## Bangkok Metropolitan Administration HIV Study
-data <- read.table("Data//Bangkok Metropolitan Administration HIV_AIDS Study//bam.txt")
 
-
-# install the IntCens package from local file
-install.packages("IntCens_0.1.0.tar.gz",
-                 repos = NULL,
-                 type = "source")
 library(IntCens)
-
-## BMA data
-head(data)
-
-# get the response data for ICSurvICM()
-delta <- data$delta
-gamma <- data$gamma
-n <- nrow(data)
-U <- data$U
-V <- data$V
+## Bangkok Metropolitan Administration HIV Study
+df <- read.table("Data//Bangkok Metropolitan Administration HIV_AIDS Study//bam.txt")
+df
 
 
 # Fit a proportional hazards model
-obj.PH <- ICSurvICM(delta,gamma,U,V,Z = data[,5:9],model="PH")
-print.ICSurv(obj.PH)
+PH_fit <- icsurvfit(L = df$L, R = df$R, Z = df[, 3:7], model = "PH")
+# Print results  
+PH_fit
+#> Call:
+#> icsurvfit(L = df$L, R = df$R, Z = df[, 3:7], model = "PH")
+#> 
+#> NPMLE of proportional hazards for interval-censored data:
+#> 
+#> ICM algorithm converges in 102 iterations.
+#> 
+#> Maximum Likelihood Estimates for Regression parameters:
+#> 
+#>         Estimate    StdErr z.value  p.value   
+#> age    -0.029914  0.011051 -2.7068 0.006793 **
+#> sex     0.387923  0.268032  1.4473 0.147814   
+#> needle  0.249568  0.144987  1.7213 0.085195 . 
+#> jail    0.456849  0.143961  3.1734 0.001506 **
+#> inject  0.221270  0.146767  1.5076 0.131652   
+#> ---
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-
+# Alternative PO model
 # obj.PO <- ICSurvICM(delta,gamma,U,V,Z=data[,5:9],model="PO")
 
 
@@ -168,27 +192,29 @@ print.ICSurv(obj.PH)
 # 95% confidence intervals
 
 #regression parameter
-beta <- obj.PH$beta
-se <- sqrt(diag(obj.PH$var))
+beta <- PH_fit$beta
+se <- sqrt(diag(PH_fit$var))
 c1 <- round(exp(beta),2)
-c2 <- paste0("(",round(exp(beta-1.96*se),2),", ",
-   round(exp(beta+1.96*se),2),")")
-noquote(cbind(c1,c2))
+c2 <- paste0("(",round(exp(beta - 1.96*se),2),", ",
+   round(exp(beta + 1.96*se),2),")")
+noquote(cbind(c1, c2))
 
 
 
 # Prediction of HIV sero-negative probabilities for a median-aged male IDU
 # without histories of needle sharing or drug injection in jail by prior imprisonment
 # status.
-par(mfrow=c(1,1))
-age.med <- median(data[,"age"])
-plot.ICSurv(obj.PH, z=c(age.med,1,0,0,0),xlim=c(0,50), lty = 2,
-     xlab="Time (months)",ylab="HIV sero-negative probabilities",
+par(mfrow=c(1, 1))
+age.med <- median(df[,"age"])
+plot(PH_fit, z=c(age.med,1,0,0,0),xlim=c(0,50), lty = 2,
+     xlab="Time (months)", ylab="HIV sero-negative probabilities",
      lwd=2, main = "")
-plot.ICSurv(obj.PH, z=c(age.med,1,0,1,0), xlim=c(0,50), add=T,
+plot(PH_fit, z=c(age.med, 1, 0, 1, 0), xlim=c(0, 50), add = TRUE,
      lwd=2)
-legend(0, 0.3, lty=c(2, 1), c("Not jailed before","Jailed before"), lwd=2)
+legend(0, 0.3, lty=c(2, 1), c("No history of imprisonment", "History of imprisonment"), 
+       lwd = 2)
 ```
+
 
 ## Follow-up Plots
 
@@ -290,16 +316,6 @@ n <- nrow(bma)
 bma_lr <- bma |> 
   mutate(
     ID = 1 : n, 
-    L = case_when(
-      delta == 1 ~ 0,
-      gamma == 1 ~ U,
-      delta + gamma == 0 ~ V
-    ),
-    R = case_when(
-      delta == 1 ~ U,
-      gamma == 1 ~ V,
-      delta + gamma == 0 ~ Inf
-    ),
     .before = 1
   )
 
