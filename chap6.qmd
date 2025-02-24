@@ -270,8 +270,6 @@ zeta_fun <- function(tau, lambda0, lambdaL, b, c){
 :::{.fragment}
 -   **GBC pilot data**
     -   $\hat\lambda_0=0.174$ per person-year based on $n=209$
-:::
-:::{.fragment}
 -   **Other parameters**
     -   Set $\lambda_L=0.01$ per person-year
     -   $\lambda_1$: (constant) hazard rate in treatment, taking a range of values

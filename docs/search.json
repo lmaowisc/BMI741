@@ -2282,7 +2282,7 @@
     "href": "chap6.html#example-gbc-as-pilot-study-i",
     "title": "Applied Survival Analysis",
     "section": "Example: GBC as Pilot Study (I)",
-    "text": "Example: GBC as Pilot Study (I)\n\n\nDesign objective\n\nA randomized controlled trial to evaluate hormonal treatment on relapse-free survival of post-menopausal breast cancer patients\n\\(b=2\\) years of accrual; \\(c=3.5\\) years subsequent follow-up\n\n\n\n\n\nGBC pilot data\n\n\\(\\hat\\lambda_0=0.174\\) per person-year based on \\(n=209\\)\n\n\n\n\n\nOther parameters\n\nSet \\(\\lambda_L=0.01\\) per person-year\n\\(\\lambda_1\\): (constant) hazard rate in treatment, taking a range of values\nHR: \\(\\lambda_1/\\lambda_0\\); difference in RMST (Exercise)"
+    "text": "Example: GBC as Pilot Study (I)\n\n\nDesign objective\n\nA randomized controlled trial to evaluate hormonal treatment on relapse-free survival of post-menopausal breast cancer patients\n\\(b=2\\) years of accrual; \\(c=3.5\\) years subsequent follow-up\n\n\n\n\n\nGBC pilot data\n\n\\(\\hat\\lambda_0=0.174\\) per person-year based on \\(n=209\\)\n\nOther parameters\n\nSet \\(\\lambda_L=0.01\\) per person-year\n\\(\\lambda_1\\): (constant) hazard rate in treatment, taking a range of values\nHR: \\(\\lambda_1/\\lambda_0\\); difference in RMST (Exercise)"
   },
   {
     "objectID": "chap6.html#example-gbc-as-pilot-study-ii",
