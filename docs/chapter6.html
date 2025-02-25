@@ -279,7 +279,7 @@ window.Quarto = {
   <li><a href="#schoenfelds-formula-for-the-cox-log-rank-test" id="toc-schoenfelds-formula-for-the-cox-log-rank-test" class="nav-link" data-scroll-target="#schoenfelds-formula-for-the-cox-log-rank-test">Schoenfeld’s formula for the Cox (log-rank) test</a></li>
   <li><a href="#sample-size-for-rmst" id="toc-sample-size-for-rmst" class="nav-link" data-scroll-target="#sample-size-for-rmst">Sample size for RMST</a></li>
   <li><a href="#study-design-and-its-impact" id="toc-study-design-and-its-impact" class="nav-link" data-scroll-target="#study-design-and-its-impact">Study design and its impact</a></li>
-  <li><a href="#a-general-implementation-in-npsurvss" id="toc-a-general-implementation-in-npsurvss" class="nav-link" data-scroll-target="#a-general-implementation-in-npsurvss">A general implementation in <code>npsurvSS</code></a></li>
+  <li><a href="#a-general-implementation" id="toc-a-general-implementation" class="nav-link" data-scroll-target="#a-general-implementation">A general implementation</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul></li>
   <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code">R code</a></li>
@@ -358,7 +358,7 @@ n
 </section>
 <section id="study-design-and-its-impact" class="level3">
 <h3 class="anchored" data-anchor-id="study-design-and-its-impact">Study design and its impact</h3>
-<p>Study design considerations—<em>uniform accrual</em> over <span class="math inline">\(b\)</span> years, total follow-up <span class="math inline">\(c\)</span> years after accrual closes, and potential <em>exponential loss to follow-up</em>—directly shape the computations of <span class="math inline">\(\psi\)</span> (for log-rank) and <span class="math inline">\(\zeta(\tau)\)</span> (for RMST).</p>
+<p>Study design considerations—<em>uniform accrual</em> over <span class="math inline">\(b\)</span> years, additional follow-up <span class="math inline">\(c\)</span> years after accrual closes, and potential <em>exponential loss to follow-up</em>—shape the computations of <span class="math inline">\(\psi\)</span> (for log-rank) and <span class="math inline">\(\zeta(\tau)\)</span> (for RMST) through the <em>censoring distribution</em>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/design_ac.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
@@ -387,8 +387,8 @@ n
 <li>Plug <span class="math inline">\(\psi\)</span> or <span class="math inline">\(\zeta(\tau)\)</span> back into sample size formulas <span class="math inline">\(\eqref{eq:cox:sample_size}\)</span> or <span class="math inline">\(\eqref{eq:rmst:sample_size}\)</span>, respectively.</li>
 </ul>
 </section>
-<section id="a-general-implementation-in-npsurvss" class="level3">
-<h3 class="anchored" data-anchor-id="a-general-implementation-in-npsurvss">A general implementation in <code>npsurvSS</code></h3>
+<section id="a-general-implementation" class="level3">
+<h3 class="anchored" data-anchor-id="a-general-implementation">A general implementation</h3>
 <p>The R package <code>npsurvSS</code> offers more general routines for sample size/power calculations under log-rank and RMST approaches. Suppose we hypothesize an exponential event rate <span class="math inline">\(\lambda_0\)</span> in the control group and a hazard ratio <span class="math inline">\(\mathrm{HR} = \exp(\theta)\)</span> in the treatment group:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install if needed</span></span>
