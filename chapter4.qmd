@@ -26,7 +26,7 @@ This decomposition leaves $\lambda_0(t)$ fully unspecified, focusing on the log-
 
 ### The partial-likelihood approach
 
-Estimation of $\beta$ proceeds through a partial-likelihood function that isolates each event’s contribution while conditioning on the subjects at risk. Suppose the observed sample has unique failure times $t_1 < \dots < t_m$, each with a single failing subject denoted by $(j)$. Let $\mathcal{R}_j$ be the risk set at $t_j$, meaning the indices of all subjects still under observation just before $t_j$. 
+Estimation of $\beta$ proceeds through a partial-likelihood function that isolates each event’s contribution while conditioning on the subjects at risk. Suppose the observed sample has unique failure times $t_1 < \dots < t_m$, each with a single failing subject denoted by $(j)$. Let $\mathcal{R}_j$ be the risk set at $t_j$, meaning the indices of all subjects still under observation just before $t_j$.
 
 ![](images/cox_time_points.png){fig-align="center" width="70%"}
 
@@ -42,11 +42,7 @@ PL(\beta)
     \sum_{i \in \mathcal{R}_j}
       \exp(\beta^\T Z_i)
   },
-$$
-where $Z_{(j)}$ is the covariate vector for the subject who fails at $t_j$. This construction eliminates $\lambda_0(t)$ from the likelihood by focusing on how the failures are “allocated” among those at risk.
-
-
-
+$$ where $Z_{(j)}$ is the covariate vector for the subject who fails at $t_j$. This construction eliminates $\lambda_0(t)$ from the likelihood by focusing on how the failures are “allocated” among those at risk.
 
 Taking logarithms leads to the log-partial likelihood,
 
@@ -118,7 +114,6 @@ Large-sample properties of the partial-likelihood estimator follow from writing 
 
 Fitting a Cox model in R can be done with just a few commands from the `survival` package:
 
-
 ```{r}
 #| eval: false
 
@@ -160,11 +155,9 @@ Beyond these base functions, other packages offer enhanced output and plots:
 -   `survminer` provides visualization tools: `ggcoxzph(cox.zph(obj))` to diagnose proportional hazards via Schoenfeld residuals, and `ggforest(obj)` to show a forest plot of hazard ratios.
 -   `ggsurvfit` simplifies the creation of Kaplan–Meier curves alongside at-risk tables, p-values, and confidence intervals.
 
-
 ### Conclusion
 
-The Cox proportional hazards model accommodates flexible, nonparametric baseline hazards while preserving a straightforward regression interpretation of covariate effects. Partial-likelihood estimation, together with various model-based residuals, allows rigorous inferences of
-covariate effects and time trends. Time-varying covariates further expand its applicability to complex longitudinal settings. By combining robust inference with interpretability, the Cox model remains a central tool in regression-based survival analysis.
+The Cox proportional hazards model accommodates flexible, nonparametric baseline hazards while preserving a straightforward regression interpretation of covariate effects. Partial-likelihood estimation, together with various model-based residuals, allows rigorous inferences of covariate effects and time trends. Time-varying covariates further expand its applicability to complex longitudinal settings. By combining robust inference with interpretability, the Cox model remains a central tool in regression-based survival analysis.
 
 ## R Code
 

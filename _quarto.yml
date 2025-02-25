@@ -29,7 +29,7 @@ website:
           - chapter3.qmd
           - chapter4.qmd
           - chapter5.qmd
-          # - chapter6.qmd
+          - chapter6.qmd
           # - chapter7.qmd
       - section: "Part II - Complex Outcomes" 
         contents:

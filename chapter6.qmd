@@ -1,11 +1,141 @@
 ---
-title: "Chapter 6 - Sample Size Calculation and Study Design"
+title: "Chapter 6 - Sample Size Determination and Study Design"
 ---
 
 ## Slides
 
 Lecture slides [here](chap6.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
+
+## Chapter Summary
+
+Determining an appropriate sample size is a crucial step in designing a time-to-event study. Inadequate sample size can lead to insufficient power, while an overpowered study may waste resources. As two most important methods in survival analysis,  the *log-rank test* (or equivalently, a Cox model with a binary predictor) and *restricted mean survival time (RMST)* analysis need special attanetion. In their sample size calculations, study design choices—such as accrual patterns, length of follow-up, and loss to follow-up assumptions—play an important role.
+
+### General approach to sample size calculation
+
+A common starting point is to consider a test statistic $S_n=\sqrt n T_n /\hat\sigma_n$ that is approximately standard normal under the null hypothesis. Define a minimal clinically important effect size $\theta$ (e.g., a targeted log-hazard ratio or a difference in RMST) and specify the desired power $\gamma$. The general form for the required sample size, under asymptotic normality, often reduces to
+
+$$
+n 
+\;=\; 
+\frac{\sigma_0^2\,\bigl(z_{1-\alpha/2} \,+\, z_\gamma\bigr)^2}{f(\theta)^2},
+$$
+
+where $f(\theta) = E(T_n)$ is the “signal” contributed by the effect size, $\sigma_0^2$ is the variance term under the null, and $z_{p}$ is the $p$-quantile of the standard normal distribution. Intuitively, stronger signals $\bigl|f(\theta)\bigr|$ reduce the required $n$, while higher variance $\sigma_0^2$ or more stringent significance/power criteria increase $n$.
+
+### Schoenfeld’s formula for the Cox (log-rank) test
+
+Under a proportional hazards model with a binary treatment:
+$$
+\lambda(t \mid Z=1) 
+\;=\; 
+\lambda_0(t)\,\exp(\theta),
+$$
+the log-rank test statistic has a well-known large-sample result leading to **Schoenfeld’s formula**:
+
+\begin{equation}\label{eq:cox:sample_size}
+n 
+\;=\; 
+\frac{\bigl(z_{1-\alpha/2} + z_\gamma\bigr)^2}{q(1-q)\,\psi\,\theta^2}, \tag{1}
+\end{equation}
+
+where:
+
+- $q$ is the proportion allocated to treatment,
+- $\theta$ is the log-hazard ratio ($\theta=0$ under the null),
+- $\psi$ is the expected proportion of events (failures).
+
+Alternatively, we can express $n\psi$, the total number of events, as 
+the right-hand side without $\psi$ in the denominator.
+You often hear this referred to as an “event-driven” calculation—knowing the total number of events required can be more important than total enrollment.
+
+### Sample size for RMST
+
+The *restricted mean survival time* (RMST) over $[0, \tau]$ captures the average time lived up to $\tau$. For a two-sample comparison, the difference $\theta(\tau) = \mu_1(\tau) - \mu_0(\tau)$ can be tested, by its estimator $\hat\theta(\tau)$. The corresponding sample size formula is:
+
+\begin{equation}\label{eq:rmst:sample_size}
+n 
+\;=\; 
+\frac{\zeta(\tau)\,\bigl(z_{1-\alpha/2} + z_\gamma\bigr)^2}{
+  q(1-q)\,\theta(\tau)^2}, \tag{2}
+\end{equation}
+
+where $\zeta(\tau)$ is a variance-related term (depending on survival and censoring distributions). While slightly less efficient under strict proportional hazards, RMST-based tests offer a direct interpretation of how many additional months or years are gained under one treatment arm compared to another.
+
+### Study design and its impact
+
+Study design considerations—*uniform accrual* over $b$ years, total follow-up $c$ years after accrual closes, and potential *exponential loss to follow-up*—directly shape the computations of $\psi$ (for log-rank) and $\zeta(\tau)$ (for RMST). 
+
+![](images/design_ac.png){fig-align="center" width="90%"}
+
+Under this set-up:
+
+1. **Administrative censoring**: Uniform$[c, b + c]$
+2. **Loss to follow-up**: Assume exponential dropout with rate $\lambda_L$.
+
+
+These assumptions feed into analytic or numerical formulas to calculate:
+
+-   Censoring survival function \begin{equation}\label{eq:design:censoring}
+        G(t;\lambda_L, b, c):=\mathrm{pr}(C>t)=\left\{\begin{array}{ll} \exp(-\lambda_L t)& 0\leq t\leq c\\
+        b^{-1}(c+b-t)\exp(-\lambda_L t) & c<t<c+b \\
+        0& t\geq c+b.
+        \end{array}\right.
+        \end{equation}
+-   $\psi$ for log-rank (closed-form) \begin{equation}\label{eq:cox:psi}
+            \psi=\frac{\lambda_0}{\lambda_0+\lambda_L}\left[1-\exp\{-(\lambda_0+\lambda_L)c\}
+            \frac{1-\exp\{-(\lambda_0+\lambda_L)b\}}{(\lambda_0+\lambda_L)b}\right]
+            \end{equation}
+-   $\zeta(\tau)$ for RMST (needs numerical integration) \begin{equation}\label{eq:design:rmst_zeta}
+            \zeta(\tau)=\lambda_0^{-1}\int_0^\tau\{\exp(-\lambda_0 t)-\exp(-\lambda_0 \tau)\}^2\exp(\lambda_0 t)G(t;\lambda_L, b, c)^{-1}\mathrm{d} t
+            \end{equation}
+-   Plug $\psi$ or $\zeta(\tau)$ back into sample size formulas \eqref{eq:cox:sample_size} or \eqref{eq:rmst:sample_size}, respectively.
+
+### A general implementation
+
+The R package **npsurvSS** offers more general routines for sample size/power calculations under log-rank and RMST approaches. Suppose we hypothesize an exponential event rate $\lambda_0$ in the control group and a hazard ratio $\mathrm{HR} = \exp(\theta)$ in the treatment group:
+
+```{r}
+#| eval: false
+
+# Install if needed
+# install.packages("npsurvSS")
+
+library(npsurvSS)
+
+# 1. Define arms (control vs. treatment) for a two-arm study
+control <- create_arm(size = 500,
+                      accr_time = 2,     # uniform accrual over 2 years
+                      follow_time = 3.5, # then followed 3.5 years
+                      surv_scale = 0.174,  # baseline hazard for event
+                      loss_scale = 0.01)   # hazard of loss to follow-up
+
+treatment <- create_arm(size = 500,
+                        accr_time = 2,
+                        follow_time = 3.5,
+                        surv_scale = 0.174 * 0.8, # hazard ratio = 0.8
+                        loss_scale = 0.01)
+
+# 2. Compute required sample size for different tests
+res_size <- size_two_arm(
+  control, 
+  treatment,
+  test = list(
+    list(test = "weighted logrank"),               # log-rank 
+    list(test = "rmst difference", milestone = 3), # RMST at 3 years
+    list(test = "rmst difference", milestone = 5)  # RMST at 5 years
+  )
+)
+
+print(res_size)
+```
+
+You can customize the accrual pattern (piecewise uniform or otherwise), use Weibull rather than exponential survival times, or request sample size for alternative tests (e.g., Gehan–Wilcoxon, RMST ratio, survival probability difference). 
+
+### Conclusion
+
+Planning a time-to-event study involves balancing the feasibility of enrolling and following patients against the power to detect a meaningful effect. Schoenfeld’s formula under the proportional hazards framework yields intuitive “event-driven” calculations, while RMST-based approaches similarly ensure adequate power for differences in average time lived within a specified window. 
+Because design factors—accrual, follow-up length, and dropout processes—directly enter these formulas, it is vital to specify reasonable assumptions and possibly refine them via pilot data. 
 
 ## R code
 
