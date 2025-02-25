@@ -46,7 +46,7 @@ where:
 - $\psi$ is the expected proportion of events (failures).
 
 Alternatively, we can express $n\psi$, the total number of events, as 
-the right-hand side without $\psi$ in the denominator.
+the right-hand side of \eqref{eq:cox:sample_size} without $\psi$ in the denominator.
 You often hear this referred to as an “event-driven” calculation—knowing the total number of events required can be more important than total enrollment.
 
 ### Sample size for RMST
