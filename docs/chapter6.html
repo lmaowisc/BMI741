@@ -183,7 +183,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter1.html">Part I - Univariate Events</a></li><li class="breadcrumb-item"><a href="./chapter6.html">Chapter 6 - Sample Size Calculation and Study Design</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter1.html">Part I - Univariate Events</a></li><li class="breadcrumb-item"><a href="./chapter6.html">Chapter 6 - Sample Size Determination and Study Design</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -245,7 +245,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter6.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Chapter 6 - Sample Size Calculation and Study Design</span></a>
+ <span class="menu-text">Chapter 6 - Sample Size Determination and Study Design</span></a>
   </div>
 </li>
       </ul>
@@ -279,7 +279,7 @@ window.Quarto = {
   <li><a href="#schoenfelds-formula-for-the-cox-log-rank-test" id="toc-schoenfelds-formula-for-the-cox-log-rank-test" class="nav-link" data-scroll-target="#schoenfelds-formula-for-the-cox-log-rank-test">Schoenfeld’s formula for the Cox (log-rank) test</a></li>
   <li><a href="#sample-size-for-rmst" id="toc-sample-size-for-rmst" class="nav-link" data-scroll-target="#sample-size-for-rmst">Sample size for RMST</a></li>
   <li><a href="#study-design-and-its-impact" id="toc-study-design-and-its-impact" class="nav-link" data-scroll-target="#study-design-and-its-impact">Study design and its impact</a></li>
-  <li><a href="#a-general-implementation" id="toc-a-general-implementation" class="nav-link" data-scroll-target="#a-general-implementation">A general implementation</a></li>
+  <li><a href="#a-general-implementation-in-npsurvss" id="toc-a-general-implementation-in-npsurvss" class="nav-link" data-scroll-target="#a-general-implementation-in-npsurvss">A general implementation in <code>npsurvSS</code></a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul></li>
   <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code">R code</a></li>
@@ -289,7 +289,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter1.html">Part I - Univariate Events</a></li><li class="breadcrumb-item"><a href="./chapter6.html">Chapter 6 - Sample Size Calculation and Study Design</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./chapter1.html">Part I - Univariate Events</a></li><li class="breadcrumb-item"><a href="./chapter6.html">Chapter 6 - Sample Size Determination and Study Design</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Chapter 6 - Sample Size Determination and Study Design</h1>
 </div>
@@ -361,7 +361,7 @@ n
 <p>Study design considerations—<em>uniform accrual</em> over <span class="math inline">\(b\)</span> years, total follow-up <span class="math inline">\(c\)</span> years after accrual closes, and potential <em>exponential loss to follow-up</em>—directly shape the computations of <span class="math inline">\(\psi\)</span> (for log-rank) and <span class="math inline">\(\zeta(\tau)\)</span> (for RMST).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/design_ac.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+<p><img src="images/design_ac.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
 </figure>
 </div>
 <p>Under this set-up:</p>
@@ -387,9 +387,9 @@ n
 <li>Plug <span class="math inline">\(\psi\)</span> or <span class="math inline">\(\zeta(\tau)\)</span> back into sample size formulas <span class="math inline">\(\eqref{eq:cox:sample_size}\)</span> or <span class="math inline">\(\eqref{eq:rmst:sample_size}\)</span>, respectively.</li>
 </ul>
 </section>
-<section id="a-general-implementation" class="level3">
-<h3 class="anchored" data-anchor-id="a-general-implementation">A general implementation</h3>
-<p>The R package <strong>npsurvSS</strong> offers more general routines for sample size/power calculations under log-rank and RMST approaches. Suppose we hypothesize an exponential event rate <span class="math inline">\(\lambda_0\)</span> in the control group and a hazard ratio <span class="math inline">\(\mathrm{HR} = \exp(\theta)\)</span> in the treatment group:</p>
+<section id="a-general-implementation-in-npsurvss" class="level3">
+<h3 class="anchored" data-anchor-id="a-general-implementation-in-npsurvss">A general implementation in <code>npsurvSS</code></h3>
+<p>The R package <code>npsurvSS</code> offers more general routines for sample size/power calculations under log-rank and RMST approaches. Suppose we hypothesize an exponential event rate <span class="math inline">\(\lambda_0\)</span> in the control group and a hazard ratio <span class="math inline">\(\mathrm{HR} = \exp(\theta)\)</span> in the treatment group:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install if needed</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("npsurvSS")</span></span>

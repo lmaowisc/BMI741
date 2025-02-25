@@ -66,7 +66,7 @@ where $\zeta(\tau)$ is a variance-related term (depending on survival and censor
 
 Study design considerations—*uniform accrual* over $b$ years, total follow-up $c$ years after accrual closes, and potential *exponential loss to follow-up*—directly shape the computations of $\psi$ (for log-rank) and $\zeta(\tau)$ (for RMST). 
 
-![](images/design_ac.png){fig-align="center" width="90%"}
+![](images/design_ac.png){fig-align="center" width="75%"}
 
 Under this set-up:
 
@@ -91,9 +91,9 @@ These assumptions feed into analytic or numerical formulas to calculate:
             \end{equation}
 -   Plug $\psi$ or $\zeta(\tau)$ back into sample size formulas \eqref{eq:cox:sample_size} or \eqref{eq:rmst:sample_size}, respectively.
 
-### A general implementation
+### A general implementation in `npsurvSS`
 
-The R package **npsurvSS** offers more general routines for sample size/power calculations under log-rank and RMST approaches. Suppose we hypothesize an exponential event rate $\lambda_0$ in the control group and a hazard ratio $\mathrm{HR} = \exp(\theta)$ in the treatment group:
+The R package `npsurvSS` offers more general routines for sample size/power calculations under log-rank and RMST approaches. Suppose we hypothesize an exponential event rate $\lambda_0$ in the control group and a hazard ratio $\mathrm{HR} = \exp(\theta)$ in the treatment group:
 
 ```{r}
 #| eval: false
