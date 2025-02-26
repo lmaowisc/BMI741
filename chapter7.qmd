@@ -154,7 +154,8 @@ chan_model <- nrisk_fig + surv_fig + plot_layout(ncol = 2, guides = "collect") &
 
 
 ## BMA HIV study
-
+# install.packages("devtools")
+devtools::install_github("lmaowisc/IntCens")
 library(IntCens)
 ## Bangkok Metropolitan Administration HIV Study
 df <- read.table("Data//Bangkok Metropolitan Administration HIV_AIDS Study//bam.txt")

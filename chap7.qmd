@@ -43,7 +43,7 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
     -   Only subjects who fail in $[T_L, \infty)$ can be observed
         -   $T_L$: left truncation time
         -   Those who fail in $[0, T_L)$ are excluded (*truncated*)
-    -   Biased sampling $(T\geq T_L)$
+        -   Biased sampling $(T\geq T_L)$
 :::
 :::{.fragment}
 -   **Mechanism: delayed entry**
@@ -322,19 +322,26 @@ plot(obj_zph, ylab = "Gender", xlab = "Age (years)", lwd = 2)
 # Interval Censoring
 
 ## Observation Setting
-
+:::{.fragment}
 -   **Interval censoring**
-    -   Periodic check-up for an asymptomatic event
+    -   Periodic check-ups for an asymptomatic event
     -   Event is only known to have occurred in between two consecutive check-ups
+:::
+:::{.fragment}
 -   **Examples**
     -   Tumor (occult) formation
     -   HIV seroconversion (viral antibodies become detectable in serum)
+:::
+:::{.fragment}
 -   **Challenge**
     -   No exact failure time is observed
+:::
 
 ## Data and Assumption
-
+:::{.fragment}
 -   **Target of inference**: still $T$
+:::
+:::{.fragment}
 -   **Check-up times**: $U=(U_1<U_2<\cdots<U_K)$
     -   $K\equiv 1$: case-1 (current status data)
     -   $K\equiv 2$: case-2
@@ -344,32 +351,40 @@ plot(obj_zph, ylab = "Gender", xlab = "Age (years)", lwd = 2)
     U\indep T
     $$
     -   With covariates: $(U\indep T)\mid Z$
+:::
 
 ## Observed Data
-
+:::{.fragment}
 -   **Censoring interval**
     -   $(L, R]$: the check-up interval containing the event ![](images/trunc_ic.png){fig-align="center" width="70%"}
     -   Other check-up times may be available but not relevant
     -   **Example**: current status data
         -   "Positive" at $U_1$: $(L, R]=(0, U_1]$
         -   "Negative" at $U_1$: $(L, R]=(U_1, \infty)$
+:::
+:::{.fragment}
 -   **Observed sample** $$
     (L_i, R_i)\,\,\,(i=1,\ldots, n)
     $$
+:::
 
 ## Likelihood-Based Inference
-
+## Observed Data
+:::{.fragment}
 -   **Likelihood function** \begin{equation}\label{eq:trunc:nonp}
     L_n(\theta)=\prod_{i=1}^n\{S(L_i;\theta)-S(R_i;\theta)\}
     \end{equation}
     -   **Log-likelihood** \begin{equation}\label{eq:trunc:ic_log_lik}
         l_n(\theta)=\sum_{i=1}^n\log\{S(L_i;\theta)-S(R_i;\theta)\}
         \end{equation}
+:::
+:::{.fragment}
 -   **Parametric Models**
     -   Standard MLE $\hat\theta=\arg\max_\theta l_n(\theta)$
+:::
 
 ## One-Sample Estimation
-
+:::{.incremental}
 -   **Nonparametric maximum likelihood**
     -   $F(t)=1-S(t)$: treat as a step function
     -   Log-likelihood $$
@@ -381,9 +396,10 @@ plot(obj_zph, ylab = "Gender", xlab = "Age (years)", lwd = 2)
     -   $l_n(F)$ becomes a function of $$
         0\leq F(t_1)\leq F(t_2)\leq\cdots \leq F(t_m)\leq 1
         $$
+:::
 
 ## One-Sample: Constrained Maximization
-
+:::{.incremental}
 -   **Monotonicity-constrained maximization** \begin{equation}\label{eq:trunc:iso}
     \hat F=\arg\max_{F\in\mathcal A}l_n(F).
     \end{equation}
@@ -391,20 +407,25 @@ plot(obj_zph, ylab = "Gender", xlab = "Age (years)", lwd = 2)
     -   Solvable by linear programming
     -   **Iterative convex minorant (ICM)**: a monotonicity-contrained version of Newton-Raphson
     -   $\hat F(t) - F(t)= O_P(n^{-1/3})$, not asymptotically normal
+:::
+
 
 ## Semiparametric Models
-
+:::{.fragment}
 -   **General approach** $\theta=(\beta, \eta)$
     -   $\beta$: regression parameter
     -   $\eta(\cdot)$: nonparametric (monotone) baseline function (cumulative hazards/odds)
     -   $(\hat\beta, \hat\eta)=\arg\max_{\beta,\eta}l_n(\beta, \eta)$: maximize iteratively between $\beta$ and $\eta(\cdot)$
+:::
+:::{.fragment}
 -   **Example: Cox proportional hazards (PH) model**
     -   Log-likelihood $$
         l_n(\beta,\Lambda_0)=\sum_{i=1}^n\log\left[\exp\{-\exp(\beta^\T Z_i)\Lambda_0(L_i)\}-\exp\{-\exp(\beta^\T Z_i)\Lambda_0(R_i)\}\right]
         $$
+:::
 
 ## Example: Cox PH Model
-
+:::{.fragment}
 -   **Iterative maximization**
     -   $\beta$-step (Newton-Raphson) $$
           \beta^{(j+1)}=\arg\max_\beta l_n(\beta,\Lambda_0^{(j)})
@@ -412,35 +433,42 @@ plot(obj_zph, ylab = "Gender", xlab = "Age (years)", lwd = 2)
     -   $\Lambda_0$-step (ICM) $$
         \Lambda_0^{(j+1)}=\arg\max_\Lambda l_n(\beta^{(j+1)},\Lambda)
         $$
+:::
+:::{.fragment}
 -   **Inference**
     -   $\hat\Lambda_0(t)-\Lambda_0(t)=O_P(n^{-1/3})$: non-standard distribution
     -   $\hat\beta$ asymptotically normal, variance estimable by efficient information
         -   $\mathcal I(\beta)=-\partial^2 l_n\{\beta, \hat\Lambda_0(\beta)\}/\partial\beta^{\otimes 2}$ (negative quadrature of "profile likelihood")
+:::
 
-## Software: `IntCens::ICSurvICM()`
-
+## Software: `IntCens::icsurvfit()`
+:::{.fragment}
 -   **Basic syntax for analysis of interval-censored data**
 
 ::: big-code
 ```{r}
 #| eval: false
 #| echo: true
-obj <- ICSurvICM(delta, gamma, U, V, Z, 
-                 model = c("NP", "PH", "PO"))
+#| # Install package
+devtools::install_github("lmaowisc/IntCens")
+library(IntCens)
+# Fit non-/semi-parametric models to interval-censored data
+obj <- icsurvfit(L, R, Z = NULL, model = c("NP", "PH", "PO"))
 ```
 :::
-
+:::
+:::{.fragment}
 -   **Input**
-    -   `delta = 1`: left censoring ($L_i=0$) $\to$ `U =` $R_i$, `V = NA`
-    -   `gamma = 1`: interval censoring ($L_i>0, R_i<\infty$) $\to$ `U =` $L_i$, `V =` $R_i$
-    -   `delta = gamma = 0`: right censoring ($R_i =\infty$) $\to$ `U = NA`, `V =` $L_i$
-    -   `model = c("NP", "PH", "PO")`: nonparametric (one-sample) estimation, PH, PO regression models (with covariate matrix `Z`), respectively
+    -   `L`, `R`: $L_i$ and $R_i$
+    -   `Z`: covariate matrix (optional)
+    -   `model = c("NP", "PH", "PO")`: nonparametric (one-sample) estimation, PH, PO regression models
 -   **Output**: `obj$beta` ($\hat\beta$), `obj$var`($\hat\var(\hat\beta)$), ...
+:::
 
 # Bangkok HIV/AIDS Study
 
 ## Study Background
-
+:::{.fragment}
 -   **Study information**
     -   **Population**: 1,124 injecting drug users (IDUs) followed from 1995 to 1998 at 4-month intervals for blood test for HIV sero-positivity
     -   **Endpoint**: (interval-censored) time from enrollment to HIV seroconversion ([link](https://lmaowisc.github.io/BMI741/chapter7_files/figure-html/fig-bma_fu-1.png) to follow-up plot)
@@ -450,9 +478,10 @@ obj <- ICSurvICM(delta, gamma, U, V, Z,
         -   History of needle sharing (`1`: yes; `0`: no)
         -   History of being jailed/imprisoned (`1`: yes; `0`: no)
         -   History of drug injection in jail (`1`: yes; `0`: no)
+:::
 
 ## Cox PH Regression
-
+:::{.fragment}
 -   **Load package and data**
 
 ```{r}
@@ -460,59 +489,70 @@ obj <- ICSurvICM(delta, gamma, U, V, Z,
 #| echo: true
 library(IntCens)
 ## BMA data
-head(data)
-# delta gamma      U       V age sex need jail inject
-#     0     0     NA 40.5574  37   0    0    1      1
-#     0     0     NA 24.2623  25   0    0    1      1
-#     1     0 4.1311      NA  49   0    1    1      1
-#     0     1 7.1475 13.2131  32   1    0    1      0
+head(df)
+#     L       R age sex needle jail inject
+#   40.6    Inf  37   0      0    1      1
+#   24.3    Inf  25   0      0    1      1
+#    0      4.1  49   0      1    1      1
+#    7.1   13.2  32   1      0    1      0
 # ...
 ```
+:::
 
+:::{.fragment}
 -   **Fit Cox model**
 
 ```{r}
 #| eval: false
 #| echo: true
-obj.PH <- ICSurvICM(delta, gamma, U, V, Z = data[, 5:9], model="PH")
+# Fit a proportional hazards model
+PH_fit <- icsurvfit(L = df$L, R = df$R, Z = df[, 3:7], model = "PH")
+
 ```
+:::
 
 ## Cox PH Regression: Inference (I)
-
+:::{.fragment}
 -   **Summary results**
 
 ```{r}
 #| eval: false
 #| echo: true
-# print out regression results
-print.ICSurv(obj.PH)
-# NPMLE of proportional hazards for interval-censored data:
-# 
-# ICM algorithm converges in 102 iterations.
-# 
-# Maximum Likelihood Estimates for Regression parameters:
-#         Estimate    StdErr z.value  p.value   
-# age    -0.029914  0.011051 -2.7068 0.006793 **
-# sex     0.387923  0.268032  1.4473 0.147814   
-# need    0.249568  0.144987  1.7213 0.085195 . 
-# jail    0.456849  0.143961  3.1734 0.001506 **
-# inject  0.221270  0.146767  1.5076 0.131652
-# ---
-# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# Print out regression results
+PH_fit 
+#> Call:
+#> icsurvfit(L = df$L, R = df$R, Z = df[, 3:7], model = "PH")
+#> 
+#> ICM algorithm converges in 102 iterations.
+#> 
+#> Maximum Likelihood Estimates for Regression parameters:
+#> 
+#>         Estimate    StdErr z.value  p.value   
+#> age    -0.029914  0.011051 -2.7068 0.006793 **
+#> sex     0.387923  0.268032  1.4473 0.147814   
+#> needle  0.249568  0.144987  1.7213 0.085195 . 
+#> jail    0.456849  0.143961  3.1734 0.001506 **
+#> inject  0.221270  0.146767  1.5076 0.131652   
+#> ---
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ```
+:::
 
 ## Cox PH Regression: Inference (II)
-
+:::{.fragment}
 -   **Regression results**
     -   History of imprisonment increases risk of HIV seroconversion by $1.58-1=58\%$ ($p$-value 0.002)
 
 ![](images/trunc_bma_reg.png){fig-align="center" width="85%"}
+:::
+
 
 ## Cox PH Regression: Prediction
-
+:::{.fragment}
 -   **Model-based prediction**
 
-![](images/trunc_bma_pred.png){fig-align="center" width="70%"}
+![](images/trunc_bma_pred.png){fig-align="center" width="60%"}
+:::
 
 # Conclusion
 
@@ -542,15 +582,15 @@ print.ICSurv(obj.PH)
 -   **Interval censoring**
     -   Periodic check-ups of non-fatal, asymptomatic event
     -   Non- and semi-parametric models by NPMLE (ICM algorithm)
-    -   `IntCens::ICSurvICM()`
+    -   `IntCens::icsurvfit()`
         -   Nonparametric estimation
         -   Proportional hazards model
         -   Proportional odds model
 
-## HW 4 (Due Mar 20)
+<!-- ## HW 4 (Due Mar 20) -->
 
--   Choose one
-    -   Problem 5.1
-    -   Problem 5.2
--   Problem 6.5
--   Problem 7.14 (The `IntCens` package is in “Files \> R-package”)
+<!-- -   Choose one -->
+<!--     -   Problem 5.1 -->
+<!--     -   Problem 5.2 -->
+<!-- -   Problem 6.5 -->
+<!-- -   Problem 7.14 (The `IntCens` package is in “Files \> R-package”) -->
