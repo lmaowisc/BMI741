@@ -23,7 +23,7 @@ include-in-header:
 
 ## Outline
 
-:::{.incremental}
+::: incremental
 1.  Model specification
 
 2.  Partial-likelihood estimation and inference
@@ -39,16 +39,16 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 
 ## Regression Modeling
 
-:::{.fragment}
+::: fragment
 -   **Regression vs testing**
     -   *Multiple* (quantitative) predictors
     -   *Quantify* treatment effect
 :::
-:::{.fragment}
+
+::: fragment
 -   **Cox proportional hazards (PH) model**
     -   Most popular for time-to-event data
-    -   Conditional (covariate-specific) hazard of $T$ 
-    $$
+    -   Conditional (covariate-specific) hazard of $T$ $$
         \lambda(t\mid Z)\dd t = \pr(t\leq T < t +\dd t\mid T\geq t, Z)
         $$
         -   $Z=(Z_{\cdot 1},\ldots, Z_{\cdot p})^\T$: a $p$-vector of covariates
@@ -57,14 +57,15 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 
 ## Cox Proportional Hazards Model
 
-:::{.fragment}
+::: fragment
 -   **Model specification** \begin{equation}\label{eq:cox:model_spec}
     \lambda(t\mid Z)=\lambda_0(t)\exp(\beta^\T Z)
     \end{equation}
     -   $\beta=(\beta_1,\ldots,\beta_p)^\T$: $p$-dimensional regression coefficients
     -   $\lambda_0(t)$: (nonparametric) baseline hazard function
 :::
-:::{.fragment}
+
+::: fragment
 -   **Proportionality**: comparing two covariate groups \begin{equation}\label{eq:cox:prop_haz}
     \frac{\lambda(t\mid z_i)}{\lambda(t\mid z_j)}=\exp\{\beta^\T (z_i-z_j)\}.
     \end{equation}
@@ -73,7 +74,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Parametric Sub-Model
-:::{.fragment}
+
+::: fragment
 -   **Parametrize baseline function** \begin{equation}\label{eq:cox:ph_param}
     \lambda(t\mid Z;\theta)=\lambda_0(t;\eta)\exp(\beta^\T Z)
     \end{equation}
@@ -81,26 +83,28 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
     -   $\theta=(\beta, \eta)$
 :::
 
-:::{.fragment}
+::: fragment
 -   **Weibull PH model** \begin{equation}\label{eq:cox:weibull_base}
     \lambda(t\mid Z;\theta)=\alpha\gamma^{-\alpha}t^{\alpha-1}\exp(\beta^\T Z).
     \end{equation}
 :::
-:::{.fragment}
+
+::: fragment
 -   **Estimation**
 
     -   Maximum likelihood (Chapter 2)
 :::
 
-
 ## Censored Data and Assumption
-:::{.fragment}
+
+::: fragment
 -   **Observed data** \begin{equation}\label{eq:cox:obs_data}
     (X_i, \delta_i, Z_i), \hspace{5mm} i=1,\ldots,n,
     \end{equation}
     -   i.i.d. replicates of $(X, \delta, Z)$, where $X=\min(T, C)$ and $\delta=I(T\leq C)$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Independent censoring (conditional)** \begin{equation}\label{eq:cox:cond_ind}
     (C\indep T)\mid Z.
     \end{equation}
@@ -109,12 +113,14 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Parametric MLE
-:::{.fragment}
+
+::: fragment
 -   **General form** of score function (Chapter 2)
     -   Martingale integral of hazard score $\partial\log\lambda(t\mid Z,\theta)/\partial\theta$
     -   First component: $\partial\log\lambda(t\mid Z,\theta)/\partial\beta=Z$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Score function** \begin{equation}\label{eq:cox:score}
     \Pn\left[\int_0^\infty\left\{Z_i^\T,\frac{\partial}{\partial\eta^\T}\log\lambda_0(t;\hat\eta)\right\}^\T\dd M_i(t;\hat\theta)\right]=0,
     \end{equation}
@@ -123,18 +129,21 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Semiparametric Model
-:::{.fragment}
--   **Parametric constraints** 
+
+::: fragment
+-   **Parametric constraints**
     -   Determine shape of baseline function
 :::
-:::{.fragment}
+
+::: fragment
 -   **Semiparametric model**
 
     -   $\beta$: **parametric** covariate effects
     -   $\lambda_0(\cdot)$: **nonparametric** time trend
     -   Standard MLE does not apply due to nonparametric $\lambda_0(\cdot)$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Partial likelihood**
     -   Focus on data most *relevant* to covariate effects
     -   A function of only $\beta$ not $\lambda_0(\cdot)$
@@ -143,7 +152,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 # Partial Likelihood
 
 ## Set-up
-:::{.fragment}
+
+::: fragment
 -   Observed event times $t_1<\cdots<t_m$
     -   $\mathcal F_j =\{(j)\}$: *singleton* index (assume no ties) for the subject that fails at $t_j$
     -   $\mathcal R_j$: set of indices for those at risk at $t_j$
@@ -153,7 +163,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Conditional Information
-:::{.incremental}
+
+::: incremental
 -   **Data most informative of** $\beta$
     -   Difference in risk between covariate groups
     -   Identity of failed subject ($\mathcal F_j$) given a failure ($d_j=1$) among those at risk ($\mathcal R_j$) \begin{align}\label{eq:cox:cond_lik}
@@ -166,7 +177,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Partial Likelihood Construction
-:::{.incremental}
+
+::: incremental
 -   **Combine over time**
     -   **Partial likelihood** \begin{align*}
         PL_n(\beta)=\prod_{j=1}^m\pr(\mathcal F_j\mid \mathcal R_j,d_j=1)
@@ -180,9 +192,9 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
         \end{align}
 :::
 
-
 ## Maximum Partial-Likelihood (MPLE)
-:::{.incremental}
+
+::: incremental
 -   **Estimator**: $\hat\beta=\arg\max_\beta pl_n(\beta)$
     -   $pl_n(\beta)\approx$ log-likelihood of a parametric model
     -   **Partial-likelihood score** \begin{equation}\label{eq:cox:pl_score}
@@ -197,7 +209,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Martingale Framework
-:::{.incremental}
+
+::: incremental
 -   **Equivalently** \begin{equation}\label{eq:cox:pl_score_mart}
     U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i- \frac{\sum_{j=1}^n I(X_j\geq t)Z_j\exp(\beta^\T Z_j)}{\sum_{j=1}^n I(X_j\geq t)\exp(\beta^\T Z_j)}
     \right\}\dd M_i(t;\beta,\Lambda_0),
@@ -208,13 +221,15 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Inference on $\beta$
-:::{.fragment}
+
+::: fragment
 -   **Individual hazard ratio**: $\exp(\beta_k)$ $(k=1,\ldots, p)$
     -   95% CI \begin{equation}\label{eq:cox:hr_ci}
         \left[\exp\left\{\hat\beta_k-1.96\hat\se(\hat\beta_k)\right\}, \exp\left\{\hat\beta_k+1.96\hat\se(\hat\beta_k)\right\}\right]
         \end{equation}
 :::
-:::{.fragment}
+
+::: fragment
 -   **Joint test of multiple coefficients**
     -   Multiple dummy variables of same categorical predictor (e.g., race groups) $$
         H_0:\beta_{(q)}=(\beta_1,\ldots,\beta_q)^\T=0
@@ -226,7 +241,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Breslow Estimator
-:::{.incremental}
+
+::: incremental
 -   **Cumulative baseline function** $\Lambda_0(t)$
     -   By $E\{\dd M_i(t;\beta,\Lambda_0)\}=0$: \begin{equation}\label{eq:cox:Lambda}
         \dd \Lambda_0(t)=\frac{E\{\dd N_i(t)\}}{E\{I(X_i\geq t)\exp(\beta^\T Z_i)\}}.
@@ -237,7 +253,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Predicting Survival
-:::{.fragment}
+
+:::: fragment
 -   **Model-based survival function for given** $z$ $$
     S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
     $$
@@ -246,18 +263,20 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 ::: callout-note
 ### Exercise: Conditional survival
 
-  A patient with covariate value $z$ is censored at time $c$. Use the fit model to predict     his/her future survival probabilities.
+A patient with covariate value $z$ is censored at time $c$. Use the fit model to predict his/her future survival probabilities.
 :::
-:::
+::::
 
 ## Stratified Model
-:::{.fragment}
+
+::: fragment
 -   **Stratification**: within-stratum comparison
     -   Sex, race, study center, etc.
     -   Adjust for confounder without including it as covariate
         -   No PH assumption across strata
 :::
-:::{.fragment}
+
+::: fragment
 -   **Conditional hazard in** $l$th stratum \begin{equation}\label{eq:cox:model_strat}
     \lambda_l(t\mid Z^{(l)})=\lambda_{0l}(t)\exp(\beta^\T Z^{(l)})
     \end{equation}
@@ -268,7 +287,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Software: `survival::coxph()` (I)
-:::{.fragment}
+
+:::: fragment
 -   **Basic syntax** for Cox model
 
 ::: big-code
@@ -282,20 +302,23 @@ obj <- coxph(Surv(time, status) ~ covariates
 
 ```
 :::
-:::
-:::{.fragment}
+::::
+
+::: fragment
 -   **Input**
     -   `Surv(time, status) ~ covariates`: $(X, \delta) \sim Z$
     -   `strata(str_var)`: stratified by variable `str_var` (optional)
-:::    
-:::{.fragment}    
+:::
+
+::: fragment
 -   **Output**: an object of class `coxph`
     -   `obj$coefficients`: $\hat\beta$
     -   `obj$var`: $\hat\var(\hat\beta)$
 :::
 
 ## Software: `survival::coxph()` (II)
-:::{.fragment} 
+
+::: fragment
 -   **Breslow estimates** $\hat\Lambda_0(t)$
 
 ```{r}
@@ -306,12 +329,14 @@ obj <- coxph(Surv(time, status) ~ covariates
 Lambda0 <- basehaz(obj, centered = FALSE)
 ```
 :::
-:::{.fragment} 
+
+::: fragment
 -   **Output**: a data frame
     -   `Lambda0$time`: $t$; `Lambda0$hazard`: $\hat\Lambda_0(t)$
     -   `Lambda0$strata`: levels of `str_var` if stratified by it
 :::
-:::{.fragment} 
+
+::: fragment
 -   **Prediction of survival**
 
 ```{r}
@@ -322,14 +347,14 @@ survfit(obj, newdata)
 ```
 :::
 
-
-
 ## Software: `survival::coxph()` (III)
-:::{.fragment} 
+
+::: fragment
 -   **Summary**: `summary(obj)`
     -   `summary(obj)$coefficients`: a matrix containing $\hat\beta$, hazard ratio $\exp(\hat\beta)$, $\hat\se(\hat\beta)$, test statistic, and $p$-value as columns
 :::
-:::{.fragment}
+
+::: fragment
 -   **Joint test of multiple coefficients**
 
 ```{r}
@@ -347,34 +372,36 @@ pval <- 1 - pchisq(chi_q, q)
 ```
 :::
 
-## Software: `gtsummary::tbl_regression()` 
+## Software: `gtsummary::tbl_regression()`
 
-:::{.fragment}
-
+::: fragment
 -   **Summary table**
+
     -   Specify `label = list(...)` for custom variable labels
-```{r}
-#| eval: false
-#| echo: true
-#| code-line-numbers: 1|2-3|4-5
-library(gtsummary)
-# Fit (time, status) vs covariates stratified by str_var
-obj <- coxph(Surv(time, status) ~ covariates)
-# Summary table
-tbl_regression(obj) # default: HR, 95% CI, p-value
-```
+
+    ```{r}
+    #| eval: false
+    #| echo: true
+    #| code-line-numbers: 1|2-3|4-5
+    library(gtsummary)
+    # Fit (time, status) vs covariates stratified by str_var
+    obj <- coxph(Surv(time, status) ~ covariates)
+    # Summary table
+    tbl_regression(obj) # default: HR, 95% CI, p-value
+    ```
 :::
 
-
 ## Example: German Breast Cancer (I)
-:::{.fragment} 
+
+::: fragment
 -   **Endpoint**: relapse-free survival
 
 ![](images/intro_tab1.png){fig-align="center" width="70%"}
 :::
 
 ## Example: German Breast Cancer (II)
-:::{.fragment}
+
+::: fragment
 -   **Model fitting**
 
 ```{r}
@@ -399,33 +426,36 @@ obj <- coxph(Surv(time, status)~ hormone + meno + age + size + grade
 :::
 
 ## Example: German Breast Cancer (III)
-:::{.fragment}
--   **Summary results**
-    -   Hormone-treated women 70.1% times as likely to relapse/die as untreated
-```{r}
-#| eval: false
-#| echo: true
 
-#--- Summary results ------------------
-summary(obj)
-#   n= 686, number of events= 299 
-#                coef  exp(coef)   se(coef)      z Pr(>|z|)    
-# hormone2 -0.3552391  0.7010058  0.1292278 -2.749  0.00598 ** 
-# meno2     0.2683165  1.3077610  0.1840516  1.458  0.14489    
-# age      -0.0087937  0.9912449  0.0093783 -0.938  0.34842    
-# size      0.0153213  1.0154392  0.0036538  4.193 2.75e-05 ***
-# grade2    0.7078888  2.0297017  0.2485544  2.848  0.00440 ** 
-# grade3    0.8171706  2.2640847  0.2689544  3.038  0.00238 ** 
-# prog     -0.0022942  0.9977084  0.0005775 -3.972 7.12e-05 ***
-# estrg     0.0001788  1.0001789  0.0004686  0.382  0.70274    
-# ---
-# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-```
+::: fragment
+-   **Summary results**
+
+    -   Hormone-treated women 70.1% times as likely to relapse/die as untreated
+
+    ```{r}
+    #| eval: false
+    #| echo: true
+
+    #--- Summary results ------------------
+    summary(obj)
+    #   n= 686, number of events= 299 
+    #                coef  exp(coef)   se(coef)      z Pr(>|z|)    
+    # hormone2 -0.3552391  0.7010058  0.1292278 -2.749  0.00598 ** 
+    # meno2     0.2683165  1.3077610  0.1840516  1.458  0.14489    
+    # age      -0.0087937  0.9912449  0.0093783 -0.938  0.34842    
+    # size      0.0153213  1.0154392  0.0036538  4.193 2.75e-05 ***
+    # grade2    0.7078888  2.0297017  0.2485544  2.848  0.00440 ** 
+    # grade3    0.8171706  2.2640847  0.2689544  3.038  0.00238 ** 
+    # prog     -0.0022942  0.9977084  0.0005775 -3.972 7.12e-05 ***
+    # estrg     0.0001788  1.0001789  0.0004686  0.382  0.70274    
+    # ---
+    # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+    ```
 :::
 
-
 ## Example: German Breast Cancer (V)
-:::{.fragment}
+
+::: fragment
 -   **Tumor grade?**
 
     -   Joint test on `grade2` and `grade3`
@@ -451,7 +481,8 @@ summary(obj)
 :::
 
 ## Example: German Breast Cancer (VI)
-:::{.fragment}
+
+::: fragment
 -   **Baseline** $\hat\Lambda_0(t)$
 
 ```{r}
@@ -466,28 +497,31 @@ plot(stepfun(Lambda0$time, c(0, Lambda0$hazard)), do.points = FALSE,
      ylab = "Baseline cumulative hazard", main = "")
 ```
 :::
-:::{.fragment}
+
+:::: fragment
 ::: callout-note
 ## Exercise: Survival prediction
+
 Predict survival function for arbitrary $z$.
 
--   Use `obj$coefficients` ($\hat\beta$) and `Lambda0` ($\hat\Lambda_0(t)$) 
--   Use `survfit(obj, newdata)` 
+-   Use `obj$coefficients` ($\hat\beta$) and `Lambda0` ($\hat\Lambda_0(t)$)
+-   Use `survfit(obj, newdata)`
 :::
-:::
+::::
 
 ## Example: German Breast Cancer (VII)
-:::{.fragment}
+
+::: fragment
 -   **Baseline** $\hat\Lambda_0(t)$
 
 ![](images/cox_gbc_basehaz.png){fig-align="center" width="75%"}
 :::
 
-
 # Residual Analyses
 
 ## Assumptions in Cox Model
-:::{.fragment}
+
+::: fragment
 -   **Cox model assumptions** \begin{equation}
     \lambda(t\mid Z)=\lambda_0(t)\exp(\beta^\T Z)
     \end{equation}
@@ -495,7 +529,8 @@ Predict survival function for arbitrary $z$.
     -   Functional form of $Z_{\cdot k}$ (linear? quadratic? categorical?)
     -   Link function $\exp(\cdot)$ for $\beta^\T Z$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Residuals**
     -   Observed vs model-predicted
     -   Model fits data $\to$ predictions capture systematic trend $\to$ random residuals
@@ -503,12 +538,14 @@ Predict survival function for arbitrary $z$.
 :::
 
 ## Cox-Snell Residuals (I)
-:::{.fragment}
+
+::: fragment
 -   **Standard result**
     -   $S(T)\sim\mbox{Unif}[0, 1]$
     -   $\Lambda(T)=-\log S(T) \sim \mbox{Expn}(1)$ (exponential with unit hazard rate)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Under Cox model** $$
     \Lambda(t\mid Z;\beta,\Lambda_0)=\exp(\beta^\T Z)\Lambda_0(t)
     $$
@@ -519,12 +556,14 @@ Predict survival function for arbitrary $z$.
 :::
 
 ## Cox-Snell Residuals (II)
-:::{.fragment}
+
+::: fragment
 -   **Nelsen-Aalen estimates** $\hat\Lambda_{\rm CS}(t)$
     -   Based on $(\hat s_i, \delta_i)$ $(i=1,\ldots, n)$
     -   Recovers cumulative hazard of $\mbox{Expn}(1)$, i.e., $\Lambda(t)=t$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Graphical check**
     -   Overall fit: $\hat\Lambda_{\rm CS}(\hat s_i)\approx \hat s_i$
     -   $\log\hat\Lambda_{\rm CS}(\hat s_i)$ vs $\log\hat s_i$: straight line passing through origin (similar to Q-Q plot)
@@ -533,7 +572,8 @@ Predict survival function for arbitrary $z$.
 :::
 
 ## Schoenfeld Residuals (I)
-:::{.incremental}
+
+::: incremental
 -   **Defined only for failed subjects** \begin{equation}\label{eq:cox:schoenfeld}
     \hat r_i=Z_i-\mathcal E(X_i;\hat\beta) \hspace{10mm} (\delta_i=1; i=1,\ldots,n).
     \end{equation}
@@ -546,7 +586,8 @@ Predict survival function for arbitrary $z$.
 :::
 
 ## Schoenfeld Residuals (II)
-:::{.incremental}
+
+::: incremental
 -   **In case of non-proportionality**
     -   HR changes over time
     -   Stratify rather than set as covariate
@@ -559,7 +600,8 @@ Predict survival function for arbitrary $z$.
 :::
 
 ## Martingale/Deviance Residuals
-:::{.incremental}
+
+::: incremental
 -   **Usual residuals**: observed response minus expected \begin{align*}
     M_i(X_i; \hat\beta,\hat\Lambda_0)&=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\hat\beta^\T Z_i)\dd \hat\Lambda_0(t)\\
     &=\delta_i-\exp(\hat\beta^\T Z_i)\hat\Lambda_0(X_i)
@@ -572,7 +614,8 @@ Predict survival function for arbitrary $z$.
 :::
 
 ## Software: `survival::resid()` (I)
-:::{.fragment}
+
+::: fragment
 -   **Basic syntax for Cox model residuals**
 
 ```{r}
@@ -583,7 +626,8 @@ resid(obj, type = c("martingale", "deviance", "score", "schoenfeld",
                     "dfbeta", "dfbetas", "scaledsch", "partial"))
 ```
 :::
-:::{.fragment}
+
+::: fragment
 -   **Cox-Snell residuals**
 
 ```{r}
@@ -604,7 +648,8 @@ abline(0, 1, lty = 3) # add a dotted reference line
 :::
 
 ## Software: `survival::cox.zph()`
-:::{.fragment}
+
+::: fragment
 -   **Rescaled Schoenfeld residuals**
 
 ```{r}
@@ -614,7 +659,8 @@ abline(0, 1, lty = 3) # add a dotted reference line
 sch <- cox.zph(obj) 
 ```
 :::
-:::{.fragment}
+
+::: fragment
 -   **Output**
     -   `sch$table`: $\chi^2$ tests of proportionality (each covariate and overall)
     -   `sch$time`: $m$-vector of the $X_i$
@@ -623,7 +669,8 @@ sch <- cox.zph(obj)
 :::
 
 ## Software: `survival::resid()` (II)
-:::{.fragment}
+
+::: fragment
 -   **Martingale/Deviance residuals**
 
     -   `df`: data frame
@@ -644,7 +691,8 @@ sch <- cox.zph(obj)
 :::
 
 ## Example: German Breast Cancer (VIII)
-:::{.fragment}
+
+::: fragment
 -   **Overall fit - Cox-Snell residuals**
 
 ```{r}
@@ -665,14 +713,16 @@ abline(0, 1, lty = 3, lwd = 1.5) # add a reference line
 :::
 
 ## Example: German Breast Cancer (IX)
-:::{.fragment}
+
+::: fragment
 -   **Overall fit - Cox-Snell residuals**
 
 ![](images/cox_cox_snell.png){fig-align="center" width="50%"}
 :::
 
 ## Example: German Breast Cancer (X)
-:::{.fragment}
+
+::: fragment
 -   **Proportionality - Schoenfeld residuals**
 
 ```{r}
@@ -683,12 +733,14 @@ sch <- cox.zph(obj)
 sch$table # chi-square tests
 ```
 :::
-:::{.fragment}
+
+::: fragment
 ![](images/cox_gbc_sch_tab1.png){fig-align="center" width="80%"}
 :::
 
 ## Example: German Breast Cancer (XI)
-:::{.fragment}
+
+::: fragment
 -   **Proportionality - Schoenfeld residuals**
 
 ```{r}
@@ -700,12 +752,14 @@ plot(sch, xlab="Time (months)", lwd=2, cex.lab=1.2, cex.axis=1.2,
                "Tumor grade", "Progesterone", "Estrogen"))
 ```
 :::
-:::{.fragment}
+
+::: fragment
 ![](images/cox_gbc_sch_plot.png){fig-align="center" width="100%"}
 :::
 
 ## Example: German Breast Cancer (XII)
-:::{.fragment}
+
+::: fragment
 -   **Stratification by tumor grade**
 
 ```{r}
@@ -717,12 +771,14 @@ obj_stra <- coxph(Surv(time, status) ~ hormone + meno
 cox.zph(obj_stra)$table # proportionality tests 
 ```
 :::
-:::{.fragment}
+
+::: fragment
 ![](images/cox_gbc_sch_tab2.png){fig-align="center" width="80%"}
 :::
 
 ## Example: German Breast Cancer (XIII)
-:::{.fragment}
+
+::: fragment
 -   **Covariate form - Martingale (deviance) residuals**
 
 ```{r}
@@ -739,14 +795,16 @@ abline(0, 0, lty = 3, lwd = 2) # add a reference line
 :::
 
 ## Example: German Breast Cancer (XIV)
-:::{.fragment}
+
+::: fragment
 -   **Covariate form - Martingale (deviance) residuals**
 
 ![](images/cox_gbc_age.png){fig-align="center" width="60%"}
 :::
 
 ## Example: German Breast Cancer (XV)
-:::{.fragment}
+
+::: fragment
 -   **Categorize age**
     -   More events in younger women than accounted for by linear age
     -   Refit model with `agec=1`: $\leq 40$ yrs; `agec=2`: $(40, 60]$ yrs; `agec=3`: $> 60$ yrs
@@ -771,7 +829,8 @@ abline(0, 0, lty = 3, lwd = 2) # add a reference line
 :::
 
 ## Example: German Breast Cancer (XVI)
-:::{.fragment}
+
+::: fragment
 -   **Categorize age**
     -   Age differences masked by inappropriate linear form ($p$-value 0.348)
 
@@ -779,8 +838,10 @@ abline(0, 0, lty = 3, lwd = 2) # add a reference line
 :::
 
 ## Example: German Breast Cancer (XVII)
-:::{.fragment}
+
+::: fragment
 -   **Tabulate final model**
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -802,43 +863,46 @@ tbl_final
 ```
 :::
 
-
 ## Example: German Breast Cancer (XVIII)
-:::{.fragment}
+
+::: fragment
 -   **Final model**
 
 ![](images/cox_gbc_final.png){fig-align="center" width="70%"}
 :::
 
-
 # Time-Dependent Covariates
 
 ## Internal vs External Covariates
-:::{.fragment}
--   **Notation**: 
-    $Z(t)=\{Z_{\cdot 1}(t),\ldots, Z_{\cdot p}(t)\}^\T$
+
+::: fragment
+-   **Notation**: $Z(t)=\{Z_{\cdot 1}(t),\ldots, Z_{\cdot p}(t)\}^\T$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Internal covariates**
     -   Measured on *same subject* during follow-up, influenced by failure process
         -   Biomarkers (CD4 cell count), quality of life, other events
     -   **Modeling**: current (instantaneous) risk vs covariate history
 :::
-:::{.fragment}
+
+::: fragment
 -   **External covariates**
     -   Extraneous factors, changes unaffected by subject's failure process
-        -   Pre-planned treatment sequence, environmental factors,  baseline covariates $\times$ time
+        -   Pre-planned treatment sequence, environmental factors, baseline covariates $\times$ time
     -   **Modeling**: risk profile vs entire covariate path
 :::
 
 ## Internal Covariates
-:::{.fragment}
+
+::: fragment
 -   **Modeling target** (intensity function) $$
     \lambda\{t\mid\overline Z(t)\}\dd t=\pr\{t\leq T<t+\dd t\mid T\geq t, \overline Z(t)\}
     $$
     -   $\overline Z(t)=\{Z(u): 0\leq u\leq t\}$: covariate path up to $t$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Model specification** \begin{equation}\label{eq:cox:time_varying_model}
     \lambda\{t\mid\overline Z(t)\}=\lambda_0(t)\exp\{\beta^\T Z(t)\}.
     \end{equation}
@@ -849,13 +913,15 @@ tbl_final
 :::
 
 ## External Covariates (I)
-:::{.fragment}
+
+::: fragment
 -   **Modeling target** (hazard function) $$
     \lambda(t\mid Z)\dd t=\pr(t\leq T<t+\dd t\mid T\geq t, Z)
     $$
     -   $Z=\{Z(t):0\leq t\leq \infty\}$: entire covariate path
 :::
-:::{.fragment}
+
+::: fragment
 -   **Model specification** \begin{equation}\label{eq:cox:time_varying_model_ex}
     \lambda(t\mid Z)=\lambda_0(t)\exp\{\beta^\T Z(t)\}.
     \end{equation}
@@ -866,27 +932,30 @@ tbl_final
 :::
 
 ## External Covariates (II)
-:::{.fragment}
--   **Baseline covariates $times$ time**
+
+::: fragment
+-   **Baseline covariates** $times$ time
     -   Addressing non-proportionality
 :::
-:::{.fragment}
+
+::: fragment
 -   **Example**: $Z_{\cdot 1} = 1, 0$
     -   Non-proportionality: $\lambda(t\mid Z_{\cdot 1} =1)/\lambda(t\mid Z_{\cdot 1} =0)$ changes with $t$
-    -   Add $Z_{\cdot 2}(t) = Z_{\cdot 1} t$, then $$\lambda(t\mid Z_{\cdot 1}, Z_{\cdot 2})=\exp\{\beta_1Z_{\cdot 1} + \beta_2Z_{\cdot 2}(t)\}\lambda_0(t)$$ 
-    So $$
+    -   Add $Z_{\cdot 2}(t) = Z_{\cdot 1} t$, then $$\lambda(t\mid Z_{\cdot 1}, Z_{\cdot 2})=\exp\{\beta_1Z_{\cdot 1} + \beta_2Z_{\cdot 2}(t)\}\lambda_0(t)$$ So $$
         \frac{\lambda(t\mid Z_{\cdot 1}=1)}{\lambda(t\mid Z_{\cdot 1}=0)}=\exp(\beta_1+\beta_2 t)
         $$
     -   Hopefully captures temporal pattern of effect size
 :::
 
 ## Estimation and Inference
-:::{.fragment}
+
+::: fragment
 -   **Same inference procedure**: partial likelihood \begin{align*}
     PL_n(\beta)=\prod_{j=1}^m\frac{\exp\{\beta^\T Z_{(j)}(t_j)\}}{\sum_{i\in\mathcal R_j}\exp\{\beta^\T Z_i(t_j)\}}.
     \end{align*}
 :::
-:::{.fragment}
+
+::: fragment
 -   **Partial-likelihood score** $$
     U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X_j\geq t)Z_j(t)\exp\{\beta^\T Z_j(t)\}}{\sum_{j=1}^n I(X_j\geq t)\exp\{\beta^\T Z_j(t)\}}
     \right\}\dd N_i(t)
@@ -895,7 +964,8 @@ tbl_final
 :::
 
 ## Software: `survival::coxph()` (IV)
-:::{.fragment}
+
+:::: fragment
 -   **Basic syntax** for time-varying covariates
 
 ::: big-code
@@ -907,48 +977,54 @@ tbl_final
 obj <- coxph(Surv(start, stop, event) ~ covariates)
 ```
 :::
-:::
-:::{.fragment}
+::::
+
+::: fragment
 -   **Input**
     -   Data in counting process (long) format (multiple records per subject)
     -   `(start, stop)`: period during which covariate takes on a particular value
     -   `event`: event indicator at time `stop`
         -   `event = 0` need not mean censoring (why?)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Output**: `coxph` object
 :::
 
-
-
 ## Software: `survival::coxph()` (V)
-:::{.fragment}
+
+::: fragment
 -   **Residual analysis**
-    - Subject indexing to aggregate residuals
-```{r}
-#| eval: false
-#| echo: true
-#| code-line-numbers: 4
-# Residual calculations for Cox model with time-varying covariates
-residuals(obj, type = c("martingale", "deviance", "schoenfeld", "score",
-                        "scaledsch", "dfbeta", "dfbetas", "partial"),
-               collapse = df$id # specify subject ID
-            )
-```
+
+    -   Subject indexing to aggregate residuals
+
+    ```{r}
+    #| eval: false
+    #| echo: true
+    #| code-line-numbers: 4
+    # Residual calculations for Cox model with time-varying covariates
+    residuals(obj, type = c("martingale", "deviance", "schoenfeld", "score",
+                            "scaledsch", "dfbeta", "dfbetas", "partial"),
+                   collapse = df$id # specify subject ID
+                )
+    ```
 :::
 
 ## Example: Stanford Heart Study (I)
-:::{.fragment}
+
+::: fragment
 -   **Heart transplant study** (1967--74)
     -   **Population**: 103 cardiac patients in transplantation program
     -   **Objective**: Evaluate effect of transplant (time-varying) on time from enrollment to death
 :::
 
-:::{.fragment}
+::: fragment
 ![](images/cox_stanford_dat.png){fig-align="center" width="75%"}
 :::
+
 ## Example: Stanford Heart Study (II)
-:::{.fragment}
+
+::: fragment
 -   **Results**
     -   Adjusting for other predictors, receiving a transplant reduces the risk of mortality by $1-0.990=1.0\%$ ($p$-value 0.974)
 
@@ -971,30 +1047,32 @@ residuals(obj, type = c("martingale", "deviance", "schoenfeld", "score",
 ```
 :::
 
-
 ## Example: Stanford Heart Study (III)
-:::{.fragment}
+
+::: fragment
 -   **Internal or external**
     -   **External**: if donor matching follows predetermined protocol
     -   **Internal**: if donor matching depends on patient's health status
-          -   Critically ill more likely to receive transplant sooner
+        -   Critically ill more likely to receive transplant sooner
 :::
-:::{.fragment}
+
+::: fragment
 -   **Model diagnostics**
     -   Exercise
 :::
 
 # Conclusion
 
-
 ## Notes (I)
-:::{.fragment}
+
+::: fragment
 -   **Partial likelihood**
     -   Original introduced by Sir David R. Cox (Cox, 1972)
     -   Statistically efficient ($\S$ 5.2 of Tsiatis, 2006)
     -   Widely used by statisticians and medical researchers alike
 :::
-:::{.fragment}
+
+::: fragment
 -   **Residual analysis**
     -   Cox--Snell residuals by Kay (1977)
     -   Schoenfeld residuals by Schoenfeld (1980, 1982)
@@ -1002,13 +1080,15 @@ residuals(obj, type = c("martingale", "deviance", "schoenfeld", "score",
 :::
 
 ## Notes (II)
-:::{.fragment}
+
+::: fragment
 -   **Time-varying coefficients**
-    -   Hazard raio changing over time
-    $$
-    \lambda\bigl(t \mid Z\bigr) = \lambda_0(t) \exp\bigl\{\beta(t)^\T Z\bigr\}
-    $$
-    -   Covariate $\times$ time 
+
+    -   Hazard raio changing over time $$
+        \lambda\bigl(t \mid Z\bigr) = \lambda_0(t) \exp\bigl\{\beta(t)^\T Z\bigr\}
+        $$
+    -   Covariate $\times$ time
+
     ```{r}
     #| eval: false
     #| echo: true
@@ -1017,9 +1097,11 @@ residuals(obj, type = c("martingale", "deviance", "schoenfeld", "score",
     ```
 :::
 
-:::{.fragment}
+::: fragment
 -   **Spline models**
+
     -   Flexible forms for continuous covariates
+
     ```{r}
     #| eval: false
     #| echo: true
@@ -1027,7 +1109,6 @@ residuals(obj, type = c("martingale", "deviance", "schoenfeld", "score",
     cox_spline <- coxph(Surv(time, status) ~ pspline(age, df = 4) + hormone 
                     + meno + size + grade + prog + estrg, data = df)
     ```
-    
 :::
 
 ## Summary (I)

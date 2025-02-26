@@ -2345,5 +2345,264 @@
       "Part I - Univariate Events",
       "Chapter 6 - Sample Size Determination and Study Design"
     ]
+  },
+  {
+    "objectID": "chap7.html#outline",
+    "href": "chap7.html#outline",
+    "title": "Applied Survival Analysis",
+    "section": "Outline",
+    "text": "Outline\n\n\nLeft truncation mechanisms\nStandard and general methods for left truncation\nNon- and Semi-parametric methods for Interval censoring\nBangkok Metropolitan Administration HIV Study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+  },
+  {
+    "objectID": "chap7.html#truncation---biased-sampling",
+    "href": "chap7.html#truncation---biased-sampling",
+    "title": "Applied Survival Analysis",
+    "section": "Truncation - Biased Sampling",
+    "text": "Truncation - Biased Sampling\n\n\nLeft truncation\n\nOnly subjects who fail in \\([T_L, \\infty)\\) can be observed\n\n\\(T_L\\): left truncation time\nThose who fail in \\([0, T_L)\\) are excluded (truncated)\n\nBiased sampling \\((T\\geq T_L)\\)\n\n\n\n\n\nMechanism: delayed entry\n\nSubject entering study after starting point"
+  },
+  {
+    "objectID": "chap7.html#examples-of-delayed-entry",
+    "href": "chap7.html#examples-of-delayed-entry",
+    "title": "Applied Survival Analysis",
+    "section": "Examples of Delayed Entry",
+    "text": "Examples of Delayed Entry\n\n\nStarting point: before enrollment\n\nBirth: age at death\n\nDead before enrollment excluded\n\nDiagnosis of cancer: time from diagnosis to death\n\nDead before enrollment excluded\n\nBlood transfusion: time from tranfusion to AIDS\n\nPositive before enrollment excluded"
+  },
+  {
+    "objectID": "chap7.html#truncation-vs-censoring",
+    "href": "chap7.html#truncation-vs-censoring",
+    "title": "Applied Survival Analysis",
+    "section": "Truncation vs Censoring",
+    "text": "Truncation vs Censoring\n\n\nDifference\n\nTruncation : Biased sampling\nCensoring: Partial missing data\n\n\n\n\n\nLeft truncation \\(+\\) right censoring"
+  },
+  {
+    "objectID": "chap7.html#data-and-assumption",
+    "href": "chap7.html#data-and-assumption",
+    "title": "Applied Survival Analysis",
+    "section": "Data and Assumption",
+    "text": "Data and Assumption\n\n\nTarget of inference: still \\(T\\)\n\n\n\n\nObserved data \\[\n(T_{Li}, X_i, \\delta_i) \\,\\,\\, (i=1,\\ldots, n)\n\\]\n\n\\(T_{Li}\\): left truncation (delayed entry) time for subject \\(i\\)\n\n\n\n\n\nIndependent truncation \\[T_L\\indep T\\]\n\nIn case with covariates \\((T_L\\indep T)\\mid Z\\)"
+  },
+  {
+    "objectID": "chap7.html#standard-methods",
+    "href": "chap7.html#standard-methods",
+    "title": "Applied Survival Analysis",
+    "section": "Standard Methods",
+    "text": "Standard Methods\n\n\nMethods by at-risk conditioning\n\nKaplan–Meier estimate\nLog-rank test\nCox model\n\n\n\n\n\nEasy fix: adjust at-risk status\n\nSubject not at risk before entry\nAt risk (on study): \\([T_{Li},\\; X_i]\\)"
+  },
+  {
+    "objectID": "chap7.html#standard-methods-nonparametric-i",
+    "href": "chap7.html#standard-methods-nonparametric-i",
+    "title": "Applied Survival Analysis",
+    "section": "Standard Methods: Nonparametric (I)",
+    "text": "Standard Methods: Nonparametric (I)\n\n\nNelsen-Aalen estimator: \\(\\dd\\hat\\Lambda(t_j)=d_j/n_j\\) \n\nWithout late entry: \\(n_j=\\sum_{i=1}^nI(X_i\\geq t_j)\\)\nWith late entry: \\(n_j=\\sum_{i=1}^nI(T_{Li}\\leq t_j\\leq X_i)\\)\n\n\n\n\n\nKaplan-Meier estimator \\[\n\\hat S(t)=\\prod_{j: t_j\\leq t}\\left(1 - d_j/n_j\\right)\n\\]"
+  },
+  {
+    "objectID": "chap7.html#standard-methods-nonparametric-ii",
+    "href": "chap7.html#standard-methods-nonparametric-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Standard Methods: Nonparametric (II)",
+    "text": "Standard Methods: Nonparametric (II)\n\n\nIdentifiability\n\nSuppose earliest entry time \\(t_0=\\min(T_{Li})&gt;0\\)\nNo data in \\([0, t_0]\\)\n\n\n\n\n\nConditional survival function \\[\\begin{align}\n\\hat S(t)&\\to \\pr(T&gt;t_1\\mid T&gt;t_0)\\pr(T&gt;t_2\\mid T&gt;t_1)\\cdots\\pr(T&gt;t\\mid T&gt;t_j)\\\\\n& = \\pr(T&gt;t \\mid T&gt;t_0)\n\\end{align}\\]\n\nNot the marginal \\(\\pr(T&gt;t)\\)\nSolution: choose a late \\(t_0^*&gt; t_0\\) (s.t. \\(n_j\\gg 1\\) for all \\(t_j\\geq t_0^*\\)) and consider \\[\\begin{equation}\n\\hat\\pr(T&gt;t\\mid T \\geq t_0^*)=\\prod_{j:t_0^*\\leq t_j\\leq t}(1-d_j/n_j),\n\\end{equation}\\]"
+  },
+  {
+    "objectID": "chap7.html#standard-methods---cox-model-i",
+    "href": "chap7.html#standard-methods---cox-model-i",
+    "title": "Applied Survival Analysis",
+    "section": "Standard Methods - Cox Model (I)",
+    "text": "Standard Methods - Cox Model (I)\n\n\nPartial likelihood construction \n\nWithout late entry: \\(\\mathcal R_j=\\{i: X_i\\geq t_j\\}\\)\nWith late entry: \\(\\mathcal R_j=\\{i: T_{Li}\\leq t_j\\leq X_i\\}\\)"
+  },
+  {
+    "objectID": "chap7.html#standard-methods---cox-model-ii",
+    "href": "chap7.html#standard-methods---cox-model-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Standard Methods - Cox Model (II)",
+    "text": "Standard Methods - Cox Model (II)\n\n\nRisk sets: example"
+  },
+  {
+    "objectID": "chap7.html#standard-methods---cox-model-iii",
+    "href": "chap7.html#standard-methods---cox-model-iii",
+    "title": "Applied Survival Analysis",
+    "section": "Standard Methods - Cox Model (III)",
+    "text": "Standard Methods - Cox Model (III)\n\n\nPartial-likelihood score\n\nAdjust the at-risk process \\[\nU_n(\\beta)=\\Pn\\int_0^\\infty\\left\\{Z_i-\\frac{\\sum_{j=1}^n I(T_{Lj}\\leq t\\leq X_j)Z_j\\exp(\\beta^\\T Z_j)}\n{\\sum_{j=1}^n I(T_{Lj}\\leq t\\leq X_j)\\exp(\\beta^\\T Z_j)}\\right\\}\\dd N_i(t)\n\\]\n\n\n\n\n\nOther extensions\n\nLog-rank test: \\(U_n(0)\\) with binary \\(Z\\)\nMartingale residuals: \\[\n  \\dd M_i(t)=\\dd N_i(t)-I(T_{Li}\\leq t\\leq X_i)\\exp(\\beta^\\T Z_i)\\dd\\Lambda_0(t)\n  \\]\nTime-varying covariates"
+  },
+  {
+    "objectID": "chap7.html#standard-methods---cox-model-iv",
+    "href": "chap7.html#standard-methods---cox-model-iv",
+    "title": "Applied Survival Analysis",
+    "section": "Standard Methods - Cox Model (IV)",
+    "text": "Standard Methods - Cox Model (IV)\n\n\nPrediction of survival rate\n\nIf all subjects enter late, choose late cutoff \\(t_0^*\\)\nConditional survival function \\[\\begin{equation}\n\\hat\\pr(T &gt; t\\mid T\\geq t_0^*, Z) =\n\\exp\\left[-\\left\\{\\hat\\Lambda_0(t)- \\hat\\Lambda_0(t_0^*)\\right\\}\\exp(\\hat\\beta^\\T Z)\\right]\n\\end{equation}\\]\n\n\n\n\n\n\n\n\n\n\nExercise\n\n\nShow that \\[\\pr(T &gt; t\\mid T\\geq t_0^*, Z) =\n\\exp\\left[-\\left\\{\\Lambda_0(t)- \\Lambda_0(t_0^*)\\right\\}\\exp(\\beta^\\T Z)\\right]  \\] for any \\(t&gt;t_0^*\\) under the Cox model."
+  },
+  {
+    "objectID": "chap7.html#general-approach---likelihood",
+    "href": "chap7.html#general-approach---likelihood",
+    "title": "Applied Survival Analysis",
+    "section": "General Approach - Likelihood",
+    "text": "General Approach - Likelihood\n\n\nNon-hazard-based methods\n\nProportional odds model\nAccelerated failure time model\n\n\n\n\n\nRe-construct likelihood\n\nA model parametrized by \\(\\theta\\) \\[\\begin{equation}\\label{eq:trunc:lik}\nL_n(\\theta)=\\prod_{i=1}^n S(T_{Li};\\theta)^{-1}\\lambda(X_i;\\theta)^{\\delta_i}S(X_{i};\\theta)\n\\end{equation}\\]\n\nEvery subject sampled is conditioned upon \\(T_i\\geq T_{Li}\\), hence inverse weight \\(S(T_{Li};\\theta)\\)\n\nLog-likelihood: \\(l_n(\\theta)=\\sum_{i=1}^n\\left[\\delta_i\\log\\lambda(X_i;\\theta)-\\left\\{\\Lambda(X_i;\\theta)-\\Lambda(T_{Li};\\theta)\\right\\}\\right]\\)"
+  },
+  {
+    "objectID": "chap7.html#maximum-likelihood-po-model",
+    "href": "chap7.html#maximum-likelihood-po-model",
+    "title": "Applied Survival Analysis",
+    "section": "Maximum Likelihood: PO Model",
+    "text": "Maximum Likelihood: PO Model\n\n\nExample: Proportional odds model\n\nModel specification with \\(\\theta = (\\beta, h_0)\\) \\[\\begin{equation}\\label{eq:non_haz:po}\n\\log\\left\\{\\frac{1-S(t\\mid Z)}{S(t\\mid Z)}\\right\\}=h_0(t)+\\beta^\\T Z,\n\\end{equation}\\]\nModel-based hazard functions \\[\\begin{align}    \n\\lambda(t\\mid Z;\\beta, h_0)&=\\frac{\\exp\\{h_0(t)+\\beta^\\T Z\\}h_0'(t)}{1+\\exp\\{h_0(t)+\\beta^\\T Z\\}}\\\\\n\\Lambda(t\\mid Z;\\beta, h_0)&=\\log\\left[1+\\exp\\{h_0(t)+\\beta^\\T Z\\}\\right]\n\\end{align}\\]\nNonparametric maximum likelihood (NPMLE)\n\nDiscretize \\(h_0(\\cdot)\\) at observed event times \\(t_1&lt;\\cdots&lt;t_m\\)\n\\(h_0'(t_j)=h_{0j}\\); \\(h_0(t)=\\sum_{j:t_j\\leq t}h_{0j}\\)"
+  },
+  {
+    "objectID": "chap7.html#software-survivalsurv",
+    "href": "chap7.html#software-survivalsurv",
+    "title": "Applied Survival Analysis",
+    "section": "Software: survival::Surv()",
+    "text": "Software: survival::Surv()\n\n\nBasic syntax for handling left truncation\n\n\n\n## Fit Kaplan-Meier curve to left-truncated data\nsurvfit(Surv(entry, end, status) ~ 1)\n## Fit Cox model to left-truncated data\ncoxph(Surv(entry, end, status) ~ covariates)\n\n\n\n\n\nInput\n\nentry: \\(T_{L}\\); end: \\(X\\); status: \\(\\delta\\)\n\nOutput: survfit or coxph object\nlog-rank test: score test under coxph()"
+  },
+  {
+    "objectID": "chap7.html#example-channing-house-study-i",
+    "href": "chap7.html#example-channing-house-study-i",
+    "title": "Applied Survival Analysis",
+    "section": "Example: Channing House Study (I)",
+    "text": "Example: Channing House Study (I)\n\n\nStudy information\n\nPopulation: 462 elderly residents of Channing House, a retirement center\nEndpoint: Age at death (starting point: birth)\nAim: Compare mortality between males (gender=1) and females (gender=2)\nTruncation: Age of admission into the center (Entry.Age)\n\nSubject must survive long enough to enter cohort (link to follow-up plot)\n\n\n\n\n\n\nhead(channing)\n#   Entry.Age  End.Age status gender\n# 1  86.83333 97.66667      1      2\n# 2  76.75000 86.66667      1      2\n# 3  73.75000 83.58333      1      2\n# ..."
+  },
+  {
+    "objectID": "chap7.html#example-channing-house-study-ii",
+    "href": "chap7.html#example-channing-house-study-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Example: Channing House Study (II)",
+    "text": "Example: Channing House Study (II)\n\n\nCox model\n\nfemales at 72.9% risk as males for mortality (\\(p\\)-value 0.07)\n\n\n\nobj &lt;- coxph(Surv(Entry.Age, End.Age, status) ~ factor(gender), \n             data = channing)\nsummary(obj)\n#                    coef exp(coef) se(coef)      z Pr(&gt;|z|)  \n# factor(gender)2 -0.3163    0.7289   0.1731 -1.827   0.0677 .\n# ---\n# \n#                 exp(coef) exp(-coef) lower .95 upper .95\n# factor(gender)2    0.7289      1.372    0.5191     1.023\n# \n# Concordance= 0.528  (se = 0.018)\n# Likelihood ratio test= 3.17  on 1 df,   p=0.07\n# Wald test            = 3.34  on 1 df,   p=0.07\n# Score (logrank) test = 3.36  on 1 df,   p=0.07"
+  },
+  {
+    "objectID": "chap7.html#example-channing-house-study-iii",
+    "href": "chap7.html#example-channing-house-study-iii",
+    "title": "Applied Survival Analysis",
+    "section": "Example: Channing House Study (III)",
+    "text": "Example: Channing House Study (III)\n\n\nChecking proportionality\n\n\n# Schoenfeld residuals\nobj_zph &lt;- cox.zph(obj)\n# test result\nobj_zph\n# plot the rescaled residuals\nplot(obj_zph, ylab = \"Gender\", xlab = \"Age (years)\", lwd = 2)"
+  },
+  {
+    "objectID": "chap7.html#example-channing-house-study-iv",
+    "href": "chap7.html#example-channing-house-study-iv",
+    "title": "Applied Survival Analysis",
+    "section": "Example: Channing House Study (IV)",
+    "text": "Example: Channing House Study (IV)\n\n\nPrediction (at age 70)"
+  },
+  {
+    "objectID": "chap7.html#observation-setting",
+    "href": "chap7.html#observation-setting",
+    "title": "Applied Survival Analysis",
+    "section": "Observation Setting",
+    "text": "Observation Setting\n\nInterval censoring\n\nPeriodic check-up for an asymptomatic event\nEvent is only known to have occurred in between two consecutive check-ups\n\nExamples\n\nTumor (occult) formation\nHIV seroconversion (viral antibodies become detectable in serum)\n\nChallenge\n\nNo exact failure time is observed"
+  },
+  {
+    "objectID": "chap7.html#data-and-assumption-1",
+    "href": "chap7.html#data-and-assumption-1",
+    "title": "Applied Survival Analysis",
+    "section": "Data and Assumption",
+    "text": "Data and Assumption\n\nTarget of inference: still \\(T\\)\nCheck-up times: \\(U=(U_1&lt;U_2&lt;\\cdots&lt;U_K)\\)\n\n\\(K\\equiv 1\\): case-1 (current status data)\n\\(K\\equiv 2\\): case-2\n\\(\\vdots\\)\n\\(K\\) random (subject-specific): mixed-case\n\nIndependent check-up \\[\nU\\indep T\n\\]\n\nWith covariates: \\((U\\indep T)\\mid Z\\)"
+  },
+  {
+    "objectID": "chap7.html#observed-data",
+    "href": "chap7.html#observed-data",
+    "title": "Applied Survival Analysis",
+    "section": "Observed Data",
+    "text": "Observed Data\n\nCensoring interval\n\n\\((L, R]\\): the check-up interval containing the event \nOther check-up times may be available but not relevant\nExample: current status data\n\n“Positive” at \\(U_1\\): \\((L, R]=(0, U_1]\\)\n“Negative” at \\(U_1\\): \\((L, R]=(U_1, \\infty)\\)\n\n\nObserved sample \\[\n(L_i, R_i)\\,\\,\\,(i=1,\\ldots, n)\n\\]"
+  },
+  {
+    "objectID": "chap7.html#likelihood-based-inference",
+    "href": "chap7.html#likelihood-based-inference",
+    "title": "Applied Survival Analysis",
+    "section": "Likelihood-Based Inference",
+    "text": "Likelihood-Based Inference\n\nLikelihood function \\[\\begin{equation}\\label{eq:trunc:nonp}\nL_n(\\theta)=\\prod_{i=1}^n\\{S(L_i;\\theta)-S(R_i;\\theta)\\}\n\\end{equation}\\]\n\nLog-likelihood \\[\\begin{equation}\\label{eq:trunc:ic_log_lik}\nl_n(\\theta)=\\sum_{i=1}^n\\log\\{S(L_i;\\theta)-S(R_i;\\theta)\\}\n\\end{equation}\\]\n\nParametric Models\n\nStandard MLE \\(\\hat\\theta=\\arg\\max_\\theta l_n(\\theta)\\)"
+  },
+  {
+    "objectID": "chap7.html#one-sample-estimation",
+    "href": "chap7.html#one-sample-estimation",
+    "title": "Applied Survival Analysis",
+    "section": "One-Sample Estimation",
+    "text": "One-Sample Estimation\n\nNonparametric maximum likelihood\n\n\\(F(t)=1-S(t)\\): treat as a step function\nLog-likelihood \\[\nl_n(F)=\\sum_{i=1}^n\\log\\{F(R_i)-F(L_i)\\}\n\\]\n\\(F(\\cdot)\\): step function jumping at unique (finite) values of the \\(R_i\\): \\[\nt_1&lt;t_2&lt;\\cdots&lt;t_m\n\\]\n\\(l_n(F)\\) becomes a function of \\[\n0\\leq F(t_1)\\leq F(t_2)\\leq\\cdots \\leq F(t_m)\\leq 1\n\\]"
+  },
+  {
+    "objectID": "chap7.html#one-sample-constrained-maximization",
+    "href": "chap7.html#one-sample-constrained-maximization",
+    "title": "Applied Survival Analysis",
+    "section": "One-Sample: Constrained Maximization",
+    "text": "One-Sample: Constrained Maximization\n\nMonotonicity-constrained maximization \\[\\begin{equation}\\label{eq:trunc:iso}\n\\hat F=\\arg\\max_{F\\in\\mathcal A}l_n(F).\n\\end{equation}\\]\n\n\\(\\mathcal A=\\{F: 0\\leq F(t_1)\\leq F(t_2)\\leq\\cdots \\leq F(t_m)\\leq 1\\}\\): a convex set\nSolvable by linear programming\nIterative convex minorant (ICM): a monotonicity-contrained version of Newton-Raphson\n\\(\\hat F(t) - F(t)= O_P(n^{-1/3})\\), not asymptotically normal"
+  },
+  {
+    "objectID": "chap7.html#semiparametric-models",
+    "href": "chap7.html#semiparametric-models",
+    "title": "Applied Survival Analysis",
+    "section": "Semiparametric Models",
+    "text": "Semiparametric Models\n\nGeneral approach \\(\\theta=(\\beta, \\eta)\\)\n\n\\(\\beta\\): regression parameter\n\\(\\eta(\\cdot)\\): nonparametric (monotone) baseline function (cumulative hazards/odds)\n\\((\\hat\\beta, \\hat\\eta)=\\arg\\max_{\\beta,\\eta}l_n(\\beta, \\eta)\\): maximize iteratively between \\(\\beta\\) and \\(\\eta(\\cdot)\\)\n\nExample: Cox proportional hazards (PH) model\n\nLog-likelihood \\[\nl_n(\\beta,\\Lambda_0)=\\sum_{i=1}^n\\log\\left[\\exp\\{-\\exp(\\beta^\\T Z_i)\\Lambda_0(L_i)\\}-\\exp\\{-\\exp(\\beta^\\T Z_i)\\Lambda_0(R_i)\\}\\right]\n\\]"
+  },
+  {
+    "objectID": "chap7.html#example-cox-ph-model",
+    "href": "chap7.html#example-cox-ph-model",
+    "title": "Applied Survival Analysis",
+    "section": "Example: Cox PH Model",
+    "text": "Example: Cox PH Model\n\nIterative maximization\n\n\\(\\beta\\)-step (Newton-Raphson) \\[\n  \\beta^{(j+1)}=\\arg\\max_\\beta l_n(\\beta,\\Lambda_0^{(j)})\n  \\]\n\\(\\Lambda_0\\)-step (ICM) \\[\n\\Lambda_0^{(j+1)}=\\arg\\max_\\Lambda l_n(\\beta^{(j+1)},\\Lambda)\n\\]\n\nInference\n\n\\(\\hat\\Lambda_0(t)-\\Lambda_0(t)=O_P(n^{-1/3})\\): non-standard distribution\n\\(\\hat\\beta\\) asymptotically normal, variance estimable by efficient information\n\n\\(\\mathcal I(\\beta)=-\\partial^2 l_n\\{\\beta, \\hat\\Lambda_0(\\beta)\\}/\\partial\\beta^{\\otimes 2}\\) (negative quadrature of “profile likelihood”)"
+  },
+  {
+    "objectID": "chap7.html#software-intcensicsurvicm",
+    "href": "chap7.html#software-intcensicsurvicm",
+    "title": "Applied Survival Analysis",
+    "section": "Software: IntCens::ICSurvICM()",
+    "text": "Software: IntCens::ICSurvICM()\n\nBasic syntax for analysis of interval-censored data\n\n\n\nobj &lt;- ICSurvICM(delta, gamma, U, V, Z, \n                 model = c(\"NP\", \"PH\", \"PO\"))\n\n\n\nInput\n\ndelta = 1: left censoring (\\(L_i=0\\)) \\(\\to\\) U = \\(R_i\\), V = NA\ngamma = 1: interval censoring (\\(L_i&gt;0, R_i&lt;\\infty\\)) \\(\\to\\) U = \\(L_i\\), V = \\(R_i\\)\ndelta = gamma = 0: right censoring (\\(R_i =\\infty\\)) \\(\\to\\) U = NA, V = \\(L_i\\)\nmodel = c(\"NP\", \"PH\", \"PO\"): nonparametric (one-sample) estimation, PH, PO regression models (with covariate matrix Z), respectively\n\nOutput: obj$beta (\\(\\hat\\beta\\)), obj$var(\\(\\hat\\var(\\hat\\beta)\\)), …"
+  },
+  {
+    "objectID": "chap7.html#study-background",
+    "href": "chap7.html#study-background",
+    "title": "Applied Survival Analysis",
+    "section": "Study Background",
+    "text": "Study Background\n\nStudy information\n\nPopulation: 1,124 injecting drug users (IDUs) followed from 1995 to 1998 at 4-month intervals for blood test for HIV sero-positivity\nEndpoint: (interval-censored) time from enrollment to HIV seroconversion (link to follow-up plot)\nBaseline risk factors\n\nAge (years)\nSex (1: male; 0: female)\nHistory of needle sharing (1: yes; 0: no)\nHistory of being jailed/imprisoned (1: yes; 0: no)\nHistory of drug injection in jail (1: yes; 0: no)"
+  },
+  {
+    "objectID": "chap7.html#cox-ph-regression",
+    "href": "chap7.html#cox-ph-regression",
+    "title": "Applied Survival Analysis",
+    "section": "Cox PH Regression",
+    "text": "Cox PH Regression\n\nLoad package and data\n\n\nlibrary(IntCens)\n## BMA data\nhead(data)\n# delta gamma      U       V age sex need jail inject\n#     0     0     NA 40.5574  37   0    0    1      1\n#     0     0     NA 24.2623  25   0    0    1      1\n#     1     0 4.1311      NA  49   0    1    1      1\n#     0     1 7.1475 13.2131  32   1    0    1      0\n# ...\n\n\nFit Cox model\n\n\nobj.PH &lt;- ICSurvICM(delta, gamma, U, V, Z = data[, 5:9], model=\"PH\")"
+  },
+  {
+    "objectID": "chap7.html#cox-ph-regression-inference-i",
+    "href": "chap7.html#cox-ph-regression-inference-i",
+    "title": "Applied Survival Analysis",
+    "section": "Cox PH Regression: Inference (I)",
+    "text": "Cox PH Regression: Inference (I)\n\nSummary results\n\n\n# print out regression results\nprint.ICSurv(obj.PH)\n# NPMLE of proportional hazards for interval-censored data:\n# \n# ICM algorithm converges in 102 iterations.\n# \n# Maximum Likelihood Estimates for Regression parameters:\n#         Estimate    StdErr z.value  p.value   \n# age    -0.029914  0.011051 -2.7068 0.006793 **\n# sex     0.387923  0.268032  1.4473 0.147814   \n# need    0.249568  0.144987  1.7213 0.085195 . \n# jail    0.456849  0.143961  3.1734 0.001506 **\n# inject  0.221270  0.146767  1.5076 0.131652\n# ---\n# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1"
+  },
+  {
+    "objectID": "chap7.html#cox-ph-regression-inference-ii",
+    "href": "chap7.html#cox-ph-regression-inference-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Cox PH Regression: Inference (II)",
+    "text": "Cox PH Regression: Inference (II)\n\nRegression results\n\nHistory of imprisonment increases risk of HIV seroconversion by \\(1.58-1=58\\%\\) (\\(p\\)-value 0.002)"
+  },
+  {
+    "objectID": "chap7.html#cox-ph-regression-prediction",
+    "href": "chap7.html#cox-ph-regression-prediction",
+    "title": "Applied Survival Analysis",
+    "section": "Cox PH Regression: Prediction",
+    "text": "Cox PH Regression: Prediction\n\nModel-based prediction"
+  },
+  {
+    "objectID": "chap7.html#notes-i",
+    "href": "chap7.html#notes-i",
+    "title": "Applied Survival Analysis",
+    "section": "Notes (I)",
+    "text": "Notes (I)\n\nLeft-truncated and interval-censored (LTIC) data\n\nDelayed entry with periodic check-ups\nPan and Chappell (1998a, 1998b, 2002), Gao and Chan (2018), etc.\n\nInterval-censored data\n\nReview: Huang and Wellner (1997)\nTime-varying covariates: Zeng et al. (2016)\nProfile-likelihood: Murphy and van der Vaart (2000)\nText: Sun (2010)"
+  },
+  {
+    "objectID": "chap7.html#notes-ii",
+    "href": "chap7.html#notes-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Notes (II)",
+    "text": "Notes (II)\n\nSun (2010)"
+  },
+  {
+    "objectID": "chap7.html#summary",
+    "href": "chap7.html#summary",
+    "title": "Applied Survival Analysis",
+    "section": "Summary",
+    "text": "Summary\n\nLeft truncation\n\nCaused by delayed entry\nKaplan-Meier, log-rank test, and Cox model \\(\\to\\) modify risk set\nsurvival::Surv(entry, end, status)\n\nInterval censoring\n\nPeriodic check-ups of non-fatal, asymptomatic event\nNon- and semi-parametric models by NPMLE (ICM algorithm)\nIntCens::ICSurvICM()\n\nNonparametric estimation\nProportional hazards model\nProportional odds model"
+  },
+  {
+    "objectID": "chap7.html#hw-4-due-mar-20",
+    "href": "chap7.html#hw-4-due-mar-20",
+    "title": "Applied Survival Analysis",
+    "section": "HW 4 (Due Mar 20)",
+    "text": "HW 4 (Due Mar 20)\n\nChoose one\n\nProblem 5.1\nProblem 5.2\n\nProblem 6.5\nProblem 7.14 (The IntCens package is in “Files &gt; R-package”)"
   }
 ]
