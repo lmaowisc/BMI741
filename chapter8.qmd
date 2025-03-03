@@ -18,7 +18,7 @@ Lecture slides [here](chap8.html){target="_blank"}. (To convert html to pdf, pre
 # This code generates all numerical results in chapter 8.      ##
 ##################################################################
 
-library("survival")
+library(survival)
 
 ################################
 # NCCTG lung cancer study      #
@@ -26,8 +26,12 @@ library("survival")
 
 ## read in the NCCTG lung cancer study
 ## (clustered data by institution)
-data <- read.table("Data//NCCTG//lung.txt")
-head(data)
+df <- read.table("Data//NCCTG//lung.txt")
+
+
+
+head(df)
+
 
 
 
@@ -40,7 +44,7 @@ library(patchwork)
 # institution and sex
 inst_by_sex_fu_plot <- function(df){
   
-  df |> 
+df |> 
   ggplot(aes(y = reorder(id, time), x = time, color = factor(2 - sex))) +
   geom_linerange(aes(xmin = 0, xmax = time)) +
   geom_point(aes(shape = factor(status)), size = 2, fill = "white") +
@@ -63,28 +67,37 @@ inst_by_sex_fu_plot <- function(df){
   
 }
 
-p1 <- inst_by_sex_fu_plot(data |> filter(inst <= 11))
+p1 <- inst_by_sex_fu_plot(df |> filter(inst <= 11))
 
-p2 <- inst_by_sex_fu_plot(data |> filter(inst > 11))
+p2 <- inst_by_sex_fu_plot(df |> filter(inst > 11))
 
 mul_lung_fu <- p1 + p2 + plot_layout(ncol = 2, guides = "collect") & theme(legend.position = "top")
+mul_lung_fu
 
 # ggsave("mul_lung_fu.pdf", mul_lung_fu, width = 8, height = 10)
 # ggsave("mul_lung_fu.eps", mul_lung_fu, width = 8, height = 10)
 
-
+# Convert sex to factor
+df$sex <- factor(df$sex)
 # Fit a Cox model with institution-specific frailty
 # to account for correlation within institution
-obj <- coxph(Surv(time, status) ~ age+ factor(sex) + phec + phkn + ptkn +
-        wl + frailty(inst, distribution="gamma"), data = data)
+obj <- coxph(Surv(time, status) ~ age + sex + phec + phkn + ptkn +
+        wl + frailty(inst, distribution = "gamma"), data = df)
 
+# obj <- coxph(Surv(time, status) ~ age + sex + phec + phkn + ptkn +
+#         wl + frailty(inst, distribution = "gaussian"), data = df)
+
+# Summarize results
 summary(obj)
 
+obj$coefficients
+obj$frail
+str(obj)
 # fit a naive Cox model without institution-specific frailty
-obj.naive <- coxph(Surv(time,status)~age+factor(sex)+phec+phkn+ptkn +
-                           wl,data=data)
+obj_naive <- coxph(Surv(time,status)~ age + sex+phec+phkn+ptkn +
+                           wl,data = df)
 
-summary(obj.naive)
+summary(obj_naive)
 
 
 ####################################################
@@ -154,15 +167,15 @@ legend("topright",lty=1:4,lwd=2,cex=1.2,paste("ECOG",0:3))
 ################################
 
 # read in the data
-data <- read.table("Data//Diabetic Retinopathy Study//drs.txt")
-head(data)
+df <- read.table("Data//Diabetic Retinopathy Study//drs.txt")
+head(df)
 
 # fit a bivariate marginal Cox model
 # with treatment, diabetic type
 # risk score, and treatment*type interaction
 # as covariates
-obj <- coxph(Surv(time, status) ~ trt + type + trt * type + risk
-             + cluster(id), data = data)
+obj <- coxph(Surv(time, status) ~ trt + type + trt : type + risk
+                           + cluster(id), data = df)
 
 summary(obj)
 
@@ -442,6 +455,108 @@ tabone <- bind_rows(
 colnames(tabone) <- c(" ", str_c(colnames(tabone)[2:3], " (N=", table(df$drug),")"))
 ## print out the table
 kable(tabone)
+
+```
+
+```{r}
+
+
+## fit the model (scenario 3)
+obj <- coxph(Surv(time, status) ~ 
+        (drug + age +  gender + nyha + bmi + smoke + chf_hosp + copd + asthma + dm + htn + cabg) * 
+        strata(endpoint) + cluster(id), data = topcat)
+
+summary(obj)
+obj$coefficients
+
+
+
+
+
+## tabulate component-specific HR (95% CI) and p-values
+
+p <- 12 # number of covariates
+
+### global beta and variance matrix
+beta <- obj$coefficients
+var <- obj$var
+
+### set up log-HR and variances
+betaHF <- rep(NA, p)
+varHF <- rep(NA, p)
+betaMI <- rep(NA, p)
+varMI <- rep(NA, p)
+betaStr <- rep(NA, p)
+varStr  <- rep(NA, p)
+
+for (j in 1:p){
+  #### HF (reference)
+  betaHF[j] <- beta[j]
+  varHF[j] <- var[j, j]
+  #### MI (ref + interaction with MI stratum)
+  betaMI[j] <- beta[j] + beta[p + 2 * j - 1]
+  varMI[j] <- var[j, j] + var[p + 2 * j - 1, p + 2 * j - 1] + 2* var[j, p + 2 * j - 1]
+  #### Stroke (ref + interaction with stroke stratum)
+  betaStr[j] <- beta[j] + beta[p + 2 * j]
+  varStr[j] <- var[j, j] + var[p + 2 * j, p + 2 * j] + 2* var[j, p + 2 * j]  
+}
+
+### make the table
+za <- qnorm(0.975)
+#### functions to compute HR (95% CI) and p-value
+#### r: number of decimal place
+hr_ci <- function(beta, var, r = 2){
+  se <- sqrt(var)
+
+  str_c(round(exp(beta), r), " (",
+        round(exp(beta - za * se), r), ", ",
+        round(exp(beta + za * se), r), ")")
+}
+
+#### p-value
+hr_p <- function(beta, var){
+  se <- sqrt(var)
+  round(1 - pchisq((beta/se)^2 , df = 1), 3)
+}
+
+
+df <- tibble(
+  betaHF, varHF, betaMI, varMI, betaStr, varStr 
+) |> 
+  mutate(
+    variable = c("Spironolactone", 
+                 "Age (years)",
+                 "Female",
+                 # "Non-caucasian",
+                 "NYHA 3-4",
+                 "BMI",
+                 "Smoke",
+                 "CHF",
+                 "COPD",
+                 "Asthma",
+                 "Diabetes",
+                 "Hypertension",
+                 "Coronary surgery"),
+    HF = hr_ci(betaHF, varHF),
+    HF_p = hr_p(betaHF, varHF),
+    MI = hr_ci(betaMI, varMI),
+    MI_p = hr_p(betaMI, varMI),
+    Stroke = hr_ci(betaStr, varStr),
+    Stroke_p = hr_p(betaStr, varStr),
+    .before = 1
+  ) |> 
+  select(variable:Stroke_p)
+
+## joint test of spironolactone effect on HF/stroke
+### main effect (HF) and interaction with stroke
+beta_q <- beta[c(1, 14)]
+Sigma_q <- var[c(1, 14), c(1, 14)]
+
+
+#chisq statistic with 2 d.f.
+chisq2 <- t(beta_q) %*% solve(Sigma_q) %*% beta_q
+#p-value
+pval <- 1 - pchisq(chisq2, 2)
 
 ```
 

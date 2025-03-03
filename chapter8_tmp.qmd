@@ -217,7 +217,6 @@ plot(t,juv.contr,type="s",xlim=c(0,80),ylim=c(0,1),frame.plot=F,lty=3,main="Juve
 lines(t,juv.trt,lty=1,lwd=2)
 ```
 
-
 ```{r}
 #| warning: false
 
@@ -279,7 +278,6 @@ mul_lung_fu <- p1 + p2 + plot_layout(ncol = 2, guides = "collect") & theme(legen
 mul_lung_fu
 ```
 
-
 ```{r}
 #| label: fig-drs-fu
 #| fig-cap: Follow-up of diabetic retinopathy study patients by disease type. Photocoagulation treatment appears to delay onset of blindness in both types, but to a greater degree in adult diabetes.
@@ -331,4 +329,3 @@ mul_drs_fu <- drs_wide |>
 mul_drs_fu
 
 ```
-

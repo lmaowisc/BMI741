@@ -6,129 +6,122 @@ title: "Chapter 7 - Left Truncation and Interval Censoring"
 
 Lecture slides [here](chap7.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-## Base R Code
+
+## R code
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 #| eval: false
 
-##################################################################
-# This code generates all numerical results in chapter 7.      ##
-##################################################################
+###############################################################################
+# Chapter 7 R Code
+#
+# This script reproduces all major numerical results in Chapter 7, including:
+#   1. Analysis of left-truncated data (Channing House Study)
+#   2. Analysis of interval-censored data (BMA HIV Study)
+###############################################################################
 
+
+#==============================================================================
+# (A) Channing House Study (Left-Truncated Data)
+#==============================================================================
 library(survival)
+library(tidyverse)
+library(patchwork)
 
-# read in the Channing study data
+#------------------------------------------------------------------------------
+# 1. Read and Inspect the Channing Data
+#------------------------------------------------------------------------------
 channing <- read.table("Data\\Channing House Study\\channing.txt")
-
 head(channing)
 
+# Convert gender to factor
 channing$gender <- factor(channing$gender)
 
-# Fit a Cox model to the Channing study data
-# with entry age as left-truncation time
+#------------------------------------------------------------------------------
+# 2. Cox Model with Left-Truncation
+#------------------------------------------------------------------------------
 obj <- coxph(Surv(Entry.Age, End.Age, status) ~ gender, data = channing)
-# Summarize model
 summary(obj)
-#> Call:
-#> coxph(formula = Surv(Entry.Age, End.Age, status) ~ gender, data = channing)
-#> 
-#>   n= 458, number of events= 176 
-#> 
-#>            coef exp(coef) se(coef)      z Pr(>|z|)  
-#> gender2 -0.3163    0.7289   0.1731 -1.827   0.0677 .
-#> ---
-#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-#> 
-#>         exp(coef) exp(-coef) lower .95 upper .95
-#> gender2    0.7289      1.372    0.5191     1.023
-#> 
-#> Concordance= 0.528  (se = 0.018 )
-#> Likelihood ratio test= 3.17  on 1 df,   p=0.07
-#> Wald test            = 3.34  on 1 df,   p=0.07
-#> Score (logrank) test = 3.36  on 1 df,   p=0.07
 
-
-### proportionality of gender ####
-# Schoenfeld residuals
+#------------------------------------------------------------------------------
+# 3. Test Proportional Hazards Assumption (Schoenfeld Residuals)
+#------------------------------------------------------------------------------
 obj_zph <- cox.zph(obj)
-# test result
 obj_zph
 # Plot the rescaled residuals
-plot(obj_zph, ylab = "Gender", xlab = "Age (years)", lwd = 2)
+plot(
+  obj_zph,
+  ylab = "Gender",
+  xlab = "Age (years)",
+  lwd  = 2
+)
 
-### prediction of (conditional survival) ##
-
-library(tidyverse)
-## numbers at risk
+#------------------------------------------------------------------------------
+# 4. Number at Risk by Gender Over Age
+#------------------------------------------------------------------------------
+# Create a function to compute number at risk at each time point
 t <- seq(60, 100, by = 1)
 
-## function to compute number at risk
-## at each t based on entry (T_L) and end (X)
-n_risk_t <- function(entry, end){
-  m <- length(t)
-  n_j <- rep(NA, m)
-  for (j in 1:m){
+n_risk_t <- function(entry, end) {
+  m   <- length(t)
+  n_j <- numeric(m)
+  for (j in seq_len(m)) {
     n_j[j] <- sum(entry <= t[j] & t[j] <= end)
   }
   return(n_j)
 }
 
-## compute n at risk by gender
-nrisk<- channing |> 
-  group_by(gender) |> 
-  reframe(
-    n_j = n_risk_t(Entry.Age, End.Age)
-  ) |> 
-  add_column(
-    t = rep(t, 2),
-    .before = 1
-  ) |> 
-  mutate(
-    gender = if_else(gender == 1, "Male", "Female")
-  )
+# Compute n at risk by gender
+nrisk <- channing %>%
+  group_by(gender) %>%
+  reframe(n_j = n_risk_t(Entry.Age, End.Age)) %>%
+  add_column(t = rep(t, 2), .before = 1) %>%
+  mutate(gender = if_else(gender == 1, "Male", "Female"))
 
-# plot n at risk by gender
-nrisk_fig <- nrisk |> 
+# Plot number at risk
+nrisk_fig <- nrisk %>%
   ggplot(aes(x = t, y = n_j)) +
   geom_step(aes(linetype = gender)) +
   theme_bw() +
- labs(
-   x = "Age (years)",
-   y = "Number at risk"
- ) +
- theme(
-    legend.title = element_blank(),
+  labs(
+    x = "Age (years)",
+    y = "Number at risk"
+  ) +
+  theme(
+    legend.title    = element_blank(),
     legend.position = "top"
   )
 
-# set cut-off 70 yo
-t0 <- 70
-# Get model-based parameter estimates
-beta <- obj$coefficients
-Lambda0 <- basehaz(obj, centered = FALSE)
-Lambda0t0 <- Lambda0[Lambda0$time >= t0,]
-Lambda0t0$hazard <- Lambda0t0$hazard - Lambda0t0$hazard[1] ## conditional cum hazard after t0
+#------------------------------------------------------------------------------
+# 5. Conditional Survival Functions Given Age 70
+#------------------------------------------------------------------------------
+t0        <- 70
+beta      <- obj$coefficients
+Lambda0   <- basehaz(obj, centered = FALSE)
 
+# Subset baseline hazard for times >= t0
+Lambda0t0 <- Lambda0[Lambda0$time >= t0, ]
+# Re-center the hazard to start at 0 for t >= t0
+Lambda0t0$hazard <- Lambda0t0$hazard - Lambda0t0$hazard[1]
 
-# predicted gender-specific conditional 
-# survival functions given 70 yo
-surv_t0 <- Lambda0t0 |> 
+# Construct survival curves for "Male" (reference) and "Female"
+surv_t0 <- Lambda0t0 %>%
   mutate(
-    St = exp(- hazard),
+    St     = exp(-hazard),
     gender = "Male"
-  ) |> 
+  ) %>%
   add_row(
-    Lambda0t0 |> 
+    Lambda0t0 %>%
       mutate(
-        St = exp(- hazard * exp(beta)),
+        St     = exp(-hazard * exp(beta)),
         gender = "Female"
       )
   )
 
-# plot conditional survival functions
-surv_fig <- surv_t0 |> 
+# Plot conditional survival functions
+surv_fig <- surv_t0 %>%
   ggplot(aes(x = time, y = St)) +
   geom_step(aes(linetype = gender)) +
   theme_bw() +
@@ -137,83 +130,97 @@ surv_fig <- surv_t0 |>
     y = "Conditional survival probabilities"
   ) +
   theme(
-    legend.title = element_blank(),
+    legend.title    = element_blank(),
     legend.position = "top"
   ) +
   scale_x_continuous(expand = expansion(c(0, 0.05)))
 
-## package to combine plots
-library(patchwork)
-# combine n-at-risk and conditional-survival plots
-chan_model <- nrisk_fig + surv_fig + plot_layout(ncol = 2, guides = "collect") & 
+# Combine number-at-risk and conditional-survival plots
+chan_model <- nrisk_fig + surv_fig +
+  plot_layout(ncol = 2, guides = "collect") &
   theme(legend.position = 'top')
 
+chan_model
+
+# Uncomment to save the figure:
 # ggsave("trunc_chan_model.pdf", chan_model, width = 8, height = 4)
 # ggsave("trunc_chan_model.eps", chan_model, width = 8, height = 4)
 
 
-
-## BMA HIV study
-# install.packages("devtools")
-devtools::install_github("lmaowisc/IntCens")
+#==============================================================================
+# (B) Bangkok Metropolitan Administration (BMA) HIV Study (Interval-Censored)
+#==============================================================================
+# devtools::install_github("lmaowisc/IntCens")
 library(IntCens)
-## Bangkok Metropolitan Administration HIV Study
+
+#------------------------------------------------------------------------------
+# 1. Read BMA HIV Study Data
+#------------------------------------------------------------------------------
 df <- read.table("Data//Bangkok Metropolitan Administration HIV_AIDS Study//bam.txt")
 df
 
-
-# Fit a proportional hazards model
-PH_fit <- icsurvfit(L = df$L, R = df$R, Z = df[, 3:7], model = "PH")
-# Print results  
+#------------------------------------------------------------------------------
+# 2. Fit Proportional Hazards Model for Interval-Censored Data
+#------------------------------------------------------------------------------
+PH_fit <- icsurvfit(
+  L = df$L,       # left endpoint of interval
+  R = df$R,       # right endpoint of interval
+  Z = df[, 3:7],  # covariates
+  model = "PH"
+)
 PH_fit
-#> Call:
-#> icsurvfit(L = df$L, R = df$R, Z = df[, 3:7], model = "PH")
-#> 
-#> NPMLE of proportional hazards for interval-censored data:
-#> 
-#> ICM algorithm converges in 102 iterations.
-#> 
-#> Maximum Likelihood Estimates for Regression parameters:
-#> 
-#>         Estimate    StdErr z.value  p.value   
-#> age    -0.029914  0.011051 -2.7068 0.006793 **
-#> sex     0.387923  0.268032  1.4473 0.147814   
-#> needle  0.249568  0.144987  1.7213 0.085195 . 
-#> jail    0.456849  0.143961  3.1734 0.001506 **
-#> inject  0.221270  0.146767  1.5076 0.131652   
-#> ---
-#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-# Alternative PO model
-# obj.PO <- ICSurvICM(delta,gamma,U,V,Z=data[,5:9],model="PO")
-
-
-# Table 7.3
-# construct a table for hazard ratio and
-# 95% confidence intervals
-
-#regression parameter
+#------------------------------------------------------------------------------
+# 3. Construct Table 7.3: Hazard Ratio & 95% CI
+#------------------------------------------------------------------------------
 beta <- PH_fit$beta
-se <- sqrt(diag(PH_fit$var))
-c1 <- round(exp(beta),2)
-c2 <- paste0("(",round(exp(beta - 1.96*se),2),", ",
-   round(exp(beta + 1.96*se),2),")")
+se   <- sqrt(diag(PH_fit$var))
+
+c1 <- round(exp(beta), 2)
+c2 <- paste0(
+  "(",
+  round(exp(beta - 1.96 * se), 2),
+  ", ",
+  round(exp(beta + 1.96 * se), 2),
+  ")"
+)
+
 noquote(cbind(c1, c2))
 
+#------------------------------------------------------------------------------
+# 4. Predict HIV Sero-Negative Probabilities
+#------------------------------------------------------------------------------
+par(mfrow = c(1, 1))
 
+age.med <- median(df[, "age"])
 
-# Prediction of HIV sero-negative probabilities for a median-aged male IDU
-# without histories of needle sharing or drug injection in jail by prior imprisonment
-# status.
-par(mfrow=c(1, 1))
-age.med <- median(df[,"age"])
-plot(PH_fit, z=c(age.med,1,0,0,0),xlim=c(0,50), lty = 2,
-     xlab="Time (months)", ylab="HIV sero-negative probabilities",
-     lwd=2, main = "")
-plot(PH_fit, z=c(age.med, 1, 0, 1, 0), xlim=c(0, 50), add = TRUE,
-     lwd=2)
-legend(0, 0.3, lty=c(2, 1), c("No history of imprisonment", "History of imprisonment"), 
-       lwd = 2)
+# Plot for a median-aged male IDU (sex=1) with no needle sharing or drug injection in jail
+plot(
+  PH_fit,
+  z    = c(age.med, 1, 0, 0, 0),
+  xlim = c(0, 50),
+  lty  = 2,
+  xlab = "Time (months)",
+  ylab = "HIV sero-negative probabilities",
+  lwd  = 2,
+  main = ""
+)
+
+plot(
+  PH_fit,
+  z    = c(age.med, 1, 0, 1, 0),
+  xlim = c(0, 50),
+  add  = TRUE,
+  lwd  = 2
+)
+
+legend(
+  "bottomleft",
+  lty = c(2, 1),
+  legend = c("No history of imprisonment", "History of imprisonment"),
+  lwd    = 2
+)
+
 ```
 
 
@@ -379,3 +386,77 @@ bma_fig
 # ggsave("trunc_bma_fig.pdf", bma_fig, width = 8, height = 12)
 # ggsave("trunc_bma_fig.eps", bma_fig, width = 8, height = 12, device = cairo_pdf)
 ```
+
+
+```{r}
+#| echo: false
+#| eval: false
+
+# Additional code
+# Load necessary package
+library(ggplot2)
+
+# Generate sample cumulative sum data (CSD)
+set.seed(42)
+n <- 10
+x <- 0:n
+# y <- cumsum(runif(n, 0.5, 1.5))  # Cumulative sum of random increments
+y <- c(0, cumsum(rnorm(n, 1, 3)))  # Cumulative sum of random increments
+# y <- y / max(y)
+
+# Compute the Greatest Convex Minorant (GCM)
+compute_gcm <- function(x, y) {
+  gcm_x <- c(x[1])
+  gcm_y <- c(y[1])
+  
+  for (i in 2:length(x)) {
+    gcm_x <- c(gcm_x, x[i])
+    gcm_y <- c(gcm_y, y[i])
+    
+    # Ensure convexity by checking slopes
+    while (length(gcm_x) >= 3) {
+      k <- length(gcm_x)
+      slope1 <- (gcm_y[k-1] - gcm_y[k-2]) / (gcm_x[k-1] - gcm_x[k-2])
+      slope2 <- (gcm_y[k] - gcm_y[k-1]) / (gcm_x[k] - gcm_x[k-1])
+      
+      if (slope1 > slope2) {
+        # Remove the middle point as it's violating convexity
+        gcm_x <- gcm_x[-(k-1)]
+        gcm_y <- gcm_y[-(k-1)]
+      } else {
+        break
+      }
+    }
+  }
+  
+  return(data.frame(x = gcm_x, y = gcm_y))
+}
+
+gcm_data <- compute_gcm(x, y)
+
+# Create a plot
+ggplot() +
+  geom_line(aes(x, y, color = "csd"), size = 1, linetype = "dashed") +
+  geom_point(aes(x, y, color = "csd"),  size = 3) +
+  geom_line(data = gcm_data, aes(x, y, color = "gcm"), size = 1) +
+  geom_point(data = gcm_data, aes(x, y, color = "gcm"),  size = 3) +
+  scale_color_manual(values = c("csd" = "#0479A8", "gcm" = "#C5050C"), 
+                     labels = c(expression(S[j]), expression(G[j]))) +
+  labs(
+    title = "Greatest convex minorant (GCM) approximation",
+    x = expression(x[j]),
+    y = "Cumulative sum",
+    color = NULL
+  ) +
+  theme_minimal() +
+  theme(legend.position = "top",
+        legend.key.width = unit(1.5, "cm"),
+        plot.title = element_text(size = 12),
+        axis.text.y = element_blank()
+  )
+
+ggsave("images/gcm_approx.png", width = 7.5, height = 5)
+ggsave("images/gcm_approx.eps", width = 7.5, height = 5)
+
+```
+

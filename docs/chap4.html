@@ -1,201 +1,150 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Lu Mao">
+
+<title>Applied Survival Analysis – BMI/STAT 741 Course Study Site</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.39">
-
-  <meta name="author" content="Lu Mao">
-  <title>BMI/STAT 741 Course Study Site – Applied Survival Analysis</title>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
-  <style>
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    ul.task-list li input[type="checkbox"] {
-      width: 0.8em;
-      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
-      vertical-align: middle;
-    }
-    /* CSS for syntax highlighting */
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      { color: #003b4f; background-color: #f1f3f5; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #003b4f; } /* Normal */
-    code span.al { color: #ad0000; } /* Alert */
-    code span.an { color: #5e5e5e; } /* Annotation */
-    code span.at { color: #657422; } /* Attribute */
-    code span.bn { color: #ad0000; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #20794d; } /* Char */
-    code span.cn { color: #8f5902; } /* Constant */
-    code span.co { color: #5e5e5e; } /* Comment */
-    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
-    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
-    code span.dt { color: #ad0000; } /* DataType */
-    code span.dv { color: #ad0000; } /* DecVal */
-    code span.er { color: #ad0000; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #ad0000; } /* Float */
-    code span.fu { color: #4758ab; } /* Function */
-    code span.im { color: #00769e; } /* Import */
-    code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
-    code span.op { color: #5e5e5e; } /* Operator */
-    code span.ot { color: #003b4f; } /* Other */
-    code span.pp { color: #ad0000; } /* Preprocessor */
-    code span.sc { color: #5e5e5e; } /* SpecialChar */
-    code span.ss { color: #20794d; } /* SpecialString */
-    code span.st { color: #20794d; } /* String */
-    code span.va { color: #111111; } /* Variable */
-    code span.vs { color: #20794d; } /* VerbatimString */
-    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
-  </style>
-  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-bbe7401fe57d4b791b917637bb662036.css">
-  <link rel="stylesheet" href="style_slides.css">
-  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
-  <style type="text/css">
-    .reveal div.sourceCode {
-      margin: 0;
-      overflow: auto;
-    }
-    .reveal div.hanging-indent {
-      margin-left: 1em;
-      text-indent: -1em;
-    }
-    .reveal .slide:not(.center) {
-      height: 100%;
-    }
-    .reveal .slide.scrollable {
-      overflow-y: auto;
-    }
-    .reveal .footnotes {
-      height: 100%;
-      overflow-y: auto;
-    }
-    .reveal .slide .absolute {
-      position: absolute;
-      display: block;
-    }
-    .reveal .footnotes ol {
-      counter-reset: ol;
-      list-style-type: none; 
-      margin-left: 0;
-    }
-    .reveal .footnotes ol li:before {
-      counter-increment: ol;
-      content: counter(ol) ". "; 
-    }
-    .reveal .footnotes ol li > p:first-child {
-      display: inline-block;
-    }
-    .reveal .slide ul,
-    .reveal .slide ol {
-      margin-bottom: 0.5em;
-    }
-    .reveal .slide ul li,
-    .reveal .slide ol li {
-      margin-top: 0.4em;
-      margin-bottom: 0.2em;
-    }
-    .reveal .slide ul[role="tablist"] li {
-      margin-bottom: 0;
-    }
-    .reveal .slide ul li > *:first-child,
-    .reveal .slide ol li > *:first-child {
-      margin-block-start: 0;
-    }
-    .reveal .slide ul li > *:last-child,
-    .reveal .slide ol li > *:last-child {
-      margin-block-end: 0;
-    }
-    .reveal .slide .columns:nth-child(3) {
-      margin-block-start: 0.8em;
-    }
-    .reveal blockquote {
-      box-shadow: none;
-    }
-    .reveal .tippy-content>* {
-      margin-top: 0.2em;
-      margin-bottom: 0.7em;
-    }
-    .reveal .tippy-content>*:last-child {
-      margin-bottom: 0.2em;
-    }
-    .reveal .slide > img.stretch.quarto-figure-center,
-    .reveal .slide > img.r-stretch.quarto-figure-center {
-      display: block;
-      margin-left: auto;
-      margin-right: auto; 
-    }
-    .reveal .slide > img.stretch.quarto-figure-left,
-    .reveal .slide > img.r-stretch.quarto-figure-left  {
-      display: block;
-      margin-left: 0;
-      margin-right: auto; 
-    }
-    .reveal .slide > img.stretch.quarto-figure-right,
-    .reveal .slide > img.r-stretch.quarto-figure-right  {
-      display: block;
-      margin-left: auto;
-      margin-right: 0; 
-    }
-  </style>
-  <style type="text/css">
-  ul li ul li {
-    font-size: 0.75em;
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-2a5582c6a9bd5a7be8848b51066e295e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
-  </style>
+}</script>
+<style type="text/css">
+ul li ul li {
+  font-size: 0.75em;
+}
+</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="style_slides.css">
 <meta property="og:title" content="Applied Survival Analysis – BMI/STAT 741 Course Study Site">
 <meta property="og:description" content="Chapter 4 - Cox Proportional Hazards Regression">
-<meta property="og:image" content="https://lmaowisc.github.io/BMI741/dc.jpg">
+<meta property="og:image" content="https://lmaowisc.github.io/BMI741/images/cox_time_points.png">
 <meta property="og:site_name" content="BMI/STAT 741 Course Study Site">
+<meta property="og:image:height" content="716">
+<meta property="og:image:width" content="1783">
 <meta name="twitter:title" content="Applied Survival Analysis – BMI/STAT 741 Course Study Site">
 <meta name="twitter:description" content="Chapter 4 - Cox Proportional Hazards Regression">
 <meta name="twitter:image" content="https://lmaowisc.github.io/BMI741/surv_hex.png">
@@ -204,51 +153,266 @@
 <meta name="twitter:image-height" content="600">
 <meta name="twitter:image-width" content="518">
 </head>
-<body class="quarto-light">
-  <div class="reveal">
-    <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Applied Survival Analysis</h1>
-  <p class="subtitle">Chapter 4 - Cox Proportional Hazards Regression</p>
+<body class="nav-sidebar docked nav-fixed">
 
-<div class="quarto-title-authors">
-<div class="quarto-title-author">
-<div class="quarto-title-author-name">
-Lu Mao 
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">BMI/STAT 741 Course Study Site</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
 </div>
-<div class="quarto-title-author-email">
-<a href="mailto:lmao@biostat.wisc.edu">lmao@biostat.wisc.edu</a>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Applied Survival Analysis</li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part I - Univariate Events</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 1 - Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 2 - Mathematical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 3 - Nonparametric Estimation and Testing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4 - Cox Proportional Hazards Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 5 - Other Non- and Semi-parametric Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 6 - Sample Size Determination and Study Design</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Part II - Complex Outcomes</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Part III - Special Topics</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Miscellaneous</span></span>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#outline" id="toc-outline" class="nav-link active" data-scroll-target="#outline">Outline</a></li>
+  <li><a href="#the-cox-model" id="toc-the-cox-model" class="nav-link" data-scroll-target="#the-cox-model">The Cox Model</a>
+  <ul>
+  <li><a href="#regression-modeling" id="toc-regression-modeling" class="nav-link" data-scroll-target="#regression-modeling">Regression Modeling</a></li>
+  <li><a href="#cox-proportional-hazards-model" id="toc-cox-proportional-hazards-model" class="nav-link" data-scroll-target="#cox-proportional-hazards-model">Cox Proportional Hazards Model</a></li>
+  <li><a href="#parametric-sub-model" id="toc-parametric-sub-model" class="nav-link" data-scroll-target="#parametric-sub-model">Parametric Sub-Model</a></li>
+  <li><a href="#censored-data-and-assumption" id="toc-censored-data-and-assumption" class="nav-link" data-scroll-target="#censored-data-and-assumption">Censored Data and Assumption</a></li>
+  <li><a href="#parametric-mle" id="toc-parametric-mle" class="nav-link" data-scroll-target="#parametric-mle">Parametric MLE</a></li>
+  <li><a href="#semiparametric-model" id="toc-semiparametric-model" class="nav-link" data-scroll-target="#semiparametric-model">Semiparametric Model</a></li>
+  </ul></li>
+  <li><a href="#partial-likelihood" id="toc-partial-likelihood" class="nav-link" data-scroll-target="#partial-likelihood">Partial Likelihood</a>
+  <ul>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up">Set-up</a></li>
+  <li><a href="#conditional-information" id="toc-conditional-information" class="nav-link" data-scroll-target="#conditional-information">Conditional Information</a></li>
+  <li><a href="#partial-likelihood-construction" id="toc-partial-likelihood-construction" class="nav-link" data-scroll-target="#partial-likelihood-construction">Partial Likelihood Construction</a></li>
+  <li><a href="#maximum-partial-likelihood-mple" id="toc-maximum-partial-likelihood-mple" class="nav-link" data-scroll-target="#maximum-partial-likelihood-mple">Maximum Partial-Likelihood (MPLE)</a></li>
+  <li><a href="#martingale-framework" id="toc-martingale-framework" class="nav-link" data-scroll-target="#martingale-framework">Martingale Framework</a></li>
+  <li><a href="#inference-on-beta" id="toc-inference-on-beta" class="nav-link" data-scroll-target="#inference-on-beta">Inference on <span class="math inline">\(\beta\)</span></a></li>
+  <li><a href="#breslow-estimator" id="toc-breslow-estimator" class="nav-link" data-scroll-target="#breslow-estimator">Breslow Estimator</a></li>
+  <li><a href="#predicting-survival" id="toc-predicting-survival" class="nav-link" data-scroll-target="#predicting-survival">Predicting Survival</a></li>
+  <li><a href="#stratified-model" id="toc-stratified-model" class="nav-link" data-scroll-target="#stratified-model">Stratified Model</a></li>
+  <li><a href="#software-survivalcoxph-i" id="toc-software-survivalcoxph-i" class="nav-link" data-scroll-target="#software-survivalcoxph-i">Software: <code>survival::coxph()</code> (I)</a></li>
+  <li><a href="#software-survivalcoxph-ii" id="toc-software-survivalcoxph-ii" class="nav-link" data-scroll-target="#software-survivalcoxph-ii">Software: <code>survival::coxph()</code> (II)</a></li>
+  <li><a href="#software-survivalcoxph-iii" id="toc-software-survivalcoxph-iii" class="nav-link" data-scroll-target="#software-survivalcoxph-iii">Software: <code>survival::coxph()</code> (III)</a></li>
+  <li><a href="#software-gtsummarytbl_regression" id="toc-software-gtsummarytbl_regression" class="nav-link" data-scroll-target="#software-gtsummarytbl_regression">Software: <code>gtsummary::tbl_regression()</code></a></li>
+  <li><a href="#example-german-breast-cancer-i" id="toc-example-german-breast-cancer-i" class="nav-link" data-scroll-target="#example-german-breast-cancer-i">Example: German Breast Cancer (I)</a></li>
+  <li><a href="#example-german-breast-cancer-ii" id="toc-example-german-breast-cancer-ii" class="nav-link" data-scroll-target="#example-german-breast-cancer-ii">Example: German Breast Cancer (II)</a></li>
+  <li><a href="#example-german-breast-cancer-iii" id="toc-example-german-breast-cancer-iii" class="nav-link" data-scroll-target="#example-german-breast-cancer-iii">Example: German Breast Cancer (III)</a></li>
+  <li><a href="#example-german-breast-cancer-v" id="toc-example-german-breast-cancer-v" class="nav-link" data-scroll-target="#example-german-breast-cancer-v">Example: German Breast Cancer (V)</a></li>
+  <li><a href="#example-german-breast-cancer-vi" id="toc-example-german-breast-cancer-vi" class="nav-link" data-scroll-target="#example-german-breast-cancer-vi">Example: German Breast Cancer (VI)</a></li>
+  <li><a href="#example-german-breast-cancer-vii" id="toc-example-german-breast-cancer-vii" class="nav-link" data-scroll-target="#example-german-breast-cancer-vii">Example: German Breast Cancer (VII)</a></li>
+  </ul></li>
+  <li><a href="#residual-analyses" id="toc-residual-analyses" class="nav-link" data-scroll-target="#residual-analyses">Residual Analyses</a>
+  <ul>
+  <li><a href="#assumptions-in-cox-model" id="toc-assumptions-in-cox-model" class="nav-link" data-scroll-target="#assumptions-in-cox-model">Assumptions in Cox Model</a></li>
+  <li><a href="#cox-snell-residuals-i" id="toc-cox-snell-residuals-i" class="nav-link" data-scroll-target="#cox-snell-residuals-i">Cox-Snell Residuals (I)</a></li>
+  <li><a href="#cox-snell-residuals-ii" id="toc-cox-snell-residuals-ii" class="nav-link" data-scroll-target="#cox-snell-residuals-ii">Cox-Snell Residuals (II)</a></li>
+  <li><a href="#schoenfeld-residuals-i" id="toc-schoenfeld-residuals-i" class="nav-link" data-scroll-target="#schoenfeld-residuals-i">Schoenfeld Residuals (I)</a></li>
+  <li><a href="#schoenfeld-residuals-ii" id="toc-schoenfeld-residuals-ii" class="nav-link" data-scroll-target="#schoenfeld-residuals-ii">Schoenfeld Residuals (II)</a></li>
+  <li><a href="#martingaledeviance-residuals" id="toc-martingaledeviance-residuals" class="nav-link" data-scroll-target="#martingaledeviance-residuals">Martingale/Deviance Residuals</a></li>
+  <li><a href="#software-survivalresid-i" id="toc-software-survivalresid-i" class="nav-link" data-scroll-target="#software-survivalresid-i">Software: <code>survival::resid()</code> (I)</a></li>
+  <li><a href="#software-survivalcox.zph" id="toc-software-survivalcox.zph" class="nav-link" data-scroll-target="#software-survivalcox.zph">Software: <code>survival::cox.zph()</code></a></li>
+  <li><a href="#software-survivalresid-ii" id="toc-software-survivalresid-ii" class="nav-link" data-scroll-target="#software-survivalresid-ii">Software: <code>survival::resid()</code> (II)</a></li>
+  <li><a href="#example-german-breast-cancer-viii" id="toc-example-german-breast-cancer-viii" class="nav-link" data-scroll-target="#example-german-breast-cancer-viii">Example: German Breast Cancer (VIII)</a></li>
+  <li><a href="#example-german-breast-cancer-ix" id="toc-example-german-breast-cancer-ix" class="nav-link" data-scroll-target="#example-german-breast-cancer-ix">Example: German Breast Cancer (IX)</a></li>
+  <li><a href="#example-german-breast-cancer-x" id="toc-example-german-breast-cancer-x" class="nav-link" data-scroll-target="#example-german-breast-cancer-x">Example: German Breast Cancer (X)</a></li>
+  <li><a href="#example-german-breast-cancer-xi" id="toc-example-german-breast-cancer-xi" class="nav-link" data-scroll-target="#example-german-breast-cancer-xi">Example: German Breast Cancer (XI)</a></li>
+  <li><a href="#example-german-breast-cancer-xii" id="toc-example-german-breast-cancer-xii" class="nav-link" data-scroll-target="#example-german-breast-cancer-xii">Example: German Breast Cancer (XII)</a></li>
+  <li><a href="#example-german-breast-cancer-xiii" id="toc-example-german-breast-cancer-xiii" class="nav-link" data-scroll-target="#example-german-breast-cancer-xiii">Example: German Breast Cancer (XIII)</a></li>
+  <li><a href="#example-german-breast-cancer-xiv" id="toc-example-german-breast-cancer-xiv" class="nav-link" data-scroll-target="#example-german-breast-cancer-xiv">Example: German Breast Cancer (XIV)</a></li>
+  <li><a href="#example-german-breast-cancer-xv" id="toc-example-german-breast-cancer-xv" class="nav-link" data-scroll-target="#example-german-breast-cancer-xv">Example: German Breast Cancer (XV)</a></li>
+  <li><a href="#example-german-breast-cancer-xvi" id="toc-example-german-breast-cancer-xvi" class="nav-link" data-scroll-target="#example-german-breast-cancer-xvi">Example: German Breast Cancer (XVI)</a></li>
+  <li><a href="#example-german-breast-cancer-xvii" id="toc-example-german-breast-cancer-xvii" class="nav-link" data-scroll-target="#example-german-breast-cancer-xvii">Example: German Breast Cancer (XVII)</a></li>
+  <li><a href="#example-german-breast-cancer-xviii" id="toc-example-german-breast-cancer-xviii" class="nav-link" data-scroll-target="#example-german-breast-cancer-xviii">Example: German Breast Cancer (XVIII)</a></li>
+  </ul></li>
+  <li><a href="#time-dependent-covariates" id="toc-time-dependent-covariates" class="nav-link" data-scroll-target="#time-dependent-covariates">Time-Dependent Covariates</a>
+  <ul>
+  <li><a href="#internal-vs-external-covariates" id="toc-internal-vs-external-covariates" class="nav-link" data-scroll-target="#internal-vs-external-covariates">Internal vs External Covariates</a></li>
+  <li><a href="#internal-covariates" id="toc-internal-covariates" class="nav-link" data-scroll-target="#internal-covariates">Internal Covariates</a></li>
+  <li><a href="#external-covariates-i" id="toc-external-covariates-i" class="nav-link" data-scroll-target="#external-covariates-i">External Covariates (I)</a></li>
+  <li><a href="#external-covariates-ii" id="toc-external-covariates-ii" class="nav-link" data-scroll-target="#external-covariates-ii">External Covariates (II)</a></li>
+  <li><a href="#estimation-and-inference" id="toc-estimation-and-inference" class="nav-link" data-scroll-target="#estimation-and-inference">Estimation and Inference</a></li>
+  <li><a href="#software-survivalcoxph-iv" id="toc-software-survivalcoxph-iv" class="nav-link" data-scroll-target="#software-survivalcoxph-iv">Software: <code>survival::coxph()</code> (IV)</a></li>
+  <li><a href="#software-survivalcoxph-v" id="toc-software-survivalcoxph-v" class="nav-link" data-scroll-target="#software-survivalcoxph-v">Software: <code>survival::coxph()</code> (V)</a></li>
+  <li><a href="#example-stanford-heart-study-i" id="toc-example-stanford-heart-study-i" class="nav-link" data-scroll-target="#example-stanford-heart-study-i">Example: Stanford Heart Study (I)</a></li>
+  <li><a href="#example-stanford-heart-study-ii" id="toc-example-stanford-heart-study-ii" class="nav-link" data-scroll-target="#example-stanford-heart-study-ii">Example: Stanford Heart Study (II)</a></li>
+  <li><a href="#example-stanford-heart-study-iii" id="toc-example-stanford-heart-study-iii" class="nav-link" data-scroll-target="#example-stanford-heart-study-iii">Example: Stanford Heart Study (III)</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a>
+  <ul>
+  <li><a href="#notes-i" id="toc-notes-i" class="nav-link" data-scroll-target="#notes-i">Notes (I)</a></li>
+  <li><a href="#notes-ii" id="toc-notes-ii" class="nav-link" data-scroll-target="#notes-ii">Notes (II)</a></li>
+  <li><a href="#summary-i" id="toc-summary-i" class="nav-link" data-scroll-target="#summary-i">Summary (I)</a></li>
+  <li><a href="#summary-ii" id="toc-summary-ii" class="nav-link" data-scroll-target="#summary-ii">Summary (II)</a></li>
+  <li><a href="#hw3-due-mar-5" id="toc-hw3-due-mar-5" class="nav-link" data-scroll-target="#hw3-due-mar-5">HW3 (Due Mar 5)</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="chap4.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Applied Survival Analysis</h1>
+<p class="subtitle lead">Chapter 4 - Cox Proportional Hazards Regression</p>
 </div>
-        <p class="quarto-title-affiliation">
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Lu Mao <a href="mailto:lmao@biostat.wisc.edu" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
             Department of Biostatistics &amp; Medical Informatics
           </p>
-        <p class="quarto-title-affiliation">
+        <p class="affiliation">
             University of Wisconsin-Madison
           </p>
-    </div>
-</div>
+      </div>
+  </div>
 
-</section>
-<section id="outline" class="slide level2">
-<h2>Outline</h2>
-<div>
-<ol type="1">
-<li class="fragment"><p>Model specification</p></li>
-<li class="fragment"><p>Partial-likelihood estimation and inference</p></li>
-<li class="fragment"><p>Residual analysis and goodness-of-fit</p></li>
-<li class="fragment"><p>Time-dependent covariates</p></li>
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="outline" class="level2">
+<h2 class="anchored" data-anchor-id="outline">Outline</h2>
+<div class="incremental">
+<ol class="incremental" type="1">
+<li><p>Model specification</p></li>
+<li><p>Partial-likelihood estimation and inference</p></li>
+<li><p>Residual analysis and goodness-of-fit</p></li>
+<li><p>Time-dependent covariates</p></li>
 </ol>
 </div>
 <p><span class="math display">\[\newcommand{\d}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\T}{{\rm T}}\]</span> <span class="math display">\[\newcommand{\dd}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\pr}{{\rm pr}}\]</span> <span class="math display">\[\newcommand{\var}{{\rm var}}\]</span> <span class="math display">\[\newcommand{\se}{{\rm se}}\]</span> <span class="math display">\[\newcommand{\indep}{\perp \!\!\! \perp}\]</span> <span class="math display">\[\newcommand{\Pn}{n^{-1}\sum_{i=1}^n}\]</span></p>
 </section>
-<section>
-<section id="the-cox-model" class="title-slide slide level1 center">
+<section id="the-cox-model" class="level1">
 <h1>The Cox Model</h1>
-
-</section>
-<section id="regression-modeling" class="slide level2">
-<h2>Regression Modeling</h2>
+<section id="regression-modeling" class="level2">
+<h2 class="anchored" data-anchor-id="regression-modeling">Regression Modeling</h2>
 <div class="fragment">
 <ul>
 <li><strong>Regression vs testing</strong>
@@ -274,8 +438,8 @@ Lu Mao
 </ul>
 </div>
 </section>
-<section id="cox-proportional-hazards-model" class="slide level2">
-<h2>Cox Proportional Hazards Model</h2>
+<section id="cox-proportional-hazards-model" class="level2">
+<h2 class="anchored" data-anchor-id="cox-proportional-hazards-model">Cox Proportional Hazards Model</h2>
 <div class="fragment">
 <ul>
 <li><strong>Model specification</strong> <span class="math display">\[\begin{equation}\label{eq:cox:model_spec}
@@ -301,8 +465,8 @@ Lu Mao
 </ul>
 </div>
 </section>
-<section id="parametric-sub-model" class="slide level2">
-<h2>Parametric Sub-Model</h2>
+<section id="parametric-sub-model" class="level2">
+<h2 class="anchored" data-anchor-id="parametric-sub-model">Parametric Sub-Model</h2>
 <div class="fragment">
 <ul>
 <li><p><strong>Parametrize baseline function</strong> <span class="math display">\[\begin{equation}\label{eq:cox:ph_param}
@@ -329,8 +493,8 @@ Lu Mao
 </ul>
 </div>
 </section>
-<section id="censored-data-and-assumption" class="slide level2">
-<h2>Censored Data and Assumption</h2>
+<section id="censored-data-and-assumption" class="level2">
+<h2 class="anchored" data-anchor-id="censored-data-and-assumption">Censored Data and Assumption</h2>
 <div class="fragment">
 <ul>
 <li><strong>Observed data</strong> <span class="math display">\[\begin{equation}\label{eq:cox:obs_data}
@@ -353,8 +517,8 @@ Lu Mao
 </ul>
 </div>
 </section>
-<section id="parametric-mle" class="slide level2">
-<h2>Parametric MLE</h2>
+<section id="parametric-mle" class="level2">
+<h2 class="anchored" data-anchor-id="parametric-mle">Parametric MLE</h2>
 <div class="fragment">
 <ul>
 <li><strong>General form</strong> of score function (Chapter 2)
@@ -376,8 +540,8 @@ Lu Mao
 </ul>
 </div>
 </section>
-<section id="semiparametric-model" class="slide level2">
-<h2>Semiparametric Model</h2>
+<section id="semiparametric-model" class="level2">
+<h2 class="anchored" data-anchor-id="semiparametric-model">Semiparametric Model</h2>
 <div class="fragment">
 <ul>
 <li><strong>Parametric constraints</strong>
@@ -405,14 +569,12 @@ Lu Mao
 </ul></li>
 </ul>
 </div>
-</section></section>
-<section>
-<section id="partial-likelihood" class="title-slide slide level1 center">
-<h1>Partial Likelihood</h1>
-
 </section>
-<section id="set-up" class="slide level2">
-<h2>Set-up</h2>
+</section>
+<section id="partial-likelihood" class="level1">
+<h1>Partial Likelihood</h1>
+<section id="set-up" class="level2">
+<h2 class="anchored" data-anchor-id="set-up">Set-up</h2>
 <div class="fragment">
 <ul>
 <li>Observed event times <span class="math inline">\(t_1&lt;\cdots&lt;t_m\)</span>
@@ -423,43 +585,43 @@ Lu Mao
 </ul></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/cox_time_points.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
+<figure class="figure">
+<p><img src="images/cox_time_points.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="conditional-information" class="slide level2">
-<h2>Conditional Information</h2>
-<div>
-<ul>
-<li class="fragment"><strong>Data most informative of</strong> <span class="math inline">\(\beta\)</span>
-<ul>
-<li class="fragment">Difference in risk between covariate groups</li>
-<li class="fragment">Identity of failed subject (<span class="math inline">\(\mathcal F_j\)</span>) given a failure (<span class="math inline">\(d_j=1\)</span>) among those at risk (<span class="math inline">\(\mathcal R_j\)</span>) <span class="math display">\[\begin{align}\label{eq:cox:cond_lik}
+<section id="conditional-information" class="level2">
+<h2 class="anchored" data-anchor-id="conditional-information">Conditional Information</h2>
+<div class="incremental">
+<ul class="incremental">
+<li><strong>Data most informative of</strong> <span class="math inline">\(\beta\)</span>
+<ul class="incremental">
+<li>Difference in risk between covariate groups</li>
+<li>Identity of failed subject (<span class="math inline">\(\mathcal F_j\)</span>) given a failure (<span class="math inline">\(d_j=1\)</span>) among those at risk (<span class="math inline">\(\mathcal R_j\)</span>) <span class="math display">\[\begin{align}\label{eq:cox:cond_lik}
 \pr(\mathcal F_j\mid \mathcal R_j,d_j=1)&amp;=\frac{\pr(\mbox{Subject $(j)$ fails given at risk at $t_j$})}{\pr(\mbox{One in $\mathcal R_j$ fails given all at risk at $t_j$})}\notag\\
 &amp;\approx\frac{\lambda(t_j\mid Z_{(j)})\dd t_j}{\sum_{i\in\mathcal R_j}\lambda(t_j\mid Z_i)\dd t_j}\notag\\
 &amp;=\frac{\exp(\beta^\T Z_{(j)})\lambda_0(t)\dd t_j}{\sum_{i\in\mathcal R_j}\exp(\beta^\T Z_i)\lambda_0(t)\dd t_j}\notag\\
 &amp;=\frac{\exp(\beta^\T Z_{(j)})}{\sum_{i\in\mathcal R_j}\exp(\beta^\T Z_i)}
 \end{align}\]</span>
-<ul>
-<li class="fragment">Indeed a function only of <span class="math inline">\(\beta\)</span></li>
+<ul class="incremental">
+<li>Indeed a function only of <span class="math inline">\(\beta\)</span></li>
 </ul></li>
 </ul></li>
 </ul>
 </div>
 </section>
-<section id="partial-likelihood-construction" class="slide level2">
-<h2>Partial Likelihood Construction</h2>
-<div>
-<ul>
-<li class="fragment"><strong>Combine over time</strong>
-<ul>
-<li class="fragment"><p><strong>Partial likelihood</strong> <span class="math display">\[\begin{align*}
+<section id="partial-likelihood-construction" class="level2">
+<h2 class="anchored" data-anchor-id="partial-likelihood-construction">Partial Likelihood Construction</h2>
+<div class="incremental">
+<ul class="incremental">
+<li><strong>Combine over time</strong>
+<ul class="incremental">
+<li><p><strong>Partial likelihood</strong> <span class="math display">\[\begin{align*}
 PL_n(\beta)=\prod_{j=1}^m\pr(\mathcal F_j\mid \mathcal R_j,d_j=1)
 =\prod_{j=1}^m\frac{\exp(\beta^\T Z_{(j)})}{\sum_{i\in\mathcal R_j}\exp(\beta^\T Z_i)}
 \end{align*}\]</span></p></li>
-<li class="fragment"><p><strong>Log-partial likelihood</strong> <span class="math display">\[\begin{align}\label{eq:cox:pln}
+<li><p><strong>Log-partial likelihood</strong> <span class="math display">\[\begin{align}\label{eq:cox:pln}
 pl_n(\beta)=n^{-1}\log PL_n(\beta)&amp;=n^{-1}\sum_{j=1}^m\left\{\beta^\T Z_{(j)}-\log\sum_{i\in\mathcal R_j}\exp(\beta^\T Z_i)\right\}\notag\\
 &amp;= n^{-1}\sum_{i=1}^n \delta_i\left\{\beta^\T Z_i- \log\sum_{j=1}^n I(X_j\geq X_i)\exp(\beta^\T Z_j) \right\}\notag\\
 &amp;=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{\beta^\T Z_i- \log\sum_{j=1}^n I(X_j\geq t)\exp(\beta^\T Z_j) \right\}\dd N_i(t).
@@ -468,48 +630,48 @@ pl_n(\beta)=n^{-1}\log PL_n(\beta)&amp;=n^{-1}\sum_{j=1}^m\left\{\beta^\T Z_{(j)
 </ul>
 </div>
 </section>
-<section id="maximum-partial-likelihood-mple" class="slide level2">
-<h2>Maximum Partial-Likelihood (MPLE)</h2>
-<div>
-<ul>
-<li class="fragment"><strong>Estimator</strong>: <span class="math inline">\(\hat\beta=\arg\max_\beta pl_n(\beta)\)</span>
-<ul>
-<li class="fragment"><span class="math inline">\(pl_n(\beta)\approx\)</span> log-likelihood of a parametric model</li>
-<li class="fragment"><strong>Partial-likelihood score</strong> <span class="math display">\[\begin{equation}\label{eq:cox:pl_score}
+<section id="maximum-partial-likelihood-mple" class="level2">
+<h2 class="anchored" data-anchor-id="maximum-partial-likelihood-mple">Maximum Partial-Likelihood (MPLE)</h2>
+<div class="incremental">
+<ul class="incremental">
+<li><strong>Estimator</strong>: <span class="math inline">\(\hat\beta=\arg\max_\beta pl_n(\beta)\)</span>
+<ul class="incremental">
+<li><span class="math inline">\(pl_n(\beta)\approx\)</span> log-likelihood of a parametric model</li>
+<li><strong>Partial-likelihood score</strong> <span class="math display">\[\begin{equation}\label{eq:cox:pl_score}
 U_n(\beta)=\frac{\partial}{\partial\beta} pl_n(\beta)
 =n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i- \frac{\sum_{j=1}^n I(X_j\geq t)Z_j\exp(\beta^\T Z_j)}{\sum_{j=1}^n I(X_j\geq t)\exp(\beta^\T Z_j)}
 \right\}\dd N_i(t)
 \end{equation}\]</span>
-<ul>
-<li class="fragment">Solve <span class="math inline">\(U_n(\hat\beta)=0\)</span> (by Newton-Raphson)</li>
+<ul class="incremental">
+<li>Solve <span class="math inline">\(U_n(\hat\beta)=0\)</span> (by Newton-Raphson)</li>
 </ul></li>
-<li class="fragment"><strong>Variance by inverse “information”</strong>
-<ul>
-<li class="fragment"><span class="math inline">\(\hat\var(\hat\beta)=n^{-1}\hat{\mathcal I}^{-1}\)</span></li>
-<li class="fragment"><span class="math inline">\(\hat{\mathcal I}=-\partial U_n(\hat\beta)/\partial\beta\)</span></li>
+<li><strong>Variance by inverse “information”</strong>
+<ul class="incremental">
+<li><span class="math inline">\(\hat\var(\hat\beta)=n^{-1}\hat{\mathcal I}^{-1}\)</span></li>
+<li><span class="math inline">\(\hat{\mathcal I}=-\partial U_n(\hat\beta)/\partial\beta\)</span></li>
 </ul></li>
 </ul></li>
 </ul>
 </div>
 </section>
-<section id="martingale-framework" class="slide level2">
-<h2>Martingale Framework</h2>
-<div>
-<ul>
-<li class="fragment"><strong>Equivalently</strong> <span class="math display">\[\begin{equation}\label{eq:cox:pl_score_mart}
+<section id="martingale-framework" class="level2">
+<h2 class="anchored" data-anchor-id="martingale-framework">Martingale Framework</h2>
+<div class="incremental">
+<ul class="incremental">
+<li><strong>Equivalently</strong> <span class="math display">\[\begin{equation}\label{eq:cox:pl_score_mart}
 U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i- \frac{\sum_{j=1}^n I(X_j\geq t)Z_j\exp(\beta^\T Z_j)}{\sum_{j=1}^n I(X_j\geq t)\exp(\beta^\T Z_j)}
 \right\}\dd M_i(t;\beta,\Lambda_0),
 \end{equation}\]</span>
-<ul>
-<li class="fragment"><span class="math inline">\(\dd M_i(t;\beta,\Lambda_0)=\dd N_i(t)-I(X_i\geq t)\exp(\beta^\T Z_i)\dd \Lambda_0(t)\)</span></li>
-<li class="fragment"><span class="math inline">\(\var\{U_n(\beta)\}\)</span> by variance formula for martingale integrals</li>
-<li class="fragment">Justifies <span class="math inline">\(\hat\var(\hat\beta)=n^{-1}\hat{\mathcal I}^{-1}\)</span></li>
+<ul class="incremental">
+<li><span class="math inline">\(\dd M_i(t;\beta,\Lambda_0)=\dd N_i(t)-I(X_i\geq t)\exp(\beta^\T Z_i)\dd \Lambda_0(t)\)</span></li>
+<li><span class="math inline">\(\var\{U_n(\beta)\}\)</span> by variance formula for martingale integrals</li>
+<li>Justifies <span class="math inline">\(\hat\var(\hat\beta)=n^{-1}\hat{\mathcal I}^{-1}\)</span></li>
 </ul></li>
 </ul>
 </div>
 </section>
-<section id="inference-on-beta" class="slide level2">
-<h2>Inference on <span class="math inline">\(\beta\)</span></h2>
+<section id="inference-on-beta" class="level2">
+<h2 class="anchored" data-anchor-id="inference-on-beta">Inference on <span class="math inline">\(\beta\)</span></h2>
 <div class="fragment">
 <ul>
 <li><strong>Individual hazard ratio</strong>: <span class="math inline">\(\exp(\beta_k)\)</span> <span class="math inline">\((k=1,\ldots, p)\)</span>
@@ -537,24 +699,24 @@ H_0:\beta_{(q)}=(\beta_1,\ldots,\beta_q)^\T=0
 </ul>
 </div>
 </section>
-<section id="breslow-estimator" class="slide level2">
-<h2>Breslow Estimator</h2>
-<div>
-<ul>
-<li class="fragment"><strong>Cumulative baseline function</strong> <span class="math inline">\(\Lambda_0(t)\)</span>
-<ul>
-<li class="fragment">By <span class="math inline">\(E\{\dd M_i(t;\beta,\Lambda_0)\}=0\)</span>: <span class="math display">\[\begin{equation}\label{eq:cox:Lambda}
+<section id="breslow-estimator" class="level2">
+<h2 class="anchored" data-anchor-id="breslow-estimator">Breslow Estimator</h2>
+<div class="incremental">
+<ul class="incremental">
+<li><strong>Cumulative baseline function</strong> <span class="math inline">\(\Lambda_0(t)\)</span>
+<ul class="incremental">
+<li>By <span class="math inline">\(E\{\dd M_i(t;\beta,\Lambda_0)\}=0\)</span>: <span class="math display">\[\begin{equation}\label{eq:cox:Lambda}
 \dd \Lambda_0(t)=\frac{E\{\dd N_i(t)\}}{E\{I(X_i\geq t)\exp(\beta^\T Z_i)\}}.
 \end{equation}\]</span></li>
-<li class="fragment"><strong>Breslow estimator</strong> <span class="math display">\[\begin{equation}\label{eq:cox:breslow}
+<li><strong>Breslow estimator</strong> <span class="math display">\[\begin{equation}\label{eq:cox:breslow}
 \hat\Lambda_0(t)=\int_0^t\frac{\sum_{i=1}^n\dd N_i(s)}{\sum_{i=1}^n I(X_i\geq s)\exp(\hat\beta^\T Z_i)}.
 \end{equation}\]</span></li>
 </ul></li>
 </ul>
 </div>
 </section>
-<section id="predicting-survival" class="slide level2">
-<h2>Predicting Survival</h2>
+<section id="predicting-survival" class="level2">
+<h2 class="anchored" data-anchor-id="predicting-survival">Predicting Survival</h2>
 <div class="fragment">
 <ul>
 <li><strong>Model-based survival function for given</strong> <span class="math inline">\(z\)</span> <span class="math display">\[
@@ -564,23 +726,23 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 <li>Plug in parameter estimates <span class="math display">\[S(t\mid z;\hat\beta,\hat\Lambda_0)\]</span></li>
 </ul></li>
 </ul>
-<div class="callout callout-note callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Exercise: Conditional survival</strong></p>
+<div class="callout-title-container flex-fill">
+Exercise: Conditional survival
 </div>
-<div class="callout-content">
+</div>
+<div class="callout-body-container callout-body">
 <p>A patient with covariate value <span class="math inline">\(z\)</span> is censored at time <span class="math inline">\(c\)</span>. Use the fit model to predict his/her future survival probabilities.</p>
 </div>
 </div>
 </div>
-</div>
 </section>
-<section id="stratified-model" class="slide level2">
-<h2>Stratified Model</h2>
+<section id="stratified-model" class="level2">
+<h2 class="anchored" data-anchor-id="stratified-model">Stratified Model</h2>
 <div class="fragment">
 <ul>
 <li><strong>Stratification</strong>: within-stratum comparison
@@ -609,17 +771,17 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 </ul>
 </div>
 </section>
-<section id="software-survivalcoxph-i" class="slide level2">
-<h2>Software: <code>survival::coxph()</code> (I)</h2>
+<section id="software-survivalcoxph-i" class="level2">
+<h2 class="anchored" data-anchor-id="software-survivalcoxph-i">Software: <code>survival::coxph()</code> (I)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Basic syntax</strong> for Cox model</li>
 </ul>
 <div class="big-code">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co"># Fit (time, status) vs covariates stratified by str_var</span></span>
-<span id="cb1-2"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates </span>
-<span id="cb1-3"><a></a>             <span class="sc">+</span> <span class="fu">strata</span>(str_var))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit (time, status) vs covariates stratified by str_var</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> <span class="fu">strata</span>(str_var))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -642,16 +804,16 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 </ul>
 </div>
 </section>
-<section id="software-survivalcoxph-ii" class="slide level2">
-<h2>Software: <code>survival::coxph()</code> (II)</h2>
+<section id="software-survivalcoxph-ii" class="level2">
+<h2 class="anchored" data-anchor-id="software-survivalcoxph-ii">Software: <code>survival::coxph()</code> (II)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Breslow estimates</strong> <span class="math inline">\(\hat\Lambda_0(t)\)</span></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="co"># obj: coxph object</span></span>
-<span id="cb2-2"><a></a><span class="co"># centered = FALSE for baseline (Z = 0)</span></span>
-<span id="cb2-3"><a></a>Lambda0 <span class="ot">&lt;-</span> <span class="fu">basehaz</span>(obj, <span class="at">centered =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># obj: coxph object</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># centered = FALSE for baseline (Z = 0)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Lambda0 <span class="ot">&lt;-</span> <span class="fu">basehaz</span>(obj, <span class="at">centered =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
@@ -668,13 +830,13 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 <li><strong>Prediction of survival</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co"># Model-based survival estimates for new observations</span></span>
-<span id="cb3-2"><a></a><span class="fu">survfit</span>(obj, newdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model-based survival estimates for new observations</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">survfit</span>(obj, newdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="software-survivalcoxph-iii" class="slide level2">
-<h2>Software: <code>survival::coxph()</code> (III)</h2>
+<section id="software-survivalcoxph-iii" class="level2">
+<h2 class="anchored" data-anchor-id="software-survivalcoxph-iii">Software: <code>survival::coxph()</code> (III)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Summary</strong>: <code>summary(obj)</code>
@@ -688,100 +850,100 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 <li><strong>Joint test of multiple coefficients</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="1-2|3|4|5-6|7-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># Sample code for testing</span></span>
-<span id="cb4-2"><a></a><span class="co"># H_0: beta_1 = ... =  beta_q = 0</span></span>
-<span id="cb4-3"><a></a>beta_q <span class="ot">&lt;-</span> obj<span class="sc">$</span>coefficients[<span class="dv">1</span><span class="sc">:</span>q] <span class="co"># get beta_(q)</span></span>
-<span id="cb4-4"><a></a>Sigma_q <span class="ot">&lt;-</span> obj<span class="sc">$</span>var[<span class="dv">1</span><span class="sc">:</span>q, <span class="dv">1</span><span class="sc">:</span>q] <span class="co"># get q x q variance matrix</span></span>
-<span id="cb4-5"><a></a><span class="co">#chisq statistic with q d.f.</span></span>
-<span id="cb4-6"><a></a>chi_q <span class="ot">&lt;-</span> <span class="fu">t</span>(beta_q) <span class="sc">%*%</span> <span class="fu">solve</span>(Sigma_q) <span class="sc">%*%</span> beta_q</span>
-<span id="cb4-7"><a></a><span class="co">#p-value</span></span>
-<span id="cb4-8"><a></a>pval <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(chi_q, q)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Sample code for testing</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co"># H_0: beta_1 = ... =  beta_q = 0</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>beta_q <span class="ot">&lt;-</span> obj<span class="sc">$</span>coefficients[<span class="dv">1</span><span class="sc">:</span>q] <span class="co"># get beta_(q)</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>Sigma_q <span class="ot">&lt;-</span> obj<span class="sc">$</span>var[<span class="dv">1</span><span class="sc">:</span>q, <span class="dv">1</span><span class="sc">:</span>q] <span class="co"># get q x q variance matrix</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#chisq statistic with q d.f.</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>chi_q <span class="ot">&lt;-</span> <span class="fu">t</span>(beta_q) <span class="sc">%*%</span> <span class="fu">solve</span>(Sigma_q) <span class="sc">%*%</span> beta_q</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#p-value</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>pval <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(chi_q, q)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="software-gtsummarytbl_regression" class="slide level2">
-<h2>Software: <code>gtsummary::tbl_regression()</code></h2>
+<section id="software-gtsummarytbl_regression" class="level2">
+<h2 class="anchored" data-anchor-id="software-gtsummarytbl_regression">Software: <code>gtsummary::tbl_regression()</code></h2>
 <div class="fragment">
 <ul>
-<li><strong>Summary table</strong>
+<li><p><strong>Summary table</strong></p>
 <ul>
 <li>Specify <code>label = list(...)</code> for custom variable labels</li>
-</ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="1|2-3|4-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="fu">library</span>(gtsummary)</span>
-<span id="cb5-2"><a></a><span class="co"># Fit (time, status) vs covariates stratified by str_var</span></span>
-<span id="cb5-3"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates)</span>
-<span id="cb5-4"><a></a><span class="co"># Summary table</span></span>
-<span id="cb5-5"><a></a><span class="fu">tbl_regression</span>(obj) <span class="co"># default: HR, 95% CI, p-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># Fit (time, status) vs covariates stratified by str_var</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates)</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># Summary table</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="fu">tbl_regression</span>(obj) <span class="co"># default: HR, 95% CI, p-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
 </div>
 </section>
-<section id="example-german-breast-cancer-i" class="slide level2">
-<h2>Example: German Breast Cancer (I)</h2>
+<section id="example-german-breast-cancer-i" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-i">Example: German Breast Cancer (I)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Endpoint</strong>: relapse-free survival</li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/intro_tab1.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
+<figure class="figure">
+<p><img src="images/intro_tab1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-ii" class="slide level2">
-<h2>Example: German Breast Cancer (II)</h2>
+<section id="example-german-breast-cancer-ii" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-ii">Example: German Breast Cancer (II)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Model fitting</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="1-9|11-13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co">#--- Data frame ---------------------</span></span>
-<span id="cb6-2"><a></a><span class="fu">head</span>(df)</span>
-<span id="cb6-3"><a></a><span class="co">#   id      time status hormone age meno size grade nodes prog estrg</span></span>
-<span id="cb6-4"><a></a><span class="co"># 1  1 43.836066      1       1  38    1   18     3     5  141   105</span></span>
-<span id="cb6-5"><a></a><span class="co"># 3  2 46.557377      1       1  52    1   20     1     1   78    14</span></span>
-<span id="cb6-6"><a></a><span class="co"># 5  3 41.934426      1       1  47    1   30     2     1  422    89</span></span>
-<span id="cb6-7"><a></a><span class="co"># 7  4  4.852459      0       1  40    1   24     1     3   25    11</span></span>
-<span id="cb6-8"><a></a><span class="co"># 8  5 61.081967      0       2  64    2   19     2     1   19     9</span></span>
-<span id="cb6-9"><a></a><span class="co"># 9  6 63.377049      0       2  49    2   56     1     3  356    64</span></span>
-<span id="cb6-10"><a></a></span>
-<span id="cb6-11"><a></a><span class="co">#--- Model fitting ------------------</span></span>
-<span id="cb6-12"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status)<span class="sc">~</span> hormone <span class="sc">+</span> meno <span class="sc">+</span> age <span class="sc">+</span> size <span class="sc">+</span> grade</span>
-<span id="cb6-13"><a></a>           <span class="sc">+</span> prog <span class="sc">+</span> estrg, <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#--- Data frame ---------------------</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">head</span>(df)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#   id      time status hormone age meno size grade nodes prog estrg</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co"># 1  1 43.836066      1       1  38    1   18     3     5  141   105</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co"># 3  2 46.557377      1       1  52    1   20     1     1   78    14</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co"># 5  3 41.934426      1       1  47    1   30     2     1  422    89</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co"># 7  4  4.852459      0       1  40    1   24     1     3   25    11</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co"># 8  5 61.081967      0       2  64    2   19     2     1   19     9</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co"># 9  6 63.377049      0       2  49    2   56     1     3  356    64</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#--- Model fitting ------------------</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status)<span class="sc">~</span> hormone <span class="sc">+</span> meno <span class="sc">+</span> age <span class="sc">+</span> size <span class="sc">+</span> grade</span>
+<span id="cb6-13"><a href="#cb6-13"></a>           <span class="sc">+</span> prog <span class="sc">+</span> estrg, <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-iii" class="slide level2">
-<h2>Example: German Breast Cancer (III)</h2>
+<section id="example-german-breast-cancer-iii" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-iii">Example: German Breast Cancer (III)</h2>
 <div class="fragment">
 <ul>
-<li><strong>Summary results</strong>
+<li><p><strong>Summary results</strong></p>
 <ul>
 <li>Hormone-treated women 70.1% times as likely to relapse/die as untreated</li>
-</ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co">#--- Summary results ------------------</span></span>
-<span id="cb7-2"><a></a><span class="fu">summary</span>(obj)</span>
-<span id="cb7-3"><a></a><span class="co">#   n= 686, number of events= 299 </span></span>
-<span id="cb7-4"><a></a><span class="co">#                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    </span></span>
-<span id="cb7-5"><a></a><span class="co"># hormone2 -0.3552391  0.7010058  0.1292278 -2.749  0.00598 ** </span></span>
-<span id="cb7-6"><a></a><span class="co"># meno2     0.2683165  1.3077610  0.1840516  1.458  0.14489    </span></span>
-<span id="cb7-7"><a></a><span class="co"># age      -0.0087937  0.9912449  0.0093783 -0.938  0.34842    </span></span>
-<span id="cb7-8"><a></a><span class="co"># size      0.0153213  1.0154392  0.0036538  4.193 2.75e-05 ***</span></span>
-<span id="cb7-9"><a></a><span class="co"># grade2    0.7078888  2.0297017  0.2485544  2.848  0.00440 ** </span></span>
-<span id="cb7-10"><a></a><span class="co"># grade3    0.8171706  2.2640847  0.2689544  3.038  0.00238 ** </span></span>
-<span id="cb7-11"><a></a><span class="co"># prog     -0.0022942  0.9977084  0.0005775 -3.972 7.12e-05 ***</span></span>
-<span id="cb7-12"><a></a><span class="co"># estrg     0.0001788  1.0001789  0.0004686  0.382  0.70274    </span></span>
-<span id="cb7-13"><a></a><span class="co"># ---</span></span>
-<span id="cb7-14"><a></a><span class="co"># Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#--- Summary results ------------------</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   n= 686, number of events= 299 </span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># hormone2 -0.3552391  0.7010058  0.1292278 -2.749  0.00598 ** </span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># meno2     0.2683165  1.3077610  0.1840516  1.458  0.14489    </span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># age      -0.0087937  0.9912449  0.0093783 -0.938  0.34842    </span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># size      0.0153213  1.0154392  0.0036538  4.193 2.75e-05 ***</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># grade2    0.7078888  2.0297017  0.2485544  2.848  0.00440 ** </span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># grade3    0.8171706  2.2640847  0.2689544  3.038  0.00238 ** </span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># prog     -0.0022942  0.9977084  0.0005775 -3.972 7.12e-05 ***</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># estrg     0.0001788  1.0001789  0.0004686  0.382  0.70274    </span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
 </div>
 </section>
-<section id="example-german-breast-cancer-v" class="slide level2">
-<h2>Example: German Breast Cancer (V)</h2>
+<section id="example-german-breast-cancer-v" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-v">Example: German Breast Cancer (V)</h2>
 <div class="fragment">
 <ul>
 <li><p><strong>Tumor grade?</strong></p>
@@ -790,48 +952,49 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 <li><span class="math inline">\(\chi_2^2=9.4\)</span>, <span class="math inline">\(p=0.009\)</span></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="1-4|5-8|9-12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co">#--- Wald test on tumor grade ------------------</span></span>
-<span id="cb8-2"><a></a><span class="co"># H_0: beta_5=beta_6=0</span></span>
-<span id="cb8-3"><a></a>beta_q <span class="ot">&lt;-</span> obj<span class="sc">$</span>coefficients[<span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>]</span>
-<span id="cb8-4"><a></a>Sigma_q <span class="ot">&lt;-</span> obj<span class="sc">$</span>var[<span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>,<span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>]</span>
-<span id="cb8-5"><a></a><span class="co">#chisq statistic with 2 d.f.</span></span>
-<span id="cb8-6"><a></a>chisq2 <span class="ot">&lt;-</span> <span class="fu">t</span>(beta_q) <span class="sc">%*%</span> <span class="fu">solve</span>(Sigma_q) <span class="sc">%*%</span> beta_q</span>
-<span id="cb8-7"><a></a>chisq2</span>
-<span id="cb8-8"><a></a><span class="co"># [1,] 9.428787</span></span>
-<span id="cb8-9"><a></a><span class="co">#p-value</span></span>
-<span id="cb8-10"><a></a>pval <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(chisq2, <span class="dv">2</span>)</span>
-<span id="cb8-11"><a></a>pval</span>
-<span id="cb8-12"><a></a><span class="co"># [1,] 0.008965302</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">#--- Wald test on tumor grade ------------------</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co"># H_0: beta_5=beta_6=0</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>beta_q <span class="ot">&lt;-</span> obj<span class="sc">$</span>coefficients[<span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb8-4"><a href="#cb8-4"></a>Sigma_q <span class="ot">&lt;-</span> obj<span class="sc">$</span>var[<span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>,<span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#chisq statistic with 2 d.f.</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>chisq2 <span class="ot">&lt;-</span> <span class="fu">t</span>(beta_q) <span class="sc">%*%</span> <span class="fu">solve</span>(Sigma_q) <span class="sc">%*%</span> beta_q</span>
+<span id="cb8-7"><a href="#cb8-7"></a>chisq2</span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co"># [1,] 9.428787</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#p-value</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>pval <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(chisq2, <span class="dv">2</span>)</span>
+<span id="cb8-11"><a href="#cb8-11"></a>pval</span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co"># [1,] 0.008965302</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
 </div>
 </section>
-<section id="example-german-breast-cancer-vi" class="slide level2">
-<h2>Example: German Breast Cancer (VI)</h2>
+<section id="example-german-breast-cancer-vi" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-vi">Example: German Breast Cancer (VI)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Baseline</strong> <span class="math inline">\(\hat\Lambda_0(t)\)</span></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="co">#--- Breslow estimates of baseline function ------------------</span></span>
-<span id="cb9-2"><a></a>Lambda0 <span class="ot">&lt;-</span> <span class="fu">basehaz</span>(obj, <span class="at">centered =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-3"><a></a><span class="co"># Plot the baseline hazard function</span></span>
-<span id="cb9-4"><a></a><span class="fu">plot</span>(<span class="fu">stepfun</span>(Lambda0<span class="sc">$</span>time, <span class="fu">c</span>(<span class="dv">0</span>, Lambda0<span class="sc">$</span>hazard)), <span class="at">do.points =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb9-5"><a></a>     <span class="at">cex.axis =</span> <span class="fl">0.9</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">frame.plot =</span> <span class="cn">FALSE</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
-<span id="cb9-6"><a></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.8</span>), <span class="at">xlab =</span> <span class="st">"Time (months)"</span>, </span>
-<span id="cb9-7"><a></a>     <span class="at">ylab =</span> <span class="st">"Baseline cumulative hazard"</span>, <span class="at">main =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#--- Breslow estimates of baseline function ------------------</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Lambda0 <span class="ot">&lt;-</span> <span class="fu">basehaz</span>(obj, <span class="at">centered =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the baseline hazard function</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">stepfun</span>(Lambda0<span class="sc">$</span>time, <span class="fu">c</span>(<span class="dv">0</span>, Lambda0<span class="sc">$</span>hazard)), <span class="at">do.points =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.axis =</span> <span class="fl">0.9</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">frame.plot =</span> <span class="cn">FALSE</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.8</span>), <span class="at">xlab =</span> <span class="st">"Time (months)"</span>, </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Baseline cumulative hazard"</span>, <span class="at">main =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
-<div class="callout callout-note callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Exercise: Survival prediction</strong></p>
+<div class="callout-title-container flex-fill">
+Exercise: Survival prediction
 </div>
-<div class="callout-content">
+</div>
+<div class="callout-body-container callout-body">
 <p>Predict survival function for arbitrary <span class="math inline">\(z\)</span>.</p>
 <ul>
 <li>Use <code>obj$coefficients</code> (<span class="math inline">\(\hat\beta\)</span>) and <code>Lambda0</code> (<span class="math inline">\(\hat\Lambda_0(t)\)</span>)</li>
@@ -840,28 +1003,25 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 </div>
 </div>
 </div>
-</div>
 </section>
-<section id="example-german-breast-cancer-vii" class="slide level2">
-<h2>Example: German Breast Cancer (VII)</h2>
+<section id="example-german-breast-cancer-vii" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-vii">Example: German Breast Cancer (VII)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Baseline</strong> <span class="math inline">\(\hat\Lambda_0(t)\)</span></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/cox_gbc_basehaz.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
+<figure class="figure">
+<p><img src="images/cox_gbc_basehaz.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
 </figure>
 </div>
 </div>
-</section></section>
-<section>
-<section id="residual-analyses" class="title-slide slide level1 center">
-<h1>Residual Analyses</h1>
-
 </section>
-<section id="assumptions-in-cox-model" class="slide level2">
-<h2>Assumptions in Cox Model</h2>
+</section>
+<section id="residual-analyses" class="level1">
+<h1>Residual Analyses</h1>
+<section id="assumptions-in-cox-model" class="level2">
+<h2 class="anchored" data-anchor-id="assumptions-in-cox-model">Assumptions in Cox Model</h2>
 <div class="fragment">
 <ul>
 <li><strong>Cox model assumptions</strong> <span class="math display">\[\begin{equation}
@@ -885,8 +1045,8 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 </ul>
 </div>
 </section>
-<section id="cox-snell-residuals-i" class="slide level2">
-<h2>Cox-Snell Residuals (I)</h2>
+<section id="cox-snell-residuals-i" class="level2">
+<h2 class="anchored" data-anchor-id="cox-snell-residuals-i">Cox-Snell Residuals (I)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Standard result</strong>
@@ -912,8 +1072,8 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 </ul>
 </div>
 </section>
-<section id="cox-snell-residuals-ii" class="slide level2">
-<h2>Cox-Snell Residuals (II)</h2>
+<section id="cox-snell-residuals-ii" class="level2">
+<h2 class="anchored" data-anchor-id="cox-snell-residuals-ii">Cox-Snell Residuals (II)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Nelsen-Aalen estimates</strong> <span class="math inline">\(\hat\Lambda_{\rm CS}(t)\)</span>
@@ -937,76 +1097,76 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 </ul>
 </div>
 </section>
-<section id="schoenfeld-residuals-i" class="slide level2">
-<h2>Schoenfeld Residuals (I)</h2>
-<div>
-<ul>
-<li class="fragment"><strong>Defined only for failed subjects</strong> <span class="math display">\[\begin{equation}\label{eq:cox:schoenfeld}
+<section id="schoenfeld-residuals-i" class="level2">
+<h2 class="anchored" data-anchor-id="schoenfeld-residuals-i">Schoenfeld Residuals (I)</h2>
+<div class="incremental">
+<ul class="incremental">
+<li><strong>Defined only for failed subjects</strong> <span class="math display">\[\begin{equation}\label{eq:cox:schoenfeld}
 \hat r_i=Z_i-\mathcal E(X_i;\hat\beta) \hspace{10mm} (\delta_i=1; i=1,\ldots,n).
 \end{equation}\]</span>
-<ul>
-<li class="fragment"><span class="math inline">\(\mathcal E(t_j;\beta) = E(Z_{(j)}\mid \mathcal R_j, d_j=1)=\frac{\sum_{j=1}^nI(X_j\geq t)Z_j\exp(\beta^\T Z_j)}{\sum_{j=1}^nI(X_j\geq t)\exp(\beta^\T Z_j)}\)</span></li>
-<li class="fragment">Observed minus (conditionally) expected covariates</li>
-<li class="fragment">Sensitive to proportionality (canceling of <span class="math inline">\(\lambda_0(\cdot)\)</span>)</li>
-<li class="fragment"><span class="math inline">\(\hat r_{ik}\)</span> (rescaled) vs <span class="math inline">\(X_i\)</span>: mean zero if proportionality holds on <span class="math inline">\(Z_{\cdot k}\)</span></li>
-<li class="fragment">Formal <span class="math inline">\(\chi^2\)</span> tests based on the <span class="math inline">\(\hat r_{ik}\)</span> (with proportionality as <span class="math inline">\(H_0\)</span>)
-<ul>
-<li class="fragment">Serve only as <em>guidelines</em> to graphical results</li>
+<ul class="incremental">
+<li><span class="math inline">\(\mathcal E(t_j;\beta) = E(Z_{(j)}\mid \mathcal R_j, d_j=1)=\frac{\sum_{j=1}^nI(X_j\geq t)Z_j\exp(\beta^\T Z_j)}{\sum_{j=1}^nI(X_j\geq t)\exp(\beta^\T Z_j)}\)</span></li>
+<li>Observed minus (conditionally) expected covariates</li>
+<li>Sensitive to proportionality (canceling of <span class="math inline">\(\lambda_0(\cdot)\)</span>)</li>
+<li><span class="math inline">\(\hat r_{ik}\)</span> (rescaled) vs <span class="math inline">\(X_i\)</span>: mean zero if proportionality holds on <span class="math inline">\(Z_{\cdot k}\)</span></li>
+<li>Formal <span class="math inline">\(\chi^2\)</span> tests based on the <span class="math inline">\(\hat r_{ik}\)</span> (with proportionality as <span class="math inline">\(H_0\)</span>)
+<ul class="incremental">
+<li>Serve only as <em>guidelines</em> to graphical results</li>
 </ul></li>
 </ul></li>
 </ul>
 </div>
 </section>
-<section id="schoenfeld-residuals-ii" class="slide level2">
-<h2>Schoenfeld Residuals (II)</h2>
-<div>
-<ul>
-<li class="fragment"><strong>In case of non-proportionality</strong>
-<ul>
-<li class="fragment">HR changes over time</li>
-<li class="fragment">Stratify rather than set as covariate</li>
-<li class="fragment">Include covariate <span class="math inline">\(\times\)</span> time interaction, e.g., <span class="math inline">\(Z_{\cdot k}\log(t)\)</span></li>
-<li class="fragment">Choose alternatives over Cox model (Chapter 5)
-<ul>
-<li class="fragment">Restricted mean life</li>
-<li class="fragment">Additive hazards</li>
-<li class="fragment">Proportional odds</li>
-<li class="fragment">Accelerate failure time (AFT)</li>
+<section id="schoenfeld-residuals-ii" class="level2">
+<h2 class="anchored" data-anchor-id="schoenfeld-residuals-ii">Schoenfeld Residuals (II)</h2>
+<div class="incremental">
+<ul class="incremental">
+<li><strong>In case of non-proportionality</strong>
+<ul class="incremental">
+<li>HR changes over time</li>
+<li>Stratify rather than set as covariate</li>
+<li>Include covariate <span class="math inline">\(\times\)</span> time interaction, e.g., <span class="math inline">\(Z_{\cdot k}\log(t)\)</span></li>
+<li>Choose alternatives over Cox model (Chapter 5)
+<ul class="incremental">
+<li>Restricted mean life</li>
+<li>Additive hazards</li>
+<li>Proportional odds</li>
+<li>Accelerate failure time (AFT)</li>
 </ul></li>
 </ul></li>
 </ul>
 </div>
 </section>
-<section id="martingaledeviance-residuals" class="slide level2">
-<h2>Martingale/Deviance Residuals</h2>
-<div>
-<ul>
-<li class="fragment"><strong>Usual residuals</strong>: observed response minus expected <span class="math display">\[\begin{align*}
+<section id="martingaledeviance-residuals" class="level2">
+<h2 class="anchored" data-anchor-id="martingaledeviance-residuals">Martingale/Deviance Residuals</h2>
+<div class="incremental">
+<ul class="incremental">
+<li><strong>Usual residuals</strong>: observed response minus expected <span class="math display">\[\begin{align*}
 M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\hat\beta^\T Z_i)\dd \hat\Lambda_0(t)\\
 &amp;=\delta_i-\exp(\hat\beta^\T Z_i)\hat\Lambda_0(X_i)
 \end{align*}\]</span>
-<ul>
-<li class="fragment"><span class="math inline">\(\exp(\hat\beta^\T Z_i)\hat\Lambda_0(X_i)\)</span> is Cox-Snell residual</li>
-<li class="fragment"><strong>Functional form of</strong> <span class="math inline">\(Z_{\cdot k}\)</span>: plot <span class="math inline">\(M_i(X_i; \hat\beta,\hat\Lambda_0)\)</span> against <span class="math inline">\(Z_{ik}\)</span> <span class="math inline">\((i=1,\ldots, n)\)</span>
-<ul>
-<li class="fragment">Inappropriate form <span class="math inline">\(\to\)</span> transform by log, square root, power, or grouping</li>
+<ul class="incremental">
+<li><span class="math inline">\(\exp(\hat\beta^\T Z_i)\hat\Lambda_0(X_i)\)</span> is Cox-Snell residual</li>
+<li><strong>Functional form of</strong> <span class="math inline">\(Z_{\cdot k}\)</span>: plot <span class="math inline">\(M_i(X_i; \hat\beta,\hat\Lambda_0)\)</span> against <span class="math inline">\(Z_{ik}\)</span> <span class="math inline">\((i=1,\ldots, n)\)</span>
+<ul class="incremental">
+<li>Inappropriate form <span class="math inline">\(\to\)</span> transform by log, square root, power, or grouping</li>
 </ul></li>
-<li class="fragment"><strong>Link function</strong>: plot <span class="math inline">\(M_i(X_i; \hat\beta,\hat\Lambda_0)\)</span> against <span class="math inline">\(\hat\beta^\T Z_i\)</span></li>
-<li class="fragment"><strong>Deviance residuals</strong>: Standardized/symmetrized martingale residuals <span class="math inline">\(\to\)</span> outlier detection</li>
+<li><strong>Link function</strong>: plot <span class="math inline">\(M_i(X_i; \hat\beta,\hat\Lambda_0)\)</span> against <span class="math inline">\(\hat\beta^\T Z_i\)</span></li>
+<li><strong>Deviance residuals</strong>: Standardized/symmetrized martingale residuals <span class="math inline">\(\to\)</span> outlier detection</li>
 </ul></li>
 </ul>
 </div>
 </section>
-<section id="software-survivalresid-i" class="slide level2">
-<h2>Software: <code>survival::resid()</code> (I)</h2>
+<section id="software-survivalresid-i" class="level2">
+<h2 class="anchored" data-anchor-id="software-survivalresid-i">Software: <code>survival::resid()</code> (I)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Basic syntax for Cox model residuals</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="co"># obj: object returned by coxph()</span></span>
-<span id="cb10-2"><a></a><span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"martingale"</span>, <span class="st">"deviance"</span>, <span class="st">"score"</span>, <span class="st">"schoenfeld"</span>, </span>
-<span id="cb10-3"><a></a>                    <span class="st">"dfbeta"</span>, <span class="st">"dfbetas"</span>, <span class="st">"scaledsch"</span>, <span class="st">"partial"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># obj: object returned by coxph()</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"martingale"</span>, <span class="st">"deviance"</span>, <span class="st">"score"</span>, <span class="st">"schoenfeld"</span>, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"dfbeta"</span>, <span class="st">"dfbetas"</span>, <span class="st">"scaledsch"</span>, <span class="st">"partial"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
@@ -1014,28 +1174,28 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <li><strong>Cox-Snell residuals</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="1-3|4-6|7-10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a><span class="co"># Calculate Cox-Snell by martingale residuals </span></span>
-<span id="cb11-2"><a></a><span class="co"># df: data frame</span></span>
-<span id="cb11-3"><a></a>coxsnellres <span class="ot">&lt;-</span> df<span class="sc">$</span>status <span class="sc">-</span> <span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="st">"martingale"</span>)</span>
-<span id="cb11-4"><a></a><span class="co"># Compute Nelsen-Aalen estimates for cumulative hazard</span></span>
-<span id="cb11-5"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(coxsnellres, df<span class="sc">$</span>status) <span class="sc">~</span> <span class="dv">1</span>)</span>
-<span id="cb11-6"><a></a>Lambda <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(fit<span class="sc">$</span>n.event <span class="sc">/</span> fit<span class="sc">$</span>n.risk)</span>
-<span id="cb11-7"><a></a><span class="co"># Scatter plot</span></span>
-<span id="cb11-8"><a></a><span class="fu">plot</span>(<span class="fu">log</span>(fit<span class="sc">$</span>time), <span class="fu">log</span>(Lambda), <span class="at">xlab =</span> <span class="st">"log(t)"</span>, </span>
-<span id="cb11-9"><a></a>     <span class="at">ylab =</span> <span class="st">"log-cumulative hazard"</span>)</span>
-<span id="cb11-10"><a></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">3</span>) <span class="co"># add a dotted reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Calculate Cox-Snell by martingale residuals </span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co"># df: data frame</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>coxsnellres <span class="ot">&lt;-</span> df<span class="sc">$</span>status <span class="sc">-</span> <span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="st">"martingale"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co"># Compute Nelsen-Aalen estimates for cumulative hazard</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(coxsnellres, df<span class="sc">$</span>status) <span class="sc">~</span> <span class="dv">1</span>)</span>
+<span id="cb11-6"><a href="#cb11-6"></a>Lambda <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(fit<span class="sc">$</span>n.event <span class="sc">/</span> fit<span class="sc">$</span>n.risk)</span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># Scatter plot</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="fu">plot</span>(<span class="fu">log</span>(fit<span class="sc">$</span>time), <span class="fu">log</span>(Lambda), <span class="at">xlab =</span> <span class="st">"log(t)"</span>, </span>
+<span id="cb11-9"><a href="#cb11-9"></a>     <span class="at">ylab =</span> <span class="st">"log-cumulative hazard"</span>)</span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">3</span>) <span class="co"># add a dotted reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="software-survivalcox.zph" class="slide level2">
-<h2>Software: <code>survival::cox.zph()</code></h2>
+<section id="software-survivalcox.zph" class="level2">
+<h2 class="anchored" data-anchor-id="software-survivalcox.zph">Software: <code>survival::cox.zph()</code></h2>
 <div class="fragment">
 <ul>
 <li><strong>Rescaled Schoenfeld residuals</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="co"># rescaled Schoenfeld residuals and tests</span></span>
-<span id="cb12-2"><a></a>sch <span class="ot">&lt;-</span> <span class="fu">cox.zph</span>(obj) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rescaled Schoenfeld residuals and tests</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sch <span class="ot">&lt;-</span> <span class="fu">cox.zph</span>(obj) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
@@ -1050,8 +1210,8 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 </ul>
 </div>
 </section>
-<section id="software-survivalresid-ii" class="slide level2">
-<h2>Software: <code>survival::resid()</code> (II)</h2>
+<section id="software-survivalresid-ii" class="level2">
+<h2 class="anchored" data-anchor-id="software-survivalresid-ii">Software: <code>survival::resid()</code> (II)</h2>
 <div class="fragment">
 <ul>
 <li><p><strong>Martingale/Deviance residuals</strong></p>
@@ -1060,144 +1220,144 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <li><code>zk</code>: name of covariate of interest</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="1-3|4-9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a><span class="co"># Get the residuals</span></span>
-<span id="cb13-2"><a></a>mart_resid <span class="ot">&lt;-</span> <span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="st">'martingale'</span>) <span class="co"># n-vector of martingale</span></span>
-<span id="cb13-3"><a></a>dev_resid <span class="ot">&lt;-</span> <span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="st">'deviance'</span>) <span class="co"># n-vector of deviance</span></span>
-<span id="cb13-4"><a></a><span class="co"># Scatter plot residuals against covariate</span></span>
-<span id="cb13-5"><a></a><span class="fu">plot</span>(df<span class="sc">$</span>zk, mart_resid)</span>
-<span id="cb13-6"><a></a><span class="fu">lines</span>(<span class="fu">lowess</span>(df<span class="sc">$</span>zk, mart_resid)) <span class="co"># add a smooth line through points</span></span>
-<span id="cb13-7"><a></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">3</span>) <span class="co"># add a dotted reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Get the residuals</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>mart_resid <span class="ot">&lt;-</span> <span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="st">'martingale'</span>) <span class="co"># n-vector of martingale</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a>dev_resid <span class="ot">&lt;-</span> <span class="fu">resid</span>(obj, <span class="at">type =</span> <span class="st">'deviance'</span>) <span class="co"># n-vector of deviance</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co"># Scatter plot residuals against covariate</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="fu">plot</span>(df<span class="sc">$</span>zk, mart_resid)</span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(df<span class="sc">$</span>zk, mart_resid)) <span class="co"># add a smooth line through points</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">3</span>) <span class="co"># add a dotted reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
 </div>
 </section>
-<section id="example-german-breast-cancer-viii" class="slide level2">
-<h2>Example: German Breast Cancer (VIII)</h2>
+<section id="example-german-breast-cancer-viii" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-viii">Example: German Breast Cancer (VIII)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Overall fit - Cox-Snell residuals</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="1-4|5-6|7-10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a><span class="co"># Compute the residuals</span></span>
-<span id="cb14-2"><a></a>coxsnellres <span class="ot">&lt;-</span> df<span class="sc">$</span>status<span class="sc">-</span><span class="fu">resid</span>(obj, <span class="at">type=</span><span class="st">"martingale"</span>)</span>
-<span id="cb14-3"><a></a><span class="do">## Then use N-A method to estimate the cumulative </span></span>
-<span id="cb14-4"><a></a><span class="do">## hazard function for residuals</span></span>
-<span id="cb14-5"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(coxsnellres,df<span class="sc">$</span>status) <span class="sc">~</span> <span class="dv">1</span>)</span>
-<span id="cb14-6"><a></a>Htilde <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(fit<span class="sc">$</span>n.event<span class="sc">/</span>fit<span class="sc">$</span>n.risk)</span>
-<span id="cb14-7"><a></a><span class="co"># Scatter plot</span></span>
-<span id="cb14-8"><a></a><span class="fu">plot</span>(<span class="fu">log</span>(fit<span class="sc">$</span>time), <span class="fu">log</span>(Htilde), <span class="at">xlab=</span><span class="st">"log(t)"</span>, <span class="at">frame.plot =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb14-9"><a></a>     <span class="at">ylab=</span><span class="st">"log-cumulative hazard"</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>, <span class="dv">2</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>, <span class="dv">2</span>))</span>
-<span id="cb14-10"><a></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="co"># add a reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Compute the residuals</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>coxsnellres <span class="ot">&lt;-</span> df<span class="sc">$</span>status<span class="sc">-</span><span class="fu">resid</span>(obj, <span class="at">type=</span><span class="st">"martingale"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="do">## Then use N-A method to estimate the cumulative </span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="do">## hazard function for residuals</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a>fit <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(coxsnellres,df<span class="sc">$</span>status) <span class="sc">~</span> <span class="dv">1</span>)</span>
+<span id="cb14-6"><a href="#cb14-6"></a>Htilde <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(fit<span class="sc">$</span>n.event<span class="sc">/</span>fit<span class="sc">$</span>n.risk)</span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co"># Scatter plot</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="fu">plot</span>(<span class="fu">log</span>(fit<span class="sc">$</span>time), <span class="fu">log</span>(Htilde), <span class="at">xlab=</span><span class="st">"log(t)"</span>, <span class="at">frame.plot =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb14-9"><a href="#cb14-9"></a>     <span class="at">ylab=</span><span class="st">"log-cumulative hazard"</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>, <span class="dv">2</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>, <span class="dv">2</span>))</span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="co"># add a reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-ix" class="slide level2">
-<h2>Example: German Breast Cancer (IX)</h2>
+<section id="example-german-breast-cancer-ix" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-ix">Example: German Breast Cancer (IX)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Overall fit - Cox-Snell residuals</strong></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/cox_cox_snell.png" class="quarto-figure quarto-figure-center" style="width:50.0%"></p>
+<figure class="figure">
+<p><img src="images/cox_cox_snell.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-x" class="slide level2">
-<h2>Example: German Breast Cancer (X)</h2>
+<section id="example-german-breast-cancer-x" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-x">Example: German Breast Cancer (X)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Proportionality - Schoenfeld residuals</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a><span class="co"># Rescaled Schoelfeld residuals</span></span>
-<span id="cb15-2"><a></a>sch <span class="ot">&lt;-</span> <span class="fu">cox.zph</span>(obj) </span>
-<span id="cb15-3"><a></a>sch<span class="sc">$</span>table <span class="co"># chi-square tests</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rescaled Schoelfeld residuals</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sch <span class="ot">&lt;-</span> <span class="fu">cox.zph</span>(obj) </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>sch<span class="sc">$</span>table <span class="co"># chi-square tests</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/cox_gbc_sch_tab1.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
+<figure class="figure">
+<p><img src="images/cox_gbc_sch_tab1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-xi" class="slide level2">
-<h2>Example: German Breast Cancer (XI)</h2>
+<section id="example-german-breast-cancer-xi" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-xi">Example: German Breast Cancer (XI)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Proportionality - Schoenfeld residuals</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a><span class="co"># Plot rescaled Schoenfeld residuals for each covariate directly</span></span>
-<span id="cb16-2"><a></a><span class="fu">plot</span>(sch, <span class="at">xlab=</span><span class="st">"Time (months)"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">cex.lab=</span><span class="fl">1.2</span>, <span class="at">cex.axis=</span><span class="fl">1.2</span>,</span>
-<span id="cb16-3"><a></a>     <span class="at">ylab =</span> <span class="fu">c</span>(<span class="st">"Hormone"</span>, <span class="st">"Menopause"</span>, <span class="st">"Age"</span>, <span class="st">"Tumor size"</span>,</span>
-<span id="cb16-4"><a></a>               <span class="st">"Tumor grade"</span>, <span class="st">"Progesterone"</span>, <span class="st">"Estrogen"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot rescaled Schoenfeld residuals for each covariate directly</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sch, <span class="at">xlab=</span><span class="st">"Time (months)"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">cex.lab=</span><span class="fl">1.2</span>, <span class="at">cex.axis=</span><span class="fl">1.2</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">c</span>(<span class="st">"Hormone"</span>, <span class="st">"Menopause"</span>, <span class="st">"Age"</span>, <span class="st">"Tumor size"</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Tumor grade"</span>, <span class="st">"Progesterone"</span>, <span class="st">"Estrogen"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/cox_gbc_sch_plot.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+<figure class="figure">
+<p><img src="images/cox_gbc_sch_plot.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-xii" class="slide level2">
-<h2>Example: German Breast Cancer (XII)</h2>
+<section id="example-german-breast-cancer-xii" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-xii">Example: German Breast Cancer (XII)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Stratification by tumor grade</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a><span class="co"># fit a Cox model stratified by tumor grade</span></span>
-<span id="cb17-2"><a></a>obj_stra <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno</span>
-<span id="cb17-3"><a></a>         <span class="sc">+</span> age <span class="sc">+</span> size <span class="sc">+</span> prog <span class="sc">+</span> estrg <span class="sc">+</span> <span class="fu">strata</span>(grade), <span class="at">data =</span> df)</span>
-<span id="cb17-4"><a></a><span class="fu">cox.zph</span>(obj_stra)<span class="sc">$</span>table <span class="co"># proportionality tests </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a Cox model stratified by tumor grade</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>obj_stra <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>         <span class="sc">+</span> age <span class="sc">+</span> size <span class="sc">+</span> prog <span class="sc">+</span> estrg <span class="sc">+</span> <span class="fu">strata</span>(grade), <span class="at">data =</span> df)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cox.zph</span>(obj_stra)<span class="sc">$</span>table <span class="co"># proportionality tests </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/cox_gbc_sch_tab2.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
+<figure class="figure">
+<p><img src="images/cox_gbc_sch_tab2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-xiii" class="slide level2">
-<h2>Example: German Breast Cancer (XIII)</h2>
+<section id="example-german-breast-cancer-xiii" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-xiii">Example: German Breast Cancer (XIII)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Covariate form - Martingale (deviance) residuals</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a><span class="do">## Martingale residuals</span></span>
-<span id="cb18-2"><a></a>mart_resid <span class="ot">&lt;-</span> <span class="fu">resid</span>(obj_stra,<span class="at">type =</span> <span class="st">'martingale'</span>)</span>
-<span id="cb18-3"><a></a><span class="co">#plot residuals against, e.g., age</span></span>
-<span id="cb18-4"><a></a><span class="fu">plot</span>(df<span class="sc">$</span>age, mart_resid, <span class="at">main=</span><span class="st">'Age'</span>, <span class="at">cex.lab=</span><span class="fl">1.2</span>, <span class="at">cex.axis=</span><span class="fl">1.2</span>,</span>
-<span id="cb18-5"><a></a>     <span class="at">xlab=</span><span class="st">"Age (years)"</span>, <span class="at">ylab=</span><span class="st">"Martingale residuals"</span>)</span>
-<span id="cb18-6"><a></a><span class="fu">lines</span>(<span class="fu">lowess</span>(df<span class="sc">$</span>age, mart_resid), <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add a smooth line</span></span>
-<span id="cb18-7"><a></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add a reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Martingale residuals</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mart_resid <span class="ot">&lt;-</span> <span class="fu">resid</span>(obj_stra,<span class="at">type =</span> <span class="st">'martingale'</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#plot residuals against, e.g., age</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(df<span class="sc">$</span>age, mart_resid, <span class="at">main=</span><span class="st">'Age'</span>, <span class="at">cex.lab=</span><span class="fl">1.2</span>, <span class="at">cex.axis=</span><span class="fl">1.2</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Age (years)"</span>, <span class="at">ylab=</span><span class="st">"Martingale residuals"</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(df<span class="sc">$</span>age, mart_resid), <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add a smooth line</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add a reference line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-xiv" class="slide level2">
-<h2>Example: German Breast Cancer (XIV)</h2>
+<section id="example-german-breast-cancer-xiv" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-xiv">Example: German Breast Cancer (XIV)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Covariate form - Martingale (deviance) residuals</strong></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/cox_gbc_age.png" class="quarto-figure quarto-figure-center" style="width:60.0%"></p>
+<figure class="figure">
+<p><img src="images/cox_gbc_age.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-xv" class="slide level2">
-<h2>Example: German Breast Cancer (XV)</h2>
+<section id="example-german-breast-cancer-xv" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-xv">Example: German Breast Cancer (XV)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Categorize age</strong>
@@ -1207,23 +1367,23 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="7-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a><span class="co"># Call:</span></span>
-<span id="cb19-2"><a></a><span class="co"># coxph(formula = Surv(time, status) ~ hormone + meno + agec + </span></span>
-<span id="cb19-3"><a></a><span class="co">#     size + prog + estrg + strata(grade), data = df)</span></span>
-<span id="cb19-4"><a></a><span class="co">#                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    </span></span>
-<span id="cb19-5"><a></a><span class="co"># hormone2 -0.3788600  0.6846415  0.1294642 -2.926  0.00343 ** </span></span>
-<span id="cb19-6"><a></a><span class="co"># meno2     0.2804119  1.3236749  0.1567576  1.789  0.07364 .  </span></span>
-<span id="cb19-7"><a></a><span class="co"># agec2    -0.5315678  0.5876829  0.1984112 -2.679  0.00738 ** </span></span>
-<span id="cb19-8"><a></a><span class="co"># agec3    -0.4965589  0.6086214  0.2497403 -1.988  0.04678 *  </span></span>
-<span id="cb19-9"><a></a><span class="co"># size      0.0164114  1.0165468  0.0036964  4.440 9.00e-06 ***</span></span>
-<span id="cb19-10"><a></a><span class="co"># prog     -0.0022708  0.9977318  0.0005812 -3.907 9.36e-05 ***</span></span>
-<span id="cb19-11"><a></a><span class="co"># estrg     0.0001254  1.0001254  0.0004718  0.266  0.79041    </span></span>
-<span id="cb19-12"><a></a><span class="co"># ---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># Call:</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="co"># coxph(formula = Surv(time, status) ~ hormone + meno + agec + </span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="co">#     size + prog + estrg + strata(grade), data = df)</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="co">#                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    </span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="co"># hormone2 -0.3788600  0.6846415  0.1294642 -2.926  0.00343 ** </span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="co"># meno2     0.2804119  1.3236749  0.1567576  1.789  0.07364 .  </span></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="co"># agec2    -0.5315678  0.5876829  0.1984112 -2.679  0.00738 ** </span></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="co"># agec3    -0.4965589  0.6086214  0.2497403 -1.988  0.04678 *  </span></span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="co"># size      0.0164114  1.0165468  0.0036964  4.440 9.00e-06 ***</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a><span class="co"># prog     -0.0022708  0.9977318  0.0005812 -3.907 9.36e-05 ***</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a><span class="co"># estrg     0.0001254  1.0001254  0.0004718  0.266  0.79041    </span></span>
+<span id="cb19-12"><a href="#cb19-12"></a><span class="co"># ---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-xvi" class="slide level2">
-<h2>Example: German Breast Cancer (XVI)</h2>
+<section id="example-german-breast-cancer-xvi" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-xvi">Example: German Breast Cancer (XVI)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Categorize age</strong>
@@ -1232,56 +1392,54 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 </ul></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/cox_gbc_age_cat.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
+<figure class="figure">
+<p><img src="images/cox_gbc_age_cat.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-xvii" class="slide level2">
-<h2>Example: German Breast Cancer (XVII)</h2>
+<section id="example-german-breast-cancer-xvii" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-xvii">Example: German Breast Cancer (XVII)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Tabulate final model</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="1-2|3|4-12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a><span class="co"># Tabulate final model results</span></span>
-<span id="cb20-2"><a></a>tbl_final <span class="ot">&lt;-</span> <span class="fu">tbl_regression</span>(</span>
-<span id="cb20-3"><a></a>  obj_stra_final, <span class="co"># coxph object for final model</span></span>
-<span id="cb20-4"><a></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb20-5"><a></a>    <span class="at">hormone =</span> <span class="st">"Hormone"</span>, </span>
-<span id="cb20-6"><a></a>    <span class="at">meno    =</span> <span class="st">"Menopause"</span>,</span>
-<span id="cb20-7"><a></a>    <span class="at">agec    =</span> <span class="st">"Age group"</span>,</span>
-<span id="cb20-8"><a></a>    <span class="at">size    =</span> <span class="st">"Tumor size (mm)"</span>,</span>
-<span id="cb20-9"><a></a>    <span class="at">prog    =</span> <span class="st">"Progesterone (100 fmol/mg)"</span>,</span>
-<span id="cb20-10"><a></a>    <span class="at">estrg   =</span> <span class="st">"Estrogen  (100 fmol/mg)"</span></span>
-<span id="cb20-11"><a></a>  )</span>
-<span id="cb20-12"><a></a>)</span>
-<span id="cb20-13"><a></a></span>
-<span id="cb20-14"><a></a>tbl_final</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Tabulate final model results</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>tbl_final <span class="ot">&lt;-</span> <span class="fu">tbl_regression</span>(</span>
+<span id="cb20-3"><a href="#cb20-3"></a>  obj_stra_final, <span class="co"># coxph object for final model</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb20-5"><a href="#cb20-5"></a>    <span class="at">hormone =</span> <span class="st">"Hormone"</span>, </span>
+<span id="cb20-6"><a href="#cb20-6"></a>    <span class="at">meno    =</span> <span class="st">"Menopause"</span>,</span>
+<span id="cb20-7"><a href="#cb20-7"></a>    <span class="at">agec    =</span> <span class="st">"Age group"</span>,</span>
+<span id="cb20-8"><a href="#cb20-8"></a>    <span class="at">size    =</span> <span class="st">"Tumor size (mm)"</span>,</span>
+<span id="cb20-9"><a href="#cb20-9"></a>    <span class="at">prog    =</span> <span class="st">"Progesterone (100 fmol/mg)"</span>,</span>
+<span id="cb20-10"><a href="#cb20-10"></a>    <span class="at">estrg   =</span> <span class="st">"Estrogen  (100 fmol/mg)"</span></span>
+<span id="cb20-11"><a href="#cb20-11"></a>  )</span>
+<span id="cb20-12"><a href="#cb20-12"></a>)</span>
+<span id="cb20-13"><a href="#cb20-13"></a></span>
+<span id="cb20-14"><a href="#cb20-14"></a>tbl_final</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="example-german-breast-cancer-xviii" class="slide level2">
-<h2>Example: German Breast Cancer (XVIII)</h2>
+<section id="example-german-breast-cancer-xviii" class="level2">
+<h2 class="anchored" data-anchor-id="example-german-breast-cancer-xviii">Example: German Breast Cancer (XVIII)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Final model</strong></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/cox_gbc_final.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
+<figure class="figure">
+<p><img src="images/cox_gbc_final.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
 </figure>
 </div>
 </div>
-</section></section>
-<section>
-<section id="time-dependent-covariates" class="title-slide slide level1 center">
-<h1>Time-Dependent Covariates</h1>
-
 </section>
-<section id="internal-vs-external-covariates" class="slide level2">
-<h2>Internal vs External Covariates</h2>
+</section>
+<section id="time-dependent-covariates" class="level1">
+<h1>Time-Dependent Covariates</h1>
+<section id="internal-vs-external-covariates" class="level2">
+<h2 class="anchored" data-anchor-id="internal-vs-external-covariates">Internal vs External Covariates</h2>
 <div class="fragment">
 <ul>
 <li><strong>Notation</strong>: <span class="math inline">\(Z(t)=\{Z_{\cdot 1}(t),\ldots, Z_{\cdot p}(t)\}^\T\)</span></li>
@@ -1312,8 +1470,8 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 </ul>
 </div>
 </section>
-<section id="internal-covariates" class="slide level2">
-<h2>Internal Covariates</h2>
+<section id="internal-covariates" class="level2">
+<h2 class="anchored" data-anchor-id="internal-covariates">Internal Covariates</h2>
 <div class="fragment">
 <ul>
 <li><strong>Modeling target</strong> (intensity function) <span class="math display">\[
@@ -1340,8 +1498,8 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 </ul>
 </div>
 </section>
-<section id="external-covariates-i" class="slide level2">
-<h2>External Covariates (I)</h2>
+<section id="external-covariates-i" class="level2">
+<h2 class="anchored" data-anchor-id="external-covariates-i">External Covariates (I)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Modeling target</strong> (hazard function) <span class="math display">\[
@@ -1366,11 +1524,11 @@ S(t\mid Z)=\exp\left\{-\int_0^t\lambda(s\mid Z)\dd s\right\}=\exp\left[-\int_0^t
 </ul>
 </div>
 </section>
-<section id="external-covariates-ii" class="slide level2">
-<h2>External Covariates (II)</h2>
+<section id="external-covariates-ii" class="level2">
+<h2 class="anchored" data-anchor-id="external-covariates-ii">External Covariates (II)</h2>
 <div class="fragment">
 <ul>
-<li><strong>Baseline covariates <span class="math inline">\(times\)</span> time</strong>
+<li><strong>Baseline covariates</strong> <span class="math inline">\(times\)</span> time
 <ul>
 <li>Addressing non-proportionality</li>
 </ul></li>
@@ -1389,8 +1547,8 @@ S(t\mid Z)=\exp\left\{-\int_0^t\lambda(s\mid Z)\dd s\right\}=\exp\left[-\int_0^t
 </ul>
 </div>
 </section>
-<section id="estimation-and-inference" class="slide level2">
-<h2>Estimation and Inference</h2>
+<section id="estimation-and-inference" class="level2">
+<h2 class="anchored" data-anchor-id="estimation-and-inference">Estimation and Inference</h2>
 <div class="fragment">
 <ul>
 <li><strong>Same inference procedure</strong>: partial likelihood <span class="math display">\[\begin{align*}
@@ -1410,17 +1568,17 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 </ul>
 </div>
 </section>
-<section id="software-survivalcoxph-iv" class="slide level2">
-<h2>Software: <code>survival::coxph()</code> (IV)</h2>
+<section id="software-survivalcoxph-iv" class="level2">
+<h2 class="anchored" data-anchor-id="software-survivalcoxph-iv">Software: <code>survival::coxph()</code> (IV)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Basic syntax</strong> for time-varying covariates</li>
 </ul>
 <div class="big-code">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a></a><span class="co"># (start, stop): left and right ends of time period</span></span>
-<span id="cb21-2"><a></a><span class="co"># event: 1 = event; 0 = no event</span></span>
-<span id="cb21-3"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, event) <span class="sc">~</span> covariates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (start, stop): left and right ends of time period</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># event: 1 = event; 0 = no event</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, event) <span class="sc">~</span> covariates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1443,26 +1601,26 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 </ul>
 </div>
 </section>
-<section id="software-survivalcoxph-v" class="slide level2">
-<h2>Software: <code>survival::coxph()</code> (V)</h2>
+<section id="software-survivalcoxph-v" class="level2">
+<h2 class="anchored" data-anchor-id="software-survivalcoxph-v">Software: <code>survival::coxph()</code> (V)</h2>
 <div class="fragment">
 <ul>
-<li><strong>Residual analysis</strong>
+<li><p><strong>Residual analysis</strong></p>
 <ul>
 <li>Subject indexing to aggregate residuals</li>
-</ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a><span class="co"># Residual calculations for Cox model with time-varying covariates</span></span>
-<span id="cb22-2"><a></a><span class="fu">residuals</span>(obj, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"martingale"</span>, <span class="st">"deviance"</span>, <span class="st">"schoenfeld"</span>, <span class="st">"score"</span>,</span>
-<span id="cb22-3"><a></a>                        <span class="st">"scaledsch"</span>, <span class="st">"dfbeta"</span>, <span class="st">"dfbetas"</span>, <span class="st">"partial"</span>),</span>
-<span id="cb22-4"><a></a>               <span class="at">collapse =</span> df<span class="sc">$</span>id <span class="co"># specify subject ID</span></span>
-<span id="cb22-5"><a></a>            )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Residual calculations for Cox model with time-varying covariates</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="fu">residuals</span>(obj, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"martingale"</span>, <span class="st">"deviance"</span>, <span class="st">"schoenfeld"</span>, <span class="st">"score"</span>,</span>
+<span id="cb22-3"><a href="#cb22-3"></a>                        <span class="st">"scaledsch"</span>, <span class="st">"dfbeta"</span>, <span class="st">"dfbetas"</span>, <span class="st">"partial"</span>),</span>
+<span id="cb22-4"><a href="#cb22-4"></a>               <span class="at">collapse =</span> df<span class="sc">$</span>id <span class="co"># specify subject ID</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a>            )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
 </div>
 </section>
-<section id="example-stanford-heart-study-i" class="slide level2">
-<h2>Example: Stanford Heart Study (I)</h2>
+<section id="example-stanford-heart-study-i" class="level2">
+<h2 class="anchored" data-anchor-id="example-stanford-heart-study-i">Example: Stanford Heart Study (I)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Heart transplant study</strong> (1967–74)
@@ -1474,14 +1632,14 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 </div>
 <div class="fragment">
 <div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/cox_stanford_dat.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
+<figure class="figure">
+<p><img src="images/cox_stanford_dat.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="example-stanford-heart-study-ii" class="slide level2">
-<h2>Example: Stanford Heart Study (II)</h2>
+<section id="example-stanford-heart-study-ii" class="level2">
+<h2 class="anchored" data-anchor-id="example-stanford-heart-study-ii">Example: Stanford Heart Study (II)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Results</strong>
@@ -1490,23 +1648,23 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a></a><span class="co"># Call:</span></span>
-<span id="cb23-2"><a></a><span class="co"># coxph(formula = Surv(start, stop, event) ~ age + accpt + surgery + </span></span>
-<span id="cb23-3"><a></a><span class="co">#       transplant, data = heart)</span></span>
-<span id="cb23-4"><a></a><span class="co"># </span></span>
-<span id="cb23-5"><a></a><span class="co">#   n= 172, number of events= 75 </span></span>
-<span id="cb23-6"><a></a><span class="co"># </span></span>
-<span id="cb23-7"><a></a><span class="co">#                 coef exp(coef) se(coef)      z Pr(&gt;|z|)  </span></span>
-<span id="cb23-8"><a></a><span class="co"># age          0.02717   1.02754  0.01371  1.981   0.0476 *</span></span>
-<span id="cb23-9"><a></a><span class="co"># accpt       -0.14635   0.86386  0.07047 -2.077   0.0378 *</span></span>
-<span id="cb23-10"><a></a><span class="co"># surgery     -0.63721   0.52877  0.36723 -1.735   0.0827 .</span></span>
-<span id="cb23-11"><a></a><span class="co"># transplant1 -0.01025   0.98980  0.31375 -0.033   0.9739  </span></span>
-<span id="cb23-12"><a></a><span class="sc">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># Call:</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="co"># coxph(formula = Surv(start, stop, event) ~ age + accpt + surgery + </span></span>
+<span id="cb23-3"><a href="#cb23-3"></a><span class="co">#       transplant, data = heart)</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co"># </span></span>
+<span id="cb23-5"><a href="#cb23-5"></a><span class="co">#   n= 172, number of events= 75 </span></span>
+<span id="cb23-6"><a href="#cb23-6"></a><span class="co"># </span></span>
+<span id="cb23-7"><a href="#cb23-7"></a><span class="co">#                 coef exp(coef) se(coef)      z Pr(&gt;|z|)  </span></span>
+<span id="cb23-8"><a href="#cb23-8"></a><span class="co"># age          0.02717   1.02754  0.01371  1.981   0.0476 *</span></span>
+<span id="cb23-9"><a href="#cb23-9"></a><span class="co"># accpt       -0.14635   0.86386  0.07047 -2.077   0.0378 *</span></span>
+<span id="cb23-10"><a href="#cb23-10"></a><span class="co"># surgery     -0.63721   0.52877  0.36723 -1.735   0.0827 .</span></span>
+<span id="cb23-11"><a href="#cb23-11"></a><span class="co"># transplant1 -0.01025   0.98980  0.31375 -0.033   0.9739  </span></span>
+<span id="cb23-12"><a href="#cb23-12"></a><span class="sc">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="example-stanford-heart-study-iii" class="slide level2">
-<h2>Example: Stanford Heart Study (III)</h2>
+<section id="example-stanford-heart-study-iii" class="level2">
+<h2 class="anchored" data-anchor-id="example-stanford-heart-study-iii">Example: Stanford Heart Study (III)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Internal or external</strong>
@@ -1527,14 +1685,12 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 </ul></li>
 </ul>
 </div>
-</section></section>
-<section>
-<section id="conclusion" class="title-slide slide level1 center">
-<h1>Conclusion</h1>
-
 </section>
-<section id="notes-i" class="slide level2">
-<h2>Notes (I)</h2>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<section id="notes-i" class="level2">
+<h2 class="anchored" data-anchor-id="notes-i">Notes (I)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Partial likelihood</strong>
@@ -1556,11 +1712,11 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 </ul>
 </div>
 </section>
-<section id="notes-ii" class="slide level2">
-<h2>Notes (II)</h2>
+<section id="notes-ii" class="level2">
+<h2 class="anchored" data-anchor-id="notes-ii">Notes (II)</h2>
 <div class="fragment">
 <ul>
-<li><strong>Time-varying coefficients</strong>
+<li><p><strong>Time-varying coefficients</strong></p>
 <ul>
 <li>Hazard raio changing over time <span class="math display">\[
 \lambda\bigl(t \mid Z\bigr) = \lambda_0(t) \exp\bigl\{\beta(t)^\T Z\bigr\}
@@ -1568,27 +1724,27 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 <li>Covariate <span class="math inline">\(\times\)</span> time</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> age <span class="sc">+</span> meno <span class="sc">+</span> hormone <span class="sc">+</span> prog <span class="sc">+</span> estrg  </span>
-<span id="cb24-2"><a></a>        <span class="sc">+</span> meno<span class="sc">:</span><span class="fu">log</span>(time), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> age <span class="sc">+</span> meno <span class="sc">+</span> hormone <span class="sc">+</span> prog <span class="sc">+</span> estrg  </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>        <span class="sc">+</span> meno<span class="sc">:</span><span class="fu">log</span>(time), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
 </div>
 <div class="fragment">
 <ul>
-<li><strong>Spline models</strong>
+<li><p><strong>Spline models</strong></p>
 <ul>
 <li>Flexible forms for continuous covariates</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a></a><span class="co"># Fit a Cox model with penalized splines for age</span></span>
-<span id="cb25-2"><a></a>cox_spline <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> <span class="fu">pspline</span>(age, <span class="at">df =</span> <span class="dv">4</span>) <span class="sc">+</span> hormone </span>
-<span id="cb25-3"><a></a>                <span class="sc">+</span> meno <span class="sc">+</span> size <span class="sc">+</span> grade <span class="sc">+</span> prog <span class="sc">+</span> estrg, <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a Cox model with penalized splines for age</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>cox_spline <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> <span class="fu">pspline</span>(age, <span class="at">df =</span> <span class="dv">4</span>) <span class="sc">+</span> hormone </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                <span class="sc">+</span> meno <span class="sc">+</span> size <span class="sc">+</span> grade <span class="sc">+</span> prog <span class="sc">+</span> estrg, <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
 </div>
 </section>
-<section id="summary-i" class="slide level2">
-<h2>Summary (I)</h2>
+<section id="summary-i" class="level2">
+<h2 class="anchored" data-anchor-id="summary-i">Summary (I)</h2>
 <ul>
 <li><strong>Cox proportional hazards (PH) model</strong> <span class="math display">\[\begin{equation}
 \lambda(t\mid Z)=\lambda_0(t)\exp(\beta^\T Z)
@@ -1604,8 +1760,8 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 </ul></li>
 </ul>
 </section>
-<section id="summary-ii" class="slide level2">
-<h2>Summary (II)</h2>
+<section id="summary-ii" class="level2">
+<h2 class="anchored" data-anchor-id="summary-ii">Summary (II)</h2>
 <ul>
 <li><strong>Residual analysis</strong>
 <ul>
@@ -1629,8 +1785,8 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 </ul></li>
 </ul>
 </section>
-<section id="hw3-due-mar-5" class="slide level2">
-<h2>HW3 (Due Mar 5)</h2>
+<section id="hw3-due-mar-5" class="level2">
+<h2 class="anchored" data-anchor-id="hw3-due-mar-5">HW3 (Due Mar 5)</h2>
 <ul>
 <li>Problem 4.8</li>
 <li>Problem 4.14</li>
@@ -1639,483 +1795,431 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 </ul>
 
 
-</section></section>
-    </div>
-  <div class="quarto-auto-generated-content" style="display: none;">
-<div class="footer footer-default">
 
-</div>
-</div></div>
-
-  <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="site_libs/revealjs/dist/reveal.js"></script>
-  <!-- reveal.js plugins -->
-  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
-  
-
-  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="site_libs/revealjs/plugin/search/search.js"></script>
-  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="site_libs/revealjs/plugin/math/math.js"></script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
-
-  <script>
-
-      // Full list of configuration options available at:
-      // https://revealjs.com/config/
-      Reveal.initialize({
-'controlsAuto': true,
-'previewLinksAuto': false,
-'pdfSeparateFragments': false,
-'autoAnimateEasing': "ease",
-'autoAnimateDuration': 1,
-'autoAnimateUnmatched': true,
-'jumpToSlide': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'smaller': false,
- 
-        // Display controls in the bottom right corner
-        controls: false,
-
-        // Help the user learn the controls by providing hints, for example by
-        // bouncing the down arrow when they first encounter a vertical slide
-        controlsTutorial: false,
-
-        // Determines where controls appear, "edges" or "bottom-right"
-        controlsLayout: 'edges',
-
-        // Visibility rule for backwards navigation arrows; "faded", "hidden"
-        // or "visible"
-        controlsBackArrows: 'faded',
-
-        // Display a presentation progress bar
-        progress: true,
-
-        // Display the page number of the current slide
-        slideNumber: false,
-
-        // 'all', 'print', or 'speaker'
-        showSlideNumber: 'all',
-
-        // Add the current slide number to the URL hash so that reloading the
-        // page/copying the URL will return you to the same slide
-        hash: true,
-
-        // Start with 1 for the hash rather than 0
-        hashOneBasedIndex: false,
-
-        // Flags if we should monitor the hash and change slides accordingly
-        respondToHashChanges: true,
-
-        // Push each slide change to the browser history
-        history: true,
-
-        // Enable keyboard shortcuts for navigation
-        keyboard: true,
-
-        // Enable the slide overview mode
-        overview: true,
-
-        // Disables the default reveal.js slide layout (scaling and centering)
-        // so that you can use custom CSS layout
-        disableLayout: false,
-
-        // Vertical centering of slides
-        center: false,
-
-        // Enables touch navigation on devices with touch input
-        touch: true,
-
-        // Loop the presentation
-        loop: false,
-
-        // Change the presentation direction to be RTL
-        rtl: false,
-
-        // see https://revealjs.com/vertical-slides/#navigation-mode
-        navigationMode: 'linear',
-
-        // Randomizes the order of slides each time the presentation loads
-        shuffle: false,
-
-        // Turns fragments on and off globally
-        fragments: true,
-
-        // Flags whether to include the current fragment in the URL,
-        // so that reloading brings you to the same fragment position
-        fragmentInURL: false,
-
-        // Flags if the presentation is running in an embedded mode,
-        // i.e. contained within a limited portion of the screen
-        embedded: false,
-
-        // Flags if we should show a help overlay when the questionmark
-        // key is pressed
-        help: true,
-
-        // Flags if it should be possible to pause the presentation (blackout)
-        pause: true,
-
-        // Flags if speaker notes should be visible to all viewers
-        showNotes: false,
-
-        // Global override for autoplaying embedded media (null/true/false)
-        autoPlayMedia: null,
-
-        // Global override for preloading lazy-loaded iframes (null/true/false)
-        preloadIframes: null,
-
-        // Number of milliseconds between automatically proceeding to the
-        // next slide, disabled when set to 0, this value can be overwritten
-        // by using a data-autoslide attribute on your slides
-        autoSlide: 0,
-
-        // Stop auto-sliding after user input
-        autoSlideStoppable: true,
-
-        // Use this method for navigation when auto-sliding
-        autoSlideMethod: null,
-
-        // Specify the average time in seconds that you think you will spend
-        // presenting each slide. This is used to show a pacing timer in the
-        // speaker view
-        defaultTiming: null,
-
-        // Enable slide navigation via mouse wheel
-        mouseWheel: false,
-
-        // The display mode that will be used to show slides
-        display: 'block',
-
-        // Hide cursor if inactive
-        hideInactiveCursor: true,
-
-        // Time before the cursor is hidden (in ms)
-        hideCursorTime: 5000,
-
-        // Opens links in an iframe preview overlay
-        previewLinks: false,
-
-        // Transition style (none/fade/slide/convex/concave/zoom)
-        transition: 'none',
-
-        // Transition speed (default/fast/slow)
-        transitionSpeed: 'default',
-
-        // Transition style for full page slide backgrounds
-        // (none/fade/slide/convex/concave/zoom)
-        backgroundTransition: 'none',
-
-        // Number of slides away from the current that are visible
-        viewDistance: 3,
-
-        // Number of slides away from the current that are visible on mobile
-        // devices. It is advisable to set this to a lower number than
-        // viewDistance in order to save resources.
-        mobileViewDistance: 2,
-
-        // The "normal" size of the presentation, aspect ratio will be preserved
-        // when the presentation is scaled to fit different resolutions. Can be
-        // specified using percentage units.
-        width: 1050,
-
-        height: 700,
-
-        // Factor of the display size that should remain empty around the content
-        margin: 0.1,
-
-        math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
-          config: 'TeX-AMS_HTML-full',
-          tex2jax: {
-            inlineMath: [['\\(','\\)']],
-            displayMath: [['\\[','\\]']],
-            balanceBraces: true,
-            processEscapes: false,
-            processRefs: true,
-            processEnvironments: true,
-            preview: 'TeX',
-            skipTags: ['script','noscript','style','textarea','pre','code'],
-            ignoreClass: 'tex2jax_ignore',
-            processClass: 'tex2jax_process'
-          },
-        },
-
-        // reveal.js plugins
-        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
-
-          RevealMath,
-          RevealNotes,
-          RevealSearch,
-          RevealZoom
-        ]
-      });
-    </script>
-    
-
-    <script>
-
-      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-
-      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-
-      // slide changes (different for each slide format).
-
-      (function () {
-
-        // dispatch for htmlwidgets
-
-        function fireSlideEnter() {
-
-          const event = window.document.createEvent("Event");
-
-          event.initEvent("slideenter", true, true);
-
-          window.document.dispatchEvent(event);
-
-        }
-
-    
-
-        function fireSlideChanged(previousSlide, currentSlide) {
-
-          fireSlideEnter();
-
-    
-
-          // dispatch for shiny
-
-          if (window.jQuery) {
-
-            if (previousSlide) {
-
-              window.jQuery(previousSlide).trigger("hidden");
-
-            }
-
-            if (currentSlide) {
-
-              window.jQuery(currentSlide).trigger("shown");
-
-            }
-
-          }
-
-        }
-
-    
-
-        // hookup for slidy
-
-        if (window.w3c_slidy) {
-
-          window.w3c_slidy.add_observer(function (slide_num) {
-
-            // slide_num starts at position 1
-
-            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-
-          });
-
-        }
-
-    
-
-      })();
-
-    </script>
-
-    
-
-    <script id="quarto-html-after-body" type="application/javascript">
-    window.document.addEventListener("DOMContentLoaded", function (event) {
-      const toggleBodyColorMode = (bsSheetEl) => {
-        const mode = bsSheetEl.getAttribute("data-mode");
-        const bodyEl = window.document.querySelector("body");
-        if (mode === "dark") {
-          bodyEl.classList.add("quarto-dark");
-          bodyEl.classList.remove("quarto-light");
-        } else {
-          bodyEl.classList.add("quarto-light");
-          bodyEl.classList.remove("quarto-dark");
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
       }
-      const toggleBodyColorPrimary = () => {
-        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-        if (bsSheetEl) {
-          toggleBodyColorMode(bsSheetEl);
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/lmaowisc\.github\.io\/BMI741");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
         }
       }
-      toggleBodyColorPrimary();  
-      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-      tabsets.forEach(function(tabset) {
-        const tabby = new Tabby('#' + tabset.id);
-      });
-      const isCodeAnnotation = (el) => {
-        for (const clz of el.classList) {
-          if (clz.startsWith('code-annotation-')) {                     
-            return true;
-          }
-        }
-        return false;
-      }
-      const onCopySuccess = function(e) {
-        // button target
-        const button = e.trigger;
-        // don't keep focus
-        button.blur();
-        // flash "checked"
-        button.classList.add('code-copy-button-checked');
-        var currentTitle = button.getAttribute("title");
-        button.setAttribute("title", "Copied!");
-        let tooltip;
-        if (window.bootstrap) {
-          button.setAttribute("data-bs-toggle", "tooltip");
-          button.setAttribute("data-bs-placement", "left");
-          button.setAttribute("data-bs-title", "Copied!");
-          tooltip = new bootstrap.Tooltip(button, 
-            { trigger: "manual", 
-              customClass: "code-copy-button-tooltip",
-              offset: [0, -8]});
-          tooltip.show();    
-        }
-        setTimeout(function() {
-          if (tooltip) {
-            tooltip.hide();
-            button.removeAttribute("data-bs-title");
-            button.removeAttribute("data-bs-toggle");
-            button.removeAttribute("data-bs-placement");
-          }
-          button.setAttribute("title", currentTitle);
-          button.classList.remove('code-copy-button-checked');
-        }, 1000);
-        // clear code selection
-        e.clearSelection();
-      }
-      const getTextToCopy = function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-      }
-      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-        text: getTextToCopy
-      });
-      clipboard.on('success', onCopySuccess);
-      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-          text: getTextToCopy,
-          container: window.document.getElementById('quarto-embedded-source-code-modal')
-        });
-        clipboardModal.on('success', onCopySuccess);
-      }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-        var mailtoRegex = new RegExp(/^mailto:/);
-          var filterRegex = new RegExp("https:\/\/lmaowisc\.github\.io\/BMI741");
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-        }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-            // undo the damage that might have been done by quarto-nav.js in the case of
-            // links that we want to consider external
-            if (link.dataset.originalHref !== undefined) {
-              link.href = link.dataset.originalHref;
-            }
-          }
-        }
-      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-        const config = {
-          allowHTML: true,
-          maxWidth: 500,
-          delay: 100,
-          arrow: false,
-          appendTo: function(el) {
-              return el.closest('section.slide') || el.parentElement;
-          },
-          interactive: true,
-          interactiveBorder: 10,
-          theme: 'light-border',
-          placement: 'bottom-start',
-        };
-        if (contentFn) {
-          config.content = contentFn;
-        }
-        if (onTriggerFn) {
-          config.onTrigger = onTriggerFn;
-        }
-        if (onUntriggerFn) {
-          config.onUntrigger = onUntriggerFn;
-        }
-          config['offset'] = [0,0];
-          config['maxWidth'] = 700;
-        window.tippy(el, config); 
-      }
-      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-      for (var i=0; i<noterefs.length; i++) {
-        const ref = noterefs[i];
-        tippyHover(ref, function() {
-          // use id or data attribute instead here
-          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-          try { href = new URL(href).hash; } catch {}
-          const id = href.replace(/^#\/?/, "");
-          const note = window.document.getElementById(id);
-          if (note) {
-            return note.innerHTML;
-          } else {
-            return "";
-          }
-        });
-      }
-      const findCites = (el) => {
-        const parentEl = el.parentElement;
-        if (parentEl) {
-          const cites = parentEl.dataset.cites;
-          if (cites) {
-            return {
-              el,
-              cites: cites.split(' ')
-            };
-          } else {
-            return findCites(el.parentElement)
-          }
-        } else {
-          return undefined;
-        }
-      };
-      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-      for (var i=0; i<bibliorefs.length; i++) {
-        const ref = bibliorefs[i];
-        const citeInfo = findCites(ref);
-        if (citeInfo) {
-          tippyHover(citeInfo.el, function() {
-            var popup = window.document.createElement('div');
-            citeInfo.cites.forEach(function(cite) {
-              var citeDiv = window.document.createElement('div');
-              citeDiv.classList.add('hanging-indent');
-              citeDiv.classList.add('csl-entry');
-              var biblioDiv = window.document.getElementById('ref-' + cite);
-              if (biblioDiv) {
-                citeDiv.innerHTML = biblioDiv.innerHTML;
-              }
-              popup.appendChild(citeDiv);
-            });
-            return popup.innerHTML;
-          });
-        }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
       }
     });
-    </script>
-    
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
 
 </body></html>

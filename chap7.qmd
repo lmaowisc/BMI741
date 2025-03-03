@@ -587,10 +587,18 @@ PH_fit
         -   Proportional hazards model
         -   Proportional odds model
 
-<!-- ## HW 4 (Due Mar 20) -->
+## HW 4 (Due Mar 19)
 
-<!-- -   Choose one -->
-<!--     -   Problem 5.1 -->
-<!--     -   Problem 5.2 -->
-<!-- -   Problem 6.5 -->
-<!-- -   Problem 7.14 (The `IntCens` package is in “Files \> R-package”) -->
+-   Choose one
+    -   Problem 5.1
+    -   Problem 5.2
+-   Problem 6.5
+-   Problem 7.14 
+
+```{r}
+#| eval: false
+# Install and load IntCens package
+# devtools::install_github("lmaowisc/IntCens")
+library(IntCens)
+```
+
