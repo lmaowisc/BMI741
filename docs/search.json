@@ -2624,7 +2624,7 @@
     "href": "chap7.html#hw-4-due-mar-19",
     "title": "Applied Survival Analysis",
     "section": "HW 4 (Due Mar 19)",
-    "text": "HW 4 (Due Mar 19)\n\nChoose one\n\nProblem 5.1\nProblem 5.2\n\nProblem 6.5\nProblem 7.14"
+    "text": "HW 4 (Due Mar 19)\n\nChoose one\n\nProblem 5.1\nProblem 5.2\n\nProblem 6.5\nProblem 7.14\n\n\n# Install and load IntCens package\n# devtools::install_github(\"lmaowisc/IntCens\")\nlibrary(IntCens)"
   },
   {
     "objectID": "chapter7.html#r-code",

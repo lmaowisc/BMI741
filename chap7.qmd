@@ -597,6 +597,7 @@ PH_fit
 
 ```{r}
 #| eval: false
+#| echo: true
 # Install and load IntCens package
 # devtools::install_github("lmaowisc/IntCens")
 library(IntCens)

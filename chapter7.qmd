@@ -7,11 +7,6 @@ title: "Chapter 7 - Left Truncation and Interval Censoring"
 Lecture slides [here](chap7.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
 
----
-title: "Chapter 7 Summary"
-format: gfm
----
-
 ## Chapter Summary
 
 When subjects enter the study late (thus excluding earlier failures) or when event times are only known to lie in intervals, traditional survival analysis methods must be adapted. *Left truncation* biases sampling toward individuals who have “survived” long enough to enroll. *Interval censoring* arises when event times are only observed through periodic assessments, leading to coarser information about the exact time of occurrence. 
