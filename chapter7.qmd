@@ -7,6 +7,99 @@ title: "Chapter 7 - Left Truncation and Interval Censoring"
 Lecture slides [here](chap7.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
 
+---
+title: "Chapter 7 Summary"
+format: gfm
+---
+
+## Chapter Summary
+
+When subjects enter the study late (thus excluding earlier failures) or when event times are only known to lie in intervals, traditional survival analysis methods must be adapted. *Left truncation* biases sampling toward individuals who have “survived” long enough to enroll. *Interval censoring* arises when event times are only observed through periodic assessments, leading to coarser information about the exact time of occurrence. 
+It is important to properly adjust the risk sets and/or likelihood functions to ensure valid inference.
+
+### Left truncation
+
+Left truncation occurs if a subject is enrolled at a later time $T_L$ than the starting point so those who fail prior to $T_L$ are never observed. Common examples include:
+
+- **Retrospective cohorts**, where one must have survived long enough to be identified.
+- **Hospital-based registries**, where patients must be alive/available to visit a center.
+
+To correct for this bias, standard *risk-set* calculations in the Kaplan–Meier, log-rank test, or Cox model are modified:
+$$
+n_j \;=\;\sum_{i=1}^{n} I\bigl(T_{Li} \;\le\; t_j \;\le\; X_i\bigr),
+$$
+so that a subject only “enters” the risk set at $T_{Li}$. Likewise, the partial likelihood in the Cox model replaces $I(X_j \ge t)$ with $I(T_{Lj} \le t \le X_j)$ when constructing sums over at-risk individuals. Beyond these hazard-based methods, a more general approach employs a *conditional likelihood* factoring in $T_i > T_{L,i}$:
+
+$$
+L_n(\theta)
+\;=\;
+\prod_{i=1}^{n}
+S\bigl(T_{Li}; \theta\bigr)^{-1}\,
+\lambda\bigl(X_i; \theta\bigr)^{\delta_i}\,
+S\bigl(X_i; \theta\bigr).
+$$
+
+This reflects the fact that each subject is only observed if they survive beyond
+$T_{Li}$. 
+
+### Interval censoring
+
+In interval-censored data, the exact failure time $T$ is only known to lie in $(L_i, R_i]$. A straightforward likelihood for a parametric or semiparametric model with survival function $S(t; \theta)$ is
+
+$$
+L_n(\theta)
+\;=\;
+\prod_{i=1}^{n}
+\Bigl\{
+S\bigl(L_i;\theta\bigr)
+\;-\;
+S\bigl(R_i;\theta\bigr)
+\Bigr\}.
+$$
+
+Each factor captures the probability that $T_i$ falls strictly between $L_i$ and $R_i$. For purely nonparametric inference, one seeks the *nonparametric MLE (NPMLE)*—often computed via:
+
+- **Turnbull’s EM algorithm**, which treats each actual $T_i$ as missing and iteratively updates estimates of its distribution.  
+- **Iterative convex minorant (ICM)** methods that maximize the log-likelihood subject to a monotonicity constraint on the distribution function or baseline hazard.
+
+Semiparametric models (e.g., Cox, proportional odds) introduce additional complexity because the baseline function is infinite-dimensional, but they can still be estimated via specialized EM or ICM algorithms. Although the baseline function converges slower than $n^{-1/2}$, the finite-dimensional regression coefficients typically remain asymptotically normal under regular conditions.
+
+
+### Example R commands
+
+Below is a brief illustration using base packages (\texttt{survival}) for left truncation and the \texttt{IntCens} package for interval censoring.
+
+```{r}
+#| eval: false
+
+###############################
+# 1. Left-truncated Cox model
+###############################
+library(survival)
+
+# 'entry' is delayed entry time, 'end' is event/censor time, 'status' is 0/1
+cox_fit <- coxph(Surv(entry, end, status) ~ covariate, data = df_left)
+summary(cox_fit)  # modifies risk sets for delayed entry
+
+###############################
+# 2. Interval-censored data
+###############################
+library(IntCens)
+
+# Fit a proportional hazards (PH) model to interval-censored data
+# L, R define the interval (L_i, R_i], Z includes covariates
+PH_fit <- icsurvfit(L = df_ic$L, R = df_ic$R, Z = df_ic[, c("x1", "x2")], 
+                    model = "PH")
+PH_fit$beta   # estimated covariate effects
+PH_fit$var    # variance-covariance matrix
+```
+
+In both cases, these functions account for the specialized likelihoods required. For left truncation, the `start`/`stop` syntax in `survival::Surv()` adjusts the risk set. For interval censoring, `IntCens::icsurvfit()` implements the ICM algorithms and can handle nonparametric and proportional hazards/odds models.
+
+### Conclusion
+
+Left-truncated designs require rethinking “at-risk” sets to reflect delayed study entry. Interval-censored data, which provide only bracketed failure times, rely on non-/semiparametric maximum likelihood with algorithms tailored to partial observations. Although more computationally involved than standard right-censored methods, these adjustments ensure valid statistical inference in the presence of complex data structures.
+
 ## R code
 
 ```{r}
