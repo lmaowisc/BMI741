@@ -2520,7 +2520,7 @@
     "href": "chap7.html#likelihood-based-inference",
     "title": "Applied Survival Analysis",
     "section": "Likelihood-Based Inference",
-    "text": "Likelihood-Based Inference"
+    "text": "Likelihood-Based Inference\n\n\nLikelihood function \\[\\begin{equation}\\label{eq:trunc:nonp}\nL_n(\\theta)=\\prod_{i=1}^n\\{S(L_i;\\theta)-S(R_i;\\theta)\\}\n\\end{equation}\\]\n\nLog-likelihood \\[\\begin{equation}\\label{eq:trunc:ic_log_lik}\nl_n(\\theta)=\\sum_{i=1}^n\\log\\{S(L_i;\\theta)-S(R_i;\\theta)\\}\n\\end{equation}\\]\n\n\n\n\n\nParametric Models\n\nStandard MLE \\(\\hat\\theta=\\arg\\max_\\theta l_n(\\theta)\\)"
   },
   {
     "objectID": "chap7.html#one-sample-estimation",

@@ -369,7 +369,6 @@ plot(obj_zph, ylab = "Gender", xlab = "Age (years)", lwd = 2)
 :::
 
 ## Likelihood-Based Inference
-## Observed Data
 :::{.fragment}
 -   **Likelihood function** \begin{equation}\label{eq:trunc:nonp}
     L_n(\theta)=\prod_{i=1}^n\{S(L_i;\theta)-S(R_i;\theta)\}
