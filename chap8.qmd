@@ -24,6 +24,7 @@ bibliography: references.bib
 
 ## Outline
 
+:::{.incremental}
 1.  Introduction to frailty models
 
 2.  Multivariate Cox model with shared frailty
@@ -33,29 +34,34 @@ bibliography: references.bib
 4.  Marginal models and robust inference
 
 5.  Example: the diabetic retinopathy study
+:::
 
 $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\rm d}}$$ $$\newcommand{\pr}{{\rm pr}}$$ $$\newcommand{\var}{{\rm var}}$$ $$\newcommand{\se}{{\rm se}}$$ $$\newcommand{\indep}{\perp \!\!\! \perp}$$ $$\newcommand{\Pn}{n^{-1}\sum_{i=1}^n}$$
 
 # Frailty/Copula Models
 
 ## Multivariate Failure Times
-
+:::{.fragment}
 -   **Two types of scenario**
     -   **Multiple events on same subject**
         -   **Cardiovascular endpoints**: heart failure, myocardio-infarction (MI; heart attack), stroke, etc.
     -   **Clustering within group**
         -   **Group**: region, study center, family, pair of twins
--   **Common challenge**
-    -   Correlation of component failure times within the unit (subject, group, etc.)
+    -   **Common challenge**
+        -   Correlation within same unit (subject, group, etc.)
+:::
+:::{.fragment}
 -   **Modelling strategies**
     -   Conditional (shared-frailty) models
     -   Marginal (component-wise) models
+:::
 
 ## Frailty Models: Concept
-
+:::{.fragment}
 -   **Target of inference**: $T=(T_1,\ldots, T_K)$
-    -   Multivariate event times on same unit (subject or group)
-    -   Different or same failure types
+    -   Multiple failures (same or different types) in same unit (subject or group)
+:::
+:::{.fragment}
 -   **Unit-specific frailty** $\xi$
     -   Latent (unobserved) factor shared by components within unit $\to$ dependence
     -   $T_k$ $(k=1,\ldots, K)$: mutually independent given $\xi$ with hazard $\xi\eta'_k(t)$ \begin{equation}\label{eq:multi:fr_surv}
@@ -63,52 +69,55 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
         \end{equation}
         -   $\xi$: nonnegative random variable with $E(\xi)=1$
         -   $\var(\xi)\uparrow$ $\to$ greater between-unit variations $\to$ stronger within-unit correlations
-        -   $\eta_k(t)$: (frailty-)conditional cumulative hazard
+        -   $\eta_k(t)$: conditional cumulative hazard given frailty
+:::
 
 ## Frailty Models: Joint Distribution
-
+:::{.incremental}
 -   **Marginal distribution**
-    -   Assume $\xi\sim g(\cdot \gamma)$ \begin{align}\label{eq:multi:joint_surv}
+    -   **Joint survival** ($\xi\sim g(\cdot \gamma)$) \begin{align}\label{eq:multi:joint_surv}
         S(t_1,\ldots, t_K)=&\pr(T_1>t_1,\ldots,T_K>t_K)\notag\\
         =&\int_0^\infty\pr(T_1>t_1,\ldots,T_K>t_K\mid \xi)g(\xi;\gamma)\dd\xi\notag\\
         =&\int_0^\infty\exp\left\{-\xi  \sum_{k=1}^K \eta_k(t_k)\right\}g(\xi;\gamma)\dd\xi,
         \end{align}
-
-::: callout-note
-### Marginal component-wise distribution
-
--   **Survival function**: $S_k(t)=\int_0^\infty\pr(T_k>t\mid\xi)g(\xi;\gamma)\dd\xi=\int_0^\infty\exp\left\{-\xi \eta_k(t)\right\}g(\xi;\gamma)\dd\xi$
--   **Cumulative hazard**: $\Lambda_k(t) = -\log S_k(t)=-\log\int_0^\infty\exp\left\{-\xi \eta_k(t)\right\}g(\xi;\gamma)\dd\xi\neq \eta_k(t)$
+    -   **Component-wise survival**     $$S_k(t)=\int_0^\infty\exp\left\{-\xi \eta_k(t)\right\}g(\xi;\gamma)\dd\xi$$
+    -   **Component-wise cumulative hazard**: $$\Lambda_k(t) = -\log S_k(t)=-\log\int_0^\infty\exp\left\{-\xi \eta_k(t)\right\}g(\xi;\gamma)\dd\xi\neq \eta_k(t)$$
 :::
 
 ## Examples: Gamma Frailty (I)
-
+:::{.fragment}
 -   **Parametric families for** $\xi$
     -   Gamma
     -   Positive stable
     -   Inverse Gaussian
     -   Log-normal
+:::
+:::{.fragment}
 -   **Gamma frailty model**
     -   $\xi\sim\mbox{Gamma}(\gamma, \gamma)$ $(\gamma >0)$ $$
         g(u;\gamma)=\Gamma(\gamma)^{-1}\gamma^\gamma u^{\gamma-1}\exp\left(-\gamma u\right),\hspace{3mm}u>0
         $$
         -   $\Gamma(\gamma)=\int_0^\infty x^{\gamma-1}\exp(-x)\dd x$
         -   $E(\xi) = 1$, $\var(\xi)=\gamma^{-1}$ (Exercise)
+:::
 
 ## Examples: Gamma Frailty (II)
-
+:::{.fragment}
 -   **Implied joint marginal** $$
     S(t_1,\ldots, t_K)=\left\{1+\gamma^{-1}\sum_{k=1}^K \eta_k(t_k)\right\}^{-\gamma}
     $$
     -   Correlated for $0<\gamma<\infty$
     -   As $\gamma\to\infty$, i.e., $\var(\xi)\downarrow 0$, $S(t_1,\ldots, t_K)\to\exp\{-\sum_{k=1}^K \eta_k(t_k)\}$
+:::
+:::{.fragment}
 -   **Component-wise marginals** $$S_k(t)=\left\{1+\gamma^{-1} \eta_k(t)\right\}^{-\gamma}
     $$
     -   **Marginal cumulative hazard**: $\Lambda_k(t)=\gamma\log\left\{1+\gamma^{-1} \eta_k(t)\right\}\neq\eta_k(t)$
+:::
 
 ## Examples: Positive Stable Frailty
-
--   **One-sided version of Stable distribution**
+:::{.incremental}
+-   **One-sided Stable distribution**
     -   No explicit form for $g(\cdot;\gamma)$ $(0<\gamma\leq 1)$
     -   **Laplace transform** \begin{equation}\label{eq:multi:stable_laplace}
         \int_0^\infty\exp(-x\xi)g(\xi;\gamma)\dd\xi=\exp(-x^\gamma)
@@ -119,39 +128,45 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
         -   $\gamma\uparrow 1$ $\to$ independence
     -   **Marginal cumulative hazard**: $\Lambda_k(t)=\eta_k(t_k)^\gamma\neq\eta_k(t)$
         -   Does preserve PH structure in regression
+:::
 
 ## Copula Models
-
+:::{.fragment}
 -   **Copula**: Joint distribution in terms of component marginals
-
+:::
+:::{.fragment}
 -   **Clayton copula**
 
     -   Induced by Gamma frailty $$
          S(t_1,\ldots, t_K) = \left\{\sum_{k=1}^KS_k(t_k)^{-1/\gamma}-K+1\right\}^{-\gamma}
         $$
-
+:::
+:::{.fragment}
 -   **Gumbel-Hougaard copula**
 
     -   Induced by positive-stable frailty $$
         S(t_1,\ldots, t_K) = \exp\left(-\left[\sum_{k=1}^K\{-\log S_k(t_k)\}^{1/\gamma}\right]^\gamma\right)
         $$
+:::
 
 ## One Sample: Data
-
+:::{.fragment}
 -   **Observed data** $$
     (X_{ki}, \delta_{ki}),\hspace{5mm} k=1,\ldots, K;\,\,\, i=1,\ldots, n
     $$
     -   $X_{ki}=\min(T_{ki}, C_{ki})$
-    -   $T_{ki}$: $T_k$ in $i$th unit
-    -   $C_{ki}$: independent censoring time for $T_{ki}$ (may be same across $k$)
+    -   $T_{ki}$: $T_k$ in $i$th unit; $C_{ki}$: censoring time for $T_{ki}$
     -   $\delta_{ki} = I(T_{ki}\leq C_{ki})$
     -   $N_{ki}(t) = I(X_{ki}\leq t, \delta_{ki} = 1)$
+:::
+:::{.fragment}
 -   **Parameters**: $\theta=(\eta_1,\ldots, \eta_K, \gamma)$
     -   $\eta_1,\ldots, \eta_K$: component-wise conditional cumulative hazards
     -   $\gamma$: frailty distribution parameter
+:::
 
 ## One Sample: Estimation
-
+:::{.incremental}
 -   **Expectation-Maximization (EM) algorithm**
     -   With $\xi$ as "missing" data
     -   $E$-step (numerical integration) \begin{equation}\label{eq:multi:estep}
@@ -163,11 +178,12 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
         \end{equation} $$
         \gamma^{(j+1)}=\arg\max_{\gamma}\sum_{i=1}^n\log g(\hat\xi_i^{(j+1)};\gamma)
         $$
+:::
 
 # Frailty Cox Models
 
 ## Model Specification
-
+:::{.incremental}
 -   **Frailty-conditioned Cox models**
     -   $T_1,\ldots, T_K$ mutually independent given $Z$ and $\xi$
 
@@ -179,48 +195,57 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
     -   **Conditional joint survival** \begin{equation}\label{eq:multi:fr_surv_reg}
         \pr(T_1>t_1,\ldots,T_K>t_K\mid Z,\xi)=\exp\left\{-\xi\sum_{k=1}^K\exp(\beta_k^\T Z) \eta_{k0}(t_k)\right\}
         \end{equation}
+:::
 
 ## Implied Marginals
-
+:::{.fragment}
 -   **Gamma frailty**
-    -   Non-proportional hazards $$
+    -   **Non-proportional hazards** $$
         \Lambda_k(t\mid Z)=\gamma\log\left\{1+\gamma^{-1} \exp(\beta_k^\T Z)\eta_{k0}(t)\right\}
         $$
+:::
+:::{.fragment}
 -   **Positive-stable frailty**
-    -   Proportional hazards $$
+    -   **Proportional hazards** $$
         \Lambda_k(t\mid Z)=\exp(\gamma\beta_k^\T Z)\eta_{k0}(t)^\gamma
         $$
     -   **Special case** where PH structure is preserved
+:::
 
 ## Parametrizations
-
+:::{.fragment}
 -   **Same failure clustered in group** \begin{align}
     \beta_1&=\cdots=\beta_K=:\beta\\
     \eta_{10}(\cdot)&=\cdots=\eta_{K0}(\cdot)=:\eta_0(\cdot)
     \end{align}
-
+:::
+:::{.fragment}
 -   **Different failure types** \begin{align}
     &\mbox{Different }\beta_k\\
     &\mbox{Different }\eta_{k0}(\cdot)
     \end{align}
 
     -   **Same covariate effect**: $\beta_1=\cdots=\beta_K=:\beta$
-    -   e.g., beta blocker has same reduction in risk of all MACEs
+    -   e.g., beta blocker has same (relative) reduction in risk of all MACEs
+:::
 
 ## Estimation and Inference
-
+:::{.fragment}
 -   **Estimation**
     -   EM algorithm treating the $\xi$ as missing data
     -   $E$-step: $\hat\xi_i^{(j+1)}=E\{\xi_i\mid (X_{ki}, \delta_{ki}, Z_i): k=1,\ldots, K; \theta^{(j)}\}$
     -   $M$-step: $\hat\xi_i^{(j+1)}$-weighted partial likelihood for $\beta_k^{(j+1)}$ + Breslow estimator for $\eta_{k0}^{(j+1)}(t)$
+:::
+:::{.fragment}
 -   **Testing covariate effect on multiple components**
     -   $Z_{\cdot 1}$: main treatment of interest $$
           H_0: \beta_{11}=\beta_{21}=\cdots=\beta_{K1}=0
           $$
     -   $\chi_K^2$: chi-square test with $𝐾$ degrees of freedom
+:::
 
 ## Software: `survival::coxph()` (I)
-
+:::{.fragment}
 -   **Scenario 1: Gamma-frailty with same** $\beta$ and $\eta_0$
     -   Same failure grouped in cluster `id`
 
@@ -232,7 +257,8 @@ coxph(Surv(time, status) ~ covariates +
         frailty(id, distribution = "gamma"))
 ```
 :::
-
+:::
+:::{.fragment}
 -   **Scenario 2: Gamma-frailty with same** $\beta$ and different $\eta_{k0}$
     -   Different failure types `enum` in unit `id` with same covariate effect
     -   Stratified Cox model by component (single $\beta$; component- specific $\eta_{k0}$)
@@ -245,9 +271,10 @@ coxph(Surv(time, status) ~ covariates + strata(enum)
       + frailty(id, distribution = "gamma"))
 ```
 :::
+:::
 
 ## Software: `survival::coxph()` (II)
-
+:::{.fragment}
 -   **Scenario 3: Gamma-frailty with different** $\beta_k$ and $\eta_{k0}$
     -   Different failure types `enum` in unit `id` with different covariate effects
     -   Component specific $\beta_k$ and $\eta_{k0}$
@@ -259,6 +286,7 @@ coxph(Surv(time, status) ~ covariates + strata(enum)
 coxph(Surv(time, status) ~ covariates * strata(enum) + 
       frailty(id, distribution = "gamma"))
 ```
+:::
 :::
 
 # Multi-Institution Lung Cancer Study
