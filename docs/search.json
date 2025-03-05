@@ -2775,28 +2775,28 @@
     "href": "chap8.html#software-survivalcoxph-i",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::coxph() (I)",
-    "text": "Software: survival::coxph() (I)\n\n\nScenario 1: Gamma-frailty with same \\(\\beta\\) and \\(\\eta_0\\)\n\nSame failure grouped in cluster id\n\n\n\n\ncoxph(Surv(time, status) ~ covariates + \n        frailty(id, distribution = \"gamma\"))\n\n\n\n\n\nScenario 2: Gamma-frailty with same \\(\\beta\\) and different \\(\\eta_{k0}\\)\n\nDifferent failure types enum in unit id with same covariate effect\nStratified Cox model by component (single \\(\\beta\\); component- specific \\(\\eta_{k0}\\))\n\n\n\n\ncoxph(Surv(time, status) ~ covariates + strata(enum)\n      + frailty(id, distribution = \"gamma\"))"
+    "text": "Software: survival::coxph() (I)\n\n\nScenario 1: Gamma-frailty with same \\(\\beta\\) and \\(\\eta_0\\)\n\nSame failure grouped in cluster id\nobj$frail: estimated \\(\\hat\\xi_i\\) for each unit\n\n\n\n\nobj &lt;- coxph(Surv(time, status) ~ covariates + \n        frailty(id, distribution = \"gamma\"))\n\n\n\n\n\nScenario 2: Gamma-frailty with same \\(\\beta\\) and different \\(\\eta_{k0}\\)\n\nDifferent failure types enum in unit id with same covariate effect\nStratified Cox model by component (single \\(\\beta\\); component- specific \\(\\eta_{k0}\\))\n\n\n\n\ncoxph(Surv(time, status) ~ covariates + strata(enum)\n      + frailty(id, distribution = \"gamma\"))"
   },
   {
     "objectID": "chap8.html#software-survivalcoxph-ii",
     "href": "chap8.html#software-survivalcoxph-ii",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::coxph() (II)",
-    "text": "Software: survival::coxph() (II)\n\n\nScenario 3: Gamma-frailty with different \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\nDifferent failure types enum in unit id with different covariate effects\nComponent specific \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\n\n\n\ncoxph(Surv(time, status) ~ covariates * strata(enum) + \n      frailty(id, distribution = \"gamma\"))"
+    "text": "Software: survival::coxph() (II)\n\n\nScenario 3: Gamma-frailty with different \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\nDifferent failure types enum in unit id with different covariate effects\nComponent specific \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\n\n\n\ncoxph(Surv(time, status) ~ covariates * strata(enum) + \n      frailty(id, distribution = \"gamma\"))\n\n\n\n\n\n\n\n\n\n\nProblem\n\n\nHow to set up a model of the form: \\[\n\\lambda_k(t\\mid Z, \\xi) \\;=\\; \\xi\\exp\\left(\\beta_k^\\T Z_{(1)} + \\gamma^\\T Z_{(2)}\\right) \\eta_{k0}'(t),\n\\] where the effects of \\(Z_{(1)}\\) are component-specific while those of \\(Z_{(2)}\\) are component-invariant?"
   },
   {
     "objectID": "chap8.html#study-background",
     "href": "chap8.html#study-background",
     "title": "Applied Survival Analysis",
     "section": "Study Background",
-    "text": "Study Background\n\nStudy information\n\nPopulation: 228 lung cancer patients grouped in 18 institutions\nEndpoint: Death (link to follow-up plot)\nRisk factors\n\nAge (years); sex (1: male; 2: female); weight loss (pounds) in last six months\nPhysician-rated ECOG (0–3) and Karnofsky scores (50–100); Patient-rated Karnofsky score (50–100)"
+    "text": "Study Background\n\n\nStudy information\n\nPopulation: 228 lung cancer patients grouped in 18 institutions\nEndpoint: Death (link to follow-up plot)\nRisk factors\n\nAge (years); sex (1: male; 2: female); weight loss (pounds) in last six months\nPhysician-rated ECOG (0–3) and Karnofsky scores (50–100); Patient-rated Karnofsky score (50–100)"
   },
   {
     "objectID": "chap8.html#cox-regression-inference",
     "href": "chap8.html#cox-regression-inference",
     "title": "Applied Survival Analysis",
     "section": "Cox Regression: Inference",
-    "text": "Cox Regression: Inference\n\nGamma frailty for correlation within institution\n\nsex and physician-rated ECOG strongly predictive of mortality\n\n\n# Fit a Cox model with institution-specific frailty\n# to account for correlation within institution\nobj &lt;- coxph(Surv(time, status) ~ age + factor(sex) + phec + phkn + \n            ptkn + wl + frailty(inst, distribution =\"gamma\"), data = data)\n\nsummary(obj)\n#              exp(coef) exp(-coef) lower .95 upper .95\n# age             1.0133     0.9869    0.9938    1.0331\n# factor(sex)2    0.5333     1.8751    0.3751    0.7582\n# phec            1.9984     0.5004    1.3460    2.9669\n# phkn            1.0204     0.9800    1.0002    1.0410\n# ptkn            0.9855     1.0147    0.9715    0.9998\n# wl              0.9870     1.0132    0.9735    1.0006"
+    "text": "Cox Regression: Inference\n\n\nGamma frailty for correlation within institution\n\nsex and physician-rated ECOG strongly predictive of mortality\n\n\n# Fit a Cox model with institution-specific frailty\nobj &lt;- coxph(Surv(time, status) ~ age + factor(sex) + phec + phkn + \n            ptkn + wl + frailty(inst, distribution = \"gamma\"), data = df)\nsummary(obj)\n#&gt;              exp(coef) exp(-coef) lower .95 upper .95\n#&gt; age             1.0133     0.9869    0.9938    1.0331\n#&gt; factor(sex)2    0.5333     1.8751    0.3751    0.7582\n#&gt; phec            1.9984     0.5004    1.3460    2.9669\n#&gt; phkn            1.0204     0.9800    1.0002    1.0410\n#&gt; ptkn            0.9855     1.0147    0.9715    0.9998\n#&gt; wl              0.9870     1.0132    0.9735    1.0006\n#&gt; Iterations: 9 outer, 35 Newton-Raphson\n#&gt;  Variance of random effect= 0.008592303   I-likelihood = -635.5"
   },
   {
     "objectID": "chap8.html#cox-regression-prediction",
@@ -2810,21 +2810,21 @@
     "href": "chap8.html#marginal-cox-models",
     "title": "Applied Survival Analysis",
     "section": "Marginal Cox Models",
-    "text": "Marginal Cox Models\n\nMarginal models\n\nFocusing on component-wise marginal distributions\n\nMarginal distribution: distribution of a component across all units in population\n\nNo specification of joint distribution between components\nAccount for correlation empirically\n\nMarginal Cox model \\[\\begin{equation}\\label{eq:multi:marg_cox}\n\\Lambda_k(t\\mid Z)=\\exp(\\beta_k^\\T Z)\\Lambda_{k0}(t)\n\\end{equation}\\]\n\n\\(\\beta_k\\): population-averaged log-hazard ratios\n\nNot comparable to unit-level \\(\\beta_k\\) in frailty model\n\nFor same-type failure, constrain \\(\\beta_1=\\cdots=\\beta_K\\) and \\(\\Lambda_{10}=\\cdots=\\Lambda_{K0}\\)"
+    "text": "Marginal Cox Models\n\n\nMarginal models\n\nFocusing on component-wise marginal distributions (averaged across units)\nNo specification of joint distribution between components\nAccount for correlation empirically\n\n\n\n\n\nMarginal Cox model \\[\\begin{equation}\\label{eq:multi:marg_cox}\n\\Lambda_k(t\\mid Z)=\\exp(\\beta_k^\\T Z)\\Lambda_{k0}(t)\n\\end{equation}\\]\n\n\\(\\beta_k\\): population-averaged log-hazard ratios\n\nNot comparable to unit-level \\(\\beta_k\\) in frailty model\n\nFor same-type failure, constrain \\(\\beta_1=\\cdots=\\beta_K\\) and \\(\\Lambda_{10}=\\cdots=\\Lambda_{K0}\\)"
   },
   {
     "objectID": "chap8.html#estimation-i",
     "href": "chap8.html#estimation-i",
     "title": "Applied Survival Analysis",
     "section": "Estimation (I)",
-    "text": "Estimation (I)\n\nFree \\(\\beta_k\\) & \\(\\Lambda_{k0}\\)\n\nSolve \\(U_{nk}(\\hat\\beta_k)=0\\) \\[\\begin{align}\\label{eq:multi:eek}\nU_{nk}(\\beta_k)&=\\Pn\\int_0^\\infty\\left\\{Z_i-\n\\frac{\\sum_{j=1}^nI(X_{kj}\\geq t)Z_j\\exp(\\beta_k^\\T Z_j)}{\\sum_{j=1}^nI(X_{kj}\\geq t)\\exp(\\beta_k^\\T Z_j)}\\right\\}\\dd N_{ki}(t)\n\\end{align}\\]\n\\(\\hat\\Lambda_{k0}(t)=\\int_0^t\\frac{\\sum_{i=1}^n\\dd N_{ki}(u)}{\\sum_{i=1}^n I(X_{ki}\\geq u)\\exp(\\hat\\beta_k^\\T Z_i)}\\)\n\nSame \\(\\beta\\) & free \\(\\Lambda_{k0}\\)\n\nSolve \\(U_{n}(\\hat\\beta)=0\\) \\[\\begin{align}\\label{eq:multi:ee_stra}\nU_{n}(\\beta)&=\\Pn\\sum_{k=1}^K\\int_0^\\infty\\left\\{Z_i-\n\\frac{\\sum_{j=1}^nI(X_{kj}\\geq t)Z_j\\exp(\\beta^\\T Z_j)}{\\sum_{j=1}^nI(X_{kj}\\geq t)\\exp(\\beta^\\T Z_j)}\\right\\}\\dd N_{ki}(t)\n\\end{align}\\]"
+    "text": "Estimation (I)\n\n\nFree \\(\\beta_k\\) & \\(\\Lambda_{k0}\\)\n\nSolve \\(U_{nk}(\\hat\\beta_k)=0\\) \\[\\begin{align}\\label{eq:multi:eek}\nU_{nk}(\\beta_k)&=\\Pn\\int_0^\\infty\\left\\{Z_i-\n\\frac{\\sum_{j=1}^nI(X_{kj}\\geq t)Z_j\\exp(\\beta_k^\\T Z_j)}{\\sum_{j=1}^nI(X_{kj}\\geq t)\\exp(\\beta_k^\\T Z_j)}\\right\\}\\dd N_{ki}(t)\n\\end{align}\\]\n\\(\\hat\\Lambda_{k0}(t)=\\int_0^t\\frac{\\sum_{i=1}^n\\dd N_{ki}(u)}{\\sum_{i=1}^n I(X_{ki}\\geq u)\\exp(\\hat\\beta_k^\\T Z_i)}\\)\n\n\n\n\n\nSame \\(\\beta\\) & free \\(\\Lambda_{k0}\\)\n\nSolve \\(U_{n}(\\hat\\beta)=0\\) \\[\\begin{align}\\label{eq:multi:ee_stra}\nU_{n}(\\beta)&=\\Pn\\sum_{k=1}^K\\int_0^\\infty\\left\\{Z_i-\n\\frac{\\sum_{j=1}^nI(X_{kj}\\geq t)Z_j\\exp(\\beta^\\T Z_j)}{\\sum_{j=1}^nI(X_{kj}\\geq t)\\exp(\\beta^\\T Z_j)}\\right\\}\\dd N_{ki}(t)\n\\end{align}\\]"
   },
   {
     "objectID": "chap8.html#estimation-ii",
     "href": "chap8.html#estimation-ii",
     "title": "Applied Survival Analysis",
     "section": "Estimation (II)",
-    "text": "Estimation (II)\n\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)\n\nSolve \\(U_{n}(\\hat\\beta)=0\\) \\[\\begin{align}\\label{eq:multi:ee_unstra}\nU_{n}(\\beta)&=\\Pn\\sum_{k=1}^K\\int_0^\\infty\\left\\{Z_i-\n\\frac{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)Z_j\\exp(\\beta^\\T Z_j)}{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)\\exp(\\beta^\\T Z_j)}\\right\\}\\times\\dd N_{ki}(t)\n\\end{align}\\]\n\n\n\n\n\n\n\n\nExercise: Breslow estimator\n\n\nConstruct proper Breslow estimators for the baseline function(s) given \\(\\hat\\beta\\) under:\n\nSame \\(\\beta\\) & free \\(\\Lambda_{k0}\\)\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)"
+    "text": "Estimation (II)\n\n\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)\n\nSolve \\(U_{n}(\\hat\\beta)=0\\) \\[\\begin{align}\\label{eq:multi:ee_unstra}\nU_{n}(\\beta)&=\\Pn\\sum_{k=1}^K\\int_0^\\infty\\left\\{Z_i-\n\\frac{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)Z_j\\exp(\\beta^\\T Z_j)}{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)\\exp(\\beta^\\T Z_j)}\\right\\}\\times\\dd N_{ki}(t)\n\\end{align}\\]\n\n\n\n\n\n\n\n\n\n\nExercise: Breslow estimator\n\n\nConstruct proper Breslow estimators for the baseline function(s) given \\(\\hat\\beta\\) under:\n\nSame \\(\\beta\\) & free \\(\\Lambda_{k0}\\)\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)"
   },
   {
     "objectID": "chap8.html#robust-variance-sandwitch-estimator",
@@ -2838,49 +2838,49 @@
     "href": "chap8.html#conditional-vs-marginal-models",
     "title": "Applied Survival Analysis",
     "section": "Conditional vs Marginal Models",
-    "text": "Conditional vs Marginal Models\n\nComparison"
+    "text": "Conditional vs Marginal Models\n\n\nComparison"
   },
   {
     "objectID": "chap8.html#software-survivalcoxph-i-1",
     "href": "chap8.html#software-survivalcoxph-i-1",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::coxph() (I)",
-    "text": "Software: survival::coxph() (I)\n\nScenario 1: Marginal model with same \\(\\beta\\) and \\(\\Lambda_0\\)\n\nSame failure grouped in cluster id\n\n\n\n\ncoxph(Surv(time, status) ~ covariates + cluster(id))\n\n\n\nScenario 2: Marginal model with same \\(\\beta\\) and different \\(\\Lambda_{k0}\\)\n\nDifferent failure types enum in unit id with same covariate effect\n\nStratified Cox model by component (single \\(\\beta\\); component- specific \\(\\Lambda_{k0}\\))\n\n\n\n\n\ncoxph(Surv(time, status) ~ covariates + strata(enum)\n      + cluster(id))"
+    "text": "Software: survival::coxph() (I)\n\n\nScenario 1: Marginal model with same \\(\\beta\\) and \\(\\Lambda_0\\)\n\nSame failure grouped in cluster id\n\n\n\n\ncoxph(Surv(time, status) ~ covariates + cluster(id))\n\n\n\n\n\nScenario 2: Marginal model with same \\(\\beta\\) and different \\(\\Lambda_{k0}\\)\n\nDifferent failure types enum in unit id with same covariate effect\n\nStratified Cox model by component (single \\(\\beta\\); component- specific \\(\\Lambda_{k0}\\))\n\n\n\n\n\ncoxph(Surv(time, status) ~ covariates + strata(enum)\n      + cluster(id))"
   },
   {
     "objectID": "chap8.html#software-survivalcoxph-ii-1",
     "href": "chap8.html#software-survivalcoxph-ii-1",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::coxph() (II)",
-    "text": "Software: survival::coxph() (II)\n\nScenario 3: Marginal model with different \\(\\beta_k\\) and \\(\\Lambda_{k0}\\)\n\nDifferent failure types enum in unit id with different covariate effects\nComponent specific \\(\\beta_k\\) and \\(\\Lambda_{k0}\\)\n\n\n\n\ncoxph(Surv(time, status) ~ covariates * strata(enum) + \n      cluster(id))"
+    "text": "Software: survival::coxph() (II)\n\n\nScenario 3: Marginal model with different \\(\\beta_k\\) and \\(\\Lambda_{k0}\\)\n\nDifferent failure types enum in unit id with different covariate effects\nComponent specific \\(\\beta_k\\) and \\(\\Lambda_{k0}\\)\n\n\n\n\ncoxph(Surv(time, status) ~ covariates * strata(enum) + \n      cluster(id))"
   },
   {
     "objectID": "chap8.html#study-background-1",
     "href": "chap8.html#study-background-1",
     "title": "Applied Survival Analysis",
     "section": "Study Background",
-    "text": "Study Background\n\nStudy information\n\nDesign: randomized controlled trial of 197 diabetic patients, each with one eye receiving photocoagulation, the other eye left untreated as control (link to follow-up plot)\nQuestions: Whether treatment delays onset of blindness, and whether treatment effect depends on type of diabetes (adult or juvenile)"
+    "text": "Study Background\n\n\nStudy information\n\nDesign: randomized controlled trial of 197 diabetic patients (plot)\n\none eye receiving photocoagulation\nthe other eye left untreated as control\n\nEndpoint: Onset of blindness\n\nWhether treatment effect depends on type of diabetes (adult or juvenile)"
   },
   {
     "objectID": "chap8.html#marginal-cox-regression-inference-i",
     "href": "chap8.html#marginal-cox-regression-inference-i",
     "title": "Applied Survival Analysis",
     "section": "Marginal Cox Regression: Inference (I)",
-    "text": "Marginal Cox Regression: Inference (I)\n\nMarginal Cox model to handle correlation between eyes\n\nTreatment effect differs by disease type substantially\n\n\n# Fit a bivariate marginal Cox model with treatment, diabetic type\n# risk score, and treatment*type interaction as covariates\nobj &lt;- coxph(Surv(time, status) ~ trt + type + trt * type + risk\n             + cluster(id), data = data)\n\nsummary(obj)\n#                      coef exp(coef) se(coef) robust se      z Pr(&gt;|z|)    \n# trt              -1.29375   0.27424  0.27552   0.24614 -5.256 1.47e-07 ***\n# typejuvenile     -0.37115   0.68994  0.19958   0.19535 -1.900  0.05745 .  \n# risk              0.15342   1.16582  0.05636   0.05981  2.565  0.01031 *  \n# trt:typejuvenile  0.88241   2.41672  0.35124   0.30962  2.850  0.00437 **"
+    "text": "Marginal Cox Regression: Inference (I)\n\n\nMarginal Cox model to handle correlation between eyes\n\nTreatment effect differs by disease type substantially\n\n\n# Fit a bivariate marginal Cox model with treatment, diabetic type\n# risk score, and treatment*type interaction as covariates\nobj &lt;- coxph(Surv(time, status) ~ trt + type + trt : type + risk\n             + cluster(id), data = data)\n\nsummary(obj)\n#                      coef exp(coef) se(coef) robust se      z Pr(&gt;|z|)    \n# trt              -1.29375   0.27424  0.27552   0.24614 -5.256 1.47e-07 ***\n# typejuvenile     -0.37115   0.68994  0.19958   0.19535 -1.900  0.05745 .  \n# risk              0.15342   1.16582  0.05636   0.05981  2.565  0.01031 *  \n# trt:typejuvenile  0.88241   2.41672  0.35124   0.30962  2.850  0.00437 **"
   },
   {
     "objectID": "chap8.html#marginal-cox-regression-inference-ii",
     "href": "chap8.html#marginal-cox-regression-inference-ii",
     "title": "Applied Survival Analysis",
     "section": "Marginal Cox Regression: Inference (II)",
-    "text": "Marginal Cox Regression: Inference (II)\n\nEfficiency gain by accounting for correlation\n\nRobust: sandwich estimator\nNaive: assuming two eyes are independent"
+    "text": "Marginal Cox Regression: Inference (II)\n\n\nEfficiency gain by accounting for correlation\n\nRobust: sandwich estimator\nNaive: assuming two eyes are independent"
   },
   {
     "objectID": "chap8.html#marginal-cox-regression-results",
     "href": "chap8.html#marginal-cox-regression-results",
     "title": "Applied Survival Analysis",
     "section": "Marginal Cox Regression: Results",
-    "text": "Marginal Cox Regression: Results\n\nTreatment effect depends on disease type\n\nMuch greater reduction in risk of blindness of adult (type II?) than juvenile patients (type I?) (p-value = 0.004)\n\n\n\n\n\n\n\n\n\nDiabetic type\nHazard ratio\n\n\n\n\nAdult\n\\[                                                                                                      \n                                                                                                                 \\exp(-1.294) = 27.4\\%       \n                                                                                                                                       \\]\n\n\nJuvenile\n\\[                                                                                                      \n                                                                                                            \\exp(-1.294 + 0.882)= 66.2\\%     \n                                                                                                                                       \\]"
+    "text": "Marginal Cox Regression: Results\n\n\nTreatment effect depends on disease type\n\nMuch greater reduction in risk of blindness of adult (type II?) than juvenile patients (type I?) (p-value = 0.004)\n\n\n\n\n\n\n\n\n\nDiabetic type\nHazard ratio\n\n\n\n\nAdult\n\\[                                                                                                      \n                                                                                                                 \\exp(-1.294) = 27.4\\%       \n                                                                                                                                       \\]\n\n\nJuvenile\n\\[                                                                                                      \n                                                                                                            \\exp(-1.294 + 0.882)= 66.2\\%     \n                                                                                                                                       \\]"
   },
   {
     "objectID": "chap8.html#marginal-cox-regression-prediction",
@@ -2894,14 +2894,14 @@
     "href": "chap8.html#notes-i",
     "title": "Applied Survival Analysis",
     "section": "Notes (I)",
-    "text": "Notes (I)\n\nComparison with longitudinal analysis\n\n\nMultivariate events\nLongitudinal data\n\n\n\n\nShared-frailty models\nMixed-effects models\n\n\nMarginal models\nMarginal models (GEE)\n\n\n\n\nFrailty models = random intercepts \\(\\to\\) random slopes \\[\n\\pr(T_k&gt;t\\mid Z, b)=\\exp\\left\\{-\\exp(b^\\T\\tilde Z+\\beta_k^\\T Z)\\eta_{k0}(t)\\right\\}\n\\]\n\n\\(\\tilde Z\\) a subset of \\(Z\\)\n\\(b\\sim_\\mbox{e.g.} MVN(0, \\Sigma)\\)"
+    "text": "Notes (I)\n\nComparison with longitudinal analysis\n\n\n\n\nMultivariate events\nLongitudinal data\n\n\n\n\nShared-frailty models\nMixed-effects models\n\n\nMarginal models\nMarginal models (GEE)\n\n\n\n\nFrailty models = random intercepts \\(\\to\\) random slopes \\[\n\\pr(T_k&gt;t\\mid Z, b)=\\exp\\left\\{-\\exp(b^\\T\\tilde Z+\\beta_k^\\T Z)\\eta_{k0}(t)\\right\\}\n\\]\n\n\\(\\tilde Z\\) a subset of \\(Z\\)\n\\(b\\sim_\\mbox{e.g.} MVN(0, \\Sigma)\\)"
   },
   {
     "objectID": "chap8.html#notes-ii",
     "href": "chap8.html#notes-ii",
     "title": "Applied Survival Analysis",
     "section": "Notes (II)",
-    "text": "Notes (II)\n\nHougaard (2000)"
+    "text": "Notes (II)\n\nOther frailty distributions\n\nLog-normal: coxph(Surv(time, status) ~ covariates +      frailty(id, distribution = \"gaussian\"))\n\nfrailtyEM package\n\nemfrail(): EM algorithm for frailty models\nemfrail_dist(): specify frailty distribution\n\nPositive stable: dist = \"stable\"\nInverse Gaussian: dist = \"pvf\"\n\n\n\n\nlibrary(frailtyEM)\n# Frailty model via emfrail()\nobj &lt;- emfrail(Surv(time, status) ~ covariates + cluster(id) \n                  + distribution = emfrail_dist(dist = \"pvf\"))"
   },
   {
     "objectID": "chap8.html#summary",
@@ -2909,5 +2909,19 @@
     "title": "Applied Survival Analysis",
     "section": "Summary",
     "text": "Summary\n\nShared-frailty Cox model \\[\n  \\pr(T_k&gt;t\\mid Z,\\xi)=\\exp\\left\\{-\\xi\\exp(\\beta_k^\\T Z) \\eta_{k0}(t)\\right\\}\n  \\]\n\nUnit-specific \\(\\xi\\) induces correlation\ncoxph(Surv(time, status) ~ covariates + frailty(id, distribution = \"gamma\"))\n\nMarginal Cox model \\[\n  \\Lambda_k(t\\mid Z)=\\exp(\\beta_k^\\T Z)\\Lambda_{k0}(t)\n  \\]\n\nRobust sandwich estimator to account for correlation empirically\ncoxph(Surv(time, status) ~ covariates + cluster(id))"
+  },
+  {
+    "objectID": "chap8.html#robust-variance-sandwitch",
+    "href": "chap8.html#robust-variance-sandwitch",
+    "title": "Applied Survival Analysis",
+    "section": "Robust Variance: Sandwitch",
+    "text": "Robust Variance: Sandwitch\n\n\nMartingale not working\n\nConditional event rate given past \\(\\neq\\) modeling target\nBetween-component dependence not specified\n\n\n\n\n\nRobust variance\n\nWorks regardless of underlying dependence structure\nSandwich estimator \\[\n\\hat\\var(\\hat\\beta)=n^{-1}\\hat A_n^{-1}\\hat{\\mathcal I}_n \\hat A_n^{\\T-1}\n\\]\n\n\\(\\hat A_n=\\partial U_n(\\hat\\beta)/\\partial\\beta\\)\n\\(\\hat{\\mathcal I}_n=\\hat\\var\\{\\sqrt n U_n(\\beta)\\}\\): sample variance based on sum of independent units"
+  },
+  {
+    "objectID": "chap8.html#notes-iii",
+    "href": "chap8.html#notes-iii",
+    "title": "Applied Survival Analysis",
+    "section": "Notes (III)",
+    "text": "Notes (III)\n\nTexts"
   }
 ]
