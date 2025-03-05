@@ -572,11 +572,12 @@ S(t_1,\ldots, t_K) = \exp\left(-\left[\sum_{k=1}^K\{-\log S_k(t_k)\}^{1/\gamma}\
 <li><strong>Scenario 1: Gamma-frailty with same</strong> <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\eta_0\)</span>
 <ul>
 <li>Same failure grouped in cluster <code>id</code></li>
+<li><code>obj$frail</code>: estimated <span class="math inline">\(\hat\xi_i\)</span> for each unit</li>
 </ul></li>
 </ul>
 <div class="big-code">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates <span class="sc">+</span> </span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates <span class="sc">+</span> </span>
 <span id="cb1-2"><a></a>        <span class="fu">frailty</span>(id, <span class="at">distribution =</span> <span class="st">"gamma"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
@@ -614,6 +615,23 @@ S(t_1,\ldots, t_K) = \exp\left(-\left[\sum_{k=1}^K\{-\log S_k(t_k)\}^{1/\gamma}\
 </div>
 </div>
 </div>
+<div class="fragment">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Problem</strong></p>
+</div>
+<div class="callout-content">
+<p>How to set up a model of the form: <span class="math display">\[
+\lambda_k(t\mid Z, \xi) \;=\; \xi\exp\left(\beta_k^\T Z_{(1)} + \gamma^\T Z_{(2)}\right) \eta_{k0}'(t),
+\]</span> where the effects of <span class="math inline">\(Z_{(1)}\)</span> are component-specific while those of <span class="math inline">\(Z_{(2)}\)</span> are component-invariant?</p>
+</div>
+</div>
+</div>
+</div>
 </section></section>
 <section>
 <section id="multi-institution-lung-cancer-study" class="title-slide slide level1 center">
@@ -622,6 +640,7 @@ S(t_1,\ldots, t_K) = \exp\left(-\left[\sum_{k=1}^K\{-\log S_k(t_k)\}^{1/\gamma}\
 </section>
 <section id="study-background" class="slide level2">
 <h2>Study Background</h2>
+<div class="fragment">
 <ul>
 <li><strong>Study information</strong>
 <ul>
@@ -634,30 +653,33 @@ S(t_1,\ldots, t_K) = \exp\left(-\left[\sum_{k=1}^K\{-\log S_k(t_k)\}^{1/\gamma}\
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="cox-regression-inference" class="slide level2">
 <h2>Cox Regression: Inference</h2>
+<div class="fragment">
 <ul>
 <li><p><strong>Gamma frailty for correlation within institution</strong></p>
 <ul>
 <li>sex and physician-rated ECOG strongly predictive of mortality</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># Fit a Cox model with institution-specific frailty</span></span>
-<span id="cb4-2"><a></a><span class="co"># to account for correlation within institution</span></span>
-<span id="cb4-3"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> age <span class="sc">+</span> <span class="fu">factor</span>(sex) <span class="sc">+</span> phec <span class="sc">+</span> phkn <span class="sc">+</span> </span>
-<span id="cb4-4"><a></a>            ptkn <span class="sc">+</span> wl <span class="sc">+</span> <span class="fu">frailty</span>(inst, <span class="at">distribution =</span><span class="st">"gamma"</span>), <span class="at">data =</span> data)</span>
-<span id="cb4-5"><a></a></span>
-<span id="cb4-6"><a></a><span class="fu">summary</span>(obj)</span>
-<span id="cb4-7"><a></a><span class="co">#              exp(coef) exp(-coef) lower .95 upper .95</span></span>
-<span id="cb4-8"><a></a><span class="co"># age             1.0133     0.9869    0.9938    1.0331</span></span>
-<span id="cb4-9"><a></a><span class="co"># factor(sex)2    0.5333     1.8751    0.3751    0.7582</span></span>
-<span id="cb4-10"><a></a><span class="co"># phec            1.9984     0.5004    1.3460    2.9669</span></span>
-<span id="cb4-11"><a></a><span class="co"># phkn            1.0204     0.9800    1.0002    1.0410</span></span>
-<span id="cb4-12"><a></a><span class="co"># ptkn            0.9855     1.0147    0.9715    0.9998</span></span>
-<span id="cb4-13"><a></a><span class="co"># wl              0.9870     1.0132    0.9735    1.0006</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="1-4|5-11|13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># Fit a Cox model with institution-specific frailty</span></span>
+<span id="cb4-2"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> age <span class="sc">+</span> <span class="fu">factor</span>(sex) <span class="sc">+</span> phec <span class="sc">+</span> phkn <span class="sc">+</span> </span>
+<span id="cb4-3"><a></a>            ptkn <span class="sc">+</span> wl <span class="sc">+</span> <span class="fu">frailty</span>(inst, <span class="at">distribution =</span> <span class="st">"gamma"</span>), <span class="at">data =</span> df)</span>
+<span id="cb4-4"><a></a><span class="fu">summary</span>(obj)</span>
+<span id="cb4-5"><a></a><span class="co">#&gt;              exp(coef) exp(-coef) lower .95 upper .95</span></span>
+<span id="cb4-6"><a></a><span class="co">#&gt; age             1.0133     0.9869    0.9938    1.0331</span></span>
+<span id="cb4-7"><a></a><span class="co">#&gt; factor(sex)2    0.5333     1.8751    0.3751    0.7582</span></span>
+<span id="cb4-8"><a></a><span class="co">#&gt; phec            1.9984     0.5004    1.3460    2.9669</span></span>
+<span id="cb4-9"><a></a><span class="co">#&gt; phkn            1.0204     0.9800    1.0002    1.0410</span></span>
+<span id="cb4-10"><a></a><span class="co">#&gt; ptkn            0.9855     1.0147    0.9715    0.9998</span></span>
+<span id="cb4-11"><a></a><span class="co">#&gt; wl              0.9870     1.0132    0.9735    1.0006</span></span>
+<span id="cb4-12"><a></a><span class="co">#&gt; Iterations: 9 outer, 35 Newton-Raphson</span></span>
+<span id="cb4-13"><a></a><span class="co">#&gt;  Variance of random effect= 0.008592303   I-likelihood = -635.5 </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
+</div>
 </section>
 <section id="cox-regression-prediction" class="slide level2">
 <h2>Cox Regression: Prediction</h2>
@@ -674,16 +696,18 @@ S(t_1,\ldots, t_K) = \exp\left(-\left[\sum_{k=1}^K\{-\log S_k(t_k)\}^{1/\gamma}\
 </section>
 <section id="marginal-cox-models" class="slide level2">
 <h2>Marginal Cox Models</h2>
+<div class="fragment">
 <ul>
 <li><strong>Marginal models</strong>
 <ul>
-<li>Focusing on component-wise marginal distributions
-<ul>
-<li><strong>Marginal distribution</strong>: distribution of a component across all units in population</li>
-</ul></li>
+<li>Focusing on component-wise <strong>marginal distributions</strong> (averaged across units)</li>
 <li>No specification of joint distribution between components</li>
 <li>Account for correlation empirically</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Marginal Cox model</strong> <span class="math display">\[\begin{equation}\label{eq:multi:marg_cox}
 \Lambda_k(t\mid Z)=\exp(\beta_k^\T Z)\Lambda_{k0}(t)
 \end{equation}\]</span>
@@ -695,9 +719,11 @@ S(t_1,\ldots, t_K) = \exp\left(-\left[\sum_{k=1}^K\{-\log S_k(t_k)\}^{1/\gamma}\
 <li>For same-type failure, constrain <span class="math inline">\(\beta_1=\cdots=\beta_K\)</span> and <span class="math inline">\(\Lambda_{10}=\cdots=\Lambda_{K0}\)</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="estimation-i" class="slide level2">
 <h2>Estimation (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Free</strong> <span class="math inline">\(\beta_k\)</span> &amp; <span class="math inline">\(\Lambda_{k0}\)</span>
 <ul>
@@ -707,6 +733,10 @@ U_{nk}(\beta_k)&amp;=\Pn\int_0^\infty\left\{Z_i-
 \end{align}\]</span></li>
 <li><span class="math inline">\(\hat\Lambda_{k0}(t)=\int_0^t\frac{\sum_{i=1}^n\dd N_{ki}(u)}{\sum_{i=1}^n I(X_{ki}\geq u)\exp(\hat\beta_k^\T Z_i)}\)</span></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Same</strong> <span class="math inline">\(\beta\)</span> &amp; free <span class="math inline">\(\Lambda_{k0}\)</span>
 <ul>
 <li>Solve <span class="math inline">\(U_{n}(\hat\beta)=0\)</span> <span class="math display">\[\begin{align}\label{eq:multi:ee_stra}
@@ -715,9 +745,11 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 \end{align}\]</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="estimation-ii" class="slide level2">
 <h2>Estimation (II)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Same</strong> <span class="math inline">\(\beta\)</span> &amp; <span class="math inline">\(\Lambda_{0}\)</span>
 <ul>
@@ -727,6 +759,8 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 \end{align}\]</span></li>
 </ul></li>
 </ul>
+</div>
+<div class="fragment">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -744,15 +778,21 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 </div>
 </div>
 </div>
+</div>
 </section>
-<section id="robust-variance-sandwitch-estimator" class="slide level2">
-<h2>Robust Variance: Sandwitch Estimator</h2>
+<section id="robust-variance-sandwitch" class="slide level2">
+<h2>Robust Variance: Sandwitch</h2>
+<div class="fragment">
 <ul>
 <li><strong>Martingale not working</strong>
 <ul>
 <li>Conditional event rate given past <span class="math inline">\(\neq\)</span> modeling target</li>
 <li>Between-component dependence not specified</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Robust variance</strong>
 <ul>
 <li>Works regardless of underlying dependence structure</li>
@@ -765,9 +805,11 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="conditional-vs-marginal-models" class="slide level2">
 <h2>Conditional vs Marginal Models</h2>
+<div class="fragment">
 <ul>
 <li><strong>Comparison</strong></li>
 </ul>
@@ -776,9 +818,11 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 <p><img data-src="images/mul_comp.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="software-survivalcoxph-i-1" class="slide level2">
 <h2>Software: <code>survival::coxph()</code> (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Scenario 1: Marginal model with same</strong> <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\Lambda_0\)</span>
 <ul>
@@ -790,6 +834,8 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates <span class="sc">+</span> <span class="fu">cluster</span>(id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
+<div class="fragment">
 <ul>
 <li><strong>Scenario 2: Marginal model with same</strong> <span class="math inline">\(\beta\)</span> and different <span class="math inline">\(\Lambda_{k0}\)</span>
 <ul>
@@ -805,9 +851,11 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 <span id="cb6-2"><a></a>      <span class="sc">+</span> <span class="fu">cluster</span>(id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
 </section>
 <section id="software-survivalcoxph-ii-1" class="slide level2">
 <h2>Software: <code>survival::coxph()</code> (II)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Scenario 3: Marginal model with different</strong> <span class="math inline">\(\beta_k\)</span> and <span class="math inline">\(\Lambda_{k0}\)</span>
 <ul>
@@ -821,6 +869,7 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 <span id="cb7-2"><a></a>      <span class="fu">cluster</span>(id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
 </section></section>
 <section>
 <section id="diabetic-retinopathy-study" class="title-slide slide level1 center">
@@ -829,25 +878,36 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 </section>
 <section id="study-background-1" class="slide level2">
 <h2>Study Background</h2>
+<div class="fragment">
 <ul>
 <li><strong>Study information</strong>
 <ul>
-<li><strong>Design</strong>: randomized controlled trial of 197 diabetic patients, each with one eye receiving <strong>photocoagulation</strong>, the other eye left untreated as <strong>control</strong> (<a href="https://lmaowisc.github.io/BMI741/chapter8_tmp_files/figure-html/fig-drs-fu-1.png" target="_blank">link</a> to follow-up plot)</li>
-<li><strong>Questions</strong>: Whether treatment delays <strong>onset of blindness</strong>, and whether treatment effect depends on type of diabetes (adult or juvenile) <img data-src="images/mul_drs_dat.png" class="quarto-figure quarto-figure-center" style="width:90.0%"></li>
+<li><strong>Design</strong>: randomized controlled trial of 197 diabetic patients (<a href="https://lmaowisc.github.io/BMI741/chapter8_tmp_files/figure-html/fig-drs-fu-1.png" target="_blank">plot</a>)
+<ul>
+<li>one eye receiving <strong>photocoagulation</strong></li>
+<li>the other eye left untreated as <strong>control</strong></li>
+</ul></li>
+<li><strong>Endpoint</strong>: <em>Onset of blindness</em>
+<ul>
+<li>Whether treatment effect depends on type of diabetes (adult or juvenile)</li>
+</ul>
+<img data-src="images/mul_drs_dat.png" class="quarto-figure quarto-figure-center" style="width:90.0%"></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="marginal-cox-regression-inference-i" class="slide level2">
 <h2>Marginal Cox Regression: Inference (I)</h2>
+<div class="fragment">
 <ul>
 <li><p><strong>Marginal Cox model to handle correlation between eyes</strong></p>
 <ul>
 <li>Treatment effect differs by disease type substantially</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># Fit a bivariate marginal Cox model with treatment, diabetic type</span></span>
+<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="1-6|8|11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># Fit a bivariate marginal Cox model with treatment, diabetic type</span></span>
 <span id="cb8-2"><a></a><span class="co"># risk score, and treatment*type interaction as covariates</span></span>
-<span id="cb8-3"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> trt <span class="sc">+</span> type <span class="sc">+</span> trt <span class="sc">*</span> type <span class="sc">+</span> risk</span>
+<span id="cb8-3"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> trt <span class="sc">+</span> type <span class="sc">+</span> trt <span class="sc">:</span> type <span class="sc">+</span> risk</span>
 <span id="cb8-4"><a></a>             <span class="sc">+</span> <span class="fu">cluster</span>(id), <span class="at">data =</span> data)</span>
 <span id="cb8-5"><a></a></span>
 <span id="cb8-6"><a></a><span class="fu">summary</span>(obj)</span>
@@ -858,9 +918,11 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 <span id="cb8-11"><a></a><span class="co"># trt:typejuvenile  0.88241   2.41672  0.35124   0.30962  2.850  0.00437 ** </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
+</div>
 </section>
 <section id="marginal-cox-regression-inference-ii" class="slide level2">
 <h2>Marginal Cox Regression: Inference (II)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Efficiency gain by accounting for correlation</strong>
 <ul>
@@ -868,14 +930,18 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 <li><strong>Naive</strong>: assuming two eyes are independent</li>
 </ul></li>
 </ul>
+</div>
+<div class="fragment">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="images/mul_drs_inf.png" class="quarto-figure quarto-figure-center" style="width:90.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="marginal-cox-regression-results" class="slide level2">
 <h2>Marginal Cox Regression: Results</h2>
+<div class="fragment">
 <ul>
 <li><strong>Treatment effect depends on disease type</strong>
 <ul>
@@ -908,13 +974,16 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 <section id="marginal-cox-regression-prediction" class="slide level2">
 <h2>Marginal Cox Regression: Prediction</h2>
+<div class="fragment">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="images/mul_drs_pred.png" class="quarto-figure quarto-figure-center" style="width:90.0%"></p>
 </figure>
+</div>
 </div>
 </section></section>
 <section>
@@ -924,8 +993,10 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 </section>
 <section id="notes-i" class="slide level2">
 <h2>Notes (I)</h2>
+<ul>
+<li><strong>Comparison with longitudinal analysis</strong></li>
+</ul>
 <table class="caption-top">
-<caption>Comparison with longitudinal analysis</caption>
 <thead>
 <tr class="header">
 <th style="text-align: center;">Multivariate events</th>
@@ -956,11 +1027,36 @@ U_{n}(\beta)&amp;=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
 <section id="notes-ii" class="slide level2">
 <h2>Notes (II)</h2>
 <ul>
-<li><strong>Hougaard (2000)</strong></li>
+<li><strong>Other frailty distributions</strong>
+<ul>
+<li><strong>Log-normal</strong>: <code>coxph(Surv(time, status) ~ covariates +      frailty(id, distribution = "gaussian"))</code></li>
+</ul></li>
+<li><strong><code>frailtyEM</code> package</strong>
+<ul>
+<li><code>emfrail()</code>: EM algorithm for frailty models</li>
+<li><code>emfrail_dist()</code>: specify frailty distribution
+<ul>
+<li><strong>Positive stable</strong>: <code>dist = "stable"</code></li>
+<li><strong>Inverse Gaussian</strong>: <code>dist = "pvf"</code></li>
+</ul></li>
+</ul></li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="fu">library</span>(frailtyEM)</span>
+<span id="cb9-2"><a></a><span class="co"># Frailty model via emfrail()</span></span>
+<span id="cb9-3"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">emfrail</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates <span class="sc">+</span> <span class="fu">cluster</span>(id) </span>
+<span id="cb9-4"><a></a>                  <span class="sc">+</span> <span class="at">distribution =</span> <span class="fu">emfrail_dist</span>(<span class="at">dist =</span> <span class="st">"pvf"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="notes-iii" class="slide level2">
+<h2>Notes (III)</h2>
+<ul>
+<li><strong>Texts</strong></li>
+</ul>
+<!-- ![](images/mul_hougaard_.jpg){fig-align="center" width="26%"} -->
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/mul_hougaard_.jpg" class="quarto-figure quarto-figure-center" style="width:26.0%"></p>
+<p><img data-src="images/mult_texts.png" class="quarto-figure quarto-figure-center" style="width:60.0%"></p>
 </figure>
 </div>
 </section>

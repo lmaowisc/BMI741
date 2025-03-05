@@ -92,7 +92,7 @@ summary(obj)
 
 obj$coefficients
 obj$frail
-str(obj)
+
 # fit a naive Cox model without institution-specific frailty
 obj_naive <- coxph(Surv(time,status)~ age + sex+phec+phkn+ptkn +
                            wl,data = df)

@@ -248,12 +248,13 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::{.fragment}
 -   **Scenario 1: Gamma-frailty with same** $\beta$ and $\eta_0$
     -   Same failure grouped in cluster `id`
-
+    -   `obj$frail`: estimated $\hat\xi_i$ for each unit
+    
 ::: big-code
 ```{r}
 #| eval: false
 #| echo: true
-coxph(Surv(time, status) ~ covariates + 
+obj <- coxph(Surv(time, status) ~ covariates + 
         frailty(id, distribution = "gamma"))
 ```
 :::
@@ -289,19 +290,33 @@ coxph(Surv(time, status) ~ covariates * strata(enum) +
 :::
 :::
 
+:::{.fragment}
+::: callout-note
+## Problem
+How to set up a model of the form:
+$$
+\lambda_k(t\mid Z, \xi) \;=\; \xi\exp\left(\beta_k^\T Z_{(1)} + \gamma^\T Z_{(2)}\right) \eta_{k0}'(t),
+$$
+where the effects of $Z_{(1)}$ are component-specific while those 
+of $Z_{(2)}$ are component-invariant?
+:::
+:::
+
+
 # Multi-Institution Lung Cancer Study
 
 ## Study Background
-
+:::{.fragment}
 -   **Study information**
     -   **Population**: 228 lung cancer patients grouped in 18 institutions
     -   **Endpoint**: Death ([link](https://lmaowisc.github.io/BMI741/chapter8_tmp_files/figure-html/fig-lung-fu-1.png){target="_blank"} to follow-up plot)
     -   **Risk factors**
         -   Age (years); sex (1: male; 2: female); weight loss (pounds) in last six months
         -   Physician-rated ECOG (0--3) and Karnofsky scores (50--100); Patient-rated Karnofsky score (50--100) ![](images/mul_lung_dat.png){fig-align="center" width="90%"}
+:::
 
 ## Cox Regression: Inference
-
+:::{.fragment}
 -   **Gamma frailty for correlation within institution**
 
     -   sex and physician-rated ECOG strongly predictive of mortality
@@ -309,20 +324,22 @@ coxph(Surv(time, status) ~ covariates * strata(enum) +
     ```{r}
     #| eval: false
     #| echo: true
+    #| code-line-numbers: 1-4|5-11|13
     # Fit a Cox model with institution-specific frailty
-    # to account for correlation within institution
     obj <- coxph(Surv(time, status) ~ age + factor(sex) + phec + phkn + 
-                ptkn + wl + frailty(inst, distribution ="gamma"), data = data)
-
+                ptkn + wl + frailty(inst, distribution = "gamma"), data = df)
     summary(obj)
-    #              exp(coef) exp(-coef) lower .95 upper .95
-    # age             1.0133     0.9869    0.9938    1.0331
-    # factor(sex)2    0.5333     1.8751    0.3751    0.7582
-    # phec            1.9984     0.5004    1.3460    2.9669
-    # phkn            1.0204     0.9800    1.0002    1.0410
-    # ptkn            0.9855     1.0147    0.9715    0.9998
-    # wl              0.9870     1.0132    0.9735    1.0006
+    #>              exp(coef) exp(-coef) lower .95 upper .95
+    #> age             1.0133     0.9869    0.9938    1.0331
+    #> factor(sex)2    0.5333     1.8751    0.3751    0.7582
+    #> phec            1.9984     0.5004    1.3460    2.9669
+    #> phkn            1.0204     0.9800    1.0002    1.0410
+    #> ptkn            0.9855     1.0147    0.9715    0.9998
+    #> wl              0.9870     1.0132    0.9735    1.0006
+    #> Iterations: 9 outer, 35 Newton-Raphson
+    #>  Variance of random effect= 0.008592303   I-likelihood = -635.5 
     ```
+:::
 
 ## Cox Regression: Prediction
 
@@ -331,41 +348,48 @@ coxph(Surv(time, status) ~ covariates * strata(enum) +
 # Marginal Models
 
 ## Marginal Cox Models
-
+:::{.fragment}
 -   **Marginal models**
-    -   Focusing on component-wise marginal distributions
-        -   **Marginal distribution**: distribution of a component across all units in population
+    -   Focusing on component-wise **marginal distributions** (averaged across units)
     -   No specification of joint distribution between components
     -   Account for correlation empirically
+:::
+:::{.fragment}
 -   **Marginal Cox model** \begin{equation}\label{eq:multi:marg_cox}
     \Lambda_k(t\mid Z)=\exp(\beta_k^\T Z)\Lambda_{k0}(t)
     \end{equation}
     -   $\beta_k$: population-averaged log-hazard ratios
         -   Not comparable to unit-level $\beta_k$ in frailty model
     -   For same-type failure, constrain $\beta_1=\cdots=\beta_K$ and $\Lambda_{10}=\cdots=\Lambda_{K0}$
+:::
 
 ## Estimation (I)
-
+:::{.fragment}
 -   **Free** $\beta_k$ & $\Lambda_{k0}$
     -   Solve $U_{nk}(\hat\beta_k)=0$ \begin{align}\label{eq:multi:eek}
         U_{nk}(\beta_k)&=\Pn\int_0^\infty\left\{Z_i-
         \frac{\sum_{j=1}^nI(X_{kj}\geq t)Z_j\exp(\beta_k^\T Z_j)}{\sum_{j=1}^nI(X_{kj}\geq t)\exp(\beta_k^\T Z_j)}\right\}\dd N_{ki}(t)
         \end{align}
     -   $\hat\Lambda_{k0}(t)=\int_0^t\frac{\sum_{i=1}^n\dd N_{ki}(u)}{\sum_{i=1}^n I(X_{ki}\geq u)\exp(\hat\beta_k^\T Z_i)}$
+:::
+:::{.fragment}
 -   **Same** $\beta$ & free $\Lambda_{k0}$
     -   Solve $U_{n}(\hat\beta)=0$ \begin{align}\label{eq:multi:ee_stra}
         U_{n}(\beta)&=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
         \frac{\sum_{j=1}^nI(X_{kj}\geq t)Z_j\exp(\beta^\T Z_j)}{\sum_{j=1}^nI(X_{kj}\geq t)\exp(\beta^\T Z_j)}\right\}\dd N_{ki}(t)
         \end{align}
+:::
 
 ## Estimation (II)
-
+:::{.fragment}
 -   **Same** $\beta$ & $\Lambda_{0}$
     -   Solve $U_{n}(\hat\beta)=0$ \begin{align}\label{eq:multi:ee_unstra}
         U_{n}(\beta)&=\Pn\sum_{k=1}^K\int_0^\infty\left\{Z_i-
         \frac{\sum_{k'=1}^K\sum_{j=1}^nI(X_{k'j}\geq t)Z_j\exp(\beta^\T Z_j)}{\sum_{k'=1}^K\sum_{j=1}^nI(X_{k'j}\geq t)\exp(\beta^\T Z_j)}\right\}\times\dd N_{ki}(t)
         \end{align}
+:::
 
+:::{.fragment}
 ::: callout-note
 ## Exercise: Breslow estimator
 
@@ -374,12 +398,15 @@ Construct proper Breslow estimators for the baseline function(s) given $\hat\bet
 -   Same $\beta$ & free $\Lambda_{k0}$
 -   Same $\beta$ & $\Lambda_{0}$
 :::
+:::
 
-## Robust Variance: Sandwitch Estimator
-
+## Robust Variance: Sandwitch 
+:::{.fragment}
 -   **Martingale not working**
     -   Conditional event rate given past $\neq$ modeling target
     -   Between-component dependence not specified
+:::
+:::{.fragment}
 -   **Robust variance**
     -   Works regardless of underlying dependence structure
     -   **Sandwich estimator** $$
@@ -387,15 +414,17 @@ Construct proper Breslow estimators for the baseline function(s) given $\hat\bet
         $$
         -   $\hat A_n=\partial U_n(\hat\beta)/\partial\beta$
         -   $\hat{\mathcal I}_n=\hat\var\{\sqrt n U_n(\beta)\}$: sample variance based on sum of independent units
+:::
 
 ## Conditional vs Marginal Models
-
+:::{.fragment}
 -   **Comparison**
 
 ![](images/mul_comp.png){fig-align="center" width="100%"}
+:::
 
 ## Software: `survival::coxph()` (I)
-
+:::{.fragment}
 -   **Scenario 1: Marginal model with same** $\beta$ and $\Lambda_0$
     -   Same failure grouped in cluster `id`
 
@@ -406,7 +435,8 @@ Construct proper Breslow estimators for the baseline function(s) given $\hat\bet
 coxph(Surv(time, status) ~ covariates + cluster(id))
 ```
 :::
-
+:::
+:::{.fragment}
 -   **Scenario 2: Marginal model with same** $\beta$ and different $\Lambda_{k0}$
     -   Different failure types `enum` in unit `id` with same covariate effect
         -   Stratified Cox model by component (single $\beta$; component- specific $\Lambda_{k0}$)
@@ -419,9 +449,10 @@ coxph(Surv(time, status) ~ covariates + strata(enum)
       + cluster(id))
 ```
 :::
+:::
 
 ## Software: `survival::coxph()` (II)
-
+:::{.fragment}
 -   **Scenario 3: Marginal model with different** $\beta_k$ and $\Lambda_{k0}$
     -   Different failure types `enum` in unit `id` with different covariate effects
     -   Component specific $\beta_k$ and $\Lambda_{k0}$
@@ -434,17 +465,24 @@ coxph(Surv(time, status) ~ covariates * strata(enum) +
       cluster(id))
 ```
 :::
+:::
 
 # Diabetic Retinopathy Study
 
 ## Study Background
-
+:::{.fragment}
 -   **Study information**
-    -   **Design**: randomized controlled trial of 197 diabetic patients, each with one eye receiving **photocoagulation**, the other eye left untreated as **control** ([link](https://lmaowisc.github.io/BMI741/chapter8_tmp_files/figure-html/fig-drs-fu-1.png){target="_blank"} to follow-up plot)
-    -   **Questions**: Whether treatment delays **onset of blindness**, and whether treatment effect depends on type of diabetes (adult or juvenile) ![](images/mul_drs_dat.png){fig-align="center" width="90%"}
+    -   **Design**: randomized controlled trial of 197 diabetic patients ([plot](https://lmaowisc.github.io/BMI741/chapter8_tmp_files/figure-html/fig-drs-fu-1.png){target="_blank"})
+        -   one eye receiving **photocoagulation** 
+        -   the other eye left untreated as **control** 
+    -   **Endpoint**: *Onset of blindness*
+        -   Whether treatment effect depends on type of diabetes (adult or juvenile) 
+        
+        ![](images/mul_drs_dat.png){fig-align="center" width="90%"}
+:::
 
 ## Marginal Cox Regression: Inference (I)
-
+:::{.fragment}
 -   **Marginal Cox model to handle correlation between eyes**
 
     -   Treatment effect differs by disease type substantially
@@ -452,9 +490,10 @@ coxph(Surv(time, status) ~ covariates * strata(enum) +
     ```{r}
     #| eval: false
     #| echo: true
+    #| code-line-numbers: 1-6|8|11
     # Fit a bivariate marginal Cox model with treatment, diabetic type
     # risk score, and treatment*type interaction as covariates
-    obj <- coxph(Surv(time, status) ~ trt + type + trt * type + risk
+    obj <- coxph(Surv(time, status) ~ trt + type + trt : type + risk
                  + cluster(id), data = data)
 
     summary(obj)
@@ -464,19 +503,23 @@ coxph(Surv(time, status) ~ covariates * strata(enum) +
     # risk              0.15342   1.16582  0.05636   0.05981  2.565  0.01031 *  
     # trt:typejuvenile  0.88241   2.41672  0.35124   0.30962  2.850  0.00437 ** 
     ```
+:::
 
 ## Marginal Cox Regression: Inference (II)
-
+:::{.fragment}
 -   **Efficiency gain by accounting for correlation**
     -   **Robust**: sandwich estimator
     -   **Naive**: assuming two eyes are independent
-
+:::
+:::{.fragment}
 ![](images/mul_drs_inf.png){fig-align="center" width="90%"}
+:::
 
 ## Marginal Cox Regression: Results
-
+:::{.fragment}
 -   **Treatment effect depends on disease type**
     -   Much greater reduction in risk of blindness of adult (type II?) than juvenile patients (type I?) (*p*-value = 0.004)
+
 
 | Diabetic type | Hazard ratio |
 |:------------:|:--------------------------------------------------------:|
@@ -486,21 +529,25 @@ coxph(Surv(time, status) ~ covariates * strata(enum) +
 | Juvenile | $$                                                                                                      
                                                                                                             \exp(-1.294 + 0.882)= 66.2\%     
                                                                                                                                        $$ |
+:::
 
 ## Marginal Cox Regression: Prediction
-
+:::{.fragment}
 ![](images/mul_drs_pred.png){fig-align="center" width="90%"}
+:::
 
 # Conclusion
 
 ## Notes (I)
+
+-   **Comparison with longitudinal analysis**
 
 |  Multivariate events  |   Longitudinal data   |
 |:---------------------:|:---------------------:|
 | Shared-frailty models | Mixed-effects models  |
 |    Marginal models    | Marginal models (GEE) |
 
-: Comparison with longitudinal analysis
+
 
 -   **Frailty models = random intercepts** $\to$ random slopes $$
     \pr(T_k>t\mid Z, b)=\exp\left\{-\exp(b^\T\tilde Z+\beta_k^\T Z)\eta_{k0}(t)\right\}
@@ -510,9 +557,31 @@ coxph(Surv(time, status) ~ covariates * strata(enum) +
 
 ## Notes (II)
 
--   **Hougaard (2000)**
+-   **Other frailty distributions**
+    -   **Log-normal**: `coxph(Surv(time, status) ~ covariates + 
+        frailty(id, distribution = "gaussian"))`
+-   **`frailtyEM` package**
+    -   `emfrail()`: EM algorithm for frailty models
+    -   `emfrail_dist()`: specify frailty distribution
+        -   **Positive stable**: `dist = "stable"`
+        -   **Inverse Gaussian**: `dist = "pvf"`
+```{r}
+#| eval: false
+#| echo: true
+library(frailtyEM)
+# Frailty model via emfrail()
+obj <- emfrail(Surv(time, status) ~ covariates + cluster(id) 
+                  + distribution = emfrail_dist(dist = "pvf"))
+```
 
-![](images/mul_hougaard_.jpg){fig-align="center" width="26%"}
+
+## Notes (III)
+
+-   **Texts**
+
+<!-- ![](images/mul_hougaard_.jpg){fig-align="center" width="26%"} -->
+![](images/mult_texts.png){fig-align="center" width="60%"}
+
 
 ## Summary
 
