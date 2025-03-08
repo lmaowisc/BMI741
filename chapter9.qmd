@@ -18,8 +18,6 @@ Lecture slides [here](chap9.html){target="_blank"}. (To convert html to pdf, pre
 # This code generates all numerical results in chapter 9.       ##
 ##################################################################
 
-
-
 library(survival)
 
 # read in the cgd dataset in counting process format
@@ -28,22 +26,28 @@ head(cgd)
 
 
 # Andersen-Gill model
-obj.AG <- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids +
+obj_AG <- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids +
                  propylac, data = cgd)
-summary(obj.AG)
+summary(obj_AG)
+
+
+# Residuals
+cox.zph(obj_AG)
+residuals(obj_AG, type = "martingale", collapse = cgd$id)
+
 
 # Frailty model
-obj.frail <- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids +
+obj_frail <- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids +
                     propylac + frailty(id, distribution = "gamma"), data = cgd)
 
-summary(obj.frail)
+summary(obj_frail)
 
 
-# proportional mean model (LWYY)
-obj.pm <- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids +
+# Proportional means model (LWYY)
+obj_pm <- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids +
                  propylac + cluster(id), data = cgd)
 
-summary(obj.pm)
+summary(obj_pm)
 
 
 # extract the beta's from the three models
@@ -117,4 +121,216 @@ lines(t/30.5,mu.f.contr,lty=3,lwd=2)
 plot(t/30.5, mu.m.trt, type="s", xlim=c(0, 12), ylim=c(0,6),frame.plot =F,lty=1,main="Male",
      xlab="Time (months)",ylab = "Mean number of infections",lwd=2)
 lines(t/30.5,mu.m.contr,lty=3,lwd=2)
+
+# Multivariate approaches -------------------------------------------------
+
+library(tidyverse)
+library(gtsummary)
+library(knitr)
+cgd
+
+cgd_mul <- cgd |> 
+  arrange(id, tstart) |> 
+  group_by(id) |> 
+  mutate(
+    order = row_number(),
+    gtime = tstop - tstart,
+    .after = tstop
+  ) |> ungroup()
+
+cgd_mul |> 
+  mutate(
+    tstart = tstart / 30.5,
+    tstop = tstop / 30.5,
+    gtime = gtime / 30.5
+  ) |> 
+  select(id, tstart, tstop, gtime, order,  status, treat,   sex,      age,
+         inherit,   steroids, propylac)
+
+## WLW 
+
+wlw_obj <- coxph(Surv(tstop, status) ~ (treat + sex + age) * 
+                   strata(order), cgd_mul |> 
+                   filter(order <= 3))
+wlw_obj0 <- coxph(Surv(tstop, status) ~ (treat + sex + age) + 
+                   strata(order), cgd_mul)
+# tbl_regression(wlw_obj)
+
+
+pwp_tt_obj <- coxph(Surv(tstart, tstop, status) ~ (treat + sex + age) * strata(order), cgd_mul |> 
+                   filter(order <= 3))
+pwp_tt_obj0 <- coxph(Surv(tstart, tstop, status) ~ (treat + sex + age) + strata(order), cgd_mul)
+# tbl_regression(pwp_tt_obj)
+
+
+pwp_gt_obj <- coxph(Surv(gtime, status) ~ (treat + sex + age) * strata(order), cgd_mul |> 
+                      filter(order <= 3))
+pwp_gt_obj0 <- coxph(Surv(gtime, status) ~ (treat + sex + age) + strata(order), cgd_mul)
+# tbl_regression(pwp_gt_obj)
+
+
+obj <- wlw_obj
+obj0 <- wlw_obj0
+
+obj <- pwp_tt_obj
+obj0 <- pwp_tt_obj0
+
+obj <- pwp_gt_obj
+obj0 <- pwp_gt_obj0
+
+## tabulate trt HR (95% CI) and p-values
+K <- 3
+p <- 3 # number of covariates, including treatment
+
+trt_hr_mul <- function(obj, obj0, p, K, r = 2){
+
+
+### global beta and variance matrix
+beta <- obj$coefficients
+var <- obj$var
+
+### set up log-HR and variances
+beta_trt <- rep(NA, p + 1)
+var_trt <- rep(NA, p + 1)
+
+beta_trt[1] <- beta[1]
+var_trt[1] <- var[1, 1]
+
+for (j in 2:K){
+  beta_trt[j] <- beta[1] + beta[p + j - 1]
+  var_trt[j] <- var[1, 1] + var[p + j - 1, p + j - 1] + 2* var[1, p + j - 1]
+}
+## overall 
+beta_trt[p + 1] <- obj0$coefficients[1]
+var_trt[p + 1] <- obj0$var[1, 1]
+
+se_trt <- sqrt(var_trt)
+### make the table
+za <- qnorm(0.975)
+
+
+df <- tibble(
+  HR =   str_c(round(exp(beta_trt), r), " (",
+               round(exp(beta_trt - za * se_trt), r), ", ",
+               round(exp(beta_trt + za * se_trt), r), ")"),
+  P = round(1 - pchisq((beta_trt / se_trt)^2 , df = 1), 3)
+  
+)
+
+df
+}
+
+N <- cgd_mul |> filter(order == 1) |> count(treat) |> pull(n)
+
+row_header <- cgd_mul |> 
+  filter(status == 1) |> 
+  count(treat, order) |> 
+  filter(order <= 3) |> 
+  pivot_wider(
+    values_from = n,
+    names_from = treat
+  ) |> 
+  mutate(
+    order = as.character(order)
+  ) |> 
+  add_row(
+    order = "All",
+    placebo = cgd_mul |> filter(treat == "placebo", status == 1) |> count() |> pull(),
+    `rIFN-g` = cgd_mul |> filter(treat == "rIFN-g", status == 1) |> count()|> pull()
+  ) |> 
+  mutate(
+    placebo = str_c(placebo, " (", round(100 * placebo / N[1], 1), "%)"),
+    `rIFN-g` = str_c(`rIFN-g`, " (", round(100 * `rIFN-g` / N[2], 1), "%)")
+  ) |> 
+  select(order, `rIFN-g`, placebo)
+
+
+cgd_tab <- row_header |> 
+  add_column(
+    WLW = trt_hr_mul(wlw_obj, wlw_obj0, 3, 3,)$HR,
+    `PWP-TT` = trt_hr_mul(pwp_tt_obj, pwp_tt_obj0, 3, 3,)$HR,
+    `PWP-GT` = trt_hr_mul(pwp_gt_obj, pwp_gt_obj0, 3, 3,)$HR,
+  ) 
+
+
+cgd_tab |> 
+  kable("latex")
+
+
+# forest plot -------------------------------------------------------------
+
+## parse the hr and 95% ci
+
+hr_ci_parse <- function(x){
+  separate_wider_regex(
+    x,
+    patterns = c(x = ".+", " \\(", xmin = ".+", ", ", ymax = ".+", "\\)")
+  )
+}
+
+cgd_models <- cgd_tab |> 
+  separate_wider_regex(
+    WLW:`PWP-GT`,
+    patterns = c(x = ".+", " \\(", xmin = ".+", ", ", xmax = ".+", "\\)"),
+    names_sep = "_"
+  ) |> 
+  mutate(
+    across(!c(order:placebo), as.numeric)
+  ) |> 
+  pivot_longer(
+    !c(order:placebo),
+    names_to = c("Model", ".value"),
+    names_sep = "_"
+  )
+
+  
+cgd_models |> 
+  ggplot(aes(x = x, y = order)) +
+  geom_point(aes(size = (order == "All"))) +
+  geom_linerange(aes(xmin = xmin, xmax = xmax, linewidth = (order == "All"))) +
+  geom_vline(xintercept = 1, linetype = 2) +
+  facet_wrap(~ fct(Model), ncol = 3) + 
+  scale_y_discrete("Infection", limits = rev(c("1", "2", "3", "All")),
+                   labels = rev(c("1st", "2nd", "3rd", "All"))) +
+  scale_x_log10("Treatment hazard ratio (95% CI)") +
+  scale_size_manual(values = c(1.5, 2)) +
+  scale_linewidth_manual(values = c(0.5, 0.8)) +
+  theme_minimal() +
+  theme(
+    axis.text = element_text(size = 10),
+    axis.title  = element_text(size = 11),
+    panel.grid = element_blank(),
+    strip.text = element_text(size = 11),
+    legend.position = "none"
+  )
+ 
+
+ggsave("rec_cgd_forest.pdf", width = 8, height = 4.5)
+ggsave("rec_cgd_forest.eps", width = 8, height = 4.5)
+
+## Poisson/NB regression
+
+# Dataset: flatten data - one row per subject
+# count: total number of events; follow_up: censoring time
+library(tidyverse)
+df <- cgd |> 
+  group_by(id) |> 
+  mutate(
+    count = sum(status),       # Compute the total number of events
+    follow_up = max(tstop)     # Compute the maximum 'tstop' (censoring time) 
+  ) |> 
+  distinct(id, .keep_all = T)  # Keep only one row per 'id' and keeping all variables
+
+# Fit a Poisson regression model
+ps_obj <- glm(count ~ treat + age + sex       # Covariates
+                    + offset(log(follow_up)), # Offset term
+            family = poisson(link="log"), # Poisson model with log link
+            data = df)  
+summary(ps_obj)  # Summarize results
+
+# Fit a negative binomial regression model
+nb_obj <- MASS::glm.nb(count ~ treat + age + sex   # Covariates
+                        + offset(log(follow_up)),  # Offset term
+                    data = df) 
+summary(nb_obj)  # Summarize results
 ```
