@@ -248,11 +248,7 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::{.fragment}
 -   **Scenario 1: Gamma-frailty with same** $\beta$ and $\eta_0$
     -   Same failure grouped in cluster `id`
-<<<<<<< HEAD
     -   `obj$frail`: estimated $\log(\hat\xi_i)$ for each unit
-=======
-    -   `obj$frail`: estimated $\hat\xi_i$ for each unit
->>>>>>> d08c9a2f03ede495848ffc879b6e2b0265772f88
     
 ::: big-code
 ```{r}

@@ -23,8 +23,7 @@ Lecture slides [here](chap10.html){target="_blank"}. (To convert html to pdf, pr
 # Analysis of the Bone Marrow Transplantation Study
 ############################################################
 
-library("survival")
-
+library(survival)
 # read in the study dataset
 cibmtr <- read.table("Data//Bone Marrow Transplantation Study//cibmtr.txt")
 head(cibmtr)
@@ -135,4 +134,179 @@ obj_pred2 <- cbind(time, cif)
 
 ## same results
 cbind(obj_pred1, obj_pred2)
+
+
+# Tidy competing risks analysis
+library(tidycmprsk)
+library(ggsurvfit)
+# library(gtsummary)
+
+df <- cibmtr |> 
+  dplyr::mutate(
+    status = factor(status, levels = c("0", "1", "2"), labels = c("Censored", "Relapse", "TRM")),
+    donor = factor(donor, levels = c("0", "1"), 
+                   labels = c("Id. sibling", "Unrelated"))
+  )
+
+
+
+
+# Nonparametric analysis cumulative incidence by donor
+obj_cif <- tidycmprsk::cuminc(Surv(time, status) ~ donor, data = df)
+# Print results
+obj_cif
+#> ── cuminc() ─────────────────────────────────────────────────
+#> 
+#> • Failure type "Relapse"
+#> strata                  time   n.risk   estimate   std.error   95% CI          
+#> HLA-identical sibling   50.0   78       0.386      0.023       0.341, 0.432    
+#> HLA-identical sibling   100    23       0.451      0.026       0.400, 0.501    
+#> HLA-identical sibling   150    1        0.557      0.044       0.466, 0.639    
+#> Unrelated dono          50.0   12       0.505      0.031       0.443, 0.564    
+#> Unrelated dono          100    3        0.529      0.032       0.464, 0.589    
+#> Unrelated dono          150    0        0.529      0.032       0.464, 0.589    
+#> 
+#> • Failure type "TRM"
+#> strata                  time   n.risk   estimate   std.error   95% CI          
+#> HLA-identical sibling   50.0   78       0.317      0.020       0.278, 0.357    
+#> HLA-identical sibling   100    23       0.331      0.021       0.289, 0.373    
+#> HLA-identical sibling   150    1        0.387      0.063       0.265, 0.507    
+#> Unrelated dono          50.0   12       0.424      0.030       0.366, 0.482    
+#> Unrelated dono          100    3        0.430      0.030       0.371, 0.488    
+#> Unrelated dono          150    0        0.430      0.030       0.371, 0.488    
+#> 
+#> • Tests
+#> outcome   statistic   df     p.value    
+#> Relapse   17.3        1.00   <0.001     
+#> TRM       12.3        1.00   <0.001
+
+# Summaries at specific times with labeled treatment groups
+tbl_surv <- tbl_cuminc(
+    x = obj_cif,                     # Provide the fitted tidycuminc object
+    times = seq(12, 120, by = 36),   # Time points for cumulative incidence
+    outcomes = c("Relapse", "TRM"),  # Specify which risks to include
+    label_header = "{time} months",  # Column label: "xx months"
+    label = "Donor"                  # Group label 
+) 
+
+tbl_surv
+
+obj_cif |> 
+  ggcuminc(outcome = c("Relapse", "TRM")) +
+  scale_x_continuous("Time (months)", limits = c(0, 120), breaks = seq(0, 120, by = 24)) +
+  add_risktable(
+    risktable_stats = "n.risk", # Include only numbers at risk
+    theme = list(
+      theme_risktable_default() # Default risk table theme
+      # scale_y_discrete(labels = c('Drug', 'Control')) # Group labels
+    )
+  ) +
+  theme_minimal()
+
+## Separate plots by risk
+
+obj_cif |> 
+  ggcuminc(outcome = c("Relapse", "TRM")) +
+  scale_x_continuous("Time (months)", limits = c(0, 120), breaks = seq(0, 120, by = 24)) +
+  add_risktable(
+    risktable_stats = "n.risk", # Include only numbers at risk
+    theme = list(
+      theme_risktable_default(), # Default risk table theme
+      scale_y_discrete(labels = c('Drug', 'Control')) # Group labels
+    )
+  ) +
+  theme_minimal() 
+
+library(patchwork) # For combining plots
+library(ggsci) # For the JAMA color style
+
+plot_bm_cif <- function(obj_cif, outcome) {
+  
+  p <- ggcuminc(obj_cif, outcome, linetype_aes = TRUE, linewidth = 0.8) +
+    add_risktable(
+      risktable_stats = "n.risk",
+      theme = list(
+        theme_risktable_default(),
+        scale_y_discrete()
+      )
+    ) +
+    ggtitle(outcome) + 
+    scale_y_continuous(
+      "Cumulative incidence", 
+      limits  = c(0, 0.6),
+      breaks  = seq(0, 1, by = 0.1),
+      expand  = expansion(c(0, 0.005))
+    ) +
+    scale_x_continuous("Time (months)", limits = c(0, 120), breaks = seq(0, 120, by = 24)) +
+    scale_color_jama() +
+    scale_linetype_manual(values = c(2, 1)) +
+    theme_classic() +
+    theme(
+      plot.margin        = margin(0, 0, 0, 0),
+      legend.position    = "top",
+      legend.key.width   = unit(1, "cm"),
+      panel.grid.major.y = element_line(),
+      legend.text        = element_text(size = 10),
+      plot.caption       = element_text(size = 10),
+      plot.title         = element_text(size = 12)
+    )
+  
+  p
+}
+
+# Two panels by donor type
+rel_fig  <- plot_bm_cif(obj_cif, "Relapse")
+trm_fig  <- plot_bm_cif(obj_cif, "TRM")
+
+# Combine with patchwork
+bm_fig <- wrap_plots(ggsurvfit_build(rel_fig ), ggsurvfit_build(trm_fig), ncol = 2)
+
+bm_fig
+
+ggsave("images/cmpr_bm.png", bm_fig, width = 8, height = 4.5)
+ggsave("images/cmpr_bm.eps", bm_fig, width = 8, height = 4.5)
+
+
+# Fine-Gray regression
+# Relapse
+obj_rel <- tidycmprsk::crr(Surv(time, status) ~ donor + cohort + hist + wait, 
+                           data = df, failcode = "Relapse")
+obj_rel # Print the results
+#> --- crr() ---------------------------------------------------
+#> • Call Surv(time, status) ~ donor + cohort + hist + wait
+#> • Failure type of interest "Relapse"
+#> 
+#> Variable         Coef    SE      HR     95% CI       p-value    
+#> donor            0.330   0.122   1.39   1.09, 1.77   0.007      
+#> cohort           0.401   0.122   1.49   1.18, 1.90   0.001      
+#> hist             0.351   0.125   1.42   1.11, 1.82   0.005      
+#> wait             0.216   0.123   1.24   0.98, 1.58   0.078 
+
+# 2. TRM
+obj_trm <- tidycmprsk::crr(Surv(time, status) ~ donor + cohort + hist + wait, 
+                           data = df, failcode = "TRM")
+obj_trm # Print the results
+#> --- crr() ---------------------------------------------------
+#> • Call Surv(time, status) ~ donor + cohort + hist + wait
+#> • Failure type of interest "TRM"
+#> 
+#> Variable         Coef     SE      HR     95% CI       p-value    
+#> donor            0.514    0.128   1.67   1.30, 2.15   <0.001     
+#> cohort           -0.578   0.139   0.56   0.43, 0.74   <0.001     
+#> hist             -0.460   0.153   0.63   0.47, 0.85   0.003      
+#> wait             0.248    0.135   1.28   0.98, 1.67   0.065   
+
+
+library(gtsummary)
+tbl_regression(obj_fg1, exponentiate = TRUE)
+
+## Proportional subdistribution odds
+library(timereg)
+# Relapse
+obj_po1 <- prop.odds.subdist(Event(time, status) ~ donor + cohort + hist + wait, 
+                            data = df, cause = 1)
+
+obj_po1$gamma
+obj_po1$robvar.gamma
+
 ```

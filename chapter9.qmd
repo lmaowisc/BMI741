@@ -333,4 +333,17 @@ nb_obj <- MASS::glm.nb(count ~ treat + age + sex   # Covariates
                         + offset(log(follow_up)),  # Offset term
                     data = df) 
 summary(nb_obj)  # Summarize results
+
+library(pscl)
+# Fit ZIP model 
+zip_model <- zeroinfl(count ~ treat + age + sex 
+                              + offset(log(follow_up)) # Poisson model
+                            | treat + age+ sex, # Logistic model
+                        data = df)
+
+# Display results
+summary(zip_model)
+
+zip_model$coefficients
+zip_model$vcov
 ```
