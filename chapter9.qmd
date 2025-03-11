@@ -51,9 +51,9 @@ summary(obj_pm)
 
 
 # extract the beta's from the three models
-coeff.AG <- summary(obj.AG)$coeff
-coeff.frail <- summary(obj.frail)$coeff
-coeff.pm <- summary(obj.pm)$coeff
+coeff_AG <- summary(obj.AG)$coeff
+coeff_frail <- summary(obj.frail)$coeff
+coeff_pm <- summary(obj.pm)$coeff
 
 
 #########################################
@@ -62,19 +62,19 @@ coeff.pm <- summary(obj.pm)$coeff
 #########################################
 
 ## Andersen-Gill model
-c1 <- coeff.AG[,1]
-c2 <- coeff.AG[,3]
-c3 <- coeff.AG[,5]
+c1 <- coeff_AG[,1]
+c2 <- coeff_AG[,3]
+c3 <- coeff_AG[,5]
 
 # Frailty model
-c4 <- coeff.frail[1:6,1]
-c5 <- coeff.frail[1:6,2]
-c6 <- coeff.frail[1:6,6]
+c4 <- coeff_frail[1:6,1]
+c5 <- coeff_frail[1:6,2]
+c6 <- coeff_frail[1:6,6]
 
 # Proportional means model
-c7 <- coeff.pm[1:6,1]
-c8 <- coeff.pm[1:6,4]
-c9 <- coeff.pm[1:6,6]
+c7 <- coeff_pm[1:6,1]
+c8 <- coeff_pm[1:6,4]
+c9 <- coeff_pm[1:6,6]
 
 #print out Table 9.1
 noquote(round(cbind(c1,c2,c3,c4,c5,c6,c7,c8,c9),3))
@@ -88,11 +88,11 @@ noquote(round(cbind(c1,c2,c3,c4,c5,c6,c7,c8,c9),3))
 ############################################################
 
 # get beta
-beta <- obj.pm$coeff
+beta <- obj_pm$coeff
 
 # get baseline mean function mu_0(t)
 # and t
-Lt <- basehaz(obj.pm,centered = F)
+Lt <- basehaz(obj_pm,centered = F)
 t <- Lt$time
 mu0 <- Lt$hazard
 
@@ -127,7 +127,6 @@ lines(t/30.5,mu.m.contr,lty=3,lwd=2)
 library(tidyverse)
 library(gtsummary)
 library(knitr)
-cgd
 
 cgd_mul <- cgd |> 
   arrange(id, tstart) |> 

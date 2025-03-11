@@ -2969,5 +2969,201 @@
       "Part II - Complex Outcomes",
       "Chapter 8 Summary"
     ]
+  },
+  {
+    "objectID": "chap9.html#outline",
+    "href": "chap9.html#outline",
+    "title": "Applied Survival Analysis",
+    "section": "Outline",
+    "text": "Outline\n\n\nIntensity and rate/mean functions\nCox-type models for recurrent events\nAnalysis of the Chronic Granulomatous Disease Study\nMultivariate approaches to recurrent events\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+  },
+  {
+    "objectID": "chap9.html#recurrent-events",
+    "href": "chap9.html#recurrent-events",
+    "title": "Applied Survival Analysis",
+    "section": "Recurrent Events",
+    "text": "Recurrent Events\n\n\nRepeated occurrences of an adverse event\n\nInfections (CGD)\nTumor occurrences\nHospitalizations\nEpisodes of CV events: chest pain (angina), irregular heart beat (tachycardia)\nNaive approach: time to first event\n\n\n\n\n\nRecurrent event process\n\nStatistically more efficient\nFuller picture of patient experience\nChallenges: correlation, multiple events"
+  },
+  {
+    "objectID": "chap9.html#outcome-data",
+    "href": "chap9.html#outcome-data",
+    "title": "Applied Survival Analysis",
+    "section": "Outcome Data",
+    "text": "Outcome Data\n\n\nTarget of inference\n\n\\(N^*(t)\\): number of recurrent events by \\(t\\)\n\n\\(N^*(t)=\\sum_{k=1}^\\infty I(T_k\\leq t)\\)\n\\(T_1&lt;T_2&lt;\\cdots\\): recurrent event times"
+  },
+  {
+    "objectID": "chap9.html#intensity-function",
+    "href": "chap9.html#intensity-function",
+    "title": "Applied Survival Analysis",
+    "section": "Intensity Function",
+    "text": "Intensity Function\n\n\nModeling recurrent events\n\nIntensity: conditional incidence given history\nRate: marginal incidence across population\n\n\n\n\n\nIntensity: Current risk given event history \\[\\begin{equation}\\label{eq:rec:intensity}\n\\ell\\{t\\mid \\overline{N}^*(t-)\\}\\dd t=E\\{\\dd N^*(t)\\mid \\overline{N}^*(t-)\\}\n\\end{equation}\\]\n\n\\(\\overline{N}^*(t-)=\\{N^*(u):0\\leq u &lt; t\\}\\)\nUnivariate case \\[\n\\ell\\{t\\mid \\overline{N}^*(t-)\\}=I(T\\geq t)\\lambda(t)\\dd t\n\\]\n\nIntensity \\(=\\) an extension of hazard"
+  },
+  {
+    "objectID": "chap9.html#example-poisson-process",
+    "href": "chap9.html#example-poisson-process",
+    "title": "Applied Survival Analysis",
+    "section": "Example: Poisson Process",
+    "text": "Example: Poisson Process\n\n\nIndependent events \\[\\begin{equation}\\label{eq:rec:poisson}\nE\\{\\dd N^*(t)\\mid \\overline{N}^*(t-)\\}=\\ell(t)\n\\end{equation}\\]\n\nCurrent risk \\(\\ell(t)\\) independent of past\n\nHomogeneous Poisson: \\(\\ell(t) = \\lambda\\)\n\nGenerally unrealistic in medical applications\n\nMore previous events \\(\\to\\) higher current risk\n\n\n\n\n\n\nPoisson properties\n\n\\(N^*(t_{j}) - N^*(t_{j-1})\\), number of events in \\((t_{j-1}, t_{j}]\\) \\((j=1, 2, \\ldots)\\), are mutually independent Poisson with mean \\(\\int_{t_{j-1}}^{t_j}\\ell(u)\\dd u\\)"
+  },
+  {
+    "objectID": "chap9.html#rate-function",
+    "href": "chap9.html#rate-function",
+    "title": "Applied Survival Analysis",
+    "section": "Rate Function",
+    "text": "Rate Function\n\n\nRate: Marginal incidence \\[\\begin{equation}\\label{eq:rec:rate}\nr(t)\\dd t=E\\{\\dd N^*(t)\\}\n\\end{equation}\\]\n\nMean: Average number of events \\[\\begin{equation}\\label{eq:rec:mean}\n\\mu(t)=E\\{N^*(t)\\}=\\int_0^t r(u)\\dd u\n\\end{equation}\\]\n\n\n\n\n\nRate vs intensity \\[\nr(t)=E\\left[\\ell\\{t\\mid \\overline{N}^*(t-)\\}\\right]\n\\]\n\nPoisson process: \\(r(t)=\\ell(t)\\)"
+  },
+  {
+    "objectID": "chap9.html#one-sample-estimation-of-mean",
+    "href": "chap9.html#one-sample-estimation-of-mean",
+    "title": "Applied Survival Analysis",
+    "section": "One-Sample Estimation of Mean",
+    "text": "One-Sample Estimation of Mean\n\n\nObserved data \\[\\begin{equation}\\label{eq:rec:obs}\n\\{N_i(\\cdot), C_i, Z_i\\},\\hspace{10mm}i=1,\\ldots, n\n\\end{equation}\\]\n\n\\(N(t)=N^*(t\\wedge C)\\); \\(C\\): independent censoring time\nNo terminal event like death \\(\\to\\) \\(C\\) always observed\n\n\n\n\n\nNelsen-Aalen-type estimator for mean \\[\n\\hat\\mu(t)=\\int_0^t\\frac{\\sum_{i=1}^n\\dd N_i(u)}{\\sum_{i=1}^n I(C_i\\geq u)}\n\\]\n\n\\(\\hat\\mu(t)\\to \\int_0^t\\frac{E\\{\\dd N(u)\\}}{\\pr(C\\geq u)}=\\int_0^t\\frac{\\pr(C\\geq u)E\\{\\dd N^*(u)\\}}{\\pr(C\\geq u)}=\\int_0^t r(u)\\dd u=\\mu(t)\\)"
+  },
+  {
+    "objectID": "chap9.html#proportional-intensity-andersen-gill",
+    "href": "chap9.html#proportional-intensity-andersen-gill",
+    "title": "Applied Survival Analysis",
+    "section": "Proportional Intensity (Andersen-Gill)",
+    "text": "Proportional Intensity (Andersen-Gill)\n\n\nThree classes of models (handle correlations)\n\nProportional intensity (by time-varying covariates)\nShared frailty (by subject-specific frailty)\nProportional rates (by robust inference)\n\n\n\n\n\nProportional intensity (Andersen & Gill, 1982) \\[\\begin{equation}\\label{eq:rec:AG_model}\nE\\{\\dd N^*(t)\\mid \\overline N^*(t-), \\overline Z(t)\\}=\\exp\\left\\{\\beta^\\T Z(t)\\right\\}\\dd\\mu_0(t)\n\\end{equation}\\]\n\n\\(\\beta\\): log-intensity (risk) ratio\nDependence on past events fully explained by \\(Z(t)\\) (modulated Poisson)\n\nDefine \\(Z(t)\\) to summarize \\(\\overline N^*(t-)\\), e.g., \\(N^*(t-)\\): number of past events\nComplicates causal interpretation in randomized trials"
+  },
+  {
+    "objectID": "chap9.html#andersen-gill-cox-extension",
+    "href": "chap9.html#andersen-gill-cox-extension",
+    "title": "Applied Survival Analysis",
+    "section": "Andersen-Gill: Cox Extension",
+    "text": "Andersen-Gill: Cox Extension\n\n\nEstimation and inference\n\nSame as Cox model with (internal) time-varying covariates\nPartial-likelihood score \\[\\begin{equation}\\label{eq:rec:score}\nU_n(\\beta)=n^{-1}\\sum_{i=1}^n\\int_0^\\infty \\left\\{Z_i(t)- \\frac{\\sum_{j=1}^n I(C_j\\geq t)Z_j(t)\\exp\\{\\beta^\\T Z_j(t)\\}}{\\sum_{j=1}^n I(C_j\\geq t)\\exp\\{\\beta^\\T Z_j(t)\\}}\n\\right\\}\\dd N_i(t)\n\\end{equation}\\]\n\nFull martingale properties\n\nBreslow estimator \\[\\begin{equation}\\label{eq:rec:breslow}\n\\hat\\mu_0(t)=\\int_0^t\\frac{\\sum_{i=1}^n\\dd N_i(u)}{\\sum_{i=1}^n I(C_i\\geq u)\\exp\\left\\{\\hat\\beta^\\T Z_i(u)\\right\\}}\n\\end{equation}\\]"
+  },
+  {
+    "objectID": "chap9.html#shared-frailty-proportional-intensity",
+    "href": "chap9.html#shared-frailty-proportional-intensity",
+    "title": "Applied Survival Analysis",
+    "section": "Shared-Frailty Proportional Intensity",
+    "text": "Shared-Frailty Proportional Intensity\n\n\nFrailty-conditioned intensity \\[\\begin{equation}\\label{eq:rec:frailty_model}\nE\\{\\dd N^*(t)\\mid \\xi, \\overline N^*(t-), \\overline Z(t)\\}=\\xi\\exp\\{\\beta^\\T Z(t)\\}\\dd\\mu_0(t)\n\\end{equation}\\]\n\n\\(\\xi\\): subject-specific frailty to capture within-subject correlation\n\\(Z(t)\\): no need to capture elements of \\(\\overline N^*(t-)\\)\n\\(\\beta\\): subject-level log-intensity (risk) ratio\n\n\n\n\n\nEstimation and inference\n\nEM algorithm treating \\(\\xi\\) as missing data\nM-step: weighted partial-likelihood and Breslow estimator"
+  },
+  {
+    "objectID": "chap9.html#marginal-proportional-rates-lwyy",
+    "href": "chap9.html#marginal-proportional-rates-lwyy",
+    "title": "Applied Survival Analysis",
+    "section": "Marginal Proportional Rates (LWYY)",
+    "text": "Marginal Proportional Rates (LWYY)\n\n\nProportion rates (Lin, Wei, Yang & Ying, 2000; LWYY) \\[\\begin{equation}\\label{eq:rec:rate_pr}\nE\\{\\dd N^*(t)\\mid \\overline Z(t)\\}=\\exp\\{\\beta^\\T Z(t)\\}\\dd\\mu_0(t)\n\\end{equation}\\]\n\nModeling marginal rate rather than intensity\nBaseline \\(Z\\) \\(\\to\\) proportional means model \\[\\begin{equation}\\label{eq:rec:rate_pm}\nE\\{N^*(t)\\mid Z\\}=\\exp(\\beta^\\T Z)\\mu_0(t)\n\\end{equation}\\]\n\n\\(Z = 1, 0\\): treated experience \\(\\exp(\\beta)\\) as many events as untreated\n\n\n\n\n\n\nEstimation and inference\n\nPartial-likelihood score as estimating function (same estimates as AG)\nRobust (sandwich) variance (different \\(\\se\\) than AG)"
+  },
+  {
+    "objectID": "chap9.html#software-survivalcoxph-i",
+    "href": "chap9.html#software-survivalcoxph-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: survival::coxph() (I)",
+    "text": "Software: survival::coxph() (I)\n\n\nInput data format\n\n\ncgd\n# id tstart tstop status   treat    sex age height weight   inherit \n#   1      0   219      1  rIFN-g female  12  147.0   62.0 autosomal\n#   1    219   373      1  rIFN-g female  12  147.0   62.0 autosomal\n#   1    373   414      0  rIFN-g female  12  147.0   62.0 autosomal\n#   2      0     8      1 placebo   male  15  159.0   47.5 autosomal\n#...\n\n\n\n\nProportional intensity (Andersen-Gill)\n\n(start, stop): time period between previous and current events\nNo need for subject id as correlation presumably captured by covariates\n\n\n\n\ncoxph(Surv(start, stop, status) ~ covariates)"
+  },
+  {
+    "objectID": "chap9.html#software-survivalcoxph-ii",
+    "href": "chap9.html#software-survivalcoxph-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: survival::coxph() (II)",
+    "text": "Software: survival::coxph() (II)\n\n\nShared-frailty proportional intensity\n\nSubject id for frailty\n\n\n\n\n# Gamma frailty\ncoxph(Surv(start, stop, status) ~ covariates + \n        frailty(id, distribution = \"gamma\"))\n\n\n\n\n\nProportional rates/means (LWYY)\n\nSubject id for empirical evaluation of clustering\nUse se2 in results for robust standard error\n\n\n\n\ncoxph(Surv(start, stop, status) ~ covariates + cluster(id))"
+  },
+  {
+    "objectID": "chap9.html#study-background",
+    "href": "chap9.html#study-background",
+    "title": "Applied Survival Analysis",
+    "section": "Study Background",
+    "text": "Study Background\n\n\nStudy information\n\nPopulation: a placebo-controlled randomized trial on 128 Chronic Granulomatous Disease (CGD) patients\nAim: evaluate effect of gamma interferon on incidence of repeated CGD infections\nBaseline risk factors\n\ntreatment (treat; rIFN-g vs placebo)\nsex (sex)\nage (age; years)\npattern of inheritance (inherit; autosomal recessive or X-linked)\nuse of steroids (steroids; Yes/No)\nuse of prophylactic antibiotics (propylac; Yes/No)"
+  },
+  {
+    "objectID": "chap9.html#regression-results-i",
+    "href": "chap9.html#regression-results-i",
+    "title": "Applied Survival Analysis",
+    "section": "Regression Results (I)",
+    "text": "Regression Results (I)\n\n\nFit three multiplicative models\n\n\n# Andersen-Gill model\nobj_AG &lt;- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + \n                  inherit + steroids + propylac, data = cgd)\n# Frailty model\nobj_frail &lt;- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + \n                     inherit + steroids + propylac + \n                     frailty(id, distribution = \"gamma\"), data = cgd)\n# Proportional mean model (LWYY) - recommended\nobj_pm &lt;- coxph(Surv(tstart, tstop, status) ~ treat + sex + age + \n                  inherit + steroids + propylac + cluster(id), data = cgd)\nsummary(obj_pm)\n#                 coef exp(coef) se(coef) robust se      z Pr(&gt;|z|)    \n# treatrIFN-g -1.05140   0.34945  0.26500   0.31031 -3.388 0.000703 ***\n# sexmale      0.72832   2.07159  0.39044   0.43676  1.668 0.095405 .  \n# ..."
+  },
+  {
+    "objectID": "chap9.html#regression-results-ii",
+    "href": "chap9.html#regression-results-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Regression Results (II)",
+    "text": "Regression Results (II)\n\n\nLWYY (recommended)\n\nPatients treated by gamma interferon on average experience \\(\\exp(-1.051) = 35.0\\%\\) as many infections as those taking placebo (\\(p\\)-value 0.001)"
+  },
+  {
+    "objectID": "chap9.html#prediction-of-mean-frequency",
+    "href": "chap9.html#prediction-of-mean-frequency",
+    "title": "Applied Survival Analysis",
+    "section": "Prediction of Mean Frequency",
+    "text": "Prediction of Mean Frequency\n\n\nLWYY (recommended)"
+  },
+  {
+    "objectID": "chap9.html#modeling-choices",
+    "href": "chap9.html#modeling-choices",
+    "title": "Applied Survival Analysis",
+    "section": "Modeling Choices",
+    "text": "Modeling Choices\n\n\nMultivariate times\n\nTotal times: Time from beginning (randomization) to event \\[T_1 &lt; T_2 &lt; T_3 &lt; \\cdots \\]\nGap times: Time from last to current event \\[\nU_1 = T_1,\\,\\, U_2 = T_2 - T_1,\\,\\, U_3 = T_3 - T_2,\\,\\, \\ldots\n\\]\n\n\n\n\n\nThree classes of models\n\nMarginal total times (Wei, Lin, and Weissfeld, 1989; WLW)\nConditional total times (Prentice, Williams, and Peterson, 1981; PWP-TT)\nGap times (Prentice, Williams, and Peterson, 1981; PWP-GT)"
+  },
+  {
+    "objectID": "chap9.html#marginal-total-times-wlw",
+    "href": "chap9.html#marginal-total-times-wlw",
+    "title": "Applied Survival Analysis",
+    "section": "Marginal Total Times (WLW)",
+    "text": "Marginal Total Times (WLW)\n\n\nModel specification \\[\\begin{equation}\\label{eq:rec:wlw}\n\\pr(t\\leq T_k&lt;t+\\dd t\\mid T_k\\geq t, Z)=\\exp(\\beta_k^\\T Z)\\dd\\Lambda_{k0}(t)\n\\end{equation}\\]\n\nMarginal Cox model for multivariate failure times \\(T_1&lt; \\ldots&lt; T_K\\)\n\\(\\beta_k\\): population-averaged log-hazard ratio for \\(k\\)th occurence\n\nCan constrain \\(\\beta_1=\\cdots=\\beta_K\\)\n\nRobust variance to account for correlation\n\n\n\n\n\nSoftware:\n\norder: \\(k\\)\n\n\n\n# WLW\ncoxph(Surv(stop, status) ~ covariates * strata(order) + cluster(id))"
+  },
+  {
+    "objectID": "chap9.html#conditional-total-times-pwp-tt",
+    "href": "chap9.html#conditional-total-times-pwp-tt",
+    "title": "Applied Survival Analysis",
+    "section": "Conditional Total Times (PWP-TT)",
+    "text": "Conditional Total Times (PWP-TT)\n\n\nModel specification \\[\\begin{equation}\\label{eq:rec:pwp_tt}\n\\pr(t\\leq T_k&lt;t+\\dd t\\mid T_{k-1}&lt;t\\leq T_k, Z)=\\exp(\\beta^\\T Z)\\dd\\Lambda_{k0}(t)\n\\end{equation}\\]\n\nRationale: subject at risk for \\(k\\)th event only after experiencing the \\((k-1)\\)th\n\\(\\beta_k\\): log-hazard ratio among those at risk for \\(k\\) event\nRobust variance to account for correlation\n\n\n\n\n\nSoftware:\n\n\n# PWP-TT\ncoxph(Surv(start, stop, status) ~ covariates * strata(order) + cluster(id))"
+  },
+  {
+    "objectID": "chap9.html#conditional-gap-times-pwp-gt",
+    "href": "chap9.html#conditional-gap-times-pwp-gt",
+    "title": "Applied Survival Analysis",
+    "section": "Conditional Gap Times (PWP-GT)",
+    "text": "Conditional Gap Times (PWP-GT)\n\n\nModel specification \\[\\begin{equation}\\label{eq:rec:pwp_gt}\n\\pr(t\\leq U_k&lt;t+\\dd t\\mid U_k\\geq t, Z)=\\exp(\\beta_k^\\T Z)\\dd\\Lambda_{k0}(t).\n\\end{equation}\\]\n\nA gap-time model: reset clock upon experiencing an event\n\nMarginal Cox model for multivariate failure times \\(U_1, \\ldots, U_K\\)\n\n\\(\\beta_k\\): log-hazard ratio for \\(k\\)th gap time\nRobust variance to account for correlation\n\n\n\n\n\nSoftware:\n\ngtime: stop - start (\\(U_k\\))\n\n\n\n# PWP-GT\ncoxph(Surv(gtime, status) ~ covariates * strata(order) + cluster(id))"
+  },
+  {
+    "objectID": "chap9.html#notes-i",
+    "href": "chap9.html#notes-i",
+    "title": "Applied Survival Analysis",
+    "section": "Notes (I)",
+    "text": "Notes (I)\n\nLWYY (Lin, Wei, Yang & Ying, 2000)\n\nEarly explorations: Pepe and Cai (1993), Lawless and Nadeau (1995), Lawless et al. (1997)\n\nPWP (Prentice, Williams, and Peterson, 1981)\n\nOriginal version conditioned on event history\nRobust versions are presented here"
+  },
+  {
+    "objectID": "chap9.html#notes-ii",
+    "href": "chap9.html#notes-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Notes (II)",
+    "text": "Notes (II)\n\nParametric models\n\nPoisson regression\n\n\nglm(count ~ covariates + offset(log(follow_up)), family = poisson)\n\n\nZero-inflated Poisson\n\n\npscl::zeroinfl(count ~ \n                  covariates1 + offset(log(follow_up))  # Poisson sub-model\n                | covariates2 # Logistic sub-model for excess zeros\n              )\n\n\nNegative binomial\n\n\nMASS::glm.nb(count ~ covariates + offset(log(follow_up)))"
+  },
+  {
+    "objectID": "chap9.html#summary-i",
+    "href": "chap9.html#summary-i",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (I)",
+    "text": "Summary (I)\n\nProportional intensity (Andersen-Gill)\n\nHandles correlation by (internal) time-varying covariates\ncoxph(Surv(start, stop, status) ~ covariates)\n\nShared-frailty\n\nHandles correlation by subject-level frailty\ncoxph(Surv(start, stop, status) ~ covariates + frailty(id, distribution = \"gamma\"))\n\nProportional rates (LWYY) - recommended\n\nHandles correlation empirically via robust variance\ncoxph(Surv(start, stop, status) ~ covariates + cluster(id))"
+  },
+  {
+    "objectID": "chap9.html#summary-ii",
+    "href": "chap9.html#summary-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (II)",
+    "text": "Summary (II)\n\nMultivariate approaches\n\nMarginal total times (WLW)\nConditional total times (PWP-TT)\nGap times (PWP-GT)\nSoftware: reorganize/transform data and tweak coxph() for multiple failure times"
+  },
+  {
+    "objectID": "chap9.html#cgd-study-multivariate-perspective",
+    "href": "chap9.html#cgd-study-multivariate-perspective",
+    "title": "Applied Survival Analysis",
+    "section": "CGD Study: Multivariate Perspective",
+    "text": "CGD Study: Multivariate Perspective\n\n\nTreatment effects on different occurrences"
+  },
+  {
+    "objectID": "chap9.html#notes-iii",
+    "href": "chap9.html#notes-iii",
+    "title": "Applied Survival Analysis",
+    "section": "Notes (III)",
+    "text": "Notes (III)\n\nCook and Lawless (2007)"
+  },
+  {
+    "objectID": "chap9.html#descriptive-outcomes",
+    "href": "chap9.html#descriptive-outcomes",
+    "title": "Applied Survival Analysis",
+    "section": "Descriptive Outcomes",
+    "text": "Descriptive Outcomes\n\n\nInfection counts"
   }
 ]
