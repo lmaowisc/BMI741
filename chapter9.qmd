@@ -43,7 +43,7 @@ $$
 
 Incorporate a random effect (frailty) $\xi$ to induce within-subject dependence:
 $$
-\ell\{t \mid \xi, \overline{Z}(t)\}
+\ell\{t \mid \xi, \overline{N}^*(t-), \overline{Z}(t)\}
 \;=\;
 \xi \,\exp\bigl\{\beta^\mathsf{T} Z(t)\bigr\}\,\mathrm{d}\mu_0(t).
 $$
