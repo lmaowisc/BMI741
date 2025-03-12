@@ -34,7 +34,7 @@ website:
       - section: "Part II - Complex Outcomes" 
         contents:
           - chapter8.qmd
-          # - chapter9.qmd
+          - chapter9.qmd
           # - chapter10.qmd
           # - chapter11.qmd
           # - chapter12.qmd

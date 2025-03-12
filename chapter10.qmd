@@ -309,4 +309,226 @@ obj_po1 <- prop.odds.subdist(Event(time, status) ~ donor + cohort + hist + wait,
 obj_po1$gamma
 obj_po1$robvar.gamma
 
+
+
+## component-wise marginal regression
+library(gtsummary)
+library(labelled)
+library(tidycmprsk)
+
+# read data
+gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
+### data transformation
+gbc <- gbc |> 
+  mutate(
+    age40 = (age > 40) + 0,
+    grade = factor(grade),
+    prog = prog / 100, # rescale progesterone
+    estrg = estrg / 100 # rescale estrogen
+  )
+
+var_label(gbc) <- list(
+  hormone = "Hormone",
+  meno = "Menopause",
+  age40 = "Age 40+",
+  grade = "Tumor grade",
+  size = "Tumor size (mm)",
+  prog = "Progesterone (100 fmol/mg)",
+  estrg = "Estrogen (100 fmol/mg)"
+  )
+
+### Regular cox model for death
+gbc_death <- gbc|> 
+  filter(status != 1) |> 
+  mutate(status = status > 0)
+
+
+# gbc_death |> 
+#   count(status)
+
+obj_death <- coxph(Surv(time, status) ~ hormone + meno
+                   + age40 + grade + size + prog + estrg, 
+                   data = gbc_death)
+
+
+death_tbl <- tbl_regression(obj_death, exponentiate = TRUE)
+
+### cause-specific hazards for relapse
+
+gbc_relc <- gbc |> 
+  group_by(id) |> 
+  slice_min(time) |> 
+  mutate(
+    status = if_else(status == 2, 0, status)
+  ) |> 
+  slice_max(status) |> 
+  ungroup()
+
+# gbc_relc |> 
+#   count(status)
+
+obj_relc <- coxph(Surv(time, status) ~ hormone + meno
+                   + age40 + grade + size + prog + estrg, 
+                   data = gbc_relc)
+
+
+relc_tbl <- tbl_regression(obj_relc, exponentiate = TRUE)
+
+
+
+
+### subdistribution hazards for relapse
+
+gbc_tfe <- gbc |> 
+  group_by(id) |> 
+  slice_min(time) |> 
+  slice_max(status) |> # death > relapse > censoring
+  mutate(
+    status = factor(status, levels = c("0", "1", "2"))
+  ) |> 
+  ungroup()
+
+gbc_tfe |> count(status) 
+# gbc_tfe$status
+
+
+obj_rel_sub <- crr(Surv(time, status) ~ hormone + meno
+                   + age40 + grade + size + prog + estrg, 
+                   data = gbc_tfe, failcode = "1")
+
+rel_sub_tbl <- tbl_regression(obj_rel_sub, exponentiate = TRUE)
+
+
+tbl <- tbl_merge(
+  tbls = list(death_tbl, relc_tbl, rel_sub_tbl),
+  tab_spanner = c("**Death**", "**Relapse (cause-specific)**",
+                  "**Relapse (subdistribution)**")
+)
+
+tbl
+# as_kable_extra(tbl, format = "latex")
+
+## bladder tumor study
+library(tidyverse)
+devtools::install_github("lmaowisc/rccf2")
+library(rccf2)
+# ?rccf
+data(bladder)
+bladder
+# descritpive analysis
+bladder |> 
+  count(status)
+
+
+## follow-up plot
+
+df <- bladder |> 
+  left_join(
+    bladder |> group_by(id) |> summarize(max_fu = max(time)),
+    join_by(id)
+  ) |> 
+  mutate(
+    id = factor(id),
+    status = factor(status, levels = c("0", "1", "2")),
+    trt = if_else(trt == 1,  "Thiotepa", "Placebo")
+  ) 
+
+dfmax <-  df |> 
+  group_by(id, trt) |> 
+  summarize(max_fu = max(time))
+
+df |> 
+  ggplot(aes(y = reorder(id, max_fu))) +
+  geom_linerange(data = dfmax, aes(xmin = 0, xmax = max_fu)) +
+  geom_point(aes(x = time, shape = status), size = 2, fill = "white") +
+  geom_vline(xintercept = 0, linewidth = 1) +
+  scale_shape_manual(values = c(23, 15, 19), labels = c("Censoring", "Tumor recurrence", "Death")) + 
+  scale_x_continuous("Time (months)", limits = c(0, 65), breaks = seq(0, 60, by = 12),
+                     expand= c(0, 0.5)) +
+  scale_y_discrete("Patients") +
+  facet_wrap( ~ trt, scales = "free") +
+  theme_minimal() +
+  theme(
+    legend.position = "top",
+    legend.title = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.grid.major.y = element_blank()
+  )
+
+ggsave("cmpr_blad_fu.pdf",  width = 8, height = 8)
+ggsave("cmpr_blad_fu.eps",  width = 8, height = 8)
+
+
+id <- bladder$id
+time <- bladder$time
+status <- bladder$status
+trt <- bladder$trt
+
+# trt <- ifelse(trt == 1,  "Thiotepa", "Placebo")
+
+obj <- rccf(id,time,status,trt)
+
+
+stat=obj$stat
+S=obj$S
+u1=obj$u1
+u2=obj$u2
+t=obj$t
+
+
+# test on recurrent event
+QLR=stat[1]/sqrt(S[1,1])
+pLR=1-pchisq(QLR^2,1)
+
+# test on death
+QD=stat[2]/sqrt(S[2,2])
+pD=1-pchisq(QD^2,1)
+
+#joint test
+Q=t(stat)%*%solve(S)%*%stat
+p=1-pchisq(Q,2)
+
+par(mfrow=c(1,2))
+
+fatal=bladder[status != 1,]
+
+obj=survfit(Surv(time,status > 0)~trt,data=fatal)
+plot(obj,lty=c(1,3),frame=F,xlim=c(0,50),lwd=2,cex.lab=1.5,
+     cex.axis=1.5,xlab="Time (months)",ylab="Survival probabilities")
+# legend(0.82,2.8,c("Thiotepa","Placebo"),lty=c(1,3),cex=1.5,lwd=2)
+text(35,0.14,paste0("Log-rank test: p=",round(pD,3)),cex=1.2)
+
+#plot the mean functions
+stepmu1=stepfun(t,c(0,u1))
+stepmu2=stepfun(t,c(0,u2))
+plot(stepmu2,do.points=F,xlab="Time (months)",ylab="Cumulative tumor frequency",
+     xlim=c(0,60),ylim=c(0,3), main="", frame=F,lwd=2,cex.lab=1.5,
+     cex.axis=1.5,lty=3)
+plot(stepmu1,add=T,lty=1,do.points=F,lwd=2)
+# legend(1,2.8,c("Thiotepa","Placebo"),lty=c(1,3),cex=1.5,lwd=2)
+text(40,0.4,paste0("Ghosh-Lin test: p=",round(pLR,3)),cex=1.2)
+
+# Ghosh-Lin proportional CF regression
+library(mets)
+
+# create a start variable that is the event time of previous event
+# for each subject id
+data(bladder)
+df <- bladder |>
+  group_by(id) |>
+  mutate(
+    start = lag(time, default = 0),
+    stop = if_else(time == 0, 1e-4, time)
+    ) |> 
+  select(
+    id, start, stop, status, trt
+  ) |> as.data.frame()
+  
+obj_reg <- recreg(Event(start, stop, status) ~ trt + cluster(id), 
+                  cause = 1, death.code=2,
+                  data = df)
+summary(obj_reg)
+
 ```
