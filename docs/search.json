@@ -3218,5 +3218,313 @@
       "Part II - Complex Outcomes",
       "Chapter 9 - Recurrent Events"
     ]
+  },
+  {
+    "objectID": "chap10.html#outline",
+    "href": "chap10.html#outline",
+    "title": "Applied Survival Analysis",
+    "section": "Outline",
+    "text": "Outline\n\n\nCause-specific hazard and cumulative incidence\nNon- and semi-parametric methods\nAnalysis of bone marrow transplantation study\nSemi-competing risks and examples\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+  },
+  {
+    "objectID": "chap10.html#definition-and-examples",
+    "href": "chap10.html#definition-and-examples",
+    "title": "Applied Survival Analysis",
+    "section": "Definition and Examples",
+    "text": "Definition and Examples\n\n\nCompeting risks\n\nDefinition: multiple types of failures, occurrence of one precludes others\n\nMultiple latent risks competing with each other for first occurrence\n\nExamples: different causes of death\n\n\n\n\n\nDefining feature\n\nOne failure per subject\nLess info than multivariate failure times\nImplications for analysis and interpretation"
+  },
+  {
+    "objectID": "chap10.html#outcome-data-identifiability",
+    "href": "chap10.html#outcome-data-identifiability",
+    "title": "Applied Survival Analysis",
+    "section": "Outcome Data & Identifiability",
+    "text": "Outcome Data & Identifiability\n\n\nTarget of inference: \\((T, \\Delta)\\)\n\n\\(T\\): time to failure\n\\(\\Delta \\in \\{1, \\ldots, K\\}\\): type/cause of failure (categorical)\n\n\n\n\n\nMultivariate perspective\n\nA conceptual framework \\[\\begin{equation}\\label{eq:cmpr:mult}\nT=\\min(T_1,\\ldots, T_K) \\hspace{1mm}\\mbox{ and } \\hspace{1mm}\\Delta=\\arg\\min_{k=1,\\ldots, K} T_k\n\\end{equation}\\]\n\n\\(T_k\\): time to \\(k\\)th latent risk \\((k=1,\\ldots, K)\\) in absence of other risks\nCompeting risks \\(=\\) partially observed multivariate failure times\n\nIdentifiability: net distribution of latent \\(T_k\\) not recognizable from \\((T, \\Delta)\\)\n\nunless under unrealistic assumption of mutual independence of the \\(T_k\\)"
+  },
+  {
+    "objectID": "chap10.html#two-approaches",
+    "href": "chap10.html#two-approaches",
+    "title": "Applied Survival Analysis",
+    "section": "Two Approaches",
+    "text": "Two Approaches\n\n\nTwo ways to characterize \\((T, \\Delta)\\)\n\nCause-specific hazard\nCumulative incidence (Sub-distribution)\n\n\n\n\n\nCause-specific hazard (CSH) \\[\\begin{equation}\\label{eq:cmpr:cs_hazard}\n    \\dd\\Lambda_k^\\cc(t)=\\pr(t\\leq T&lt;t+\\dd t, \\Delta=k\\mid T\\geq t)\n    \\end{equation}\\]\n\nInterpretation: instantaneous incidence of \\(k\\)th risk given overall “survival”\nExample: \\(\\dd\\Lambda_1^\\cc(t)=\\) incidence rate for CV death among survivors at \\(t\\)\n\n\\(k =1\\): CV death; \\(k =2\\): other causes of death\n\nOverall hazard: \\(\\dd\\Lambda(t)=\\pr(t\\leq T&lt;t+\\dd t \\mid T\\geq t) = \\sum_{k=1}^K \\dd\\Lambda_k^\\cc(t)\\)"
+  },
+  {
+    "objectID": "chap10.html#cause-specific-hazard",
+    "href": "chap10.html#cause-specific-hazard",
+    "title": "Applied Survival Analysis",
+    "section": "Cause-Specific Hazard",
+    "text": "Cause-Specific Hazard\n\n\nLimitations\n\nThe cumulative CSH \\(\\Lambda_k^\\cc(t)\\) not a meaningful quantity\n\\(\\exp\\{-\\Lambda_k^\\cc(t)\\}\\) not a survival function of any kind\n\n\n\n\n\nCorrespondence with “net hazard”\n\nUnder (unrealistic) mutual independence of the latent \\(T_k\\)\nHazard of \\(T_k\\) identifiable and equal to \\(\\Lambda_k^\\cc(t)\\)\nNot recommended"
+  },
+  {
+    "objectID": "chap10.html#cumulative-incidence",
+    "href": "chap10.html#cumulative-incidence",
+    "title": "Applied Survival Analysis",
+    "section": "Cumulative Incidence",
+    "text": "Cumulative Incidence\n\n\nCumulative incidence function (CIF) \\[\n    F_k(t)=\\pr(T\\leq t, \\Delta=k)\n    \\]\n\nInterpretation: probability of failure from \\(k\\)th risk in presence of other risks\nMarginal quantity, easy to interpret (a real-world probability)\n\\(F(t)=\\pr(T\\leq t) = \\sum_{k=1}^K F_k(t)\\) (sub-distribution functions)\n\n\n\n\n\nRelationship\n\nCSH in terms of CIF (for a particular risk, no one-to-one correspondence) \\[\\begin{equation}\\label{eq:cmpr:correspond}\n\\dd\\Lambda_k^\\cc(t)=\\frac{\\dd F_k(t)}{1-\\sum_{l=1}^K F_l(t-)}\n\\end{equation}\\]"
+  },
+  {
+    "objectID": "chap10.html#csh-vs-cif",
+    "href": "chap10.html#csh-vs-cif",
+    "title": "Applied Survival Analysis",
+    "section": "CSH vs CIF",
+    "text": "CSH vs CIF\n\n\nExample: effect on CSH may not align with CIF\n\nTreatment: \\(\\Lambda_1^\\cc(t)=\\Lambda_2^\\cc(t)=3t\\)\nControl: \\(\\Lambda_1^\\cc(t)=2t\\) and \\(\\Lambda_2^\\cc(t)=t\\)"
+  },
+  {
+    "objectID": "chap10.html#comparison-of-functions",
+    "href": "chap10.html#comparison-of-functions",
+    "title": "Applied Survival Analysis",
+    "section": "Comparison of Functions",
+    "text": "Comparison of Functions\n\nCSH vs net hazard vs CIF"
+  },
+  {
+    "objectID": "chap10.html#observed-data",
+    "href": "chap10.html#observed-data",
+    "title": "Applied Survival Analysis",
+    "section": "Observed Data",
+    "text": "Observed Data\n\n\nA random \\(n\\)-sample \\[(X_i, \\delta_i, Z_i), \\,\\,\\, i=1,\\ldots, n\\]\n\n\\(X=T\\wedge C\\)\n\\(\\delta=\\Delta I(T\\leq C)\\) (0: censored; \\(k\\): observed \\(k\\)th risk, \\(k=1,\\ldots, K\\))\n\\(C\\): independent censoring time\n\\(Z\\): covariates\n\\(N_{ki}(t)=I(X_i\\leq t, \\delta_i=k)\\): Observed counting process for \\(k\\)th risk"
+  },
+  {
+    "objectID": "chap10.html#cause-specific-hazard-models-i",
+    "href": "chap10.html#cause-specific-hazard-models-i",
+    "title": "Applied Survival Analysis",
+    "section": "Cause-Specific Hazard Models (I)",
+    "text": "Cause-Specific Hazard Models (I)\n\n\nProportional cause-specific hazards \\[\\begin{equation}\\label{eq:cmpr:ph_csh}\n\\pr(t\\leq T&lt;t+\\dd t, \\Delta=k\\mid T\\geq t, Z)=\\exp(\\beta_k^\\T Z)\\dd\\Lambda_{k0}(t)\n\\end{equation}\\]\n\nA model on “survivors” (those who have not failed from any risk)\n\\(\\beta_k\\): log-hazard ratios for \\(k\\)th risk in survivors\n\n\n\n\n\nEstimation\n\nPartial likelihood score for \\(k\\)th risk \\[\n  U_{nk}(\\beta_k)=\\Pn\\int_0^\\infty\\left\\{Z_i-\\frac{\\sum_{j=1}^n I(X_j\\geq t)Z_j\\exp(\\beta_k^\\T Z_j)}{\\sum_{j=1}^n I(X_j\\geq t)\\exp(\\beta_k^\\T Z_j)}\\right\\}\\dd N_{ki}(t)\n\\]\n\nEssentially treating non-\\(k\\) risks as censoring\nEasy to implement in survival::coxph() (status == k)"
+  },
+  {
+    "objectID": "chap10.html#cause-specific-hazard-models-ii",
+    "href": "chap10.html#cause-specific-hazard-models-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Cause-Specific Hazard Models (II)",
+    "text": "Cause-Specific Hazard Models (II)\n\n\nUnder (unrealistic) independence of the latent \\(T_k\\)\n\nProportional cause-specific hazards \\(\\Longleftrightarrow\\) proportional net hazards\nFrailty to relax independence\nNot recommended\n\nNon-identifiability\nNon-interpretability\n\n\n\n\n\n\nLog-rank test\n\nRisk-specific log-rank statisic with other risks treated as censoring\n“Kaplan-Meier” doesn’t work \\(\\to\\) estimand \\(\\exp\\{-\\Lambda_k^\\cc(t)\\}\\) is non-quantity\nCompeting-risks equivalent of KM is Gray (1988) estimator of \\(F_k(t)\\)"
+  },
+  {
+    "objectID": "chap10.html#cif-nonparametric-estimation",
+    "href": "chap10.html#cif-nonparametric-estimation",
+    "title": "Applied Survival Analysis",
+    "section": "CIF: Nonparametric Estimation",
+    "text": "CIF: Nonparametric Estimation\n\n\nDecomposition of \\(F_k(t)\\) \\[\\begin{equation*}\n    \\dd F_k(t)=S(t-)\\dd\\Lambda_k^\\cc(t)\n\\end{equation*}\\]\n\n\\(S(t-)=\\pr(T\\geq t)\\): By KM estimator \\(\\hat S(t-)\\) for overall failure\n\\(\\dd\\Lambda_k^\\cc(t)\\): By Nelsen-Aalen estimator (non-\\(k\\) risks as censoring) \\[\n  \\dd\\hat\\Lambda_k^\\cc(t)=\\frac{\\sum_{i=1}^n\\dd N_{ki}(t)}{\\sum_{i=1}^n I(X_i\\geq t)}\n  \\]\n\n\n\n\n\nGray estimator \\[\\begin{equation*}\n    \\hat F_k(t)=\\int_0^t \\hat S(u-)\\dd\\hat \\Lambda_k^\\cc(u)\n\\end{equation*}\\]"
+  },
+  {
+    "objectID": "chap10.html#cif-sub-distribution-hazard",
+    "href": "chap10.html#cif-sub-distribution-hazard",
+    "title": "Applied Survival Analysis",
+    "section": "CIF: Sub-Distribution Hazard",
+    "text": "CIF: Sub-Distribution Hazard\n\n\nSub-distribution hazard (SDH) \\[\\begin{equation}\\label{eq:cmpr:sdh}\n    \\dd\\Lambda_k(t)=\\pr(t\\leq T_k^*&lt;t+\\dd t\\mid T_k^*\\geq t)\n    \\end{equation}\\]\n\nTime to \\(k\\)th risk in presence of other risks \\[\nT_k^*=T\\cdot I(\\Delta=k)+\\infty\\cdot I(\\Delta\\neq k)\n\\]\n\n\\(F_k(t)=\\pr(T_k^*\\leq t)\\)\n\nInterpretation: incidence of \\(k\\)th risk given not failing from it\nEasier to work with hazard-like functions (unbounded)\nCorrespondence with CIF \\[\\begin{equation}\\label{eq:cmpr:subdist}\nF_k(t)=1-\\exp\\{-\\Lambda_k(t)\\}\n\\end{equation}\\]\nModel/test on SDH \\(\\Longleftrightarrow\\) Model/test on CIF"
+  },
+  {
+    "objectID": "chap10.html#cif-grays-test",
+    "href": "chap10.html#cif-grays-test",
+    "title": "Applied Survival Analysis",
+    "section": "CIF: Gray’s Test",
+    "text": "CIF: Gray’s Test\n\n\nDiscrete version (\\(k\\)th risk) \\[\n\\dd\\Lambda_k(t)=\\frac{\\dd F_k(t)}{1-F_k(t-)}\n\\]\n\n\n\n\nLog-rank-type test\n\nTesting \\(H_0: F_{k1}(t)=F_{k0}(t)\\) \\[\\begin{equation}\\label{eq:cmpr:gray_tests}\n\\int_0^\\infty W_k(t)\\big\\{\\dd\\hat\\Lambda_{k1}(t)-\\dd\\hat\\Lambda_{k0}(t)\\big\\}\n\\end{equation}\\]\n\\(\\hat\\Lambda_{ka}(t)\\): Gray’s CIF plug-in estimator for SDH in group \\(a\\) \\((a=1, 0)\\)\n\\(W_k(t)\\): Weight function\nExtensions: multi-group, stratification, etc."
+  },
+  {
+    "objectID": "chap10.html#cif-fine-gray-regression",
+    "href": "chap10.html#cif-fine-gray-regression",
+    "title": "Applied Survival Analysis",
+    "section": "CIF: Fine-Gray Regression",
+    "text": "CIF: Fine-Gray Regression\n\n\nProportional sub-distribution hazards (Fine and Gray, 1999) \\[\\begin{equation}\\label{eq:cmpr:fg}\n\\pr(t\\leq T_k^*&lt;t+\\dd t\\mid T_k^*\\geq t, Z)=\\exp(\\beta_k^\\T Z)\\dd\\Lambda_{k0}(t)\n  \\end{equation}\\]\n\n\\(\\beta_k\\): log-hazard ratios for \\(k\\)th risk in entire population (under other risks)\nEstimation and inference: partial-likelihood score with IPCW to address dependent censoring by other risks\n\n\n\n\n\nTarget populations\n\nCause-specific hazard: survivors\nSub-distribution hazard: all, including those who have failed from other causes"
+  },
+  {
+    "objectID": "chap10.html#software-cmprkcuminc",
+    "href": "chap10.html#software-cmprkcuminc",
+    "title": "Applied Survival Analysis",
+    "section": "Software: cmprk::cuminc()",
+    "text": "Software: cmprk::cuminc()\n\n\nBasic syntax for Gray’s estimator & test\n\n\n\nobj &lt;- cuminc(ftime, fstatus, group, strata, rho = 0)\n\n\n\nInput\n\n(ftime, fstatus): \\((X, \\delta)\\)\ngroup: group variable (optional); strata: strata variable (optional)\nrho: \\(\\rho\\) in weight \\(W_k(t)=\\{1 - \\hat F_k(t)\\}^\\rho\\) (HF \\(G^\\rho\\) family)\n\nOutput: a list\n\nobj$Tests: tests results on each risk\nobj$\"a k\": CIF estimates for \\(k\\)th risk in group \\(a\\)\n\ntime: \\(t\\); est: \\(\\hat F_k(t)\\); var: \\(\\hat\\var\\{\\hat F_k(t)\\}\\)"
+  },
+  {
+    "objectID": "chap10.html#software-cmprkcrr-i",
+    "href": "chap10.html#software-cmprkcrr-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: cmprk::crr() (I)",
+    "text": "Software: cmprk::crr() (I)\n\n\nBasic syntax for Fine-Gray model\n\n\n\nobj &lt;- crr(ftime, fstatus, cov1, failcode = k)\n\n\n\nInput\n\n(ftime, fstatus): \\((X, \\delta)\\); cov1: \\(Z\\)\nfailcode = k: models \\(k\\)th risk\n\n\n\n\n\nOutput: a list of class crr\n\nobj$coef: \\(\\hat\\beta_k\\); obj$var: \\(\\hat\\var(\\hat\\beta_k)\\)\nobj$uftime: \\(t\\); obj$bfitj: \\(\\dd\\hat\\Lambda_{k0}(t)\\)"
+  },
+  {
+    "objectID": "chap10.html#software-cmprkcrr-ii",
+    "href": "chap10.html#software-cmprkcrr-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: cmprk::crr() (II)",
+    "text": "Software: cmprk::crr() (II)\n\n\nPrediction of CIF by Fine-Gray model\n\nobj: a crr object for fit model\nz: new covariate data\n\n\n\n\n\n\n# --- Method 1: use predict.crr() \nobj_pred &lt;- predict(obj, z)\n\n# --- Method 2: manual calculation\nbeta &lt;- obj$coef\nLambda &lt;- cumsum(obj$bfitj)\ntime &lt;- obj$uftime\n## Calculate CIF based on FG model\ncif &lt;- 1- exp(- exp(sum(beta * z)) * Lambda)\n## Same as obj_pred from Method 1\nobj_pred &lt;- cbind(time, cif)"
+  },
+  {
+    "objectID": "chap10.html#study-background",
+    "href": "chap10.html#study-background",
+    "title": "Applied Survival Analysis",
+    "section": "Study Background",
+    "text": "Study Background\n\nStudy information\n\nPopulation: 864 multiple-myeloma leukemia patients undergoing allo-HCT cell transplantation\nEndpoints: Time from surgery to treatment-related mortality (TRM; death in remission) or relapse of leukemia\nRisk factors\n\nCohort indicator (years 1995–2000 or 2001–2005)\nType of donor (unrelated or HLA-identical sibling)\nHistory of a prior transplant\nTime from diagnosis to transplantation (&lt;24 months, or ≥ 24 months)"
+  },
+  {
+    "objectID": "chap10.html#study-data",
+    "href": "chap10.html#study-data",
+    "title": "Applied Survival Analysis",
+    "section": "Study Data",
+    "text": "Study Data\n\n\nData format\n\n\nhead(cibmtr)\n#&gt;    time status cohort donor hist wait\n#&gt; 1 0.010      2      1     1    1    1\n#&gt; 2 0.066      2      1     1    1    0\n#&gt; 3 0.099      1      1     1    1    1\n#&gt; ..."
+  },
+  {
+    "objectID": "chap10.html#cif-by-donor-type",
+    "href": "chap10.html#cif-by-donor-type",
+    "title": "Applied Survival Analysis",
+    "section": "CIF by Donor Type",
+    "text": "CIF by Donor Type\n\nGray’s nonparametric estimates/tests of CIFs by donor type\n\n\nobj_cif &lt;- tidycmprsk::cuminc(Surv(time, status) ~ donor, data = df)\n\n# Print results\nobj_cif\n#&gt; --- cuminc() ----------------------------------------------------\n#&gt; ...\n#&gt; • Tests\n#&gt; outcome   statistic   df     p.value    \n#&gt; Relapse   17.3        1.00   &lt;0.001     \n#&gt; TRM       12.3        1.00   &lt;0.001"
+  },
+  {
+    "objectID": "chap10.html#regression-analysis",
+    "href": "chap10.html#regression-analysis",
+    "title": "Applied Survival Analysis",
+    "section": "Regression Analysis",
+    "text": "Regression Analysis\n\n\nSemiparametric regression\n\nProportional cause-specific hazard\nProportional sub-distribution hazard (FG)\n\n\n\n# Change k\nk &lt;- 1\n#--- proportional cause-specific hazards -----------------------------\nobj.cs &lt;- coxph(Surv(time, status == k) ~ cohort + donor + hist + wait,\n                data = cibmtr)\n\n#--- Fine and Gray --------------------------------------------------\nobj.fg &lt;- crr(cibmtr$time, cibmtr$status, cibmtr[, 3:6], failcode = k)"
+  },
+  {
+    "objectID": "chap10.html#regression-results",
+    "href": "chap10.html#regression-results",
+    "title": "Applied Survival Analysis",
+    "section": "Regression Results",
+    "text": "Regression Results\n\n\nDifferential effects of prior surgery\n\nRelapse: increases risk by \\(42\\%\\)\nTRM: decreases risk by \\(1-0.63 = 37\\%\\)"
+  },
+  {
+    "objectID": "chap10.html#definition-and-examples-1",
+    "href": "chap10.html#definition-and-examples-1",
+    "title": "Applied Survival Analysis",
+    "section": "Definition and Examples",
+    "text": "Definition and Examples\n\n\nSemi-competing risks\n\nTerminal event (competing): death\nNon-terminal events (non-competing): hospitalization, relapse, etc.\n\n\n\n\n\nExamples\n\nDeath + relapse of cancer (German breast cancer study)\nDeath terminates nonfatal event but not vice versa\n\n\n\n\n\nMethods\n\nMarginal: cumulative incidence/frequency\nFrailty (Ch. 8); Multistate (Ch. 12); Composite (Ch. 13)"
+  },
+  {
+    "objectID": "chap10.html#data-and-identifiability",
+    "href": "chap10.html#data-and-identifiability",
+    "title": "Applied Survival Analysis",
+    "section": "Data and Identifiability",
+    "text": "Data and Identifiability\n\n\n\n\nTarget of inference: \\((T, D)\\)\n\n\\(T\\): time to nonfatal event\n\\(D\\): time to death\nJoint distribution \\[H(s, t)=\\pr(D&gt;s, T&gt;t)\\]\nIdentifiable region: \\(\\{(s, t):0\\leq t\\leq s&lt;\\infty\\}\\)\n\nPossible nonfatal \\(\\to\\) death, not vice versa"
+  },
+  {
+    "objectID": "chap10.html#recurrent-events",
+    "href": "chap10.html#recurrent-events",
+    "title": "Applied Survival Analysis",
+    "section": "Recurrent Events",
+    "text": "Recurrent Events\n\n\nOutcome data: \\(\\{N^*(\\cdot), D\\}\\)\n\n\\(N^*(t)\\): number of recurrent events in presence of death\n\nRepeated tumor occurrences/hospitalizations before death (\\(\\dd N^*(t)\\equiv 0\\) for \\(t&gt;D\\))\n\nTreating \\(D\\) as censoring (AG/LWYY) \\(\\to\\) cause-specific event rate \\[E\\{\\dd N^*(t)\\mid D\\geq t\\}\\]\n\nIncidence rate in survivors\n\n\n\n\n\n\nCumulative frequency\n\nMean function in overall population, dead or alive \\[\n\\mu(t)=E\\{N^*(t)\\}\n\\]\nExtension of cumulative incidence"
+  },
+  {
+    "objectID": "chap10.html#marginal-approaches",
+    "href": "chap10.html#marginal-approaches",
+    "title": "Applied Survival Analysis",
+    "section": "Marginal Approaches",
+    "text": "Marginal Approaches\n\n\nMethods for cumulative frequency\n\nGray-type nonparametric estimator/test (Ghosh and Lin, 2000)\nProportional CF model (Fine-Gray-type) (Ghosh and Lin, 2002) \\[\\begin{equation}\\label{eq:cmpr:pcf}\nE\\{N^*(t)\\mid Z\\}=\\exp(\\beta^\\T Z)\\mu_0(t)\n\\end{equation}\\]\nHigher death rate can reduce CF\n\n\n\n\n\nJoint analysis with mortality\n\nGhosh-Lin for recurrent events \\(+\\) Cox/log-rank for death\n\\(\\chi^2\\) test with 2 d.f.\n\n\n\n\n\nAlternative: shared-frailty models"
+  },
+  {
+    "objectID": "chap10.html#example-bladder-tumor-study",
+    "href": "chap10.html#example-bladder-tumor-study",
+    "title": "Applied Survival Analysis",
+    "section": "Example: Bladder Tumor Study",
+    "text": "Example: Bladder Tumor Study\n\nBladder cancer trial: thiotepa (\\(n=38\\)) vs placebo (\\(n=48\\))\n\nEndpoints: tumor recurrences and death (\\(\\chi_2^2\\) test \\(p\\)-value 0.184)"
+  },
+  {
+    "objectID": "chap10.html#notes",
+    "href": "chap10.html#notes",
+    "title": "Applied Survival Analysis",
+    "section": "Notes",
+    "text": "Notes\n\nFine–Gray regression\n\nModel diagnostics: R package crskdiag\nProportional sub-distribution odds model (Eriksson et al., 2015)\n\n\nlibrary(timereg)\n# Fit a proportional sub-distribution odds model for the kth risk\nobj_po &lt;- prop.odds.subdist(Event(time, status) ˜ covariates, cause = k)\n\n\nInterval-censored competing risks (Mao et al., 2018)\n\nSemi-competing risks\n\nTerm coined by Fine, Jiang, and Chappell (2001)\nMultivariate (here), multistate (Chapter 12), and composite (Chapter 13)\nNonfatal event as mediator of treatment effect on death (Huang, 2021, 2022)"
+  },
+  {
+    "objectID": "chap10.html#summary",
+    "href": "chap10.html#summary",
+    "title": "Applied Survival Analysis",
+    "section": "Summary",
+    "text": "Summary\n\nCompeting risks\n\nCause-specific hazard: conditional failure rate on survivors\n\ncoxph(Surv(time, status == k) ~ covariates)\n\nCumulative incidence: marginal failure probability under other risks\n\nGray’s estimator/test cmprk::cuminc(ftime, fstatus, group, strata, rho = 0)\nFine-Gray model cmprk::crr(ftime, fstatus, cov1, failcode = k)\nTidy tables and graphics: tidycmprk package\n\n\nRecurrent events in presence of death\n\nGhosh-Lin methods\n\nNonparametric: rccf2::rccf(id, time, status, trt)\nProportional CF model: R packages mets and reReg"
+  },
+  {
+    "objectID": "chap10.html#study-information",
+    "href": "chap10.html#study-information",
+    "title": "Applied Survival Analysis",
+    "section": "Study Information",
+    "text": "Study Information\n\n\nPopulation\n\n864 multiple-myeloma patients undergoing allo-HCT cell transplantation\n\nEndpoints: time from surgery to\n\nTreatment-related mortality (TRM; death in remission)\nRelapse of leukemia\n\nRisk factors\n\nCohort indicator (years 1995–2000 or 2001–2005)\nType of donor (unrelated or HLA-identical sibling)\nHistory of a prior transplant\nTime from diagnosis to transplantation (&lt;24 months, or ≥ 24 months)"
+  },
+  {
+    "objectID": "chap10.html#software-tidycmprk-package",
+    "href": "chap10.html#software-tidycmprk-package",
+    "title": "Applied Survival Analysis",
+    "section": "Software: tidycmprk Package",
+    "text": "Software: tidycmprk Package\n\nTidy competing risks analysis\n\nWraps around cmprk functions\nFormula-based interface \\(+\\) Tidy output\nIntegrated with ggsurvfit and gtsummary\n\nGray’s estimator and test\n\ntidycmprsk::cuminc()\ntidycmprsk::tbl_cuminc()\ntidycmprsk::ggcuminc()\n\n\n\n# Compute and test on cumulative incidence function (CIF)\nobj_cif &lt;- tidycmprsk::cuminc(Surv(time, status) ~ group, data = df)\n# Tabulate CIF estimates with 95% CI at specific times\ntbl_surv &lt;- tidycmprsk::tbl_cuminc(\n    x = obj_cif,                     # Provide fitted object\n    times = seq(12, 120, by = 36),   # Time points for CIF\n    outcomes = c(\"1\", \"2\"),          # Specify risks to include\n) \n# Create group-specific CIF plot\nggcuminc(obj_cif, outcome = c(\"1\", \"2\"))  # Specify risks to include"
+  },
+  {
+    "objectID": "chap10.html#software-tidycmprk-package-i",
+    "href": "chap10.html#software-tidycmprk-package-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: tidycmprk Package (I)",
+    "text": "Software: tidycmprk Package (I)\n\n\nTidy competing risks analysis\n\nWraps around cmprk functions\nFormula-based interface \\(+\\) Tidy output\nIntegrated with ggsurvfit and gtsummary\n\nMain functions\n\nNonparametric analysis\n\ntidycmprsk::cuminc(): model fitting\ntidycmprsk::tbl_cuminc(): tabulation of CIF estimates\nggsurvfit::ggcuminc(): plotting of CIF estimates\n\nFine-Gray regression\n\ntidycmprsk::crr(): model fitting\ngtsummary::tbl_regression(): regression table"
+  },
+  {
+    "objectID": "chap10.html#software-tidycmprk-package-ii",
+    "href": "chap10.html#software-tidycmprk-package-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: tidycmprk Package (II)",
+    "text": "Software: tidycmprk Package (II)\n\n\nSample code\n\n\n# Compute and test on cumulative incidence function (CIF) -------------------\nobj_cif &lt;- tidycmprsk::cuminc(Surv(time, status) ~ group, data = df)\n# Tabulate CIF estimates with 95% CI at specific times\ntbl_surv &lt;- tidycmprsk::tbl_cuminc(\n    x = obj_cif,                     # Provide fitted object\n    times = seq(12, 120, by = 36),   # Time points for CIF\n    outcomes = c(\"1\", \"2\"),          # Specify risks to include\n) \n# Create group-specific CIF plot\nggcuminc(obj_cif, outcome = c(\"1\", \"2\"))  # Specify risks to include\n\n# Fine-Gray regression for risk \"k\" -----------------------------------------\nobj_fg &lt;- tidycmprsk::crr(Surv(time, status) ~ covariates, \n                           data = df, failcode = \"k\")\n# Tabulate regression results\ntbl &lt;- tbl_regression(obj_fg, exponentiate = TRUE)"
+  },
+  {
+    "objectID": "chap10.html#cif-by-donor-type-i",
+    "href": "chap10.html#cif-by-donor-type-i",
+    "title": "Applied Survival Analysis",
+    "section": "CIF by Donor Type (I)",
+    "text": "CIF by Donor Type (I)\n\n\nEstimation/testing by donor type\n\n\nobj_cif &lt;- tidycmprsk::cuminc(Surv(time, status) ~ donor, data = df)\nobj_cif # Print results\n#&gt; ...\n#&gt; • Tests\n#&gt; outcome   statistic   df     p.value    \n#&gt; Relapse   17.3        1.00   &lt;0.001     \n#&gt; TRM       12.3        1.00   &lt;0.001\n\n# Summarize CIF estimates at specific times \ntbl_surv &lt;- tbl_cuminc(\n    x = obj_cif,                     # Provide the fitted object\n    times = seq(12, 120, by = 36),   # Time points for CIF\n    outcomes = c(\"Relapse\", \"TRM\"),  # Specify risks to include\n    label_header = \"{time} months\"   # Column label format\n) \ntbl_surv"
+  },
+  {
+    "objectID": "chap10.html#cif-by-donor-type-ii",
+    "href": "chap10.html#cif-by-donor-type-ii",
+    "title": "Applied Survival Analysis",
+    "section": "CIF by Donor Type (II)",
+    "text": "CIF by Donor Type (II)\n\n\nTable created by tbl_cuminc()"
+  },
+  {
+    "objectID": "chap10.html#cif-by-donor-type-iii",
+    "href": "chap10.html#cif-by-donor-type-iii",
+    "title": "Applied Survival Analysis",
+    "section": "CIF by Donor Type (III)",
+    "text": "CIF by Donor Type (III)\n\n\nGraphics\n\n\nobj_cif |&gt; ggcuminc(outcome = c(\"Relapse\", \"TRM\")) # + ggplot2 formatting"
+  },
+  {
+    "objectID": "chap10.html#bivariate-analysis",
+    "href": "chap10.html#bivariate-analysis",
+    "title": "Applied Survival Analysis",
+    "section": "Bivariate Analysis",
+    "text": "Bivariate Analysis\n\n\nMarginal models\n\nDeath: univariate event (KM, log-rank, Cox)\nNonfatal event\n\nCause-specific risk (treating death as censoring)\ncumulative incidence (Gray, FG)\n\n\n\n\n\n\nGerman breast cancer study\n\nNonfatal event: relapse of cancer (status == 1)\nDeath: overall mortality (status == 2)\n\n\n\ngbc &lt;- read.table(\"Data//German Breast Cancer Study//gbc.txt\") |&gt;\n   mutate(age40 = (age &gt; 40) + 0) # create age40: I(age &gt; 40)"
+  },
+  {
+    "objectID": "chap10.html#bivariate-analysis---gbc-example",
+    "href": "chap10.html#bivariate-analysis---gbc-example",
+    "title": "Applied Survival Analysis",
+    "section": "Bivariate Analysis - GBC Example",
+    "text": "Bivariate Analysis - GBC Example\n\nData\n\n\ngbc\n#    id      time status hormone age meno size grade nodes prog estrg age40\n# 1   1 43.836066      1       1  38    1   18     3     5 1.41  1.05     0\n# 2   1 74.819672      0       1  38    1   18     3     5 1.41  1.05     0\n# 5   3 41.934426      1       1  47    1   30     2     1 4.22  0.89     1\n# 6   3 47.737705      2       1  47    1   30     2     1 4.22  0.89     1\n\n\nAnalysis\n\nDeath (subset to status != 1)\n\nStandard Cox: coxph(Surv(time, status == 2) ~ covariates)\n\nRelapse (subset to first row for each id)\n\nCause-specific hazard: coxph(Surv(time, status == 1) ~ covariates)\nSub-distribution hazard: tidycmprk::crr(Surv(time, status) ~ covariates, failcode = \"1\")"
+  },
+  {
+    "objectID": "chap10.html#bivariate-analysis---gbc-example-i",
+    "href": "chap10.html#bivariate-analysis---gbc-example-i",
+    "title": "Applied Survival Analysis",
+    "section": "Bivariate Analysis - GBC Example (I)",
+    "text": "Bivariate Analysis - GBC Example (I)\n\n\nData\n\n\ngbc\n#    id      time status hormone age meno size grade nodes prog estrg age40\n# 1   1 43.836066      1       1  38    1   18     3     5 1.41  1.05     0\n# 2   1 74.819672      0       1  38    1   18     3     5 1.41  1.05     0\n# 5   3 41.934426      1       1  47    1   30     2     1 4.22  0.89     1\n# 6   3 47.737705      2       1  47    1   30     2     1 4.22  0.89     1\n\n\n\n\nAnalysis\n\nDeath (subset to status != 1)\n\nStandard Cox: coxph(Surv(time, status == 2) ~ covariates)\n\nRelapse (subset to first row for each id)\n\nCause-specific hazard: coxph(Surv(time, status == 1) ~ covariates)\nSub-distribution hazard: tidycmprk::crr(Surv(time, status) ~ covariates, failcode = \"1\")"
+  },
+  {
+    "objectID": "chap10.html#bivariate-analysis---gbc-example-ii",
+    "href": "chap10.html#bivariate-analysis---gbc-example-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Bivariate Analysis - GBC Example (II)",
+    "text": "Bivariate Analysis - GBC Example (II)\n\n\nRegression results\n\nRelapse: cause-specific \\(\\approx\\) sub-distribution—few deaths (21) before relapse\nAge effect: driven by relapse"
+  },
+  {
+    "objectID": "chap10.html#software-rccf2rccf",
+    "href": "chap10.html#software-rccf2rccf",
+    "title": "Applied Survival Analysis",
+    "section": "Software: rccf2::rccf()",
+    "text": "Software: rccf2::rccf()\n\n\nTwo-sample estimation/testing of CF\n\n\n\ndevtools::install_github(\"lmaowisc/rccf2\")\nlibrary(rccf2) # Load package\nobj &lt;- rccf(id, time, status, trt) # Fit model\n\n\n\nInput\n\nid: subject ID; trt: binary treatment group\ntime: event time; status: event status (1: nonfatal; 2: death; 0: censoring)\n\n\n\n\n\nOutput\n\nobj$u1, obj$u2: Estimates of group-specific \\(\\mu(t)\\) as a function of \\(t\\) (obj$t).\nobj$pLR, obj$pD, obj$pjnt: \\(p\\)-values for tests on \\(\\mu(t)\\), death, and jointly"
+  },
+  {
+    "objectID": "chap10.html#example-bladder-tumor-study-i",
+    "href": "chap10.html#example-bladder-tumor-study-i",
+    "title": "Applied Survival Analysis",
+    "section": "Example: Bladder Tumor Study (I)",
+    "text": "Example: Bladder Tumor Study (I)\n\n\nBladder cancer trial (Byar, 1980)\n\nTreatment groups: thiotepa (\\(n=38\\)) vs placebo (\\(n=48\\))\nEndpoints: tumor recurrences and death"
+  },
+  {
+    "objectID": "chap10.html#example-bladder-tumor-study-ii",
+    "href": "chap10.html#example-bladder-tumor-study-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Example: Bladder Tumor Study (II)",
+    "text": "Example: Bladder Tumor Study (II)\n\n\nSurvival and cumulative frequency\n\nJoint \\(\\chi_2^2\\) test: \\(p\\)-value 0.184"
   }
 ]

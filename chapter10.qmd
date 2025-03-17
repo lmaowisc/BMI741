@@ -80,7 +80,7 @@ lines(obj.trm.nonsib$time,obj.trm.nonsib$est,lty=3,lwd=2)
 # and cause-specific hazard model
 ######################################################
 
-#change k
+# Change k
 k <- 1
 
 #### proportional cause-specific hazards
@@ -314,11 +314,12 @@ obj_po1$robvar.gamma
 ## component-wise marginal regression
 library(gtsummary)
 library(labelled)
+library(tidyverse)
 library(tidycmprsk)
 
 # read data
 gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
-### data transformation
+### Data transformation
 gbc <- gbc |> 
   mutate(
     age40 = (age > 40) + 0,
@@ -326,6 +327,7 @@ gbc <- gbc |>
     prog = prog / 100, # rescale progesterone
     estrg = estrg / 100 # rescale estrogen
   )
+gbc
 
 var_label(gbc) <- list(
   hormone = "Hormone",
@@ -337,19 +339,15 @@ var_label(gbc) <- list(
   estrg = "Estrogen (100 fmol/mg)"
   )
 
-### Regular cox model for death
+# Regular cox model for death
+# Subset to death data
 gbc_death <- gbc|> 
   filter(status != 1) |> 
   mutate(status = status > 0)
-
-
-# gbc_death |> 
-#   count(status)
-
+# Fit Cox model to overall survival
 obj_death <- coxph(Surv(time, status) ~ hormone + meno
                    + age40 + grade + size + prog + estrg, 
                    data = gbc_death)
-
 
 death_tbl <- tbl_regression(obj_death, exponentiate = TRUE)
 
@@ -378,7 +376,6 @@ relc_tbl <- tbl_regression(obj_relc, exponentiate = TRUE)
 
 
 ### subdistribution hazards for relapse
-
 gbc_tfe <- gbc |> 
   group_by(id) |> 
   slice_min(time) |> 

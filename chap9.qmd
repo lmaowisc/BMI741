@@ -22,7 +22,8 @@ include-in-header:
 ---
 
 ## Outline
-::: {.incremental}
+
+::: incremental
 1.  Intensity and rate/mean functions
 
 2.  Cox-type models for recurrent events
@@ -31,12 +32,14 @@ include-in-header:
 
 4.  Multivariate approaches to recurrent events
 :::
+
 $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\rm d}}$$ $$\newcommand{\pr}{{\rm pr}}$$ $$\newcommand{\var}{{\rm var}}$$ $$\newcommand{\se}{{\rm se}}$$ $$\newcommand{\indep}{\perp \!\!\! \perp}$$ $$\newcommand{\Pn}{n^{-1}\sum_{i=1}^n}$$ <!-- $$\usepackage{mathtools}$$ -->
 
 # Intensity and Marginal Rate
 
 ## Recurrent Events
-:::{.fragment}
+
+::: fragment
 -   **Repeated occurrences** of an adverse event
 
     -   Infections (CGD)
@@ -45,7 +48,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
     -   Episodes of CV events: chest pain (angina), irregular heart beat (tachycardia)
     -   **Naive approach**: time to first event
 :::
-:::{.fragment}
+
+::: fragment
 -   **Recurrent event process**
     -   Statistically more efficient
     -   Fuller picture of patient experience
@@ -53,23 +57,27 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Outcome Data
-:::{.fragment}
+
+::: fragment
 -   **Target of inference**
     -   $N^*(t)$: number of recurrent events by $t$
         -   $N^*(t)=\sum_{k=1}^\infty I(T_k\leq t)$
         -   $T_1<T_2<\cdots$: recurrent event times
 :::
-:::{.fragment}
+
+::: fragment
 ![](images/rec_counting.png){fig-align="center" width="70%"}
 :::
 
 ## Intensity Function
-:::{.fragment}
+
+::: fragment
 -   **Modeling recurrent events**
     -   **Intensity**: conditional incidence *given history*
     -   **Rate**: marginal incidence *across population*
 :::
-:::{.fragment}
+
+::: fragment
 -   **Intensity**: Current risk *given event history* \begin{equation}\label{eq:rec:intensity}
     \ell\{t\mid \overline{N}^*(t-)\}\dd t=E\{\dd N^*(t)\mid \overline{N}^*(t-)\}
     \end{equation}
@@ -81,7 +89,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Example: Poisson Process
-:::{.fragment}
+
+::: fragment
 -   **Independent events** \begin{equation}\label{eq:rec:poisson}
     E\{\dd N^*(t)\mid \overline{N}^*(t-)\}=\ell(t)
     \end{equation}
@@ -90,21 +99,24 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
     -   Generally *unrealistic* in medical applications
         -   More previous events $\to$ higher current risk
 :::
-:::{.fragment}
+
+::: fragment
 -   **Poisson properties**
-    -   $N^*(t_{j}) - N^*(t_{j-1})$, number of events in $(t_{j-1}, t_{j}]$ $(j=1, 2, \ldots)$, are mutually independent Poisson with mean $\int_{t_{j-1}}^{t_j}\ell(u)\dd u$  
+    -   $N^*(t_{j}) - N^*(t_{j-1})$, number of events in $(t_{j-1}, t_{j}]$ $(j=1, 2, \ldots)$, are mutually independent Poisson with mean $\int_{t_{j-1}}^{t_j}\ell(u)\dd u$\
 :::
 
 ## Rate Function
-:::{.fragment}
+
+::: fragment
 -   **Rate**: Marginal incidence \begin{equation}\label{eq:rec:rate}
     r(t)\dd t=E\{\dd N^*(t)\}
     \end{equation}
     -   **Mean**: Average number of events \begin{equation}\label{eq:rec:mean}
-    \mu(t)=E\{N^*(t)\}=\int_0^t r(u)\dd u
-    \end{equation}
+        \mu(t)=E\{N^*(t)\}=\int_0^t r(u)\dd u
+        \end{equation}
 :::
-:::{.fragment}
+
+::: fragment
 -   **Rate vs intensity** $$
     r(t)=E\left[\ell\{t\mid \overline{N}^*(t-)\}\right]
     $$
@@ -113,31 +125,34 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## One-Sample Estimation of Mean
-:::{.fragment}
+
+::: fragment
 -   **Observed data** \begin{equation}\label{eq:rec:obs}
     \{N_i(\cdot), C_i, Z_i\},\hspace{10mm}i=1,\ldots, n
     \end{equation}
     -   $N(t)=N^*(t\wedge C)$; $C$: independent censoring time
     -   No terminal event like death $\to$ $C$ always observed
 :::
-:::{.fragment}
+
+::: fragment
 -   **Nelsen-Aalen-type estimator for mean** $$
     \hat\mu(t)=\int_0^t\frac{\sum_{i=1}^n\dd N_i(u)}{\sum_{i=1}^n I(C_i\geq u)}
     $$
     -   $\hat\mu(t)\to \int_0^t\frac{E\{\dd N(u)\}}{\pr(C\geq u)}=\int_0^t\frac{\pr(C\geq u)E\{\dd N^*(u)\}}{\pr(C\geq u)}=\int_0^t r(u)\dd u=\mu(t)$
 :::
 
-
 # Proportional Intensity/Rates Models
 
 ## Proportional Intensity (Andersen-Gill)
-:::{.fragment}
+
+::: fragment
 -   **Three classes of models** (handle correlations)
     -   **Proportional intensity** (by time-varying covariates)
     -   **Shared frailty** (by subject-specific frailty)
     -   **Proportional rates** (by robust inference)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Proportional intensity (Andersen & Gill, 1982)** \begin{equation}\label{eq:rec:AG_model}
     E\{\dd N^*(t)\mid \overline N^*(t-), \overline Z(t)\}=\exp\left\{\beta^\T Z(t)\right\}\dd\mu_0(t)
     \end{equation}
@@ -148,7 +163,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Andersen-Gill: Cox Extension
-:::{.fragment}
+
+::: fragment
 -   **Estimation and inference**
     -   **Same as Cox model** with (internal) time-varying covariates
     -   **Partial-likelihood score** \begin{equation}\label{eq:rec:score}
@@ -161,9 +177,9 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
         \end{equation}
 :::
 
-
 ## Shared-Frailty Proportional Intensity
-:::{.fragment}
+
+::: fragment
 -   **Frailty-conditioned intensity** \begin{equation}\label{eq:rec:frailty_model}
     E\{\dd N^*(t)\mid \xi, \overline N^*(t-), \overline Z(t)\}=\xi\exp\{\beta^\T Z(t)\}\dd\mu_0(t)
     \end{equation}
@@ -171,14 +187,16 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
     -   $Z(t)$: no need to capture elements of $\overline N^*(t-)$
     -   $\beta$: subject-level log-intensity (risk) ratio
 :::
-:::{.fragment}
+
+::: fragment
 -   **Estimation and inference**
     -   **EM algorithm** treating $\xi$ as missing data
     -   **M-step**: weighted partial-likelihood and Breslow estimator
 :::
 
 ## Marginal Proportional Rates (LWYY)
-:::{.fragment}
+
+::: fragment
 -   **Proportion rates (Lin, Wei, Yang & Ying, 2000; LWYY)** \begin{equation}\label{eq:rec:rate_pr}
     E\{\dd N^*(t)\mid \overline Z(t)\}=\exp\{\beta^\T Z(t)\}\dd\mu_0(t)
     \end{equation}
@@ -188,14 +206,16 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
         \end{equation}
         -   $Z = 1, 0$: treated experience $\exp(\beta)$ as many events as untreated
 :::
-:::{.fragment}
+
+::: fragment
 -   **Estimation and inference**
     -   Partial-likelihood score as estimating function (same estimates as AG)
     -   Robust (sandwich) variance (different $\se$ than AG)
 :::
 
 ## Software: `survival::coxph()` (I)
-:::{.fragment}
+
+::: fragment
 -   **Input data format**
 
 ```{r}
@@ -211,7 +231,7 @@ cgd
 ```
 :::
 
-:::{.fragment}
+:::: fragment
 -   **Proportional intensity (Andersen-Gill)**
     -   `(start, stop)`: time period between previous and current events
     -   No need for subject `id` as correlation presumably captured by covariates
@@ -223,10 +243,11 @@ cgd
 coxph(Surv(start, stop, status) ~ covariates)
 ```
 :::
-:::
+::::
 
 ## Software: `survival::coxph()` (II)
-:::{.fragment}
+
+:::: fragment
 -   **Shared-frailty proportional intensity**
     -   Subject `id` for frailty
 
@@ -239,9 +260,9 @@ coxph(Surv(start, stop, status) ~ covariates +
         frailty(id, distribution = "gamma"))
 ```
 :::
-:::
+::::
 
-:::{.fragment}
+:::: fragment
 -   **Proportional rates/means (LWYY)**
     -   Subject `id` for empirical evaluation of clustering
     -   Use `se2` in results for robust standard error
@@ -253,12 +274,13 @@ coxph(Surv(start, stop, status) ~ covariates +
 coxph(Surv(start, stop, status) ~ covariates + cluster(id))
 ```
 :::
-:::
+::::
 
 # Chronic Granulomatous Disease Study
 
 ## Study Background
-:::{.fragment}
+
+::: fragment
 -   **Study information**
     -   **Population**: a placebo-controlled randomized trial on 128 Chronic Granulomatous Disease (CGD) patients
     -   **Aim**: evaluate effect of **gamma interferon** on incidence of **repeated CGD infections**
@@ -272,14 +294,16 @@ coxph(Surv(start, stop, status) ~ covariates + cluster(id))
 :::
 
 ## Descriptive Outcomes
-:::{.fragment}
+
+::: fragment
 -   **Infection counts**
 
 ![](images/rec_cgd_hist.png){fig-align="center" width="75%"}
 :::
 
 ## Regression Results (I)
-:::{.fragment}
+
+::: fragment
 -   **Fit three multiplicative models**
 
 ```{r}
@@ -305,7 +329,8 @@ summary(obj_pm)
 :::
 
 ## Regression Results (II)
-:::{.fragment}
+
+::: fragment
 -   **LWYY (recommended)**
     -   Patients treated by **gamma interferon** on average experience $\exp(-1.051) = 35.0\%$ as many infections as those taking placebo ($p$-value 0.001)
 
@@ -313,7 +338,8 @@ summary(obj_pm)
 :::
 
 ## Prediction of Mean Frequency
-:::{.fragment}
+
+::: fragment
 -   **LWYY (recommended)**
 
 ![](images/rec_cgd_pred.png){fig-align="center" width="75%"}
@@ -322,15 +348,16 @@ summary(obj_pm)
 # Multivariate Approaches
 
 ## Modeling Choices
-:::{.fragment}
+
+::: fragment
 -   **Multivariate times**
-    -   **Total times**: Time from **beginning** (randomization) 
-    to event $$T_1 < T_2 < T_3 < \cdots $$
+    -   **Total times**: Time from **beginning** (randomization) to event $$T_1 < T_2 < T_3 < \cdots $$
     -   **Gap times**: Time from last to current event $$
         U_1 = T_1,\,\, U_2 = T_2 - T_1,\,\, U_3 = T_3 - T_2,\,\, \ldots
         $$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Three classes of models**
     -   **Marginal total times** (Wei, Lin, and Weissfeld, 1989; WLW)
     -   **Conditional total times** (Prentice, Williams, and Peterson, 1981; PWP-TT)
@@ -338,28 +365,33 @@ summary(obj_pm)
 :::
 
 ## Marginal Total Times (WLW)
-:::{.fragment}
+
+::: fragment
 -   **Model specification** \begin{equation}\label{eq:rec:wlw}
     \pr(t\leq T_k<t+\dd t\mid T_k\geq t, Z)=\exp(\beta_k^\T Z)\dd\Lambda_{k0}(t)
     \end{equation}
-    -   **Marginal Cox model** for multivariate failure times $T_1< \ldots< T_K$ 
+    -   **Marginal Cox model** for multivariate failure times $T_1< \ldots< T_K$
     -   $\beta_k$: **population-averaged log-hazard ratio** for $k$th occurence
-        -    Can constrain $\beta_1=\cdots=\beta_K$
+        -   Can constrain $\beta_1=\cdots=\beta_K$
     -   **Robust variance** to account for correlation
 :::
-:::{.fragment}
--   **Software**: 
+
+::: fragment
+-   **Software**:
+
     -   `order`: $k$
-```{r}
-#| eval: false
-#| echo: true
-# WLW
-coxph(Surv(stop, status) ~ covariates * strata(order) + cluster(id))
-```
+
+    ```{r}
+    #| eval: false
+    #| echo: true
+    # WLW
+    coxph(Surv(stop, status) ~ covariates * strata(order) + cluster(id))
+    ```
 :::
 
 ## Conditional Total Times (PWP-TT)
-:::{.fragment}
+
+::: fragment
 -   **Model specification** \begin{equation}\label{eq:rec:pwp_tt}
     \pr(t\leq T_k<t+\dd t\mid T_{k-1}<t\leq T_k, Z)=\exp(\beta^\T Z)\dd\Lambda_{k0}(t)
     \end{equation}
@@ -367,8 +399,10 @@ coxph(Surv(stop, status) ~ covariates * strata(order) + cluster(id))
     -   $\beta_k$: **log-hazard ratio** among those at risk for $k$ event
     -   **Robust variance** to account for correlation
 :::
-:::{.fragment}
--   **Software**: 
+
+::: fragment
+-   **Software**:
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -377,36 +411,38 @@ coxph(Surv(start, stop, status) ~ covariates * strata(order) + cluster(id))
 ```
 :::
 
-
 ## Conditional Gap Times (PWP-GT)
-:::{.fragment}
+
+::: fragment
 -   **Model specification** \begin{equation}\label{eq:rec:pwp_gt}
     \pr(t\leq U_k<t+\dd t\mid U_k\geq t, Z)=\exp(\beta_k^\T Z)\dd\Lambda_{k0}(t).
     \end{equation}
     -   **A gap-time model**: reset clock upon experiencing an event
         -   **Marginal Cox model** for multivariate failure times $U_1, \ldots, U_K$
-    -   $\beta_k$: **log-hazard ratio** for $k$th gap time 
+    -   $\beta_k$: **log-hazard ratio** for $k$th gap time
     -   **Robust variance** to account for correlation
 :::
-:::{.fragment}
--   **Software**: 
+
+::: fragment
+-   **Software**:
+
     -   `gtime`: `stop` - `start` ($U_k$)
-```{r}
-#| eval: false
-#| echo: true
-# PWP-GT
-coxph(Surv(gtime, status) ~ covariates * strata(order) + cluster(id))
-```
+
+    ```{r}
+    #| eval: false
+    #| echo: true
+    # PWP-GT
+    coxph(Surv(gtime, status) ~ covariates * strata(order) + cluster(id))
+    ```
 :::
 
 ## CGD Study: Multivariate Perspective
-:::{.fragment}
 
+::: fragment
 -   **Treatment effects** on different occurrences
 
 ![](images/rec_cgd_mul.png){fig-align="center" width="70%"}
 :::
-
 
 # Conclusion
 
@@ -420,14 +456,18 @@ coxph(Surv(gtime, status) ~ covariates * strata(order) + cluster(id))
 
 ## Notes (II)
 
--   **Parametric models** 
+-   **Parametric models**
+
     -   **Poisson regression**
+
     ```{r}
     #| eval: false
     #| echo: true
     glm(count ~ covariates + offset(log(follow_up)), family = poisson)
     ```
+
     -   **Zero-inflated Poisson**
+
     ```{r}
     #| eval: false
     #| echo: true
@@ -436,7 +476,9 @@ coxph(Surv(gtime, status) ~ covariates * strata(order) + cluster(id))
                     | covariates2 # Logistic sub-model for excess zeros
                   )
     ```
+
     -   **Negative binomial**
+
     ```{r}
     #| eval: false
     #| echo: true

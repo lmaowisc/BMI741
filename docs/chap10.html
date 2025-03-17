@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.39">
+
+  <meta name="author" content="Lu Mao">
+  <title>BMI/STAT 741 Course Study Site – Applied Survival Analysis</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-bbe7401fe57d4b791b917637bb662036.css">
+  <link rel="stylesheet" href="style_slides.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <style type="text/css">
+  ul li ul li {
+    font-size: 0.75em;
+  }
+  </style>
+<meta property="og:title" content="Applied Survival Analysis – BMI/STAT 741 Course Study Site">
+<meta property="og:description" content="Chapter 10 - Competing/Semi-Competing Risks">
+<meta property="og:image" content="https://lmaowisc.github.io/BMI741/dc.jpg">
+<meta property="og:site_name" content="BMI/STAT 741 Course Study Site">
+<meta name="twitter:title" content="Applied Survival Analysis – BMI/STAT 741 Course Study Site">
+<meta name="twitter:description" content="Chapter 10 - Competing/Semi-Competing Risks">
+<meta name="twitter:image" content="https://lmaowisc.github.io/BMI741/surv_hex.png">
+<meta name="twitter:creator" content="@lmaowisc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image-height" content="600">
+<meta name="twitter:image-width" content="518">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Applied Survival Analysis</h1>
+  <p class="subtitle">Chapter 10 - Competing/Semi-Competing Risks</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Lu Mao 
+</div>
+<div class="quarto-title-author-email">
+<a href="mailto:lmao@biostat.wisc.edu">lmao@biostat.wisc.edu</a>
+</div>
+        <p class="quarto-title-affiliation">
+            Department of Biostatistics &amp; Medical Informatics
+          </p>
+        <p class="quarto-title-affiliation">
+            University of Wisconsin-Madison
+          </p>
+    </div>
+</div>
+
+</section>
+<section id="outline" class="slide level2">
+<h2>Outline</h2>
+<div>
+<ol type="1">
+<li class="fragment"><p>Cause-specific hazard and cumulative incidence</p></li>
+<li class="fragment"><p>Non- and semi-parametric methods</p></li>
+<li class="fragment"><p>Analysis of bone marrow transplantation study</p></li>
+<li class="fragment"><p>Semi-competing risks and examples</p></li>
+</ol>
+</div>
+<p><span class="math display">\[\newcommand{\d}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\T}{{\rm T}}\]</span> <span class="math display">\[\newcommand{\dd}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\cc}{{\rm c}}\]</span> <span class="math display">\[\newcommand{\pr}{{\rm pr}}\]</span> <span class="math display">\[\newcommand{\var}{{\rm var}}\]</span> <span class="math display">\[\newcommand{\se}{{\rm se}}\]</span> <span class="math display">\[\newcommand{\indep}{\perp \!\!\! \perp}\]</span> <span class="math display">\[\newcommand{\Pn}{n^{-1}\sum_{i=1}^n}\]</span></p>
+</section>
+<section>
+<section id="basic-quantities" class="title-slide slide level1 center">
+<h1>Basic Quantities</h1>
+
+</section>
+<section id="definition-and-examples" class="slide level2">
+<h2>Definition and Examples</h2>
+<div class="fragment">
+<ul>
+<li><strong>Competing risks</strong>
+<ul>
+<li><strong>Definition</strong>: multiple types of failures, occurrence of one <strong>precludes</strong> others
+<ul>
+<li>Multiple latent risks competing with each other for first occurrence</li>
+</ul></li>
+<li><strong>Examples</strong>: different causes of death</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Defining feature</strong>
+<ul>
+<li>One failure per subject</li>
+<li>Less info than multivariate failure times</li>
+<li>Implications for analysis and interpretation</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="outcome-data-identifiability" class="slide level2">
+<h2>Outcome Data &amp; Identifiability</h2>
+<div class="fragment">
+<ul>
+<li><strong>Target of inference</strong>: <span class="math inline">\((T, \Delta)\)</span>
+<ul>
+<li><span class="math inline">\(T\)</span>: <strong>time</strong> to failure</li>
+<li><span class="math inline">\(\Delta \in \{1, \ldots, K\}\)</span>: <strong>type/cause</strong> of failure (categorical)</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Multivariate perspective</strong>
+<ul>
+<li><strong>A conceptual framework</strong> <span class="math display">\[\begin{equation}\label{eq:cmpr:mult}
+T=\min(T_1,\ldots, T_K) \hspace{1mm}\mbox{ and } \hspace{1mm}\Delta=\arg\min_{k=1,\ldots, K} T_k
+\end{equation}\]</span>
+<ul>
+<li><span class="math inline">\(T_k\)</span>: time to <span class="math inline">\(k\)</span>th <em>latent</em> risk <span class="math inline">\((k=1,\ldots, K)\)</span> in absence of other risks</li>
+<li>Competing risks <span class="math inline">\(=\)</span> partially observed multivariate failure times</li>
+</ul></li>
+<li><strong>Identifiability</strong>: net distribution of latent <span class="math inline">\(T_k\)</span> not recognizable from <span class="math inline">\((T, \Delta)\)</span>
+<ul>
+<li>unless under unrealistic assumption of mutual independence of the <span class="math inline">\(T_k\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="two-approaches" class="slide level2">
+<h2>Two Approaches</h2>
+<div class="fragment">
+<ul>
+<li><strong>Two ways</strong> to characterize <span class="math inline">\((T, \Delta)\)</span>
+<ul>
+<li><strong>Cause-specific hazard</strong></li>
+<li><strong>Cumulative incidence (Sub-distribution)</strong></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Cause-specific hazard (CSH)</strong> <span class="math display">\[\begin{equation}\label{eq:cmpr:cs_hazard}
+    \dd\Lambda_k^\cc(t)=\pr(t\leq T&lt;t+\dd t, \Delta=k\mid T\geq t)
+    \end{equation}\]</span>
+<ul>
+<li><strong>Interpretation</strong>: instantaneous incidence of <span class="math inline">\(k\)</span>th risk given overall “survival”</li>
+<li><strong>Example</strong>: <span class="math inline">\(\dd\Lambda_1^\cc(t)=\)</span> incidence rate for CV death among survivors at <span class="math inline">\(t\)</span>
+<ul>
+<li><span class="math inline">\(k =1\)</span>: CV death; <span class="math inline">\(k =2\)</span>: other causes of death</li>
+</ul></li>
+<li><strong>Overall hazard</strong>: <span class="math inline">\(\dd\Lambda(t)=\pr(t\leq T&lt;t+\dd t \mid T\geq t) = \sum_{k=1}^K \dd\Lambda_k^\cc(t)\)</span></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="cause-specific-hazard" class="slide level2">
+<h2>Cause-Specific Hazard</h2>
+<div class="fragment">
+<ul>
+<li><strong>Limitations</strong>
+<ul>
+<li>The <em>cumulative</em> CSH <span class="math inline">\(\Lambda_k^\cc(t)\)</span> not a meaningful quantity</li>
+<li><span class="math inline">\(\exp\{-\Lambda_k^\cc(t)\}\)</span> not a survival function of any kind</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Correspondence with “net hazard”</strong>
+<ul>
+<li>Under (unrealistic) mutual independence of the latent <span class="math inline">\(T_k\)</span></li>
+<li>Hazard of <span class="math inline">\(T_k\)</span> identifiable and equal to <span class="math inline">\(\Lambda_k^\cc(t)\)</span></li>
+<li>Not recommended</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="cumulative-incidence" class="slide level2">
+<h2>Cumulative Incidence</h2>
+<div class="fragment">
+<ul>
+<li><strong>Cumulative incidence function (CIF)</strong> <span class="math display">\[
+    F_k(t)=\pr(T\leq t, \Delta=k)
+    \]</span>
+<ul>
+<li><strong>Interpretation</strong>: probability of failure from <span class="math inline">\(k\)</span>th risk <em>in presence of</em> other risks</li>
+<li>Marginal quantity, easy to interpret (a real-world probability)</li>
+<li><span class="math inline">\(F(t)=\pr(T\leq t) = \sum_{k=1}^K F_k(t)\)</span> (<em>sub</em>-distribution functions)</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Relationship</strong>
+<ul>
+<li>CSH in terms of CIF (for a particular risk, no one-to-one correspondence) <span class="math display">\[\begin{equation}\label{eq:cmpr:correspond}
+\dd\Lambda_k^\cc(t)=\frac{\dd F_k(t)}{1-\sum_{l=1}^K F_l(t-)}
+\end{equation}\]</span></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="csh-vs-cif" class="slide level2">
+<h2>CSH vs CIF</h2>
+<div class="fragment">
+<ul>
+<li><strong>Example</strong>: effect on CSH may not align with CIF
+<ul>
+<li><strong>Treatment</strong>: <span class="math inline">\(\Lambda_1^\cc(t)=\Lambda_2^\cc(t)=3t\)</span></li>
+<li><strong>Control</strong>: <span class="math inline">\(\Lambda_1^\cc(t)=2t\)</span> and <span class="math inline">\(\Lambda_2^\cc(t)=t\)</span></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cmpr_compare.png" class="quarto-figure quarto-figure-center" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="comparison-of-functions" class="slide level2">
+<h2>Comparison of Functions</h2>
+<ul>
+<li><strong>CSH vs net hazard vs CIF</strong></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cmpr_functions.png" class="quarto-figure quarto-figure-center" style="width:90.0%"></p>
+</figure>
+</div>
+</section></section>
+<section>
+<section id="methods-for-competing-risks" class="title-slide slide level1 center">
+<h1>Methods for Competing Risks</h1>
+
+</section>
+<section id="observed-data" class="slide level2">
+<h2>Observed Data</h2>
+<div>
+<ul>
+<li class="fragment"><strong>A random</strong> <span class="math inline">\(n\)</span>-sample <span class="math display">\[(X_i, \delta_i, Z_i), \,\,\, i=1,\ldots, n\]</span>
+<ul>
+<li class="fragment"><span class="math inline">\(X=T\wedge C\)</span></li>
+<li class="fragment"><span class="math inline">\(\delta=\Delta I(T\leq C)\)</span> (0: censored; <span class="math inline">\(k\)</span>: observed <span class="math inline">\(k\)</span>th risk, <span class="math inline">\(k=1,\ldots, K\)</span>)</li>
+<li class="fragment"><span class="math inline">\(C\)</span>: independent censoring time</li>
+<li class="fragment"><span class="math inline">\(Z\)</span>: covariates</li>
+<li class="fragment"><span class="math inline">\(N_{ki}(t)=I(X_i\leq t, \delta_i=k)\)</span>: <em>Observed</em> counting process for <span class="math inline">\(k\)</span>th risk</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="cause-specific-hazard-models-i" class="slide level2">
+<h2>Cause-Specific Hazard Models (I)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Proportional cause-specific hazards</strong> <span class="math display">\[\begin{equation}\label{eq:cmpr:ph_csh}
+\pr(t\leq T&lt;t+\dd t, \Delta=k\mid T\geq t, Z)=\exp(\beta_k^\T Z)\dd\Lambda_{k0}(t)
+\end{equation}\]</span>
+<ul>
+<li>A model on “survivors” (those who have not failed from any risk)</li>
+<li><span class="math inline">\(\beta_k\)</span>: log-hazard ratios for <span class="math inline">\(k\)</span>th risk in survivors</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Estimation</strong>
+<ul>
+<li><strong>Partial likelihood score</strong> for <span class="math inline">\(k\)</span>th risk <span class="math display">\[
+  U_{nk}(\beta_k)=\Pn\int_0^\infty\left\{Z_i-\frac{\sum_{j=1}^n I(X_j\geq t)Z_j\exp(\beta_k^\T Z_j)}{\sum_{j=1}^n I(X_j\geq t)\exp(\beta_k^\T Z_j)}\right\}\dd N_{ki}(t)
+\]</span>
+<ul>
+<li>Essentially treating non-<span class="math inline">\(k\)</span> risks as censoring</li>
+<li>Easy to implement in <code>survival::coxph()</code> (<code>status == k</code>)</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="cause-specific-hazard-models-ii" class="slide level2">
+<h2>Cause-Specific Hazard Models (II)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Under (unrealistic) independence of the latent</strong> <span class="math inline">\(T_k\)</span>
+<ul>
+<li>Proportional cause-specific hazards <span class="math inline">\(\Longleftrightarrow\)</span> proportional net hazards</li>
+<li>Frailty to relax independence</li>
+<li>Not recommended
+<ul>
+<li>Non-identifiability</li>
+<li>Non-interpretability</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Log-rank test</strong>
+<ul>
+<li>Risk-specific log-rank statisic with other risks treated as censoring</li>
+<li>“Kaplan-Meier” doesn’t work <span class="math inline">\(\to\)</span> estimand <span class="math inline">\(\exp\{-\Lambda_k^\cc(t)\}\)</span> is non-quantity</li>
+<li>Competing-risks equivalent of KM is Gray (1988) estimator of <span class="math inline">\(F_k(t)\)</span></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="cif-nonparametric-estimation" class="slide level2">
+<h2>CIF: Nonparametric Estimation</h2>
+<div class="fragment">
+<ul>
+<li><p><strong>Decomposition of</strong> <span class="math inline">\(F_k(t)\)</span> <span class="math display">\[\begin{equation*}
+    \dd F_k(t)=S(t-)\dd\Lambda_k^\cc(t)
+\end{equation*}\]</span></p>
+<ul>
+<li><p><span class="math inline">\(S(t-)=\pr(T\geq t)\)</span>: By KM estimator <span class="math inline">\(\hat S(t-)\)</span> for overall failure</p></li>
+<li><p><span class="math inline">\(\dd\Lambda_k^\cc(t)\)</span>: By Nelsen-Aalen estimator (non-<span class="math inline">\(k\)</span> risks as censoring) <span class="math display">\[
+  \dd\hat\Lambda_k^\cc(t)=\frac{\sum_{i=1}^n\dd N_{ki}(t)}{\sum_{i=1}^n I(X_i\geq t)}
+  \]</span></p></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Gray estimator</strong> <span class="math display">\[\begin{equation*}
+    \hat F_k(t)=\int_0^t \hat S(u-)\dd\hat \Lambda_k^\cc(u)
+\end{equation*}\]</span></li>
+</ul>
+</div>
+</section>
+<section id="cif-sub-distribution-hazard" class="slide level2">
+<h2>CIF: Sub-Distribution Hazard</h2>
+<div>
+<ul>
+<li class="fragment"><strong>Sub-distribution hazard (SDH)</strong> <span class="math display">\[\begin{equation}\label{eq:cmpr:sdh}
+    \dd\Lambda_k(t)=\pr(t\leq T_k^*&lt;t+\dd t\mid T_k^*\geq t)
+    \end{equation}\]</span>
+<ul>
+<li class="fragment">Time to <span class="math inline">\(k\)</span>th risk <em>in presence of</em> other risks <span class="math display">\[
+T_k^*=T\cdot I(\Delta=k)+\infty\cdot I(\Delta\neq k)
+\]</span>
+<ul>
+<li class="fragment"><span class="math inline">\(F_k(t)=\pr(T_k^*\leq t)\)</span></li>
+</ul></li>
+<li class="fragment"><strong>Interpretation</strong>: incidence of <span class="math inline">\(k\)</span>th risk given not failing from it</li>
+<li class="fragment">Easier to work with hazard-like functions (unbounded)</li>
+<li class="fragment"><strong>Correspondence with CIF</strong> <span class="math display">\[\begin{equation}\label{eq:cmpr:subdist}
+F_k(t)=1-\exp\{-\Lambda_k(t)\}
+\end{equation}\]</span></li>
+<li class="fragment"><strong>Model/test on SDH</strong> <span class="math inline">\(\Longleftrightarrow\)</span> Model/test on CIF</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="cif-grays-test" class="slide level2">
+<h2>CIF: Gray’s Test</h2>
+<div class="fragment">
+<ul>
+<li><strong>Discrete version</strong> (<span class="math inline">\(k\)</span>th risk) <span class="math display">\[
+\dd\Lambda_k(t)=\frac{\dd F_k(t)}{1-F_k(t-)}
+\]</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Log-rank-type test</strong>
+<ul>
+<li>Testing <span class="math inline">\(H_0: F_{k1}(t)=F_{k0}(t)\)</span> <span class="math display">\[\begin{equation}\label{eq:cmpr:gray_tests}
+\int_0^\infty W_k(t)\big\{\dd\hat\Lambda_{k1}(t)-\dd\hat\Lambda_{k0}(t)\big\}
+\end{equation}\]</span></li>
+<li><span class="math inline">\(\hat\Lambda_{ka}(t)\)</span>: Gray’s CIF plug-in estimator for SDH in group <span class="math inline">\(a\)</span> <span class="math inline">\((a=1, 0)\)</span></li>
+<li><span class="math inline">\(W_k(t)\)</span>: Weight function</li>
+<li><strong>Extensions</strong>: multi-group, stratification, etc.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="cif-fine-gray-regression" class="slide level2">
+<h2>CIF: Fine-Gray Regression</h2>
+<div class="fragment">
+<ul>
+<li><strong>Proportional sub-distribution hazards</strong> (Fine and Gray, 1999) <span class="math display">\[\begin{equation}\label{eq:cmpr:fg}
+\pr(t\leq T_k^*&lt;t+\dd t\mid T_k^*\geq t, Z)=\exp(\beta_k^\T Z)\dd\Lambda_{k0}(t)
+  \end{equation}\]</span>
+<ul>
+<li><span class="math inline">\(\beta_k\)</span>: <strong>log-hazard ratios</strong> for <span class="math inline">\(k\)</span>th risk in entire population (under other risks)</li>
+<li><strong>Estimation and inference</strong>: partial-likelihood score with IPCW to address dependent censoring by other risks</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Target populations</strong>
+<ul>
+<li><strong>Cause-specific hazard</strong>: survivors</li>
+<li><strong>Sub-distribution hazard</strong>: all, including those who have failed from other causes</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="software-cmprkcuminc" class="slide level2">
+<h2>Software: <code>cmprk::cuminc()</code></h2>
+<div class="fragment">
+<ul>
+<li><strong>Basic syntax for Gray’s estimator &amp; test</strong></li>
+</ul>
+<div class="big-code">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">cuminc</span>(ftime, fstatus, group, strata, <span class="at">rho =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<ul>
+<li><strong>Input</strong>
+<ul>
+<li><code>(ftime, fstatus)</code>: <span class="math inline">\((X, \delta)\)</span></li>
+<li><code>group</code>: group variable (optional); <code>strata</code>: strata variable (optional)</li>
+<li><code>rho</code>: <span class="math inline">\(\rho\)</span> in weight <span class="math inline">\(W_k(t)=\{1 - \hat F_k(t)\}^\rho\)</span> (HF <span class="math inline">\(G^\rho\)</span> family)</li>
+</ul></li>
+<li><strong>Output</strong>: a list
+<ul>
+<li><code>obj$Tests</code>: tests results on each risk</li>
+<li><code>obj$"a k"</code>: CIF estimates for <span class="math inline">\(k\)</span>th risk in group <span class="math inline">\(a\)</span>
+<ul>
+<li><code>time</code>: <span class="math inline">\(t\)</span>; <code>est</code>: <span class="math inline">\(\hat F_k(t)\)</span>; <code>var</code>: <span class="math inline">\(\hat\var\{\hat F_k(t)\}\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="software-cmprkcrr-i" class="slide level2">
+<h2>Software: <code>cmprk::crr()</code> (I)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Basic syntax for Fine-Gray model</strong></li>
+</ul>
+<div class="big-code">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">crr</span>(ftime, fstatus, cov1, <span class="at">failcode =</span> k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<ul>
+<li><strong>Input</strong>
+<ul>
+<li><code>(ftime, fstatus)</code>: <span class="math inline">\((X, \delta)\)</span>; <code>cov1</code>: <span class="math inline">\(Z\)</span></li>
+<li><code>failcode = k</code>: models <span class="math inline">\(k\)</span>th risk</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Output</strong>: a list of class <code>crr</code>
+<ul>
+<li><code>obj$coef</code>: <span class="math inline">\(\hat\beta_k\)</span>; <code>obj$var</code>: <span class="math inline">\(\hat\var(\hat\beta_k)\)</span></li>
+<li><code>obj$uftime</code>: <span class="math inline">\(t\)</span>; <code>obj$bfitj</code>: <span class="math inline">\(\dd\hat\Lambda_{k0}(t)\)</span></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="software-cmprkcrr-ii" class="slide level2">
+<h2>Software: <code>cmprk::crr()</code> (II)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Prediction of CIF by Fine-Gray model</strong>
+<ul>
+<li><code>obj</code>: a <code>crr</code> object for fit model</li>
+<li><code>z</code>: new covariate data</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="big-code">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="1-2|4-11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co"># --- Method 1: use predict.crr() </span></span>
+<span id="cb3-2"><a></a>obj_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(obj, z)</span>
+<span id="cb3-3"><a></a></span>
+<span id="cb3-4"><a></a><span class="co"># --- Method 2: manual calculation</span></span>
+<span id="cb3-5"><a></a>beta <span class="ot">&lt;-</span> obj<span class="sc">$</span>coef</span>
+<span id="cb3-6"><a></a>Lambda <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(obj<span class="sc">$</span>bfitj)</span>
+<span id="cb3-7"><a></a>time <span class="ot">&lt;-</span> obj<span class="sc">$</span>uftime</span>
+<span id="cb3-8"><a></a><span class="do">## Calculate CIF based on FG model</span></span>
+<span id="cb3-9"><a></a>cif <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(beta <span class="sc">*</span> z)) <span class="sc">*</span> Lambda)</span>
+<span id="cb3-10"><a></a><span class="do">## Same as obj_pred from Method 1</span></span>
+<span id="cb3-11"><a></a>obj_pred <span class="ot">&lt;-</span> <span class="fu">cbind</span>(time, cif)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="software-tidycmprk-package-i" class="slide level2">
+<h2>Software: <code>tidycmprk</code> Package (I)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Tidy competing risks analysis</strong>
+<ul>
+<li>Wraps around <code>cmprk</code> functions</li>
+<li>Formula-based interface <span class="math inline">\(+\)</span> Tidy output</li>
+<li>Integrated with <code>ggsurvfit</code> and <code>gtsummary</code></li>
+</ul></li>
+<li><strong>Main functions</strong>
+<ul>
+<li><strong>Nonparametric analysis</strong>
+<ul>
+<li><code>tidycmprsk::cuminc()</code>: model fitting</li>
+<li><code>tidycmprsk::tbl_cuminc()</code>: tabulation of CIF estimates</li>
+<li><code>ggsurvfit::ggcuminc()</code>: plotting of CIF estimates</li>
+</ul></li>
+<li><strong>Fine-Gray regression</strong>
+<ul>
+<li><code>tidycmprsk::crr()</code>: model fitting</li>
+<li><code>gtsummary::tbl_regression()</code>: regression table</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="software-tidycmprk-package-ii" class="slide level2">
+<h2>Software: <code>tidycmprk</code> Package (II)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Sample code</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="1-2|3-8|9-10|12-13|15-16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># Compute and test on cumulative incidence function (CIF) -------------------</span></span>
+<span id="cb4-2"><a></a>obj_cif <span class="ot">&lt;-</span> tidycmprsk<span class="sc">::</span><span class="fu">cuminc</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> group, <span class="at">data =</span> df)</span>
+<span id="cb4-3"><a></a><span class="co"># Tabulate CIF estimates with 95% CI at specific times</span></span>
+<span id="cb4-4"><a></a>tbl_surv <span class="ot">&lt;-</span> tidycmprsk<span class="sc">::</span><span class="fu">tbl_cuminc</span>(</span>
+<span id="cb4-5"><a></a>    <span class="at">x =</span> obj_cif,                     <span class="co"># Provide fitted object</span></span>
+<span id="cb4-6"><a></a>    <span class="at">times =</span> <span class="fu">seq</span>(<span class="dv">12</span>, <span class="dv">120</span>, <span class="at">by =</span> <span class="dv">36</span>),   <span class="co"># Time points for CIF</span></span>
+<span id="cb4-7"><a></a>    <span class="at">outcomes =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>),          <span class="co"># Specify risks to include</span></span>
+<span id="cb4-8"><a></a>) </span>
+<span id="cb4-9"><a></a><span class="co"># Create group-specific CIF plot</span></span>
+<span id="cb4-10"><a></a><span class="fu">ggcuminc</span>(obj_cif, <span class="at">outcome =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>))  <span class="co"># Specify risks to include</span></span>
+<span id="cb4-11"><a></a></span>
+<span id="cb4-12"><a></a><span class="co"># Fine-Gray regression for risk "k" -----------------------------------------</span></span>
+<span id="cb4-13"><a></a>obj_fg <span class="ot">&lt;-</span> tidycmprsk<span class="sc">::</span><span class="fu">crr</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates, </span>
+<span id="cb4-14"><a></a>                           <span class="at">data =</span> df, <span class="at">failcode =</span> <span class="st">"k"</span>)</span>
+<span id="cb4-15"><a></a><span class="co"># Tabulate regression results</span></span>
+<span id="cb4-16"><a></a>tbl <span class="ot">&lt;-</span> <span class="fu">tbl_regression</span>(obj_fg, <span class="at">exponentiate =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="bone-marrow-transplant-study" class="title-slide slide level1 center">
+<h1>Bone Marrow Transplant Study</h1>
+
+</section>
+<section id="study-information" class="slide level2">
+<h2>Study Information</h2>
+<div class="fragment">
+<ul>
+<li><strong>Population</strong>
+<ul>
+<li>864 multiple-myeloma patients undergoing allo-HCT cell transplantation</li>
+</ul></li>
+<li><strong>Endpoints</strong>: time from surgery to
+<ul>
+<li><strong>Treatment-related mortality</strong> (TRM; death in remission)</li>
+<li><strong>Relapse of leukemia</strong></li>
+</ul></li>
+<li><strong>Risk factors</strong>
+<ul>
+<li>Cohort indicator (years 1995–2000 or 2001–2005)</li>
+<li>Type of donor (unrelated or HLA-identical sibling)</li>
+<li>History of a prior transplant</li>
+<li>Time from diagnosis to transplantation (&lt;24 months, or ≥ 24 months)</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="study-data" class="slide level2">
+<h2>Study Data</h2>
+<div class="fragment">
+<ul>
+<li><strong>Data format</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="fu">head</span>(cibmtr)</span>
+<span id="cb5-2"><a></a><span class="co">#&gt;    time status cohort donor hist wait</span></span>
+<span id="cb5-3"><a></a><span class="co">#&gt; 1 0.010      2      1     1    1    1</span></span>
+<span id="cb5-4"><a></a><span class="co">#&gt; 2 0.066      2      1     1    1    0</span></span>
+<span id="cb5-5"><a></a><span class="co">#&gt; 3 0.099      1      1     1    1    1</span></span>
+<span id="cb5-6"><a></a><span class="co">#&gt; ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cmpr_cibmtr.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="cif-by-donor-type-i" class="slide level2">
+<h2>CIF by Donor Type (I)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Estimation/testing by donor type</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="1-7|9-16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a>obj_cif <span class="ot">&lt;-</span> tidycmprsk<span class="sc">::</span><span class="fu">cuminc</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> donor, <span class="at">data =</span> df)</span>
+<span id="cb6-2"><a></a>obj_cif <span class="co"># Print results</span></span>
+<span id="cb6-3"><a></a><span class="co">#&gt; ...</span></span>
+<span id="cb6-4"><a></a><span class="co">#&gt; • Tests</span></span>
+<span id="cb6-5"><a></a><span class="co">#&gt; outcome   statistic   df     p.value    </span></span>
+<span id="cb6-6"><a></a><span class="co">#&gt; Relapse   17.3        1.00   &lt;0.001     </span></span>
+<span id="cb6-7"><a></a><span class="co">#&gt; TRM       12.3        1.00   &lt;0.001</span></span>
+<span id="cb6-8"><a></a></span>
+<span id="cb6-9"><a></a><span class="co"># Summarize CIF estimates at specific times </span></span>
+<span id="cb6-10"><a></a>tbl_surv <span class="ot">&lt;-</span> <span class="fu">tbl_cuminc</span>(</span>
+<span id="cb6-11"><a></a>    <span class="at">x =</span> obj_cif,                     <span class="co"># Provide the fitted object</span></span>
+<span id="cb6-12"><a></a>    <span class="at">times =</span> <span class="fu">seq</span>(<span class="dv">12</span>, <span class="dv">120</span>, <span class="at">by =</span> <span class="dv">36</span>),   <span class="co"># Time points for CIF</span></span>
+<span id="cb6-13"><a></a>    <span class="at">outcomes =</span> <span class="fu">c</span>(<span class="st">"Relapse"</span>, <span class="st">"TRM"</span>),  <span class="co"># Specify risks to include</span></span>
+<span id="cb6-14"><a></a>    <span class="at">label_header =</span> <span class="st">"{time} months"</span>   <span class="co"># Column label format</span></span>
+<span id="cb6-15"><a></a>) </span>
+<span id="cb6-16"><a></a>tbl_surv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="cif-by-donor-type-ii" class="slide level2">
+<h2>CIF by Donor Type (II)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Table created by <code>tbl_cuminc()</code></strong></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cmpr_bm_cif_tbl.png" class="quarto-figure quarto-figure-center" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="cif-by-donor-type-iii" class="slide level2">
+<h2>CIF by Donor Type (III)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Graphics</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>obj_cif <span class="sc">|&gt;</span> <span class="fu">ggcuminc</span>(<span class="at">outcome =</span> <span class="fu">c</span>(<span class="st">"Relapse"</span>, <span class="st">"TRM"</span>)) <span class="co"># + ggplot2 formatting</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cmpr_bm_cif.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="regression-analysis" class="slide level2">
+<h2>Regression Analysis</h2>
+<div class="fragment">
+<ul>
+<li>Semiparametric regression
+<ul>
+<li>Proportional cause-specific hazard</li>
+<li>Proportional sub-distribution hazard (FG)</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># Change k</span></span>
+<span id="cb8-2"><a></a>k <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb8-3"><a></a><span class="co">#--- proportional cause-specific hazards -----------------------------</span></span>
+<span id="cb8-4"><a></a>obj.cs <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status <span class="sc">==</span> k) <span class="sc">~</span> cohort <span class="sc">+</span> donor <span class="sc">+</span> hist <span class="sc">+</span> wait,</span>
+<span id="cb8-5"><a></a>                <span class="at">data =</span> cibmtr)</span>
+<span id="cb8-6"><a></a></span>
+<span id="cb8-7"><a></a><span class="co">#--- Fine and Gray --------------------------------------------------</span></span>
+<span id="cb8-8"><a></a>obj.fg <span class="ot">&lt;-</span> <span class="fu">crr</span>(cibmtr<span class="sc">$</span>time, cibmtr<span class="sc">$</span>status, cibmtr[, <span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>], <span class="at">failcode =</span> k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="regression-results" class="slide level2">
+<h2>Regression Results</h2>
+<div class="fragment">
+<ul>
+<li><strong>Differential effects of prior surgery</strong>
+<ul>
+<li><strong>Relapse</strong>: increases risk by <span class="math inline">\(42\%\)</span></li>
+<li><strong>TRM</strong>: decreases risk by <span class="math inline">\(1-0.63 = 37\%\)</span> <img data-src="images/cmpr_bm_reg.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></li>
+</ul></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="semi-competing-risks" class="title-slide slide level1 center">
+<h1>Semi-Competing Risks</h1>
+
+</section>
+<section id="definition-and-examples-1" class="slide level2">
+<h2>Definition and Examples</h2>
+<div class="fragment">
+<ul>
+<li><strong>Semi-competing risks</strong>
+<ul>
+<li><strong>Terminal event</strong> (competing): death</li>
+<li><strong>Non-terminal events</strong> (non-competing): hospitalization, relapse, etc.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Examples</strong>
+<ul>
+<li>Death + relapse of cancer (German breast cancer study)</li>
+<li>Death terminates nonfatal event but not <em>vice versa</em></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Methods</strong>
+<ul>
+<li><strong>Marginal</strong>: cumulative incidence/frequency</li>
+<li><strong>Frailty</strong> (Ch. 8); <strong>Multistate</strong> (Ch. 12); <strong>Composite</strong> (Ch. 13)</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="data-and-identifiability" class="slide level2">
+<h2>Data and Identifiability</h2>
+<div class="columns">
+<div class="fragment">
+<div class="column" style="width:55%;">
+<ul>
+<li><strong>Target of inference</strong>: <span class="math inline">\((T, D)\)</span>
+<ul>
+<li><span class="math inline">\(T\)</span>: time to nonfatal event</li>
+<li><span class="math inline">\(D\)</span>: time to death</li>
+<li><strong>Joint distribution</strong> <span class="math display">\[H(s, t)=\pr(D&gt;s, T&gt;t)\]</span></li>
+<li><strong>Identifiable region</strong>: <span class="math inline">\(\{(s, t):0\leq t\leq s&lt;\infty\}\)</span>
+<ul>
+<li>Possible nonfatal <span class="math inline">\(\to\)</span> death, not <em>vice versa</em></li>
+</ul></li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:45%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cmpr_wedge.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+</figure>
+</div>
+</div></div>
+</div>
+</section>
+<section id="bivariate-analysis" class="slide level2">
+<h2>Bivariate Analysis</h2>
+<div class="fragment">
+<ul>
+<li><strong>Marginal models</strong>
+<ul>
+<li><strong>Death</strong>: univariate event (KM, log-rank, Cox)</li>
+<li><strong>Nonfatal event</strong>
+<ul>
+<li>Cause-specific risk (treating death as censoring)</li>
+<li>cumulative incidence (Gray, FG)</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>German breast cancer study</strong>
+<ul>
+<li><strong>Nonfatal event</strong>: relapse of cancer (<code>status == 1</code>)</li>
+<li><strong>Death</strong>: overall mortality (<code>status == 2</code>)</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>gbc <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Data//German Breast Cancer Study//gbc.txt"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a></a>   <span class="fu">mutate</span>(<span class="at">age40 =</span> (age <span class="sc">&gt;</span> <span class="dv">40</span>) <span class="sc">+</span> <span class="dv">0</span>) <span class="co"># create age40: I(age &gt; 40)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="bivariate-analysis---gbc-example-i" class="slide level2">
+<h2>Bivariate Analysis - GBC Example (I)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Data</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>gbc</span>
+<span id="cb10-2"><a></a><span class="co">#    id      time status hormone age meno size grade nodes prog estrg age40</span></span>
+<span id="cb10-3"><a></a><span class="co"># 1   1 43.836066      1       1  38    1   18     3     5 1.41  1.05     0</span></span>
+<span id="cb10-4"><a></a><span class="co"># 2   1 74.819672      0       1  38    1   18     3     5 1.41  1.05     0</span></span>
+<span id="cb10-5"><a></a><span class="co"># 5   3 41.934426      1       1  47    1   30     2     1 4.22  0.89     1</span></span>
+<span id="cb10-6"><a></a><span class="co"># 6   3 47.737705      2       1  47    1   30     2     1 4.22  0.89     1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Analysis</strong>
+<ul>
+<li><strong>Death</strong> (subset to <code>status != 1</code>)
+<ul>
+<li>Standard Cox: <code>coxph(Surv(time, status == 2) ~ covariates)</code></li>
+</ul></li>
+<li><strong>Relapse</strong> (subset to first row for each <code>id</code>)
+<ul>
+<li>Cause-specific hazard: <code>coxph(Surv(time, status == 1) ~ covariates)</code></li>
+<li>Sub-distribution hazard: <code>tidycmprk::crr(Surv(time, status) ~ covariates, failcode = "1")</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="bivariate-analysis---gbc-example-ii" class="slide level2">
+<h2>Bivariate Analysis - GBC Example (II)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Regression results</strong>
+<ul>
+<li><strong>Relapse</strong>: cause-specific <span class="math inline">\(\approx\)</span> sub-distribution—few deaths (21) before relapse</li>
+<li><strong>Age effect</strong>: driven by relapse <img data-src="images/cmpr_gbc_reg.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="recurrent-events" class="slide level2">
+<h2>Recurrent Events</h2>
+<div class="fragment">
+<ul>
+<li><strong>Outcome data</strong>: <span class="math inline">\(\{N^*(\cdot), D\}\)</span>
+<ul>
+<li><span class="math inline">\(N^*(t)\)</span>: number of recurrent events in presence of death
+<ul>
+<li>Repeated tumor occurrences/hospitalizations before death (<span class="math inline">\(\dd N^*(t)\equiv 0\)</span> for <span class="math inline">\(t&gt;D\)</span>)</li>
+</ul></li>
+<li>Treating <span class="math inline">\(D\)</span> as censoring (AG/LWYY) <span class="math inline">\(\to\)</span> cause-specific event rate <span class="math display">\[E\{\dd N^*(t)\mid D\geq t\}\]</span>
+<ul>
+<li>Incidence rate in survivors</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Cumulative frequency</strong>
+<ul>
+<li>Mean function in overall population, dead or alive <span class="math display">\[
+\mu(t)=E\{N^*(t)\}
+\]</span></li>
+<li>Extension of cumulative incidence</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="marginal-approaches" class="slide level2">
+<h2>Marginal Approaches</h2>
+<div class="fragment">
+<ul>
+<li><strong>Methods for cumulative frequency</strong>
+<ul>
+<li>Gray-type nonparametric estimator/test (Ghosh and Lin, 2000)</li>
+<li>Proportional CF model (Fine-Gray-type) (Ghosh and Lin, 2002) <span class="math display">\[\begin{equation}\label{eq:cmpr:pcf}
+E\{N^*(t)\mid Z\}=\exp(\beta^\T Z)\mu_0(t)
+\end{equation}\]</span></li>
+<li>Higher death rate can reduce CF</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Joint analysis with mortality</strong>
+<ul>
+<li>Ghosh-Lin for recurrent events <span class="math inline">\(+\)</span> Cox/log-rank for death</li>
+<li><span class="math inline">\(\chi^2\)</span> test with 2 d.f.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Alternative:</strong> shared-frailty models</li>
+</ul>
+</div>
+</section>
+<section id="software-rccf2rccf" class="slide level2">
+<h2>Software: <code>rccf2::rccf()</code></h2>
+<div class="fragment">
+<ul>
+<li><strong>Two-sample estimation/testing of CF</strong></li>
+</ul>
+<div class="big-code">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"lmaowisc/rccf2"</span>)</span>
+<span id="cb11-2"><a></a><span class="fu">library</span>(rccf2) <span class="co"># Load package</span></span>
+<span id="cb11-3"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">rccf</span>(id, time, status, trt) <span class="co"># Fit model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<ul>
+<li><strong>Input</strong>
+<ul>
+<li><code>id</code>: subject ID; <code>trt</code>: binary treatment group</li>
+<li><code>time</code>: event time; <code>status</code>: event status (1: nonfatal; 2: death; 0: censoring)</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Output</strong>
+<ul>
+<li><code>obj$u1</code>, <code>obj$u2</code>: Estimates of group-specific <span class="math inline">\(\mu(t)\)</span> as a function of <span class="math inline">\(t\)</span> (<code>obj$t</code>).</li>
+<li><code>obj$pLR</code>, <code>obj$pD</code>, <code>obj$pjnt</code>: <span class="math inline">\(p\)</span>-values for tests on <span class="math inline">\(\mu(t)\)</span>, death, and jointly</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="example-bladder-tumor-study-i" class="slide level2">
+<h2>Example: Bladder Tumor Study (I)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Bladder cancer trial</strong> (Byar, 1980)
+<ul>
+<li><strong>Treatment groups</strong>: thiotepa (<span class="math inline">\(n=38\)</span>) vs placebo (<span class="math inline">\(n=48\)</span>)</li>
+<li><strong>Endpoints</strong>: tumor recurrences and death <img data-src="images/cmpr_bladder_df.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="example-bladder-tumor-study-ii" class="slide level2">
+<h2>Example: Bladder Tumor Study (II)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Survival and cumulative frequency</strong>
+<ul>
+<li>Joint <span class="math inline">\(\chi_2^2\)</span> test: <span class="math inline">\(p\)</span>-value 0.184 <img data-src="images/cmpr_bladder.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></li>
+</ul></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="conclusion" class="title-slide slide level1 center">
+<h1>Conclusion</h1>
+
+</section>
+<section id="notes" class="slide level2">
+<h2>Notes</h2>
+<ul>
+<li><strong>Fine–Gray regression</strong>
+<ul>
+<li><strong>Model diagnostics</strong>: R package <code>crskdiag</code></li>
+<li><strong>Proportional sub-distribution odds model</strong> (Eriksson et al., 2015)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="fu">library</span>(timereg)</span>
+<span id="cb12-2"><a></a><span class="co"># Fit a proportional sub-distribution odds model for the kth risk</span></span>
+<span id="cb12-3"><a></a>obj_po <span class="ot">&lt;-</span> <span class="fu">prop.odds.subdist</span>(<span class="fu">Event</span>(time, status) ˜ covariates, <span class="at">cause =</span> k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><strong>Interval-censored competing risks</strong> (Mao et al., 2018)</li>
+</ul></li>
+<li><strong>Semi-competing risks</strong>
+<ul>
+<li>Term coined by Fine, Jiang, and Chappell (2001)</li>
+<li>Multivariate (here), multistate (Chapter 12), and composite (Chapter 13)</li>
+<li>Nonfatal event as <em>mediator</em> of treatment effect on death (Huang, 2021, 2022)</li>
+</ul></li>
+</ul>
+</section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
+<ul>
+<li><strong>Competing risks</strong>
+<ul>
+<li><strong>Cause-specific hazard</strong>: conditional failure rate on survivors
+<ul>
+<li><code>coxph(Surv(time, status == k) ~ covariates)</code></li>
+</ul></li>
+<li><strong>Cumulative incidence</strong>: marginal failure probability under other risks
+<ul>
+<li><strong>Gray’s estimator/test</strong> <code>cmprk::cuminc(ftime, fstatus, group, strata, rho = 0)</code></li>
+<li><strong>Fine-Gray model</strong> <code>cmprk::crr(ftime, fstatus, cov1, failcode = k)</code></li>
+<li><strong>Tidy tables and graphics</strong>: <code>tidycmprk</code> package</li>
+</ul></li>
+</ul></li>
+<li><strong>Recurrent events in presence of death</strong>
+<ul>
+<li><strong>Ghosh-Lin methods</strong>
+<ul>
+<li><strong>Nonparametric</strong>: <code>rccf2::rccf(id, time, status, trt)</code></li>
+<li><strong>Proportional CF model</strong>: R packages <code>mets</code> and <code>reReg</code></li>
+</ul></li>
+</ul></li>
+</ul>
+
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp("https:\/\/lmaowisc\.github\.io\/BMI741");
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
