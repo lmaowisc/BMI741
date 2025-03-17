@@ -6,239 +6,191 @@ title: "Chapter 10 - Competing and Semi-Competing Risks"
 
 Lecture slides [here](chap10.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-## Base R Code
+## R Code
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 #| eval: false
 
+###############################################################################
+# Chapter 10 R Code
+#
+# This script reproduces all major numerical results in Chapter 10, including:
+#   1. Bone Marrow Transplantation Study (Competing risks)
+#   2. Semi-competing risks in the German Breast Cancer (GBC) data
+#   3. Bladder tumor study (recurrent events with death as a terminal event)
+###############################################################################
 
-##################################################################
-# This code generates all numerical results in chapter 10.      ##
-##################################################################
+#==============================================================================
+# (A) Bone Marrow Transplantation Study
+#==============================================================================
+library(survival)     # For survival analysis (cause-specific hazards, etc.)
+library(cmprsk)       # For Fine-Gray and Gray’s test
+library(tidyverse)    # For data manipulation and plotting
 
-
-############################################################
-# Analysis of the Bone Marrow Transplantation Study
-############################################################
-
-library(survival)
-# read in the study dataset
+#------------------------------------------------------------------------------
+# 1. Read Data and Perform Gray's Test
+#------------------------------------------------------------------------------
 cibmtr <- read.table("Data//Bone Marrow Transplantation Study//cibmtr.txt")
 head(cibmtr)
 
-#load the cmprsk package
-library(cmprsk)
+# Gray's unweighted log-rank-type test for group differences in cause-specific
+# cumulative incidence. 'rho=0' => unweighted test.
+obj <- cmprsk::cuminc(cibmtr$time, cibmtr$status, cibmtr$donor, rho = 0)
 
-# Gray's (unweighted) log-rank-type test
-obj <- cuminc(cibmtr$time, cibmtr$status, cibmtr$donor, rho = 0)
-
-# test results
+# Print test results (Gray’s test statistics and p-values)
 obj$Tests
 
-# a naive plot: everything in one plot
-# plot(obj)
+#------------------------------------------------------------------------------
+# 2. Plot the Cumulative Incidence Functions (Figure 10.2)
+#   - Relapse (k=1)
+#   - Treatment-related Mortality (k=2)
+#------------------------------------------------------------------------------
+# Extract group-specific CIF objects for siblings (donor=0) vs. unrelated (donor=1)
+# k=1: relapse, k=2: TRM
+obj.rlp.sib    <- obj$`0 1`  # Relapse, siblings
+obj.rlp.nonsib <- obj$`1 1`  # Relapse, unrelated
+obj.trm.sib    <- obj$`0 2`  # TRM, siblings
+obj.trm.nonsib <- obj$`1 2`  # TRM, unrelated
 
+# Set up two-panel plot
+par(mfrow = c(1, 2))
 
-##################################
-# obj$`a k`: kth risk in group a #
-##################################
+# Left panel: Relapse
+plot(
+  obj.rlp.sib$time, obj.rlp.sib$est,
+  type      = "s",          # Step function
+  frame.plot= FALSE,
+  main      = "Relapse",
+  xlim      = c(0, 120),
+  ylim      = c(0, 0.6),
+  xlab      = "Time (months)",
+  ylab      = "Cumulative incidence",
+  lwd       = 2
+)
+lines(obj.rlp.nonsib$time, obj.rlp.nonsib$est, lty = 3, lwd = 2)
 
-# Obtain the estimated cumulative incidence functions
-# for kth (k=1, 2) risk in group a (a=1, 0)
-# k=1: relapse; k=2: TRM
-obj.rlp.sib <- obj$`0 1`
-obj.rlp.nonsib <- obj$`1 1`
-obj.trm.sib <- obj$`0 2`
-obj.trm.nonsib <- obj$`1 2`
+# Right panel: TRM
+plot(
+  obj.trm.sib$time, obj.trm.sib$est,
+  type      = "s",
+  frame.plot= FALSE,
+  main      = "Treatment-related mortality",
+  xlim      = c(0, 120),
+  ylim      = c(0, 0.6),
+  xlab      = "Time (months)",
+  ylab      = "Cumulative incidence",
+  lwd       = 2
+)
+lines(obj.trm.nonsib$time, obj.trm.nonsib$est, lty = 3, lwd = 2)
 
-#############################################
-# Figure 10.2
-# plot the cumulative incidence functions
-##############################################
-par(mfrow=c(1,2))
+#------------------------------------------------------------------------------
+# 3. Fine-Gray vs. Cause-Specific Hazard Models 
+#------------------------------------------------------------------------------
+# We focus on cause k = 1 (Relapse)
 
-plot(obj.rlp.sib$time,obj.rlp.sib$est,type='s', frame.plot = F,
-     main="Relapse",xlim=c(0,120),ylim=c(0,0.6),
-     xlab="Time (months)", ylab="Cumulative incidence", lwd=2)
-lines(obj.rlp.nonsib$time,obj.rlp.nonsib$est,lty=3,lwd=2)
+# Fine-Gray model
+obj.fg <- cmprsk::crr(cibmtr$time, cibmtr$status, cibmtr[, 3:6], failcode = 1)
 
-plot(obj.trm.sib$time,obj.trm.sib$est,type='s', frame.plot = F,
-     main="Treatment-related mortality",xlim=c(0,120),ylim=c(0,0.6),
-     xlab="Time (months)", ylab="Cumulative incidence", lwd=2)
-lines(obj.trm.nonsib$time,obj.trm.nonsib$est,lty=3,lwd=2)
-
-
-
-###########################
-# Table 10.2              #
-###########################
-
-######################################################
-# Fine-Gray proportional sub-distribution hazard model
-# and cause-specific hazard model
-######################################################
-
-# Change k
-k <- 1
-
-#### proportional cause-specific hazards
-obj.cs <- coxph(Surv(time, status == k) ~ cohort + donor + hist + wait,
-                data = cibmtr)
-
-#### Fine and Gray #################
-obj.fg <- crr(cibmtr$time, cibmtr$status, cibmtr[,3:6], failcode = k)
-
-# beta estimates and se's
+# Extract estimates and standard errors
 beta.fg <- obj.fg$coef
-se.fg <- sqrt(diag(obj.fg$var))
+se.fg   <- sqrt(diag(obj.fg$var))
 
-# construct HR, 95% CI, and p-values
-c1 <- round(exp(beta.fg),2)
-c2 <- paste0("(",round(exp(beta.fg-1.96*se.fg),2),"-",round(exp(beta.fg+1.96*se.fg),2),")")
-c3 <- round(1-pchisq((beta.fg/se.fg)^2,1),3)
+# Format hazard ratios (HR), confidence intervals, and p-values
+c1 <- round(exp(beta.fg), 2)
+c2 <- paste0("(", round(exp(beta.fg - 1.96 * se.fg), 2), "-", round(exp(beta.fg + 1.96 * se.fg), 2), ")")
+c3 <- round(1 - pchisq((beta.fg / se.fg)^2, 1), 3)
 
-### Cause-specific hazard ############
-obj.csh <- coxph(Surv(time,status==k)~cohort+donor+hist+wait,data=cibmtr)
+# Cause-specific hazard model for k=1
+obj.csh <- coxph(Surv(time, status == 1) ~ cohort + donor + hist + wait, data = cibmtr)
 
-# beta estimates and se's
 beta.csh <- obj.csh$coef
-se.csh <- sqrt(diag(obj.csh$var))
+se.csh   <- sqrt(diag(obj.csh$var))
 
-# construct HR, 95% CI, and p-values
-c4 <- round(exp(beta.csh),2)
-c5 <- paste0("(",round(exp(beta.csh-1.96*se.csh),2),"-",round(exp(beta.csh+1.96*se.csh),2),")")
-c6 <- round(1-pchisq((beta.csh/se.csh)^2,1),3)
+c4 <- round(exp(beta.csh), 2)
+c5 <- paste0("(", round(exp(beta.csh - 1.96 * se.csh), 2), "-", round(exp(beta.csh + 1.96 * se.csh), 2), ")")
+c6 <- round(1 - pchisq((beta.csh / se.csh)^2, 1), 3)
 
-# print the results
-noquote(cbind(c1,c2,c3,c4,c5,c6))
+# Print combined Fine-Gray (columns 1-3) vs. cause-specific hazard (columns 4-6)
+noquote(cbind(c1, c2, c3, c4, c5, c6))
 
-#######################################
-## prediction of covariate-specific CIF
-# example 
-#######################################
+#------------------------------------------------------------------------------
+# 5. Covariate-Specific CIF Prediction
+#------------------------------------------------------------------------------
+# Example covariate vector: z = (1, 0, 1, 0)
 z <- c(1, 0, 1, 0)
 
-# Method 1
-# --- Method 1: use predict.crr() 
+# Method 1: Using predict.crr()
 obj_pred1 <- predict(obj.fg, z)
-# --- Method 2: manual calculation
-beta <- obj.fg$coef
-Lambda <- cumsum(obj.fg$bfitj)
-time <- obj.fg$uftime
-## calculate CIF based on FG model
-cif <- 1- exp(- exp(sum(beta * z)) * Lambda)
-## Same as obj_pred from Method 1
+
+# Method 2: Manual calculation
+beta   <- obj.fg$coef
+Lambda <- cumsum(obj.fg$bfitj)  # Baseline integrated sub-distribution hazard
+time   <- obj.fg$uftime
+cif    <- 1 - exp(-exp(sum(beta * z)) * Lambda)
 obj_pred2 <- cbind(time, cif)
 
-## same results
+# Compare both predictions (they should match closely)
 cbind(obj_pred1, obj_pred2)
 
 
-# Tidy competing risks analysis
-library(tidycmprsk)
-library(ggsurvfit)
-# library(gtsummary)
+#==============================================================================
+# (B) Tidy Competing Risks Analysis
+#==============================================================================
+library(tidycmprsk)  # For cuminc() wrappers & table building
+library(ggsurvfit)   # For enhanced survival/cif plots
 
-df <- cibmtr |> 
+# Recode the data for use with tidycmprsk
+df <- cibmtr %>%
   dplyr::mutate(
     status = factor(status, levels = c("0", "1", "2"), labels = c("Censored", "Relapse", "TRM")),
-    donor = factor(donor, levels = c("0", "1"), 
-                   labels = c("Id. sibling", "Unrelated"))
+    donor  = factor(donor, levels = c("0", "1"), labels = c("Id. sibling", "Unrelated"))
   )
 
-
-
-
-# Nonparametric analysis cumulative incidence by donor
+# Fit CIF by donor groups using tidycmprsk
 obj_cif <- tidycmprsk::cuminc(Surv(time, status) ~ donor, data = df)
-# Print results
 obj_cif
-#> ── cuminc() ─────────────────────────────────────────────────
-#> 
-#> • Failure type "Relapse"
-#> strata                  time   n.risk   estimate   std.error   95% CI          
-#> HLA-identical sibling   50.0   78       0.386      0.023       0.341, 0.432    
-#> HLA-identical sibling   100    23       0.451      0.026       0.400, 0.501    
-#> HLA-identical sibling   150    1        0.557      0.044       0.466, 0.639    
-#> Unrelated dono          50.0   12       0.505      0.031       0.443, 0.564    
-#> Unrelated dono          100    3        0.529      0.032       0.464, 0.589    
-#> Unrelated dono          150    0        0.529      0.032       0.464, 0.589    
-#> 
-#> • Failure type "TRM"
-#> strata                  time   n.risk   estimate   std.error   95% CI          
-#> HLA-identical sibling   50.0   78       0.317      0.020       0.278, 0.357    
-#> HLA-identical sibling   100    23       0.331      0.021       0.289, 0.373    
-#> HLA-identical sibling   150    1        0.387      0.063       0.265, 0.507    
-#> Unrelated dono          50.0   12       0.424      0.030       0.366, 0.482    
-#> Unrelated dono          100    3        0.430      0.030       0.371, 0.488    
-#> Unrelated dono          150    0        0.430      0.030       0.371, 0.488    
-#> 
-#> • Tests
-#> outcome   statistic   df     p.value    
-#> Relapse   17.3        1.00   <0.001     
-#> TRM       12.3        1.00   <0.001
 
-# Summaries at specific times with labeled treatment groups
+# Summaries of CIF at specific times (12, 48, 84, 120 months)
 tbl_surv <- tbl_cuminc(
-    x = obj_cif,                     # Provide the fitted tidycuminc object
-    times = seq(12, 120, by = 36),   # Time points for cumulative incidence
-    outcomes = c("Relapse", "TRM"),  # Specify which risks to include
-    label_header = "{time} months",  # Column label: "xx months"
-    label = "Donor"                  # Group label 
-) 
-
+  x          = obj_cif,
+  times      = seq(12, 120, by = 36),
+  outcomes   = c("Relapse", "TRM"),
+  label_header = "{time} months",
+  label        = "Donor"
+)
 tbl_surv
 
-obj_cif |> 
+# Base CIF plot for both outcomes (Relapse, TRM) in one panel
+obj_cif %>%
   ggcuminc(outcome = c("Relapse", "TRM")) +
-  scale_x_continuous("Time (months)", limits = c(0, 120), breaks = seq(0, 120, by = 24)) +
-  add_risktable(
-    risktable_stats = "n.risk", # Include only numbers at risk
-    theme = list(
-      theme_risktable_default() # Default risk table theme
-      # scale_y_discrete(labels = c('Drug', 'Control')) # Group labels
-    )
-  ) +
+  scale_x_continuous("Time (months)", limits = c(0, 120), breaks = seq(0, 120, 24)) +
+  add_risktable(risktable_stats = "n.risk") +
   theme_minimal()
 
-## Separate plots by risk
+#------------------------------------------------------------------------------
+# 1. Separate Plots by Risk (Patchwork)
+#------------------------------------------------------------------------------
+library(patchwork)
+library(ggsci)
 
-obj_cif |> 
-  ggcuminc(outcome = c("Relapse", "TRM")) +
-  scale_x_continuous("Time (months)", limits = c(0, 120), breaks = seq(0, 120, by = 24)) +
-  add_risktable(
-    risktable_stats = "n.risk", # Include only numbers at risk
-    theme = list(
-      theme_risktable_default(), # Default risk table theme
-      scale_y_discrete(labels = c('Drug', 'Control')) # Group labels
-    )
-  ) +
-  theme_minimal() 
-
-library(patchwork) # For combining plots
-library(ggsci) # For the JAMA color style
-
+# Function to plot a single outcome's CIF
 plot_bm_cif <- function(obj_cif, outcome) {
-  
   p <- ggcuminc(obj_cif, outcome, linetype_aes = TRUE, linewidth = 0.8) +
     add_risktable(
       risktable_stats = "n.risk",
-      theme = list(
-        theme_risktable_default(),
-        scale_y_discrete()
-      )
+      theme = list(theme_risktable_default())
     ) +
-    ggtitle(outcome) + 
+    ggtitle(outcome) +
     scale_y_continuous(
-      "Cumulative incidence", 
-      limits  = c(0, 0.6),
-      breaks  = seq(0, 1, by = 0.1),
-      expand  = expansion(c(0, 0.005))
+      "Cumulative incidence",
+      limits = c(0, 0.6),
+      breaks = seq(0, 1, by = 0.1),
+      expand = expansion(c(0, 0.005))
     ) +
-    scale_x_continuous("Time (months)", limits = c(0, 120), breaks = seq(0, 120, by = 24)) +
-    scale_color_jama() +
+    scale_x_continuous("Time (months)", limits = c(0, 120), breaks = seq(0, 120, 24)) +
+    scale_color_jama() +                # JAMA color palette
     scale_linetype_manual(values = c(2, 1)) +
     theme_classic() +
     theme(
@@ -250,282 +202,289 @@ plot_bm_cif <- function(obj_cif, outcome) {
       plot.caption       = element_text(size = 10),
       plot.title         = element_text(size = 12)
     )
-  
   p
 }
 
-# Two panels by donor type
-rel_fig  <- plot_bm_cif(obj_cif, "Relapse")
-trm_fig  <- plot_bm_cif(obj_cif, "TRM")
+# Two outcome-specific panels
+rel_fig <- plot_bm_cif(obj_cif, "Relapse")
+trm_fig <- plot_bm_cif(obj_cif, "TRM")
 
-# Combine with patchwork
-bm_fig <- wrap_plots(ggsurvfit_build(rel_fig ), ggsurvfit_build(trm_fig), ncol = 2)
-
+# Combine into one figure
+bm_fig <- wrap_plots(
+  ggsurvfit_build(rel_fig),
+  ggsurvfit_build(trm_fig),
+  ncol = 2
+)
 bm_fig
 
-ggsave("images/cmpr_bm.png", bm_fig, width = 8, height = 4.5)
-ggsave("images/cmpr_bm.eps", bm_fig, width = 8, height = 4.5)
+# Save if needed:
+# ggsave("images/cmpr_bm.png", bm_fig, width = 8, height = 4.5)
+# ggsave("images/cmpr_bm.eps", bm_fig, width = 8, height = 4.5)
 
+# Fit separate Fine-Gray models for relapse vs. TRM
+obj_rel <- tidycmprsk::crr(Surv(time, status) ~ donor + cohort + hist + wait, data = df, failcode = "Relapse")
+obj_rel
+obj_trm <- tidycmprsk::crr(Surv(time, status) ~ donor + cohort + hist + wait, data = df, failcode = "TRM")
+obj_trm
 
-# Fine-Gray regression
-# Relapse
-obj_rel <- tidycmprsk::crr(Surv(time, status) ~ donor + cohort + hist + wait, 
-                           data = df, failcode = "Relapse")
-obj_rel # Print the results
-#> --- crr() ---------------------------------------------------
-#> • Call Surv(time, status) ~ donor + cohort + hist + wait
-#> • Failure type of interest "Relapse"
-#> 
-#> Variable         Coef    SE      HR     95% CI       p-value    
-#> donor            0.330   0.122   1.39   1.09, 1.77   0.007      
-#> cohort           0.401   0.122   1.49   1.18, 1.90   0.001      
-#> hist             0.351   0.125   1.42   1.11, 1.82   0.005      
-#> wait             0.216   0.123   1.24   0.98, 1.58   0.078 
-
-# 2. TRM
-obj_trm <- tidycmprsk::crr(Surv(time, status) ~ donor + cohort + hist + wait, 
-                           data = df, failcode = "TRM")
-obj_trm # Print the results
-#> --- crr() ---------------------------------------------------
-#> • Call Surv(time, status) ~ donor + cohort + hist + wait
-#> • Failure type of interest "TRM"
-#> 
-#> Variable         Coef     SE      HR     95% CI       p-value    
-#> donor            0.514    0.128   1.67   1.30, 2.15   <0.001     
-#> cohort           -0.578   0.139   0.56   0.43, 0.74   <0.001     
-#> hist             -0.460   0.153   0.63   0.47, 0.85   0.003      
-#> wait             0.248    0.135   1.28   0.98, 1.67   0.065   
-
-
-library(gtsummary)
-tbl_regression(obj_fg1, exponentiate = TRUE)
-
-## Proportional subdistribution odds
+# Example: subdistribution odds via timereg::prop.odds.subdist
 library(timereg)
-# Relapse
-obj_po1 <- prop.odds.subdist(Event(time, status) ~ donor + cohort + hist + wait, 
-                            data = df, cause = 1)
-
+obj_po1 <- prop.odds.subdist(
+  Event(time, status) ~ donor + cohort + hist + wait,
+  data  = df,
+  cause = 1
+)
 obj_po1$gamma
 obj_po1$robvar.gamma
 
 
-
-## component-wise marginal regression
+#==============================================================================
+# (C) Semi-Competing Risks in the German Breast Cancer Data
+#==============================================================================
 library(gtsummary)
 library(labelled)
-library(tidyverse)
-library(tidycmprsk)
 
-# read data
-gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
-### Data transformation
-gbc <- gbc |> 
+#------------------------------------------------------------------------------
+# 1. Read and Recoding GBC Data
+#------------------------------------------------------------------------------
+gbc <- read.table("Data//German Breast Cancer Study//gbc.txt") %>%
   mutate(
-    age40 = (age > 40) + 0,
+    age40 = (age > 40) + 0,        # Binary for age>40
     grade = factor(grade),
-    prog = prog / 100, # rescale progesterone
-    estrg = estrg / 100 # rescale estrogen
+    prog  = prog / 100,           # Rescale progesterone
+    estrg = estrg / 100           # Rescale estrogen
   )
-gbc
 
+# Assign human-friendly variable labels for gtsummary
 var_label(gbc) <- list(
   hormone = "Hormone",
-  meno = "Menopause",
-  age40 = "Age 40+",
-  grade = "Tumor grade",
-  size = "Tumor size (mm)",
-  prog = "Progesterone (100 fmol/mg)",
-  estrg = "Estrogen (100 fmol/mg)"
-  )
-
-# Regular cox model for death
-# Subset to death data
-gbc_death <- gbc|> 
-  filter(status != 1) |> 
-  mutate(status = status > 0)
-# Fit Cox model to overall survival
-obj_death <- coxph(Surv(time, status) ~ hormone + meno
-                   + age40 + grade + size + prog + estrg, 
-                   data = gbc_death)
-
-death_tbl <- tbl_regression(obj_death, exponentiate = TRUE)
-
-### cause-specific hazards for relapse
-
-gbc_relc <- gbc |> 
-  group_by(id) |> 
-  slice_min(time) |> 
-  mutate(
-    status = if_else(status == 2, 0, status)
-  ) |> 
-  slice_max(status) |> 
-  ungroup()
-
-# gbc_relc |> 
-#   count(status)
-
-obj_relc <- coxph(Surv(time, status) ~ hormone + meno
-                   + age40 + grade + size + prog + estrg, 
-                   data = gbc_relc)
-
-
-relc_tbl <- tbl_regression(obj_relc, exponentiate = TRUE)
-
-
-
-
-### subdistribution hazards for relapse
-gbc_tfe <- gbc |> 
-  group_by(id) |> 
-  slice_min(time) |> 
-  slice_max(status) |> # death > relapse > censoring
-  mutate(
-    status = factor(status, levels = c("0", "1", "2"))
-  ) |> 
-  ungroup()
-
-gbc_tfe |> count(status) 
-# gbc_tfe$status
-
-
-obj_rel_sub <- crr(Surv(time, status) ~ hormone + meno
-                   + age40 + grade + size + prog + estrg, 
-                   data = gbc_tfe, failcode = "1")
-
-rel_sub_tbl <- tbl_regression(obj_rel_sub, exponentiate = TRUE)
-
-
-tbl <- tbl_merge(
-  tbls = list(death_tbl, relc_tbl, rel_sub_tbl),
-  tab_spanner = c("**Death**", "**Relapse (cause-specific)**",
-                  "**Relapse (subdistribution)**")
+  meno    = "Menopause",
+  age40   = "Age 40+",
+  grade   = "Tumor grade",
+  size    = "Tumor size (mm)",
+  prog    = "Progesterone (100 fmol/mg)",
+  estrg   = "Estrogen (100 fmol/mg)"
 )
 
+#------------------------------------------------------------------------------
+# 2. Cox Model for Overall Survival (Death)
+#------------------------------------------------------------------------------
+# Exclude those who relapsed only (status=1), keep death (status=2) and censoring (status=0)
+gbc_death <- gbc %>%
+  filter(status != 1) %>%
+  mutate(status = (status > 0))  # status=1 if death, 0 if censor
+
+obj_death <- coxph(
+  Surv(time, status) ~ hormone + meno + age40 + grade + size + prog + estrg,
+  data = gbc_death
+)
+death_tbl <- tbl_regression(obj_death, exponentiate = TRUE)
+
+#------------------------------------------------------------------------------
+# 3. Cause-Specific Hazards for Relapse
+#------------------------------------------------------------------------------
+# Keep only first event for each subject
+# If status=1 => relapse, else censor
+# (Ignoring death, which is status=2)
+gbc_relc <- gbc %>%
+  group_by(id) %>%
+  slice_min(time) %>%
+  mutate(status = if_else(status == 2, 0, status)) %>%
+  slice_max(status) %>%
+  ungroup()
+
+obj_relc <- coxph(
+  Surv(time, status) ~ hormone + meno + age40 + grade + size + prog + estrg,
+  data = gbc_relc
+)
+relc_tbl <- tbl_regression(obj_relc, exponentiate = TRUE)
+
+#------------------------------------------------------------------------------
+# 4. Subdistribution Hazards for Relapse (Fine-Gray)
+#------------------------------------------------------------------------------
+# Keep only the first event, re-encode status as factor
+gbc_tfe <- gbc %>%
+  group_by(id) %>%
+  slice_min(time) %>%
+  slice_max(status) %>%
+  mutate(status = factor(status, levels = c("0", "1", "2"))) %>%
+  ungroup()
+
+obj_rel_sub <- tidycmprsk::crr(
+  Surv(time, status) ~ hormone + meno + age40 + grade + size + prog + estrg,
+  data     = gbc_tfe,
+  failcode = "1"
+)
+rel_sub_tbl <- tbl_regression(obj_rel_sub, exponentiate = TRUE)
+
+# Merge three tables: Death, Relapse (Cause-Specific), Relapse (Subdistribution)
+tbl <- tbl_merge(
+  tbls = list(death_tbl, relc_tbl, rel_sub_tbl),
+  tab_spanner = c("**Death**", "**Relapse (cause-specific)**", "**Relapse (subdistribution)**")
+)
 tbl
 # as_kable_extra(tbl, format = "latex")
 
-## bladder tumor study
-library(tidyverse)
+
+#==============================================================================
+# (D) Bladder Tumor Study (Recurrent Events with Death as Terminal Event)
+#==============================================================================
 devtools::install_github("lmaowisc/rccf2")
 library(rccf2)
-# ?rccf
 data(bladder)
-bladder
-# descritpive analysis
-bladder |> 
+
+#------------------------------------------------------------------------------
+# 1. Descriptive Analysis
+#------------------------------------------------------------------------------
+# Count how many rows belong to each status
+bladder %>%
   count(status)
 
-
-## follow-up plot
-
-df <- bladder |> 
+# Prepare data for plotting
+df <- bladder %>%
   left_join(
-    bladder |> group_by(id) |> summarize(max_fu = max(time)),
-    join_by(id)
-  ) |> 
+    bladder %>% group_by(id) %>% summarize(max_fu = max(time)),
+    by = "id"
+  ) %>%
   mutate(
-    id = factor(id),
-    status = factor(status, levels = c("0", "1", "2")),
-    trt = if_else(trt == 1,  "Thiotepa", "Placebo")
-  ) 
+    id     = factor(id),
+    status = factor(status, levels = c("0", "1", "2")),  # 0=censored,1=recur,2=death
+    trt    = if_else(trt == 1, "Thiotepa", "Placebo")
+  )
 
-dfmax <-  df |> 
-  group_by(id, trt) |> 
-  summarize(max_fu = max(time))
+dfmax <- df %>%
+  group_by(id, trt) %>%
+  summarize(max_fu = max(time), .groups = "drop")
 
-df |> 
+# Follow-up plot showing recurrences/death
+df %>%
   ggplot(aes(y = reorder(id, max_fu))) +
   geom_linerange(data = dfmax, aes(xmin = 0, xmax = max_fu)) +
   geom_point(aes(x = time, shape = status), size = 2, fill = "white") +
   geom_vline(xintercept = 0, linewidth = 1) +
-  scale_shape_manual(values = c(23, 15, 19), labels = c("Censoring", "Tumor recurrence", "Death")) + 
-  scale_x_continuous("Time (months)", limits = c(0, 65), breaks = seq(0, 60, by = 12),
-                     expand= c(0, 0.5)) +
+  scale_shape_manual(values = c(23, 15, 19), labels = c("Censoring", "Tumor recurrence", "Death")) +
+  scale_x_continuous(
+    "Time (months)",
+    limits = c(0, 65),
+    breaks = seq(0, 60, by = 12),
+    expand = c(0, 0.5)
+  ) +
   scale_y_discrete("Patients") +
-  facet_wrap( ~ trt, scales = "free") +
+  facet_wrap(~ trt, scales = "free") +
   theme_minimal() +
   theme(
-    legend.position = "top",
-    legend.title = element_blank(),
-    panel.grid.minor.x = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank(),
-    panel.grid.major.y = element_blank()
+    legend.position      = "top",
+    legend.title         = element_blank(),
+    panel.grid.minor.x   = element_blank(),
+    axis.text.y          = element_blank(),
+    axis.ticks.y         = element_blank(),
+    panel.grid.major.y   = element_blank()
   )
 
-ggsave("cmpr_blad_fu.pdf",  width = 8, height = 8)
-ggsave("cmpr_blad_fu.eps",  width = 8, height = 8)
+# ggsave("cmpr_blad_fu.pdf", width = 8, height = 8)
+# ggsave("cmpr_blad_fu.eps", width = 8, height = 8)
 
-
-id <- bladder$id
-time <- bladder$time
+#------------------------------------------------------------------------------
+# 2. Ghosh-Lin Two-Sample Analysis
+#------------------------------------------------------------------------------
+id     <- bladder$id
+time   <- bladder$time
 status <- bladder$status
-trt <- bladder$trt
+trt    <- bladder$trt
 
-# trt <- ifelse(trt == 1,  "Thiotepa", "Placebo")
+# Fit the Ghosh-Lin test for recurrent events
+obj_rccf <- rccf(id, time, status, trt)
+stat  <- obj_rccf$stat  # test statistics
+S     <- obj_rccf$S     # covariance matrix
+u1    <- obj_rccf$u1    # mean function for group 1
+u2    <- obj_rccf$u2    # mean function for group 2
+t_rccf<- obj_rccf$t     # time points used
 
-obj <- rccf(id,time,status,trt)
+# Derive partial tests
+QLR <- stat[1] / sqrt(S[1, 1])   # Q-value for recurrence
+pLR <- 1 - pchisq(QLR^2, 1)
 
+QD <- stat[2] / sqrt(S[2, 2])    # Q-value for death
+pD <- 1 - pchisq(QD^2, 1)
 
-stat=obj$stat
-S=obj$S
-u1=obj$u1
-u2=obj$u2
-t=obj$t
+Q  <- t(stat) %*% solve(S) %*% stat  # joint test
+p  <- 1 - pchisq(Q, 2)
 
+#------------------------------------------------------------------------------
+# 3. Plot Estimated Cumulative Frequency (CF) (Figure 10.x)
+#------------------------------------------------------------------------------
+par(mfrow = c(1, 2))
 
-# test on recurrent event
-QLR=stat[1]/sqrt(S[1,1])
-pLR=1-pchisq(QLR^2,1)
+# Left panel: Survival from death (0=alive, >0=dead)
+fatal <- bladder[status != 1, ]
+obj_sf <- survfit(Surv(time, status > 0) ~ trt, data = fatal)
 
-# test on death
-QD=stat[2]/sqrt(S[2,2])
-pD=1-pchisq(QD^2,1)
+plot(
+  obj_sf,
+  lty      = c(1, 3),
+  frame    = FALSE,
+  xlim     = c(0, 50),
+  lwd      = 2,
+  cex.lab  = 1.5,
+  cex.axis = 1.5,
+  xlab     = "Time (months)",
+  ylab     = "Survival probabilities"
+)
+text(35, 0.14, paste0("Log-rank test: p=", round(pD, 3)), cex = 1.2)
 
-#joint test
-Q=t(stat)%*%solve(S)%*%stat
-p=1-pchisq(Q,2)
+# Right panel: Mean functions for tumor recurrences
+stepmu1 <- stepfun(t_rccf, c(0, u1))
+stepmu2 <- stepfun(t_rccf, c(0, u2))
 
-par(mfrow=c(1,2))
+plot(
+  stepmu2,
+  do.points= FALSE,
+  xlab     = "Time (months)",
+  ylab     = "Cumulative tumor frequency",
+  main = "",
+  xlim     = c(0, 60),
+  ylim     = c(0, 3),
+  frame    = FALSE,
+  lwd      = 2,
+  cex.lab  = 1.5,
+  cex.axis = 1.5,
+  lty      = 3
+)
+plot(
+  stepmu1,
+  add       = TRUE,
+  lty       = 1,
+  do.points = FALSE,
+  lwd       = 2
+)
+text(40, 0.4, paste0("Ghosh-Lin test: p=", round(pLR, 3)), cex = 1.2)
 
-fatal=bladder[status != 1,]
-
-obj=survfit(Surv(time,status > 0)~trt,data=fatal)
-plot(obj,lty=c(1,3),frame=F,xlim=c(0,50),lwd=2,cex.lab=1.5,
-     cex.axis=1.5,xlab="Time (months)",ylab="Survival probabilities")
-# legend(0.82,2.8,c("Thiotepa","Placebo"),lty=c(1,3),cex=1.5,lwd=2)
-text(35,0.14,paste0("Log-rank test: p=",round(pD,3)),cex=1.2)
-
-#plot the mean functions
-stepmu1=stepfun(t,c(0,u1))
-stepmu2=stepfun(t,c(0,u2))
-plot(stepmu2,do.points=F,xlab="Time (months)",ylab="Cumulative tumor frequency",
-     xlim=c(0,60),ylim=c(0,3), main="", frame=F,lwd=2,cex.lab=1.5,
-     cex.axis=1.5,lty=3)
-plot(stepmu1,add=T,lty=1,do.points=F,lwd=2)
-# legend(1,2.8,c("Thiotepa","Placebo"),lty=c(1,3),cex=1.5,lwd=2)
-text(40,0.4,paste0("Ghosh-Lin test: p=",round(pLR,3)),cex=1.2)
-
-# Ghosh-Lin proportional CF regression
+#------------------------------------------------------------------------------
+# 4. Ghosh-Lin Proportional CF Regression (mets::recreg)
+#------------------------------------------------------------------------------
 library(mets)
-
-# create a start variable that is the event time of previous event
-# for each subject id
 data(bladder)
-df <- bladder |>
-  group_by(id) |>
+
+# Create start-stop format for each ID
+df_gl <- bladder %>%
+  group_by(id) %>%
   mutate(
     start = lag(time, default = 0),
-    stop = if_else(time == 0, 1e-4, time)
-    ) |> 
-  select(
-    id, start, stop, status, trt
-  ) |> as.data.frame()
-  
-obj_reg <- recreg(Event(start, stop, status) ~ trt + cluster(id), 
-                  cause = 1, death.code=2,
-                  data = df)
+    stop  = if_else(time == 0, 1e-4, time)
+  ) %>%
+  select(id, start, stop, status, trt) %>%
+  ungroup() %>%
+  as.data.frame()
+
+# Fit the proportional cumulative frequency regression
+obj_reg <- recreg(
+  Event(start, stop, status) ~ trt + cluster(id),
+  cause      = 1,    # Recurrent event
+  death.code = 2,    # Terminal event
+  data       = df_gl
+)
 summary(obj_reg)
 
 ```
+
+
