@@ -35,7 +35,7 @@ website:
         contents:
           - chapter8.qmd
           - chapter9.qmd
-          # - chapter10.qmd
+          - chapter10.qmd
           # - chapter11.qmd
           # - chapter12.qmd
           # - chapter13.qmd

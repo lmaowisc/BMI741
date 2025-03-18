@@ -25,11 +25,11 @@ Lecture slides [here](chap11.html){target="_blank"}. (To convert html to pdf, pr
 #load required packages
 library(nlme) # for linear mixed effects model
 library(survival)
+library(tidyverse)
 
 # read in the study dataset
-data <- read.table("Data//Anti-retroviral Trial//aids.txt")
-head(data)
-
+df <- read.table("Data//Anti-retroviral Trial//aids.txt")
+head(df)
 #load the JM package
 install.packages("JM")
 library(JM)
@@ -38,20 +38,25 @@ library(JM)
 # Figure 11.2 Histograms of CD4 count and square-root
 #       transformation
 #####################################################
-par(mfrow=c(1,2))
-hist(data$CD4,xlab="CD4 count", main = "", lwd=2)
-hist(sqrt(data$CD4),xlab="Square root of CD4 count",main="",lwd=2)
-
+# par(mfrow=c(1,2))
+# hist(data$CD4,xlab="CD4 count", main = "", lwd=2)
+# hist(sqrt(data$CD4),xlab="Square root of CD4 count",main="",lwd=2)
 # taking square root of CD4 count
-data$y <- sqrt(data$CD4)
-
+# data$y <- sqrt(data$CD4)
+data$y <- data$CD4
 # create a de-duplicated data for survival sub-model
 data.surv <- data[!duplicated(data$id),]
 
 # Joint model fit for the HIV/AIDS dataset
-# longitudinal sub-model
+# longitudinal sub-model: linear time
 longit.sub <- lme(y ~ obsmo + obsmo:drug + sex + hist,
                    random = ~ obsmo|id, data = data)
+
+# Alternative longitudinal sub-models
+# Natural splines
+# longit.sub <- lme(y ~ ns(obsmo, 3) + ns(obsmo, 3):drug + sex + hist,
+#                    random = ~ obsmo|id, data = data)
+
 
 # survival sub-model
 surv.sub <- coxph(Surv(time, status) ~ drug + sex + hist,
@@ -62,6 +67,16 @@ surv.sub <- coxph(Surv(time, status) ~ drug + sex + hist,
 joint.model <- jointModel(longit.sub, surv.sub,
                             timeVar = "obsmo",
                             method = "piecewise-PH-aGH")
+## 3-month lag
+# joint.model <- jointModel(longit.sub, surv.sub, lag = 3,
+#                             timeVar = "obsmo",
+#                             method = "piecewise-PH-aGH")
+
+## Include the derivative into model
+
+joint.model <- jointModel(longit.sub, surv.sub, 
+                             timeVar = "obsmo",
+                             method = "piecewise-PH-aGH
 
 
 joint.model$coefficients
@@ -69,7 +84,7 @@ joint.model$coefficients
 # print out the summary
 summary(joint.model)
 
-
+joint.model$coefficients
 
 ######################################
 # Figure 11.3
