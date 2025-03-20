@@ -6,87 +6,72 @@ title: "Chapter 9 - Recurrent Events"
 
 Lecture slides [here](chap9.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-
-
 ## Chapter Summary
 
-When a subject (or system) can experience *recurrent events* (e.g., repeated hospitalizations, infections, or mechanical failures), standard univariate approaches (like focusing only on the first event) can be inefficient and miss valuable information. 
-Instead, we can model these repeated occurrences via extended Cox-type methods. 
-
+When a subject (or system) can experience *recurrent events* (e.g., repeated hospitalizations, infections, or mechanical failures), standard univariate approaches (like focusing only on the first event) can be inefficient and miss valuable information. Instead, we can model these repeated occurrences via extended Cox-type methods.
 
 ### Intensity vs. rate functions
 
-- **Intensity function** $\ell\{t \mid \overline{N}^*(t-)\}$: The instantaneous incidence of a new event at time $t$ *conditional* on the entire past. Generalizes the hazard function from univariate survival.
-- **Rate function** $r(t)$: The *marginal* incidence rate across the population. Bypasses specifying how past events affect current risk but does not fully specify the likelihood. Often paired with robust variance methods.
+-   **Intensity function** $\ell\{t \mid \overline{N}^*(t-)\}$: The instantaneous incidence of a new event at time $t$ *conditional* on the entire past. Generalizes the hazard function from univariate survival.
+-   **Rate function** $r(t)$: The *marginal* incidence rate across the population. Bypasses specifying how past events affect current risk but does not fully specify the likelihood. Often paired with robust variance methods.
 
 *Poisson processes* are the simplest example (memoryless arrivals), but in practice, recurrent events often cluster, so more realistic models are needed.
-
 
 ### Multiplicative intensity/rate models
 
 #### Andersen–Gill model
 
-A direct extension of the Cox model that posits:
-$$
+A direct extension of the Cox model that posits: $$
 \ell\{t \mid \overline{N}^*(t-), \overline{Z}(t)\}
 \;=\;
 \exp\bigl\{\beta^\mathsf{T}Z(t)\bigr\}\,\mathrm{d}\mu_0(t).
 $$
 
-- **Interpretation**: The conditional risk of a new event depends only on the *current* covariates $Z(t)$, not the event history (unless included in $Z(t)$).  
-- **Estimation**: Uses partial-likelihood scores analogous to Cox, with counting-process style risk sets.  
-- **Limitation**: If only baseline covariates are included, ignoring event history can be unrealistic; including post-baseline events or other time-varying covariates can confound inference about baseline effects.
-
-
+-   **Interpretation**: The conditional risk of a new event depends only on the *current* covariates $Z(t)$, not the event history (unless included in $Z(t)$).\
+-   **Estimation**: Uses partial-likelihood scores analogous to Cox, with counting-process style risk sets.\
+-   **Limitation**: If only baseline covariates are included, ignoring event history can be unrealistic; including post-baseline events or other time-varying covariates can confound inference about baseline effects.
 
 #### Multiplicative intensity frailty models
 
-Incorporate a random effect (frailty) $\xi$ to induce within-subject dependence:
-$$
+Incorporate a random effect (frailty) $\xi$ to induce within-subject dependence: $$
 \ell\{t \mid \xi, \overline{N}^*(t-), \overline{Z}(t)\}
 \;=\;
 \xi \,\exp\bigl\{\beta^\mathsf{T} Z(t)\bigr\}\,\mathrm{d}\mu_0(t).
 $$
 
-- **Example**: Gamma frailty, letting $\xi$ follow a Gamma distribution with mean 1, variance $1/\gamma$.  
-- **Interpretation**: Covariate effects are *subject-specific*; $\beta$ reflects hazard ratios within each random-effect stratum.
-- **Estimation**: Typically via EM algorithm.  
-
-
+-   **Example**: Gamma frailty, letting $\xi$ follow a Gamma distribution with mean 1, variance $1/\gamma$.\
+-   **Interpretation**: Covariate effects are *subject-specific*; $\beta$ reflects hazard ratios within each random-effect stratum.
+-   **Estimation**: Typically via EM algorithm.
 
 #### Proportional rates/means (LWYY) model
 
-Targets the *marginal rate*:
-$$
+Targets the *marginal rate*: $$
 r\{t \mid \overline{Z}(t)\}
 \;=\;
 \exp\bigl\{\beta^\mathsf{T} Z(t)\bigr\}\,\mathrm{d}\mu_0(t).
 $$
 
-- **Estimation**: Identical point estimates as Andersen–Gill, but with **robust** (sandwich) standard errors to account for unmodeled within-subject correlation.  
-- **Interpretation**: $\beta$ is the *population-level* effect on the rate (or mean) of recurrent events, simpler to interpret when focusing on an overall treatment effect.
-
-
+-   **Estimation**: Identical point estimates as Andersen–Gill, but with **robust** (sandwich) standard errors to account for unmodeled within-subject correlation.\
+-   **Interpretation**: $\beta$ is the *population-level* effect on the rate (or mean) of recurrent events, simpler to interpret when focusing on an overall treatment effect.
 
 ### Multivariate approaches to total or gap times
 
 Rather than modeling the entire counting process $N^*(t)$ directly, one can treat the times $T_1< T_2< \cdots$ (or gap times $U_k=T_k - T_{k-1}$) as a multivariate survival problem:
 
-- **WLW model**: *Marginal* hazard for each event order (1st, 2nd, etc.), ignoring the conditioning on previous events.  
-- **PWP-TT**: Condition on having experienced the $(k-1)$th event, analyzing total times but only for those who reached event $k-1$.  
-- **PWP-GT**: Condition similarly, but use *gap times* from one event to the next, resetting the time clock after each event.
+-   **WLW model**: *Marginal* hazard for each event order (1st, 2nd, etc.), ignoring the conditioning on previous events.\
+-   **PWP-TT**: Condition on having experienced the $(k-1)$th event, analyzing total times but only for those who reached event $k-1$.\
+-   **PWP-GT**: Condition similarly, but use *gap times* from one event to the next, resetting the time clock after each event.
 
 Differing risk-set definitions imply differences in interpretation for later events. WLW models the overall population-level hazard for the $k$th event, while PWP approaches focus on *conditional* hazards for those who already had $(k-1)$ events.
-
 
 ### Example R code
 
 Below are code snippets using R’s `survival::coxph()` to demonstrate fitting the three main classes of Cox-type recurrent event models. Suppose our data frame `df` is in a “counting process” format with columns:
 
-- `start`, `stop`: time interval boundaries for each event segment,  
-- `status`: event indicator (1 if the event occurred in that interval, 0 if censored),  
-- `id`: subject identifier,  
-- additional covariates (e.g., `x1`, `x2`).
+-   `start`, `stop`: time interval boundaries for each event segment,\
+-   `status`: event indicator (1 if the event occurred in that interval, 0 if censored),\
+-   `id`: subject identifier,\
+-   additional covariates (e.g., `x1`, `x2`).
 
 ```{r}
 #| eval: false
@@ -129,7 +114,6 @@ For multivariate approaches, we need to preprocess the data to include event ord
 -   `order`: event order (1st, 2nd, etc.),
 -   `gtime`: gap time from the previous event.
 
-
 ```{r}
 #| eval: false
 
@@ -170,20 +154,11 @@ fit_pwp_gt <- coxph(
 
 Recurrent event data demand methods that move beyond standard univariate survival analysis:
 
-- **Andersen–Gill** and **frailty** models specify *conditional intensities,* capturing event dependence through time-varying covariates or latent frailties.  
-- **Proportional rates/means** approaches target *marginal* rates, using robust variances to adjust for within-subject correlations.  
-- **Multivariate total/gap-time approaches** view each recurrence as a separate component, applying extensions of the Cox model (WLW, PWP-TT, PWP-GT), each with different conditioning and interpretational nuances.
+-   **Andersen–Gill** and **frailty** models specify *conditional intensities,* capturing event dependence through time-varying covariates or latent frailties.\
+-   **Proportional rates/means** approaches target *marginal* rates, using robust variances to adjust for within-subject correlations.\
+-   **Multivariate total/gap-time approaches** view each recurrence as a separate component, applying extensions of the Cox model (WLW, PWP-TT, PWP-GT), each with different conditioning and interpretational nuances.
 
 The choice among these frameworks depends on scientific aims (e.g., dynamic prediction vs. inference on treatment effect at baseline) and how one wishes to handle correlations induced by repeated occurrences. All, however, build on the Cox model’s core multiplicative form, ensuring familiar regression interpretations and flexible software implementations.
-
-
-
-
-
-
-
-
-
 
 ## R Code
 
@@ -586,4 +561,3 @@ zip_model$coefficients
 zip_model$vcov
 
 ```
-
