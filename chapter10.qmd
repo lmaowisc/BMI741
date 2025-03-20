@@ -35,7 +35,7 @@ library(tidyverse)    # For data manipulation and plotting
 cibmtr <- read.table("Data//Bone Marrow Transplantation Study//cibmtr.txt")
 head(cibmtr)
 
-# Gray's unweighted log-rank-type test for group differences in cause-specific
+# Gray's unweighted log-rank-type test for group differences in 
 # cumulative incidence. 'rho=0' => unweighted test.
 obj <- cmprsk::cuminc(cibmtr$time, cibmtr$status, cibmtr$donor, rho = 0)
 

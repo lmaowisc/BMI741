@@ -359,7 +359,7 @@ window.Quarto = {
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>cibmtr <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Data//Bone Marrow Transplantation Study//cibmtr.txt"</span>)</span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cibmtr)</span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Gray's unweighted log-rank-type test for group differences in cause-specific</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Gray's unweighted log-rank-type test for group differences in </span></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># cumulative incidence. 'rho=0' =&gt; unweighted test.</span></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> cmprsk<span class="sc">::</span><span class="fu">cuminc</span>(cibmtr<span class="sc">$</span>time, cibmtr<span class="sc">$</span>status, cibmtr<span class="sc">$</span>donor, <span class="at">rho =</span> <span class="dv">0</span>)</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
