@@ -26,13 +26,15 @@ Lecture slides [here](chap11.html){target="_blank"}. (To convert html to pdf, pr
 library(nlme) # for linear mixed effects model
 library(survival)
 library(tidyverse)
+#load the JM package
+install.packages("JM")
+library(JM)
 
 # read in the study dataset
 df <- read.table("Data//Anti-retroviral Trial//aids.txt")
 head(df)
-#load the JM package
-install.packages("JM")
-library(JM)
+nrow(df)
+print(df)
 
 #####################################################
 # Figure 11.2 Histograms of CD4 count and square-root
@@ -42,51 +44,92 @@ library(JM)
 # hist(data$CD4,xlab="CD4 count", main = "", lwd=2)
 # hist(sqrt(data$CD4),xlab="Square root of CD4 count",main="",lwd=2)
 # taking square root of CD4 count
-# data$y <- sqrt(data$CD4)
-data$y <- data$CD4
+df$y <- df$CD4
 # create a de-duplicated data for survival sub-model
-data.surv <- data[!duplicated(data$id),]
+df_surv <- df[!duplicated(df$id),]
 
 # Joint model fit for the HIV/AIDS dataset
 # longitudinal sub-model: linear time
-longit.sub <- lme(y ~ obsmo + obsmo:drug + sex + hist,
-                   random = ~ obsmo|id, data = data)
+longit_sub <- lme(y ~ obsmo + obsmo:drug + sex + hist,
+                   random = ~ obsmo|id, data = df)
 
 # Alternative longitudinal sub-models
 # Natural splines
-# longit.sub <- lme(y ~ ns(obsmo, 3) + ns(obsmo, 3):drug + sex + hist,
-#                    random = ~ obsmo|id, data = data)
+# longit_sub <- lme(y ~ ns(obsmo, 3) + ns(obsmo, 3):drug + sex + hist,
+#                    random = ~ obsmo|id, data = df)
 
 
 # survival sub-model
-surv.sub <- coxph(Surv(time, status) ~ drug + sex + hist,
-                     data = data.surv, x = TRUE)
+surv_sub <- coxph(Surv(time, status) ~ drug + sex + hist,
+                     data = df_surv, x = TRUE)
 
 # combine the two models
 # piecewise linear baseline with six internal knots
-joint.model <- jointModel(longit.sub, surv.sub,
-                            timeVar = "obsmo",
+obj_joint <- jointModel(longit_sub, surv_sub, timeVar = "obsmo",
                             method = "piecewise-PH-aGH")
 ## 3-month lag
-# joint.model <- jointModel(longit.sub, surv.sub, lag = 3,
-#                             timeVar = "obsmo",
+# obj_join_l3m <- jointModel(longit_sub, surv_sub, timeVar = "obsmo", lag = 3,
 #                             method = "piecewise-PH-aGH")
 
-## Include the derivative into model
-
-joint.model <- jointModel(longit.sub, surv.sub, 
-                             timeVar = "obsmo",
-                             method = "piecewise-PH-aGH
-
-
-joint.model$coefficients
-
 # print out the summary
-summary(joint.model)
+summary(obj_joint)
+obj_joint$coefficients
 
-joint.model$coefficients
 
-######################################
+## Residual analysis 
+par(mfrow = c(2, 2))
+plot(obj_joint) # Standard plotd
+
+
+# Longitudinal residuals
+epsilons <- residuals(obj_joint, process = "Longitudinal", type = "Subject")
+length(epsilons)
+Rs <- residuals(obj_joint, process = "Longitudinal", type = "Marginal")
+length(Rs)
+# Fitted m_i(t)
+ms <- fitted(obj_joint, process = "Longitudinal")
+length(ms)
+ms1 <- fitted(obj_joint, process = "Longitudinal", type = "EventTime")
+length(ms1)
+
+ms2 <- df$y - epsilons
+
+ms[1:10]
+ms1[1:10]
+ms2[1:10]
+
+# Martingale residuals
+mart <- residuals(obj_joint, process = "Event")
+
+plot(ms1, mart)
+
+tibble(
+  y_obs = df$y,
+  y_pred = ms2
+) |> 
+  ggplot(aes(x = y_obs, y = y_pred)) +
+  geom_point(color = "gray20") +
+  geom_abline(intercept = 0, slope = 1, color = "red") +
+  coord_fixed() +
+  labs(title = "Martingale residuals vs. Fitted values",
+       x = expression("Fitted "~ sqrt(CD4)),
+       y = expression("Observed "~ sqrt(CD4))) +
+  theme_minimal()
+
+# Fitted value of true CD4
+mt <- df$y - epsilons
+
+## Dynamic prediction
+head(df)
+
+df$id
+
+surv_pred2 <- survfitJM(obj_joint, newdata = df[df$id == 2, ], simulate = FALSE)
+
+surv_pred2 <- survfitJM(obj_joint, newdata = data.frame(id = 1, y = 3, obsmo = 6, drug = "ddI",  sex = "male", hist = "noAIDS"))
+
+
+ ######################################
 # Figure 11.3
 ######################################
 
