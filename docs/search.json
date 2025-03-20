@@ -2706,8 +2706,8 @@
     "objectID": "chap8.html#outline",
     "href": "chap8.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "",
-    "text": "Introduction to frailty models\nMultivariate Cox model with shared frailty\nExample: A multi-center lung cancer study\nMarginal models and robust inference\nExample: the diabetic retinopathy study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+    "section": "Outline",
+    "text": "Outline\n\n\nIntroduction to frailty models\nMultivariate Cox model with shared frailty\nExample: A multi-center lung cancer study\nMarginal models and robust inference\nExample: the diabetic retinopathy study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   },
   {
     "objectID": "chap8.html#multivariate-failure-times",
@@ -2812,7 +2812,7 @@
     "href": "chap8.html#software-survivalcoxph-ii",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::coxph() (II)",
-    "text": "Software: survival::coxph() (II)\n\n\nScenario 3: Gamma-frailty with different \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\nDifferent failure types enum in unit id with different covariate effects\nComponent specific \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\n\n\n\ncoxph(Surv(time, status) ~ covariates * strata(enum) + \n      frailty(id, distribution = \"gamma\"))\n\n\n\n\n\n\n\n\n\n\nProblem\n\n\n\nHow to set up a model of the form: \\[\n\\lambda_k(t\\mid Z, \\xi) \\;=\\; \\xi\\exp\\left(\\beta_k^\\T Z_{(1)} + \\gamma^\\T Z_{(2)}\\right) \\eta_{k0}'(t),\n\\] where the effects of \\(Z_{(1)}\\) are component-specific while those of \\(Z_{(2)}\\) are component-invariant?"
+    "text": "Software: survival::coxph() (II)\n\n\nScenario 3: Gamma-frailty with different \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\nDifferent failure types enum in unit id with different covariate effects\nComponent specific \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\n\n\n\ncoxph(Surv(time, status) ~ covariates * strata(enum) + \n      frailty(id, distribution = \"gamma\"))\n\n\n\n\n\n\n\n\n\n\nProblem\n\n\nHow to set up a model of the form: \\[\n\\lambda_k(t\\mid Z, \\xi) \\;=\\; \\xi\\exp\\left(\\beta_k^\\T Z_{(1)} + \\gamma^\\T Z_{(2)}\\right) \\eta_{k0}'(t),\n\\] where the effects of \\(Z_{(1)}\\) are component-specific while those of \\(Z_{(2)}\\) are component-invariant?"
   },
   {
     "objectID": "chap8.html#study-background",
@@ -2854,7 +2854,7 @@
     "href": "chap8.html#estimation-ii",
     "title": "Applied Survival Analysis",
     "section": "Estimation (II)",
-    "text": "Estimation (II)\n\n\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)\n\nSolve \\(U_{n}(\\hat\\beta)=0\\) \\[\\begin{align}\\label{eq:multi:ee_unstra}\nU_{n}(\\beta)&=\\Pn\\sum_{k=1}^K\\int_0^\\infty\\left\\{Z_i-\n\\frac{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)Z_j\\exp(\\beta^\\T Z_j)}{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)\\exp(\\beta^\\T Z_j)}\\right\\}\\times\\dd N_{ki}(t)\n\\end{align}\\]\n\n\n\n\n\n\n\n\n\n\nExercise: Breslow estimator\n\n\n\nConstruct proper Breslow estimators for the baseline function(s) given \\(\\hat\\beta\\) under:\n\nSame \\(\\beta\\) & free \\(\\Lambda_{k0}\\)\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)"
+    "text": "Estimation (II)\n\n\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)\n\nSolve \\(U_{n}(\\hat\\beta)=0\\) \\[\\begin{align}\\label{eq:multi:ee_unstra}\nU_{n}(\\beta)&=\\Pn\\sum_{k=1}^K\\int_0^\\infty\\left\\{Z_i-\n\\frac{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)Z_j\\exp(\\beta^\\T Z_j)}{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)\\exp(\\beta^\\T Z_j)}\\right\\}\\times\\dd N_{ki}(t)\n\\end{align}\\]\n\n\n\n\n\n\n\n\n\n\nExercise: Breslow estimator\n\n\nConstruct proper Breslow estimators for the baseline function(s) given \\(\\hat\\beta\\) under:\n\nSame \\(\\beta\\) & free \\(\\Lambda_{k0}\\)\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)"
   },
   {
     "objectID": "chap8.html#robust-variance-sandwitch-estimator",

@@ -565,7 +565,7 @@ coxph(Surv(time, status) ~ covariates * strata(enum) +
     -   Much greater reduction in risk of blindness of adult (type II?) than juvenile patients (type I?) (*p*-value = 0.004)
 
 | Diabetic type | Hazard ratio |
-|:---------------:|:-----------------------------------------------------:|
+|:----------------:|:----------------------------------------------------:|
 | Adult | $$                                                                                                      
                                                                                                                  \exp(-1.294) = 27.4\%       
                                                                                                                                        $$ |
