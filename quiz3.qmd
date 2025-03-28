@@ -14,7 +14,7 @@ execute:
 
 ## **Question 1 (5 points) – Recurrent Events**
 
-@fig-followup below shows the follow-up of six patients for repeated infections. 
+@fig-followup below shows the follow-up of six patients for repeated infections.
 
 ```{r}
 #| label: fig-followup
@@ -76,27 +76,25 @@ df |>
     panel.grid.major.y = element_blank(),
     legend.text = element_text(size = 11)
   )
-          
+ 
+ggsave("images/rec_fu_prob.png", width = 8, height = 3)
+ggsave("images/rec_fu_prob.eps", width = 8, height = 3)
+
 ```
 
--   Calculate the (Nelsen--Aalen-type) estimates of the **average number of infections per patient by
-month 2, 4, and 6**.\vspace{2cm}
+-   Calculate the (Nelsen--Aalen-type) estimates of the **average number of infections per patient by month 2, 4, and 6**.\vspace{2cm}
 -   Why is the following arithmetic biased:
 
 $$
 \frac{\mbox{Total number of black dots by month }2, 4, 6}{6 \mbox{ subjects}}
-$$
-\vspace{2cm}
+$$ \vspace{2cm}
 
 ## **Question 2 (5 points) – Mean Model**
 
-Let $N^*(t)$ denote the average number of recurrent events by time $t$ (such as estimated in Question 1). Let $Z=1, 0$ denote treatment and control groups, respectively.
-Under the multiplicative mean model:
-$$
+Let $N^*(t)$ denote the average number of recurrent events by time $t$ (such as estimated in Question 1). Let $Z=1, 0$ denote treatment and control groups, respectively. Under the multiplicative mean model: $$
 E\{N^*(t) \mid Z\} = \exp(\beta Z)\mu_0(t),
 $$
 
 -   What is the mean function in each group, i.e., $E\{N^*(t) \mid Z = z\}$ for $z= 1, 0$?\vspace{2cm}
 
 -   Suppose $\hat\beta = \log(0.8)$, interpret the treatment effect.
-

@@ -73,13 +73,54 @@ obj_joint <- jointModel(longit_sub, surv_sub, timeVar = "obsmo",
 
 # print out the summary
 summary(obj_joint)
+#> Call:
+#> jointModel(lmeObject = longit_sub, survObject = surv_sub, timeVar = "obsmo", 
+#>     method = "piecewise-PH-aGH")
+#> 
+#> Data Descriptives:
+#> Longitudinal Process		Event Process
+#> Number of Observations: 1405	Number of Events: 188 (40.3%)
+#> Number of Groups: 467
+#> 
+#> Joint Model Summary:
+#> Longitudinal Process: Linear mixed-effects model
+#> Event Process: Relative risk model with piecewise-constant
+#> 		baseline risk function
+#> Parameterization: Time-dependent 
+#> 
+#>    log.Lik      AIC      BIC
+#>  -4404.569 8849.139 8932.065
+#> 
+#> Variance Components:
+#>              StdDev    Corr
+#> (Intercept)  3.9797  (Intr)
+#> obsmo        0.1928 -0.0890
+#> Residual     2.0428        
+#> 
+#> Coefficients:
+#> Longitudinal Process
+#>                 Value Std.Err z-value p-value
+#> (Intercept)    5.8614  0.6562  8.9322 <0.0001
+#> obsmo         -0.1922  0.0240 -8.0175 <0.0001
+#> sexmale       -0.3823  0.6642 -0.5757  0.5649
+#> histnoAIDS     4.8617  0.4091 11.8835 <0.0001
+#> obsmo:drugddI  0.0219  0.0333  0.6558  0.5120
+#> 
+#> Event Process
+#>              Value Std.Err z-value p-value
+#> drugddI     0.3487  0.1576  2.2118  0.0270
+#> sexmale    -0.3313  0.2608 -1.2701  0.2040
+#> histnoAIDS -0.5873  0.2255 -2.6040  0.0092
+#> Assoct     -0.2569  0.0374 -6.8708 <0.0001
+#> ...
+
+
 obj_joint$coefficients
 
 
 ## Residual analysis 
 par(mfrow = c(2, 2))
-plot(obj_joint) # Standard plotd
-
+plot(obj_joint) # Standard plot
 
 # Longitudinal residuals
 epsilons <- residuals(obj_joint, process = "Longitudinal", type = "Subject")
@@ -129,7 +170,7 @@ surv_pred2 <- survfitJM(obj_joint, newdata = df[df$id == 2, ], simulate = FALSE)
 surv_pred2 <- survfitJM(obj_joint, newdata = data.frame(id = 1, y = 3, obsmo = 6, drug = "ddI",  sex = "male", hist = "noAIDS"))
 
 
- ######################################
+#######################################
 # Figure 11.3
 ######################################
 
@@ -138,18 +179,18 @@ surv_pred2 <- survfitJM(obj_joint, newdata = data.frame(id = 1, y = 3, obsmo = 6
 
 t <- (0:180)/10
 
-g0 <- 2.2123
-g1 <- -0.0414
-g3 <- 0.9153
-g4 <- 0.0061
+g0 <- gamma[1]
+g1 <- gamma[2]
+g3 <- gamma[4]
+g4 <- gamma[5]
 
 
-ddC.nonhist <- (g0+g3+g1*t)^2
-ddC.hist <- (g0+g1*t)^2
+ddC_nonhist <- (g0+g3+g1*t)^2
+ddC_hist <- (g0 + g1*t)^2
 
 
-ddI.nonhist <- (g0+g3+(g1+g4)*t)^2
-ddI.hist <- (g0+(g1+g4)*t)^2
+ddI_nonhist <- (g0+g3+(g1+g4)*t)^2
+ddI_hist <- (g0+(g1+g4)*t)^2
 
 
 #######################################################
@@ -161,14 +202,47 @@ ddI.hist <- (g0+(g1+g4)*t)^2
 ######################################################
 par(mfrow=c(1,2))
 
-plot(t, ddC.nonhist,type='l',frame.plot=F,
-     main="No previous infection",xlim=c(0,20),ylim=c(0,10),
+plot(t, ddC_nonhist,type='l',frame.plot=F,
+     main="No previous infection",xlim=c(0,18),ylim=c(0,120),
      xlab="Time (months)", ylab="Mean CD4 cell count", lwd=2, cex.main = 1)
-lines(t,ddI.nonhist,lty=3,lwd=2)
+lines(t,ddI_nonhist,lty=3,lwd=2)
 
-plot(t, ddC.hist,type='l',frame.plot=F,
-     main="Previous infection",xlim=c(0,20),ylim=c(0,10),
+plot(t, ddC_hist,type='l',frame.plot=F,
+     main="Previous infection",xlim=c(0,18),ylim=c(0,120),
      xlab="Time (months)", ylab="Mean CD4 cell count", lwd=2, cex.main = 1)
-lines(t,ddI.hist,lty=3,lwd=2)
+lines(t,ddI_hist,lty=3,lwd=2)
+
+## ggplot version
+
+m <- length(t)
+tibble(
+  t = rep(t, 4),
+  CD4 = c(ddC_nonhist, ddI_nonhist, ddC_hist, ddI_hist),
+  trt = rep(rep(c("ddC", "ddI"), each = m), 2),
+  hist = rep(c("No previous infection", "Previous infection"), each = 2*m)
+    ) |> 
+  ggplot(aes(x = t, y = CD4)) +
+    geom_line(aes(linetype = trt), linewidth = 0.8) +
+    facet_wrap(~ hist) +
+  scale_x_continuous(breaks = seq(0, 18, 6)) +
+  scale_y_continuous(limits = c(0, 120), breaks = seq(0, 120, 30)) +
+  labs(
+    x = "Time (months)",
+    y = expression("CD4 cell count / mm"^3),
+    linetype = NULL
+  ) +
+    theme_minimal() +
+  theme(
+    legend.position = "top",
+    strip.text = element_text(size = 11),
+    legend.text = element_text(size = 11),
+    legend.key.width = unit(1, "cm")
+  )
+
+ggsave("images/longit_mean_cd4.png", width = 8, height = 4.5)
+ggsave("images/longit_mean_cd4.eps", width = 8, height = 4.5)
+
+
+
 
 ```

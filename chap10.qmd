@@ -22,7 +22,8 @@ include-in-header:
 ---
 
 ## Outline
-:::{.incremental}
+
+::: incremental
 1.  Cause-specific hazard and cumulative incidence
 
 2.  Non- and semi-parametric methods
@@ -37,13 +38,15 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 # Basic Quantities
 
 ## Definition and Examples
-:::{.fragment}
+
+::: fragment
 -   **Competing risks**
     -   **Definition**: multiple types of failures, occurrence of one **precludes** others
         -   Multiple latent risks competing with each other for first occurrence
     -   **Examples**: different causes of death
 :::
-:::{.fragment}
+
+::: fragment
 -   **Defining feature**
     -   One failure per subject
     -   Less info than multivariate failure times
@@ -51,12 +54,14 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Outcome Data & Identifiability
-:::{.fragment}
+
+::: fragment
 -   **Target of inference**: $(T, \Delta)$
     -   $T$: **time** to failure
     -   $\Delta \in \{1, \ldots, K\}$: **type/cause** of failure (categorical)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Multivariate perspective**
     -   **A conceptual framework** \begin{equation}\label{eq:cmpr:mult}
         T=\min(T_1,\ldots, T_K) \hspace{1mm}\mbox{ and } \hspace{1mm}\Delta=\arg\min_{k=1,\ldots, K} T_k
@@ -68,14 +73,15 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Two Approaches
-:::{.fragment}
+
+::: fragment
 -   **Two ways** to characterize $(T, \Delta)$
     -   **Cause-specific hazard**
     -   **Cumulative incidence (Sub-distribution)**
 :::
-:::{.fragment}
--   **Cause-specific hazard (CSH)**
- \begin{equation}\label{eq:cmpr:cs_hazard}
+
+::: fragment
+-   **Cause-specific hazard (CSH)** \begin{equation}\label{eq:cmpr:cs_hazard}
         \dd\Lambda_k^\cc(t)=\pr(t\leq T<t+\dd t, \Delta=k\mid T\geq t)
         \end{equation}
     -   **Interpretation**: instantaneous incidence of $k$th risk given overall "survival"
@@ -85,12 +91,14 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Cause-Specific Hazard
-:::{.fragment}
+
+::: fragment
 -   **Limitations**
     -   The *cumulative* CSH $\Lambda_k^\cc(t)$ not a meaningful quantity
     -   $\exp\{-\Lambda_k^\cc(t)\}$ not a survival function of any kind
 :::
-:::{.fragment}
+
+::: fragment
 -   **Correspondence with "net hazard"**
     -   Under (unrealistic) mutual independence of the latent $T_k$
     -   Hazard of $T_k$ identifiable and equal to $\Lambda_k^\cc(t)$
@@ -98,16 +106,17 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## Cumulative Incidence
-:::{.fragment}
--   **Cumulative incidence function (CIF)**
-        $$
+
+::: fragment
+-   **Cumulative incidence function (CIF)** $$
         F_k(t)=\pr(T\leq t, \Delta=k)
         $$
-    -   **Interpretation**: probability of failure from $k$th risk *in presence of* other risks 
+    -   **Interpretation**: probability of failure from $k$th risk *in presence of* other risks
     -   Marginal quantity, easy to interpret (a real-world probability)
     -   $F(t)=\pr(T\leq t) = \sum_{k=1}^K F_k(t)$ (*sub*-distribution functions)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Relationship**
     -   CSH in terms of CIF (for a particular risk, no one-to-one correspondence) \begin{equation}\label{eq:cmpr:correspond}
         \dd\Lambda_k^\cc(t)=\frac{\dd F_k(t)}{1-\sum_{l=1}^K F_l(t-)}
@@ -115,14 +124,16 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## CSH vs CIF
-:::{.fragment}
+
+::: fragment
 -   **Example**: effect on CSH may not align with CIF
     -   **Treatment**: $\Lambda_1^\cc(t)=\Lambda_2^\cc(t)=3t$
     -   **Control**: $\Lambda_1^\cc(t)=2t$ and $\Lambda_2^\cc(t)=t$
-:::   
-:::{.fragment}
+:::
+
+::: fragment
 ![](images/cmpr_compare.png){fig-align="center" width="60%"}
-::: 
+:::
 
 ## Comparison of Functions
 
@@ -133,35 +144,38 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 # Methods for Competing Risks
 
 ## Observed Data
-:::{.incremental}
+
+::: incremental
 -   **A random** $n$-sample $$(X_i, \delta_i, Z_i), \,\,\, i=1,\ldots, n$$
     -   $X=T\wedge C$
     -   $\delta=\Delta I(T\leq C)$ (0: censored; $k$: observed $k$th risk, $k=1,\ldots, K$)
     -   $C$: independent censoring time
     -   $Z$: covariates
-    -   $N_{ki}(t)=I(X_i\leq t, \delta_i=k)$: *Observed* counting process for $k$th risk 
-::: 
+    -   $N_{ki}(t)=I(X_i\leq t, \delta_i=k)$: *Observed* counting process for $k$th risk
+:::
 
 ## Cause-Specific Hazard Models (I)
-:::{.fragment}
+
+::: fragment
 -   **Proportional cause-specific hazards** \begin{equation}\label{eq:cmpr:ph_csh}
     \pr(t\leq T<t+\dd t, \Delta=k\mid T\geq t, Z)=\exp(\beta_k^\T Z)\dd\Lambda_{k0}(t)
     \end{equation}
     -   A model on "survivors" (those who have not failed from any risk)
     -   $\beta_k$: log-hazard ratios for $k$th risk in survivors
-::: 
-:::{.fragment}
--   **Estimation** 
-    -   **Partial likelihood score** for $k$th risk
-    $$
-      U_{nk}(\beta_k)=\Pn\int_0^\infty\left\{Z_i-\frac{\sum_{j=1}^n I(X_j\geq t)Z_j\exp(\beta_k^\T Z_j)}{\sum_{j=1}^n I(X_j\geq t)\exp(\beta_k^\T Z_j)}\right\}\dd N_{ki}(t)
-    $$
+:::
+
+::: fragment
+-   **Estimation**
+    -   **Partial likelihood score** for $k$th risk $$
+          U_{nk}(\beta_k)=\Pn\int_0^\infty\left\{Z_i-\frac{\sum_{j=1}^n I(X_j\geq t)Z_j\exp(\beta_k^\T Z_j)}{\sum_{j=1}^n I(X_j\geq t)\exp(\beta_k^\T Z_j)}\right\}\dd N_{ki}(t)
+        $$
         -   Essentially treating non-$k$ risks as censoring
         -   Easy to implement in `survival::coxph()` (`status == k`)
 :::
 
 ## Cause-Specific Hazard Models (II)
-:::{.fragment}
+
+::: fragment
 -   **Under (unrealistic) independence of the latent** $T_k$
     -   Proportional cause-specific hazards $\Longleftrightarrow$ proportional net hazards
     -   Frailty to relax independence
@@ -169,7 +183,8 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
         -   Non-identifiability
         -   Non-interpretability
 :::
-:::{.fragment}
+
+::: fragment
 -   **Log-rank test**
     -   Risk-specific log-rank statisic with other risks treated as censoring
     -   "Kaplan-Meier" doesn't work $\to$ estimand $\exp\{-\Lambda_k^\cc(t)\}$ is non-quantity
@@ -177,11 +192,11 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## CIF: Nonparametric Estimation
-:::{.fragment}
--   **Decomposition of** $F_k(t)$
-\begin{equation*}
+
+::: fragment
+-   **Decomposition of** $F_k(t)$ \begin{equation*}
         \dd F_k(t)=S(t-)\dd\Lambda_k^\cc(t)
-\end{equation*}
+    \end{equation*}
 
     -   $S(t-)=\pr(T\geq t)$: By KM estimator $\hat S(t-)$ for overall failure
 
@@ -189,24 +204,24 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
           \dd\hat\Lambda_k^\cc(t)=\frac{\sum_{i=1}^n\dd N_{ki}(t)}{\sum_{i=1}^n I(X_i\geq t)}
           $$
 :::
-:::{.fragment}
--   **Gray estimator** 
-\begin{equation*}
+
+::: fragment
+-   **Gray estimator** \begin{equation*}
         \hat F_k(t)=\int_0^t \hat S(u-)\dd\hat \Lambda_k^\cc(u)
-\end{equation*}
+    \end{equation*}
 :::
 
 ## CIF: Sub-Distribution Hazard
-:::{.incremental}
--   **Sub-distribution hazard (SDH)**
-\begin{equation}\label{eq:cmpr:sdh}
+
+::: incremental
+-   **Sub-distribution hazard (SDH)** \begin{equation}\label{eq:cmpr:sdh}
         \dd\Lambda_k(t)=\pr(t\leq T_k^*<t+\dd t\mid T_k^*\geq t)
         \end{equation}
     -   Time to $k$th risk *in presence of* other risks $$
         T_k^*=T\cdot I(\Delta=k)+\infty\cdot I(\Delta\neq k)
         $$
         -   $F_k(t)=\pr(T_k^*\leq t)$
-    -   **Interpretation**: incidence of $k$th risk given not failing from it 
+    -   **Interpretation**: incidence of $k$th risk given not failing from it
     -   Easier to work with hazard-like functions (unbounded)
     -   **Correspondence with CIF** \begin{equation}\label{eq:cmpr:subdist}
         F_k(t)=1-\exp\{-\Lambda_k(t)\}
@@ -215,12 +230,14 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## CIF: Gray's Test
-:::{.fragment}
+
+::: fragment
 -   **Discrete version** ($k$th risk) $$
     \dd\Lambda_k(t)=\frac{\dd F_k(t)}{1-F_k(t-)}
     $$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Log-rank-type test**
     -   Testing $H_0: F_{k1}(t)=F_{k0}(t)$ \begin{equation}\label{eq:cmpr:gray_tests}
         \int_0^\infty W_k(t)\big\{\dd\hat\Lambda_{k1}(t)-\dd\hat\Lambda_{k0}(t)\big\}
@@ -231,21 +248,24 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
 :::
 
 ## CIF: Fine-Gray Regression
-:::{.fragment}
+
+::: fragment
 -   **Proportional sub-distribution hazards** (Fine and Gray, 1999) \begin{equation}\label{eq:cmpr:fg}
- \pr(t\leq T_k^*<t+\dd t\mid T_k^*\geq t, Z)=\exp(\beta_k^\T Z)\dd\Lambda_{k0}(t)
-  \end{equation}
+     \pr(t\leq T_k^*<t+\dd t\mid T_k^*\geq t, Z)=\exp(\beta_k^\T Z)\dd\Lambda_{k0}(t)
+      \end{equation}
     -   $\beta_k$: **log-hazard ratios** for $k$th risk in entire population (under other risks)
     -   **Estimation and inference**: partial-likelihood score with IPCW to address dependent censoring by other risks
 :::
-:::{.fragment}
+
+::: fragment
 -   **Target populations**
     -   **Cause-specific hazard**: survivors
     -   **Sub-distribution hazard**: all, including those who have failed from other causes
 :::
 
 ## Software: `cmprk::cuminc()`
-:::{.fragment}
+
+:::: fragment
 -   **Basic syntax for Gray's estimator & test**
 
 ::: big-code
@@ -264,10 +284,11 @@ obj <- cuminc(ftime, fstatus, group, strata, rho = 0)
     -   `obj$Tests`: tests results on each risk
     -   `obj$"a k"`: CIF estimates for $k$th risk in group $a$
         -   `time`: $t$; `est`: $\hat F_k(t)$; `var`: $\hat\var\{\hat F_k(t)\}$
-:::
+::::
 
 ## Software: `cmprk::crr()` (I)
-:::{.fragment}
+
+:::: fragment
 -   **Basic syntax for Fine-Gray model**
 
 ::: big-code
@@ -281,21 +302,23 @@ obj <- crr(ftime, fstatus, cov1, failcode = k)
 -   **Input**
     -   `(ftime, fstatus)`: $(X, \delta)$; `cov1`: $Z$
     -   `failcode = k`: models $k$th risk
-:::
-:::{.fragment}
+::::
+
+::: fragment
 -   **Output**: a list of class `crr`
     -   `obj$coef`: $\hat\beta_k$; `obj$var`: $\hat\var(\hat\beta_k)$
     -   `obj$uftime`: $t$; `obj$bfitj`: $\dd\hat\Lambda_{k0}(t)$
 :::
 
 ## Software: `cmprk::crr()` (II)
-:::{.fragment}
+
+::: fragment
 -   **Prediction of CIF by Fine-Gray model**
     -   `obj`: a `crr` object for fit model
     -   `z`: new covariate data
 :::
-:::{.fragment}
 
+:::: fragment
 ::: big-code
 ```{r}
 #| eval: false
@@ -314,10 +337,11 @@ cif <- 1- exp(- exp(sum(beta * z)) * Lambda)
 obj_pred <- cbind(time, cif)
 ```
 :::
-:::
+::::
 
 ## Software: `tidycmprk` Package (I)
-:::{.fragment}
+
+::: fragment
 -   **Tidy competing risks analysis**
     -   Wraps around `cmprk` functions
     -   Formula-based interface $+$ Tidy output
@@ -333,8 +357,10 @@ obj_pred <- cbind(time, cif)
 :::
 
 ## Software: `tidycmprk` Package (II)
-:::{.fragment}
+
+::: fragment
 -   **Sample code**
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -358,16 +384,15 @@ tbl <- tbl_regression(obj_fg, exponentiate = TRUE)
 ```
 :::
 
-
 # Bone Marrow Transplant Study
 
 ## Study Information
 
-:::{.fragment}
--   **Population** 
+::: fragment
+-   **Population**
     -   864 multiple-myeloma patients undergoing allo-HCT cell transplantation
 -   **Endpoints**: time from surgery to
-    -  **Treatment-related mortality** (TRM; death in remission)
+    -   **Treatment-related mortality** (TRM; death in remission)
     -   **Relapse of leukemia**
 -   **Risk factors**
     -   Cohort indicator (years 1995–2000 or 2001–2005)
@@ -377,7 +402,8 @@ tbl <- tbl_regression(obj_fg, exponentiate = TRUE)
 :::
 
 ## Study Data
-:::{.fragment}
+
+::: fragment
 -   **Data format**
 
 ```{r}
@@ -395,7 +421,8 @@ head(cibmtr)
 :::
 
 ## CIF by Donor Type (I)
-:::{.fragment}
+
+::: fragment
 -   **Estimation/testing by donor type**
 
 ```{r}
@@ -421,31 +448,33 @@ tbl_surv
 ```
 :::
 
-
-
 ## CIF by Donor Type (II)
-:::{.fragment}
+
+::: fragment
 -   **Table created by `tbl_cuminc()`**
 
 ![](images/cmpr_bm_cif_tbl.png){fig-align="center" width="90%"}
 :::
 
-
 ## CIF by Donor Type (III)
-:::{.fragment}
+
+::: fragment
 -   **Graphics**
+
 ```{r}
 #| eval: false
 #| echo: true
 obj_cif |> ggcuminc(outcome = c("Relapse", "TRM")) # + ggplot2 formatting
 ```
 :::
-:::{.fragment}
+
+::: fragment
 ![](images/cmpr_bm_cif.png){fig-align="center" width="70%"}
 :::
 
 ## Regression Analysis
-:::{.fragment}
+
+::: fragment
 -   Semiparametric regression
     -   Proportional cause-specific hazard
     -   Proportional sub-distribution hazard (FG)
@@ -466,7 +495,8 @@ obj.fg <- crr(cibmtr$time, cibmtr$status, cibmtr[, 3:6], failcode = k)
 :::
 
 ## Regression Results
-:::{.fragment}
+
+::: fragment
 -   **Differential effects of prior surgery**
     -   **Relapse**: increases risk by $42\%$
     -   **TRM**: decreases risk by $1-0.63 = 37\%$ ![](images/cmpr_bm_reg.png){fig-align="center" width="80%"}
@@ -475,17 +505,20 @@ obj.fg <- crr(cibmtr$time, cibmtr$status, cibmtr[, 3:6], failcode = k)
 # Semi-Competing Risks
 
 ## Definition and Examples
-:::{.fragment}
+
+::: fragment
 -   **Semi-competing risks**
     -   **Terminal event** (competing): death
     -   **Non-terminal events** (non-competing): hospitalization, relapse, etc.
 :::
-:::{.fragment}
+
+::: fragment
 -   **Examples**
     -   Death + relapse of cancer (German breast cancer study)
     -   Death terminates nonfatal event but not *vice versa*
 :::
-:::{.fragment}
+
+::: fragment
 -   **Methods**
     -   **Marginal**: cumulative incidence/frequency
     -   **Frailty** (Ch. 8); **Multistate** (Ch. 12); **Composite** (Ch. 13)
@@ -493,8 +526,8 @@ obj.fg <- crr(cibmtr$time, cibmtr$status, cibmtr[, 3:6], failcode = k)
 
 ## Data and Identifiability
 
-::::: columns
-:::{.fragment}
+:::::: columns
+::::: fragment
 ::: {.column width="55%"}
 -   **Target of inference**: $(T, D)$
     -   $T$: time to nonfatal event
@@ -503,22 +536,24 @@ obj.fg <- crr(cibmtr$time, cibmtr$status, cibmtr[, 3:6], failcode = k)
     -   **Identifiable region**: $\{(s, t):0\leq t\leq s<\infty\}$
         -   Possible nonfatal $\to$ death, not *vice versa*
 :::
-::: {.column width="45%"}
 
+::: {.column width="45%"}
 ![](images/cmpr_wedge.png){fig-align="center" width="100%"}
 :::
-:::
 :::::
+::::::
 
 ## Bivariate Analysis
-:::{.fragment}
+
+::: fragment
 -   **Marginal models**
     -   **Death**: univariate event (KM, log-rank, Cox)
     -   **Nonfatal event**
         -   Cause-specific risk (treating death as censoring)
         -   cumulative incidence (Gray, FG)
 :::
-:::{.fragment}
+
+::: fragment
 -   **German breast cancer study**
     -   **Nonfatal event**: relapse of cancer (`status == 1`)
     -   **Death**: overall mortality (`status == 2`)
@@ -531,10 +566,11 @@ gbc <- read.table("Data//German Breast Cancer Study//gbc.txt") |>
 ```
 :::
 
-
 ## Bivariate Analysis - GBC Example (I)
-:::{.fragment}
+
+::: fragment
 -   **Data**
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -546,33 +582,35 @@ gbc
 # 6   3 47.737705      2       1  47    1   30     2     1 4.22  0.89     1
 ```
 :::
-:::{.fragment}
+
+::: fragment
 -   **Analysis**
     -   **Death** (subset to `status != 1`)
-        -  Standard Cox: `coxph(Surv(time, status == 2) ~ covariates)`
+        -   Standard Cox: `coxph(Surv(time, status == 2) ~ covariates)`
     -   **Relapse** (subset to first row for each `id`)
-        -  Cause-specific hazard: `coxph(Surv(time, status == 1) ~ covariates)`
-        -  Sub-distribution hazard: `tidycmprk::crr(Surv(time, status) ~ covariates, failcode = "1")`
+        -   Cause-specific hazard: `coxph(Surv(time, status == 1) ~ covariates)`
+        -   Sub-distribution hazard: `tidycmprk::crr(Surv(time, status) ~ covariates, failcode = "1")`
 :::
 
 ## Bivariate Analysis - GBC Example (II)
-:::{.fragment}
+
+::: fragment
 -   **Regression results**
     -   **Relapse**: cause-specific $\approx$ sub-distribution---few deaths (21) before relapse
-    -   **Age effect**: driven by relapse
-![](images/cmpr_gbc_reg.png){fig-align="center" width="75%"}
+    -   **Age effect**: driven by relapse ![](images/cmpr_gbc_reg.png){fig-align="center" width="75%"}
 :::
 
-  
 ## Recurrent Events
-:::{.fragment}
+
+::: fragment
 -   **Outcome data**: $\{N^*(\cdot), D\}$
     -   $N^*(t)$: number of recurrent events in presence of death
         -   Repeated tumor occurrences/hospitalizations before death ($\dd N^*(t)\equiv 0$ for $t>D$)
     -   Treating $D$ as censoring (AG/LWYY) $\to$ cause-specific event rate $$E\{\dd N^*(t)\mid D\geq t\}$$
         -   Incidence rate in survivors
 :::
-:::{.fragment}
+
+::: fragment
 -   **Cumulative frequency**
     -   Mean function in overall population, dead or alive $$
         \mu(t)=E\{N^*(t)\}
@@ -581,7 +619,8 @@ gbc
 :::
 
 ## Marginal Approaches
-:::{.fragment}
+
+::: fragment
 -   **Methods for cumulative frequency**
     -   Gray-type nonparametric estimator/test (Ghosh and Lin, 2000)
     -   Proportional CF model (Fine-Gray-type) (Ghosh and Lin, 2002) \begin{equation}\label{eq:cmpr:pcf}
@@ -589,17 +628,20 @@ gbc
         \end{equation}
     -   Higher death rate can reduce CF
 :::
-:::{.fragment}
+
+::: fragment
 -   **Joint analysis with mortality**
     -   Ghosh-Lin for recurrent events $+$ Cox/log-rank for death
     -   $\chi^2$ test with 2 d.f.
 :::
-:::{.fragment}
+
+::: fragment
 -   **Alternative:** shared-frailty models
 :::
 
-## Software: `rccf2::rccf()` 
-:::{.fragment}
+## Software: `rccf2::rccf()`
+
+:::: fragment
 -   **Two-sample estimation/testing of CF**
 
 ::: big-code
@@ -615,27 +657,27 @@ obj <- rccf(id, time, status, trt) # Fit model
 -   **Input**
     -   `id`: subject ID; `trt`: binary treatment group
     -   `time`: event time; `status`: event status (1: nonfatal; 2: death; 0: censoring)
-:::    
-:::{.fragment}
+::::
+
+::: fragment
 -   **Output**
-    -   `obj$u1`, `obj$u2`: Estimates of group-specific 
-          $\mu(t)$ as a function of $t$ (`obj$t`).
+    -   `obj$u1`, `obj$u2`: Estimates of group-specific $\mu(t)$ as a function of $t$ (`obj$t`).
     -   `obj$pLR`, `obj$pD`, `obj$pjnt`: $p$-values for tests on $\mu(t)$, death, and jointly
 :::
 
 ## Example: Bladder Tumor Study (I)
-:::{.fragment}
+
+::: fragment
 -   **Bladder cancer trial** (Byar, 1980)
     -   **Treatment groups**: thiotepa ($n=38$) vs placebo ($n=48$)
-    -   **Endpoints**: tumor recurrences and death 
-   ![](images/cmpr_bladder_df.png){fig-align="center" width="70%"}
+    -   **Endpoints**: tumor recurrences and death ![](images/cmpr_bladder_df.png){fig-align="center" width="70%"}
 :::
 
-## Example: Bladder Tumor Study (II)   
-:::{.fragment}    
+## Example: Bladder Tumor Study (II)
+
+::: fragment
 -   **Survival and cumulative frequency**
-    -   Joint $\chi_2^2$ test: $p$-value 0.184
-    ![](images/cmpr_bladder.png){fig-align="center" width="70%"}
+    -   Joint $\chi_2^2$ test: $p$-value 0.184 ![](images/cmpr_bladder.png){fig-align="center" width="70%"}
 :::
 
 # Conclusion
@@ -643,8 +685,10 @@ obj <- rccf(id, time, status, trt) # Fit model
 ## Notes
 
 -   **Fine--Gray regression**
-    -   **Model diagnostics**: R package `crskdiag` 
+
+    -   **Model diagnostics**: R package `crskdiag`
     -   **Proportional sub-distribution odds model** (Eriksson et al., 2015)
+
     ```{r}
     #| eval: false
     #| echo: true
@@ -652,12 +696,14 @@ obj <- rccf(id, time, status, trt) # Fit model
     # Fit a proportional sub-distribution odds model for the kth risk
     obj_po <- prop.odds.subdist(Event(time, status) ˜ covariates, cause = k)
     ```
-    -   **Interval-censored competing risks**  (Mao et al., 2018)
+
+    -   **Interval-censored competing risks** (Mao et al., 2018)
 
 -   **Semi-competing risks**
+
     -   Term coined by Fine, Jiang, and Chappell (2001)
     -   Multivariate (here), multistate (Chapter 12), and composite (Chapter 13)
-    -   Nonfatal event as *mediator* of treatment effect on death (Huang, 2021, 2022) 
+    -   Nonfatal event as *mediator* of treatment effect on death (Huang, 2021, 2022)
 
 ## Summary
 
@@ -668,12 +714,7 @@ obj <- rccf(id, time, status, trt) # Fit model
         -   **Gray's estimator/test** `cmprk::cuminc(ftime, fstatus, group, strata, rho = 0)`
         -   **Fine-Gray model** `cmprk::crr(ftime, fstatus, cov1, failcode = k)`
         -   **Tidy tables and graphics**: `tidycmprk` package
-
 -   **Recurrent events in presence of death**
     -   **Ghosh-Lin methods**
         -   **Nonparametric**: `rccf2::rccf(id, time, status, trt)`
         -   **Proportional CF model**: R packages `mets` and `reReg`
-        
-        
-        
-        

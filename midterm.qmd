@@ -1,0 +1,101 @@
+---
+title: "Effect of Intensive Glycemic Control on Progression of Retinopathy in Patients with Type 2 Diabetes"
+author: "STAT/BIOSTAT 7XX"
+date: "`r Sys.Date()`"
+format: pdf
+---
+
+## **Instructions**
+This exam is **open-book** but must be completed **independently**.  
+You may not discuss the problems with anyone other than the instructor:  
+**Email:** [lmao@biostat.wisc.edu](mailto:lmao@biostat.wisc.edu)
+
+The **Action to Control Cardiovascular Risk in Diabetes (ACCORD)** trial was conducted from **1999 to 2012** to evaluate the health effects of specific strategies for managing blood glucose levels, serum lipid levels, and blood pressure in patients with type 2 diabetes. Here, we focus on the glycemia substudy, which investigated whether **intensive glycemic control** slows **progression of diabetic retinopathy** compared to standard control.  
+
+Diabetic retinopathy is a major **microvascular complication of diabetes** and a leading cause of blindness in the U.S. The study enrolled **10,251 diabetic patients**, with **5,128 randomized** to intensive control and **5,123 to standard control**, followed over **7 years** for indications of **retinopathy progression** (e.g., loss of vision, cataract extraction, vitrectomy, etc.).  
+
+Our primary research question is:  
+- *Does intensive glycemic control reduce the risk of retinopathy progression compared to standard glycemic control?*  
+
+Also of interest are risk factors such as **age, sex, race, medical history, and clinical measurements like HbA1c**.
+
+### **Data Description**
+The dataset **`accord_glyc.txt`** contains the following variables:
+
+- **MaskID**: Patient identifier  
+- **time**: Time (years) from randomization to retinopathy progression or censoring  
+- **status**: Event indicator (1 = retinopathy progression, 0 = censored)  
+- **trt**: Treatment group (1 = intensive glycemic control, 0 = standard glycemic control)  
+- **female**: Sex (1 = female, 0 = male)  
+- **age**: Baseline age (years)  
+- **race**: Race (White, Black, Hispanic, Other)  
+- **hba1c**: Glycosylated hemoglobin (%)  
+- **cvd**: History of cardiovascular disease (1 = yes, 0 = no)  
+- **chol**: Total cholesterol (mg/dL)  
+- **ldl**: Low-density lipoprotein (mg/dL)  
+- **hdl**: High-density lipoprotein (mg/dL)  
+
+---
+
+## **Exam Questions**
+
+### **1. Descriptive Statistics (20 points)**
+Summarize key baseline characteristics **by treatment group** and **overall**, including:
+
+- Demographic variables: **Sex, age, and race**
+- Medical history: **Cardiovascular disease (CVD)**
+- Biochemical measurements: **HbA1c, total cholesterol, LDL, HDL, etc.**
+- **Calculate the event rates** of retinopathy progression in each treatment arm.
+
+---
+
+### **2. Graphical Analysis (20 points)**
+To explore treatment effects visually:  
+
+- **Compute and plot Kaplan-Meier survival curves** for retinopathy progression-free probabilities, stratified by:  
+  - **Treatment group**
+  - **Sex**
+  - **Race**  
+- **Interpretation:**  
+  - Which **sex and race group** appears to benefit most from intensive glycemic control?
+
+---
+
+### **3. Multiple Regression Analysis (40 points)**
+Construct a **Cox proportional hazards model** to analyze how intensive glycemic control and other factors affect **retinopathy progression**, adjusting for key covariates.
+
+#### **Steps to Follow:**
+1. **Covariate Selection:** Based on results from **Questions 1 & 2**, choose relevant risk factors.  
+2. **Proportionality Assumption:**  
+   - Check whether each covariate satisfies the **proportional hazards assumption**.  
+   - If violated, apply appropriate corrections (e.g., time-dependent covariates, stratification).  
+3. **Functional Form of Continuous Covariates:**  
+   - Check whether continuous variables (e.g., age, HbA1c) are correctly specified.  
+   - Consider transformations (e.g., splines, quadratic terms) if necessary.  
+4. **Statistical Inference:**  
+   - Interpret the effects of **intensive glycemic control** and **other significant risk factors**.  
+   - Perform a formal **global test** for race group differences (degrees of freedom: $3$).  
+
+---
+
+### **4. Reporting Findings (20 points)**
+Write a **short press release (3–4 sentences)** summarizing the **most important findings** in **nontechnical language**, suitable for a general audience.  
+
+Ensure the summary is:  
+- **Concise**  
+- **Scientifically accurate**  
+- **Understandable to non-experts**  
+
+---
+
+## **Grading Rubric**
+| Question | Points | Key Aspects for Full Credit |
+|----------|--------|--------------------------------------|
+| **1** | 20 | Correct summary of patient characteristics and event rates |
+| **2** | 20 | Proper Kaplan-Meier plots and clear interpretation |
+| **3** | 40 | Well-specified Cox model, assumption checks, and interpretation |
+| **4** | 20 | Clear and engaging press release summary |
+
+---
+
+

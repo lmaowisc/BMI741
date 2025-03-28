@@ -3579,5 +3579,327 @@
       "Part II - Complex Outcomes",
       "Chapter 10 Summary"
     ]
+  },
+  {
+    "objectID": "chap11.html#outline",
+    "href": "chap11.html#outline",
+    "title": "Applied Survival Analysis",
+    "section": "Outline",
+    "text": "Outline\n\n\nLinear mixed effects models for longitudinal data\nA two-stage joint modeling approach\nExtensions and dynamic prediction\nAnalysis of an anti-retroviral drug trial\nAn example with multiple biomarkers*\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+  },
+  {
+    "objectID": "chap11.html#overview",
+    "href": "chap11.html#overview",
+    "title": "Applied Survival Analysis",
+    "section": "Overview",
+    "text": "Overview\n\n\nBackground\n\nBiomarkers, quality of life measured longitudinally while being followed for a clinical event\n\n\n\n\n\nJoint modeling\n\nAssociation between biomarker and (clinical) endpoint\n\nCD4 cell count \\(\\to\\) death from AIDS\nSerum creatinine/eGFR \\(\\to\\) kidney failure\n\nDependent dropout (death) in longitudinal analysis\nDynamic prediction of survival/biomarker"
+  },
+  {
+    "objectID": "chap11.html#longitudinal-data",
+    "href": "chap11.html#longitudinal-data",
+    "title": "Applied Survival Analysis",
+    "section": "Longitudinal Data",
+    "text": "Longitudinal Data\n\n\nOutcome Data\n\n\\(Y_{i1},\\ldots, Y_{in_i}\\) longitudinal responses measured on subject \\(i\\) at the \\(t_{ij}\\)\n\\(t_{i1},\\ldots, t_{in_i}\\): measurement occasions for subject \\(i\\)\n\\(Z_{ij}\\): covariates on subject \\(i\\) at \\(t_{ij}\\)\n\nPatient characteristics \\(+\\) time trend (functions of \\(t_{ij}\\))\n\n\n\n\n\n\nLongitudinal regression\n\nMean model: \\(E(Y_{ij}\\mid Z_{ij}) = \\gamma_0 + \\gamma^\\T Z_{ij}\\)\nExample: \\(E(Y_{ij}\\mid A_i)=\\gamma_0+\\gamma_1A_i+\\gamma_2t_{ij}+\\gamma_3A_it_{ij}\\)\n\n\\(Z_{ij}=(A_i, t_{ij}, A_it_{ij})^\\T\\); \\(A_i = 1, 0\\): treatment indicator"
+  },
+  {
+    "objectID": "chap11.html#handling-correlations",
+    "href": "chap11.html#handling-correlations",
+    "title": "Applied Survival Analysis",
+    "section": "Handling Correlations",
+    "text": "Handling Correlations\n\n\nChallenge: correlation of the \\(Y_{ij}\\) over \\(t_{ij}\\)\n\nStandard least squares invalid or suboptimal\n\n\n\n\n\nLinear mixed effects (LME) models \\[\\begin{equation}\\label{eq:longit:lme}\nY_{ij}=\\gamma_0+\\gamma^\\T Z_{ij}+b_i^\\T\\tilde Z_{ij}+\\epsilon_{ij}\n\\end{equation}\\]\n\n\\(\\tilde Z_{ij}\\) contains 1 and a subset of \\(Z_{ij}\\)\n\\(b_i\\sim \\mathcal N(0,\\Sigma_b)\\): subject-specific random effects (intercept, slope)\n\nInduces correlation within subject\n\n\\(\\epsilon_{ij}\\sim_{\\rm i.i.d.} \\mathcal N(0,\\sigma^2)\\): random measurement error\nTrue values: \\(E(Y_{ij}\\mid Z_{ij}, b_i)=\\gamma_0+\\gamma^\\T Z_{ij}+b_i^\\T\\tilde Z_{ij}\\)"
+  },
+  {
+    "objectID": "chap11.html#lme-example",
+    "href": "chap11.html#lme-example",
+    "title": "Applied Survival Analysis",
+    "section": "LME Example",
+    "text": "LME Example\n\n\nRandom intercept \\(+\\) random slope\n\n\\(Y_{ij}=\\gamma_0+\\gamma_1t_{ij}+b_{i0}+b_{i1}t_{ij}+\\epsilon_{ij}\\)\n\n\\(Z_{ij}=t_{ij}\\), \\(\\tilde Z_{ij}=(1, t_{ij})^\\T\\), \\(b_i=(b_{i0},b_{i1})^\\T\\)"
+  },
+  {
+    "objectID": "chap11.html#estimation-and-inference",
+    "href": "chap11.html#estimation-and-inference",
+    "title": "Applied Survival Analysis",
+    "section": "Estimation and Inference",
+    "text": "Estimation and Inference\n\n\nEM algorithm with \\(b_i\\) as missing data\n\n\\(E\\)-step: conditional expectation of \\(b_i\\) and \\(b_i^2\\) given observed data\n\nExplicit under multivariate normal\n\n\\(M\\)-step: (weighted) least squares\n\n\n\n\n\nVariance components\n\n\\(\\hat\\Sigma_b\\): between-subject\n\\(\\hat\\sigma_2\\): within-subject"
+  },
+  {
+    "objectID": "chap11.html#rationale",
+    "href": "chap11.html#rationale",
+    "title": "Applied Survival Analysis",
+    "section": "Rationale",
+    "text": "Rationale\n\n\nTraditional Cox model\n\nSurvival vs observed biomarker as (internal) time-varying covariates\n\n\n\n\n\nLimitations\n\nBiomarker measured at discrete times, with missing data in-between\nBiomarker measured with error (sometimes with erratic noise)\n\n\n\n\n\nTwo-stage modeling\n\nLongitudinal sub-model: true biomarker process over continuous time\nSurvival sub-model: Cox model with true biomarker process as time-varying covariate"
+  },
+  {
+    "objectID": "chap11.html#longitudinal-sub-model",
+    "href": "chap11.html#longitudinal-sub-model",
+    "title": "Applied Survival Analysis",
+    "section": "Longitudinal Sub-Model",
+    "text": "Longitudinal Sub-Model\n\n\nConceptual setup\n\n\\(Y_i(t)\\): latent biomarker process at time \\(t\\)\n\n\\(Y_i(t_{ij}) = Y_{ij}\\)\n\n\\(Z_i(t), \\tilde Z_i(t)\\): latent covariate processes at time \\(t\\)\n\n\\(Z_i(t_{ij}) = Z_{ij}\\); \\(\\tilde Z_i(t_{ij}) = \\tilde Z_{ij}\\)\n\n\n\n\n\n\nReformulation of LME \\[\\begin{equation}\\label{eq:longit:longit_sub}\nY_i(t)=m_i(t)+\\epsilon_i(t),\n\\end{equation}\\]\n\n\\(m_i(t)=\\gamma_0+\\gamma^\\T Z_i(t)+b_i^\\T\\tilde Z_i(t)\\): True biomarker process\n\\(\\epsilon_i(t)\\): Error process"
+  },
+  {
+    "objectID": "chap11.html#survival-sub-model",
+    "href": "chap11.html#survival-sub-model",
+    "title": "Applied Survival Analysis",
+    "section": "Survival Sub-Model",
+    "text": "Survival Sub-Model\n\n\nModel specification \\[\\begin{equation}\\label{eq:longit:survival_sub}\n\\pr\\{t\\leq T_i&lt;t+\\dd t\\mid Z_i^*, \\overline m_i(t)\\}=\\exp\\{\\beta^\\T Z_i^*+\\nu m_i(t)\\}\\lambda_0(t)\\dd t\n\\end{equation}\\]\n\n\\(T_i\\): survival endpoint\n\\(\\overline m_i(t)=\\{m_i(u):0\\leq u\\leq t\\}\\): biomarker history\n\\(Z_i^*\\): baseline covariates to be adjusted for in survival model\n\\(\\nu\\): log-hazard ratio with one unit increase in current biomarker\n\n\n\n\n\nEstimation\n\n\\(E\\)-step: conditional expectation of the \\(b_i\\) (numerical integration)\n\\(M\\)-step: (weighted) least squares \\(+\\) partial-likelihood score"
+  },
+  {
+    "objectID": "chap11.html#interaction-and-trend-effect",
+    "href": "chap11.html#interaction-and-trend-effect",
+    "title": "Applied Survival Analysis",
+    "section": "Interaction and Trend Effect",
+    "text": "Interaction and Trend Effect\n\n\nBiomarker effect by baseline group\n\nBiomarker \\(\\times\\) baseline interaction \\[\n\\pr(t\\leq T_i&lt;t+\\dd t\\mid Z_i^*, \\overline m_i(t))=\\exp\\big\\{\\beta^\\T Z_i^*+\\nu m_i(t)+ \\tilde\\nu^\\T Z_i^*m_i(t)\\big\\}\\lambda_0(t)\\dd t\n\\]\n\n\n\n\n\nEffect of biomarker trend (change rate)\n\nLongitudinal sub-model \\[\\begin{equation}\\label{eq:longit:longit_sub_slope}\nm_i(t)=\\gamma_0+\\gamma^\\T Z_i+\\eta t+b_{i0}+b_{i1}t,\n\\end{equation}\\]\nSurvival sub-model \\[\\begin{equation}\\label{eq:longit:survival_sub_rand}\n\\pr(t\\leq T_i&lt;t+\\dd t\\mid Z_i, b_i)=\\exp\\{\\beta^\\T Z_i+\\nu_0b_{i0}+\\nu_1b_{i1}\\}\\lambda_0(t)\\dd t.\n\\end{equation}\\]\n\\(\\nu_1\\):log-hazard ratio by unit increase in biomarker change rate"
+  },
+  {
+    "objectID": "chap11.html#glme-models",
+    "href": "chap11.html#glme-models",
+    "title": "Applied Survival Analysis",
+    "section": "GLME Models",
+    "text": "GLME Models\n\n\nGeneralized linear mixed-effects models\n\nBinary, categorical, count biomarkers \\[\\begin{equation}\\label{eq:longit:glmm}\ng\\left[E\\{Y_i(t)\\mid Z_i,b_i\\}\\right]=\\gamma_0+\\gamma^\\T Z_i(t)+b_i^\\T\\tilde Z_i(t)\n\\end{equation}\\]\n\nExample : logistic regression with \\(g(x)=\\log\\{x/(1-x)\\}\\)\n\nSubject-level trajectory \\[m_i(t)=g^{-1}\\left\\{\\gamma_0+\\gamma^\\T Z_i(t)+b_i^\\T\\tilde Z_i(t)\\right\\}\\]\nSurvival sub-model: plug in \\(m_i(t)\\) or \\(g\\{m_i(t)\\}\\)"
+  },
+  {
+    "objectID": "chap11.html#dynamic-prediction",
+    "href": "chap11.html#dynamic-prediction",
+    "title": "Applied Survival Analysis",
+    "section": "Dynamic Prediction",
+    "text": "Dynamic Prediction\n\n\nSetup\n\nQuestion: Prediction of survival/biomarker given current data\nObserved biomarker history: \\(\\overline Y_i(u)=\\{Y_i(t_{ij}):0\\leq t_{ij}\\leq u\\}\\)\n\n\n\n\n\nPrediction of future outcomes\n\nSurvival \\[\n  \\mathcal S_i\\{t\\mid u, \\overline Y_i(u)\\}=\\pr\\{T_i &gt; t \\mid T_i&gt;u, \\overline Y_i(u)\\}\n  \\]\nBiomarker \\[\n  \\mathcal M_i(t\\mid u)=E[Y_i(t)\\mid T_i&gt;u, \\overline Y_i(u)]\n  \\]\nBoth computable under fitted model"
+  },
+  {
+    "objectID": "chap11.html#software-jm-package-i",
+    "href": "chap11.html#software-jm-package-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: JM package (I)",
+    "text": "Software: JM package (I)\n\n\nLongitudinal sub-model\n\nid: subject identifier; y: response; covariates: \\(Z\\); cov_rand: \\(\\tilde Z\\)\n\n\n\n\n# Longitudinal sub-model\nlongit_sub &lt;- lme(y ~ covariates, \n                  random = ~ cov_rand | id, data = df)\n\n\n\n\n\nSurvival sub-model\n\ncovariates1: \\(Z^*\\); x = TRUE to include \\(Z^*\\) in model fit\n\n\n\n\ndf_surv &lt;- df[!duplicated(df$id), ] # De-duplicate data\n# Fit Cox model without biomarker \nsurv_sub &lt;- coxph(Surv(time, status) ~ covariates1, \n                  data = df_surv, x = TRUE)"
+  },
+  {
+    "objectID": "chap11.html#software-jm-package-ii",
+    "href": "chap11.html#software-jm-package-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: JM package (II)",
+    "text": "Software: JM package (II)\n\n\nJoining two sub-models\n\n\"occasion\": time variable in longitudinal model (same unit as time)\n\"piecewise-PH-aGH\": piecewise linear baseline with 6 internal knots\n\n\n\n\n# combine the two models\nobj &lt;- jointModel(longit_sub, surv_sub, timeVar = \"occasion\",\n                            method = \"piecewise-PH-aGH\")\n\n\n\n\n\nOutput: a list of class jointModel\n\nobj$coefficients: main component\n\nbetas: \\(\\hat\\gamma\\); gammas: \\(\\hat\\beta\\); alpha: \\(\\hat\\nu\\); sigma: \\(\\hat\\sigma\\); D: \\(\\hat\\Sigma_b\\)\n\nSummary(obj) to print summary results"
+  },
+  {
+    "objectID": "chap11.html#study-background",
+    "href": "chap11.html#study-background",
+    "title": "Applied Survival Analysis",
+    "section": "Study Background",
+    "text": "Study Background\n\n\nStudy information\n\nPopulation: 467 HIV-positive patients randomized to receive didanosine (ddI) and zalcitabine (ddC) followed over a median length of 13.2 month\nPrimary endpoint : All-cause mortality\nLongitudinal biomarker: number of CD4 cells per cubic millimeter of blood (square-root transformed), measured at baseline, 2, 6, 12, 18 months\nAims: evaluate associations between\n\nTreatment (ddI vs ddC) \\(\\to\\) CD4 cell count\nCD4 cell count \\(\\to\\) mortality"
+  },
+  {
+    "objectID": "chap11.html#study-data",
+    "href": "chap11.html#study-data",
+    "title": "Applied Survival Analysis",
+    "section": "Study Data",
+    "text": "Study Data\n\n\nData format\n\nRepeated measures of CD4 cell count + death"
+  },
+  {
+    "objectID": "chap11.html#transformation",
+    "href": "chap11.html#transformation",
+    "title": "Applied Survival Analysis",
+    "section": "Transformation",
+    "text": "Transformation\n\nSquare root transform \\(\\to\\) close to normality"
+  },
+  {
+    "objectID": "chap11.html#joint-modeling-of-mortality-and-cd4",
+    "href": "chap11.html#joint-modeling-of-mortality-and-cd4",
+    "title": "Applied Survival Analysis",
+    "section": "Joint Modeling of Mortality and CD4",
+    "text": "Joint Modeling of Mortality and CD4\n\n\nLME + Cox model\n\nRandom intercept & time slope\nFixed effects: time, treatment \\(\\times\\) time\n\nadjusting for patient sex, history of HIV infection\n\n\n\n\n# Longitudinal sub-model: linear time\nlongit_sub &lt;- lme(CD4 ~ obsmo + obsmo:drug + sex + hist,\n                  random = ~ obsmo|id, data = df)\n# Survival sub-model\ndf_surv &lt;- df[!duplicated(df$id),]\nsurv_sub &lt;- coxph(Surv(time, status) ~ drug + sex + hist,\n                  data = df_surv, x = TRUE)"
+  },
+  {
+    "objectID": "chap11.html#summary-results-i",
+    "href": "chap11.html#summary-results-i",
+    "title": "Applied Survival Analysis",
+    "section": "Summary Results (I)",
+    "text": "Summary Results (I)\n\n\nLongitudinal sub-model\n\n\n# Combine the two models\nobj_joint &lt;- jointModel(longit_sub, surv_sub, timeVar = \"obsmo\",\n                            method = \"piecewise-PH-aGH\")\nsummary(obj_joint)\n#&gt; Variance Components:\n#&gt;              StdDev    Corr\n#&gt; (Intercept)  3.9797  (Intr)\n#&gt; obsmo        0.1928 -0.0890\n#&gt; Residual     2.0428    \n#&gt; Longitudinal Process\n#&gt;                 Value Std.Err z-value p-value\n#&gt; (Intercept)    5.8614  0.6562  8.9322 &lt;0.0001\n#&gt; obsmo         -0.1922  0.0240 -8.0175 &lt;0.0001\n#&gt; sexmale       -0.3823  0.6642 -0.5757  0.5649\n#&gt; histnoAIDS     4.8617  0.4091 11.8835 &lt;0.0001\n#&gt; obsmo:drugddI  0.0219  0.0333  0.6558  0.5120"
+  },
+  {
+    "objectID": "chap11.html#summary-results-ii",
+    "href": "chap11.html#summary-results-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Summary Results (II)",
+    "text": "Summary Results (II)\n\n\nSurvival sub-model\n\n\nsummary(obj_joint)\n#&gt; Event Process\n#&gt;              Value Std.Err z-value p-value\n#&gt; drugddI     0.3487  0.1576  2.2118  0.0270\n#&gt; sexmale    -0.3313  0.2608 -1.2701  0.2040\n#&gt; histnoAIDS -0.5873  0.2255 -2.6040  0.0092\n#&gt; Assoct     -0.2569  0.0374 -6.8708 &lt;0.0001 # CD4 effect\n#&gt; ...\n\n\n\n\nResults\n\nddI leads to slightly slower rate of decline (by 0.0219 per month) in \\(\\sqrt{\\rm CD4}\\)\nOne unit decline in \\(\\sqrt{\\rm CD4}\\) increases the risk of death by \\(\\exp(0.2569) = 1.30\\)-fold (p-value \\(&lt; 0.0001\\))"
+  },
+  {
+    "objectID": "chap11.html#mean-cd4-trajectory",
+    "href": "chap11.html#mean-cd4-trajectory",
+    "title": "Applied Survival Analysis",
+    "section": "Mean CD4 Trajectory",
+    "text": "Mean CD4 Trajectory\n\n\nModel-based predictions"
+  },
+  {
+    "objectID": "chap11.html#notes",
+    "href": "chap11.html#notes",
+    "title": "Applied Survival Analysis",
+    "section": "Notes",
+    "text": "Notes\n\n\nJMbayes2 website"
+  },
+  {
+    "objectID": "chap11.html#summary-i",
+    "href": "chap11.html#summary-i",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (I)",
+    "text": "Summary (I)\n\nTwo-stage joint models\n\nLongitudinal sub-model \\[m_i(t)=\\gamma_0+\\gamma^\\T Z_i(t)+b_i^\\T\\tilde Z_i(t)\\]\n\nobj1 &lt;- nlme::lme()\n\nSurvival sub-model \\[\n\\pr\\{t\\leq T_i&lt;t+\\dd t\\mid Z_i^*, \\overline m_i(t)\\}=\\exp\\{\\beta^\\T Z_i^*+\\nu m_i(t)\\}\\lambda_0(t)\\dd t\n\\]\n\nobj2 &lt;- survival::coxph()\n\nJoining two models\n\nJM::jointModel(obj1, obj2, timeVar)"
+  },
+  {
+    "objectID": "chap11.html#summary-ii",
+    "href": "chap11.html#summary-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (II)",
+    "text": "Summary (II)\n\nExtensions (Rizopoulos, 2012)\n\nBiomarker \\(\\times\\) baseline interactions\nChange rate \\(\\to\\) survival\nGLME GLMM\nMultivariate failure times (competing risks, recurrent events)\nDynamic predictions\nJMbayes2 package for Bayesian approach\n\n\n\nobj &lt;- jm(surv_sub, list(longit_sub1, longit_sub2), \n          time_var = \"obstime\",\n          functional_forms = fForms)"
+  },
+  {
+    "objectID": "chap11.html#multivariate-models",
+    "href": "chap11.html#multivariate-models",
+    "title": "Applied Survival Analysis",
+    "section": "Multivariate Models",
+    "text": "Multivariate Models\n\n\nMultple biomarkers\n\nLongitudinal sub-models \\[\nm_{ik}(t)=\\gamma_{0k}+\\gamma_k^\\T Z_i(t)+b_{ik}^\\T\\tilde Z_i(t), \\quad k =1,\\ldots, K\n\\]\nSurvival sub-model \\[\n\\pr\\{t\\leq T_i&lt;t+\\dd t\\mid Z_i^*, \\overline m_{i1}(t), \\ldots, \\overline m_{iK}(t)\\}=\\exp\\left\\{\\beta^\\T Z_i^*+\\sum_k\\nu_k m_{ik}(t)\\right\\}\\lambda_0(t)\\dd t\n\\]\n\n\n\n\n\nMultple events\n\nShared-fraity sub-models \\[\\begin{equation}\\label{eq:longit:survival_sub_mult}\n\\pr\\{t\\leq T_{ik}&lt;t+\\dd t\\mid \\xi_i, Z_i^*, \\overline m_i(t)\\}=\\xi_i\\exp\\{\\beta_k^\\T Z_i^*+\\nu_k m_i(t)\\}\\lambda_{0k}(t)\\dd t\n\\end{equation}\\]"
+  },
+  {
+    "objectID": "chap11.html#software-jmbayes2-package",
+    "href": "chap11.html#software-jmbayes2-package",
+    "title": "Applied Survival Analysis",
+    "section": "Software: JMbayes2 package",
+    "text": "Software: JMbayes2 package\n\n\nMultiple non-Gaussian biomarkers (Bayesian approach)\n\n\n\n# Fit longitudinal sub-models (linear time)\n# Biomarker 1 (Continuous)\nlongit_sub1 &lt;- lme(y1 ~ covariates + obstime, \n                   random = ~ obstime | id, data = df)\n\n# Biomarker 2 (Binary)\nlongit_sub2 &lt;- mixed_model(y2 ~ covariates + obstime, \n                           random = ~ obstime | id, data = df,\n                           family = binomial())"
+  },
+  {
+    "objectID": "chap11.html#software-jmbayes2-package-i",
+    "href": "chap11.html#software-jmbayes2-package-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: JMbayes2 package (I)",
+    "text": "Software: JMbayes2 package (I)\n\n\nMultiple non-Gaussian biomarkers (Bayesian approach)\n\nmixed_model(formula, family = binomial()): logistic GLMM\n\n\n\n\n# Fit longitudinal sub-models (linear time)\n# Biomarker 1 (Continuous)\nlongit_sub1 &lt;- lme(y1 ~ covariates + obstime, \n                   random = ~ obstime | id, data = df)\n# Biomarker 2 (Binary)\nlongit_sub2 &lt;- mixed_model(y2 ~ covariates + obstime, \n                           random = ~ obstime | id, data = df,\n                           family = binomial())\n\n# Fit the Cox sub-model without the biomarker\nsurv_sub &lt;- coxph(Surv(time, status) ~ covariates, \n                  data = df_surv, x = TRUE)"
+  },
+  {
+    "objectID": "chap11.html#glmm",
+    "href": "chap11.html#glmm",
+    "title": "Applied Survival Analysis",
+    "section": "GLMM",
+    "text": "GLMM\n\n\nGeneralized linear mixed-effects models (GLMM)\n\nBinary, categorical, count biomarkers \\[\\begin{equation}\\label{eq:longit:glmm}\ng\\left[E\\{Y_i(t)\\mid Z_i,b_i\\}\\right]=\\gamma_0+\\gamma^\\T Z_i(t)+b_i^\\T\\tilde Z_i(t)\n\\end{equation}\\]\n\nExample : logistic regression with \\(g(x)=\\log\\{x/(1-x)\\}\\)\n\nSubject-level trajectory \\[m_i(t)=g^{-1}\\left\\{\\gamma_0+\\gamma^\\T Z_i(t)+b_i^\\T\\tilde Z_i(t)\\right\\}\\]\nSurvival sub-model: plug in \\(m_i(t)\\) or \\(g\\{m_i(t)\\}\\)"
+  },
+  {
+    "objectID": "chap11.html#software-jmbayes2-package-i-1",
+    "href": "chap11.html#software-jmbayes2-package-i-1",
+    "title": "Applied Survival Analysis",
+    "section": "Software: JMbayes2 package (I)",
+    "text": "Software: JMbayes2 package (I)\n\n\nJoin models (Bayesian approach)\n\nSpecify functional_forms for each biomarker\n\nvalue(): \\(m_{ik}(t)\\) (LME) (\\(g\\{m_{ik}(t)\\}\\) for GLMM)\nslope(): \\(\\d m_{ik}(t)/\\d t\\)\narea(): \\(\\int_0^t m_{ik}(u)\\d u\\)\n\n\n\n\n\n# Define functional forms of biomarkers to include in joint model\nfForms &lt;- list(\"y1\" = ~ value(y1) + slope(y1), \n               \"y2\" = ~ value(y2) + slope(y2))\n\n# Combine the longitudinal and survival sub-models\nobj &lt;- jm(surv_sub, list(longit_sub1, longit_sub2), \n          time_var = \"obstime\",\n          functional_forms = fForms)"
+  },
+  {
+    "objectID": "chap11.html#software-jmbayes2-package-ii",
+    "href": "chap11.html#software-jmbayes2-package-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: JMbayes2 package (II)",
+    "text": "Software: JMbayes2 package (II)\n\n\nJoin models (Bayesian approach)\n\nSpecify functional_forms for each biomarker\n\nvalue(): \\(m_{ik}(t)\\) (\\(g\\{m_{ik}(t)\\}\\) for GLMM)\nslope(): \\(\\d m_{ik}(t)/\\d t\\);\\(\\quad\\) area(): \\(\\int_0^t m_{ik}(u)\\d u\\)\n\n\n\n\n\n# Define functional forms of biomarkers to include in joint model\nfForms &lt;- list(\"y1\" = ~ value(y1) + slope(y1), \n               \"y2\" = ~ value(y2) + slope(y2))\n# Combine the longitudinal and survival sub-models\nobj &lt;- jm(surv_sub, list(longit_sub1, longit_sub2), \n          time_var = \"obstime\",\n          functional_forms = fForms)\n# Dynamic prediction\npred &lt;- predict(obj, newdata = df_new)"
+  },
+  {
+    "objectID": "chap11.html#aortic-valve-replacement-study",
+    "href": "chap11.html#aortic-valve-replacement-study",
+    "title": "Applied Survival Analysis",
+    "section": "Aortic Valve Replacement Study",
+    "text": "Aortic Valve Replacement Study\n\n\nStudy information\n\nPopulation: 256 patients receiving a bioprosthetic valve replacement\nfollowed for up to 10 years from 1991–2002\nPrimary endpoint : All-cause mortality\nLongitudinal biomarker\n\nSerum creatinine (mg/dL) measured at baseline, 6, 12, 24, 36 months\neGFR (mL/min/1.73m\\(^2\\)) calculated from serum creatinine\n\nAims: evaluate associations between\n\nTreatment (ddI vs ddC) \\(\\to\\) CD4 cell count\nCD4 cell count \\(\\to\\) mortality"
+  },
+  {
+    "objectID": "chap11.html#heart-valve-replacement-study",
+    "href": "chap11.html#heart-valve-replacement-study",
+    "title": "Applied Survival Analysis",
+    "section": "Heart Valve Replacement Study",
+    "text": "Heart Valve Replacement Study\n\nStudy information\n\nPopulation: 256 patients receiving a valve replacement surgery, followed for up to 10 years from 1991–2002\nPrimary endpoint : All-cause mortality\nLongitudinal biomarkers\n\nLeft ventricular ejection fraction (LVEF): &lt; 50%\nValve gradient (mmHg): pressure difference across heart valve during blood flow (valve narrowing)\nLV mass index (g/m\\(^2\\)): mass of LV relative to subject’s body surface area (hypertrophy)\n\nBaseline factors\n\nPatient age, sex, LV size (mm), LV function grade (1: good, 2: moderate, and 3: poor), history of cardiac surgery, presence of a coronary artery bypass graft (CABG), current use of ACE inhibitor, presence of high cholesterol, and operative urgency (0: elective, 1: urgent, and 3: emergency)"
+  },
+  {
+    "objectID": "chap11.html#models-and-data",
+    "href": "chap11.html#models-and-data",
+    "title": "Applied Survival Analysis",
+    "section": "Models and Data",
+    "text": "Models and Data\n\nStudy aims\n\nBaseline factors \\(\\to\\) biomarkers\nBiomarkers \\(\\to\\) mortality"
+  },
+  {
+    "objectID": "chap11.html#data-format",
+    "href": "chap11.html#data-format",
+    "title": "Applied Survival Analysis",
+    "section": "Data Format",
+    "text": "Data Format"
+  },
+  {
+    "objectID": "chap11.html#longitudinal-survival-models",
+    "href": "chap11.html#longitudinal-survival-models",
+    "title": "Applied Survival Analysis",
+    "section": "Longitudinal & Survival Models",
+    "text": "Longitudinal & Survival Models\n\nLongitudinal sub-models\n\nLVEF\\(\\le 50\\%\\): logistic GLMM\nValve gradient: LME\nLV mass index: LME\n\nSurvival (Cox) sub-model\n\nCurrent log-odds of LVEF\\(\\le 50\\%\\)\nCurrent values and change rates of valve gradient and LVMI\nBaseline age, sex"
+  },
+  {
+    "objectID": "chap11.html#longitudinal-survival-sub-models",
+    "href": "chap11.html#longitudinal-survival-sub-models",
+    "title": "Applied Survival Analysis",
+    "section": "Longitudinal & Survival Sub-Models",
+    "text": "Longitudinal & Survival Sub-Models\n\nLongitudinal sub-models\n\nLVEF\\(\\le 50\\%\\): logistic GLMM (binary)\nValve gradient: LME (continuous)\nLV mass index: LME (continuous)\n\nSurvival (Cox) sub-model\n\nCurrent log-odds of LVEF\\(\\le 50\\%\\)\nCurrent values and change rates of valve gradient and LVMI\nBaseline age, sex"
+  },
+  {
+    "objectID": "chap11.html#fitting-longitudinal-sub-models",
+    "href": "chap11.html#fitting-longitudinal-sub-models",
+    "title": "Applied Survival Analysis",
+    "section": "Fitting Longitudinal Sub-Models",
+    "text": "Fitting Longitudinal Sub-Models"
+  },
+  {
+    "objectID": "chap11.html#model-fitting-i",
+    "href": "chap11.html#model-fitting-i",
+    "title": "Applied Survival Analysis",
+    "section": "Model Fitting (I)",
+    "text": "Model Fitting (I)\n\nLongitudinal sub-models\n\n\n# 1. Ejection fraction &lt;= 50% at follow-up\nef_mod &lt;- mixed_model(ef50 ~ obsyear + age + sex  + vsize + lvef + redo \n                      + cabg + acei + hc + emergenc, \n                      random = ~ obsyear | id, data = df,\n                      family = binomial())\n\n# 2. Valve gradient at follow-up\ngrad_mod &lt;- lme(grad ~ obsyear + age + sex  + vsize + lvef + redo \n                + cabg + acei + hc + emergenc, \n                random = ~ obsyear | id, data = df)\n\n# 3. LV mass index at follow-up\nlvmi_mod &lt;- lme(lvmi ~ obsyear + age + sex  + vsize + lvef + redo \n                + cabg + acei + hc + emergenc, \n                random = ~ obsyear | id, data = df)"
+  },
+  {
+    "objectID": "chap11.html#model-fitting-ii",
+    "href": "chap11.html#model-fitting-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Model Fitting (II)",
+    "text": "Model Fitting (II)\n\nJoin with survival sub-model\n\n\n# Survival sub-model\ndf_surv &lt;- df[!duplicated(df$id),] # de-duplicated data\nsurv_mod &lt;- coxph(Surv(surv_time, status) ~ age + sex,  \n                  data = df_surv)\n\n# Set-up functional forms biomarkers in Cox model\nfForms &lt;- list(\n  \"grad\" = ~ slope(grad) + value(grad),\n  \"lvmi\" = ~ slope(lvmi) + value(lvmi)\n)\n\n# Fit joint model\nobj &lt;- jm(surv_mod, list(ef_mod, grad_mod, lvmi_mod), \n                time_var = \"obsyear\",\n                functional_forms = fForms)"
+  },
+  {
+    "objectID": "chap11.html#regression-results-i",
+    "href": "chap11.html#regression-results-i",
+    "title": "Applied Survival Analysis",
+    "section": "Regression Results (I)",
+    "text": "Regression Results (I)\n\nThree longitudinal sub-models"
+  },
+  {
+    "objectID": "chap11.html#regression-results-ii",
+    "href": "chap11.html#regression-results-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Regression Results (II)",
+    "text": "Regression Results (II)\n\nCox sub-model for mortality\n\nDoubling odds of reduced LVEF \\(\\longrightarrow\\) \\(2^{1.63} - 1 = 210\\%\\) increase in mortality (\\(p\\)-value \\(= 0.049\\))"
+  },
+  {
+    "objectID": "chap11.html#prediction-for-patient-id-3",
+    "href": "chap11.html#prediction-for-patient-id-3",
+    "title": "Applied Survival Analysis",
+    "section": "Prediction for Patient ID 3",
+    "text": "Prediction for Patient ID 3\n\nDynamic prediction: patient ID = 3 by year 3\n\n\n# Set up data\nt0 &lt;- 3 # Set current time u\nnewdf &lt;- df[df$id == 3, ] # Get data from patient 3\nnewdf &lt;- newdf[newdf$obsyear &lt; t0, ] # Subset to times before t0\n# Indicate that the patient is alive at t0\nnewdf$status &lt;- 0\nnewdf$surv_time &lt;- t0\n\n\n# Predict longitudinal trajectories\npred_longit &lt;- predict(obj, newdata = newdf,\n                       times = seq(t0, 10, length.out = 10),\n                       return_newdata = TRUE)\n\n# Plot the predicted trajectories\npar(mfrow = c(1, 3))\nplot(pred_longit, outcomes = 1:3, ...)"
+  },
+  {
+    "objectID": "chap11.html#predicted-biomarker-curves",
+    "href": "chap11.html#predicted-biomarker-curves",
+    "title": "Applied Survival Analysis",
+    "section": "Predicted Biomarker Curves",
+    "text": "Predicted Biomarker Curves"
+  },
+  {
+    "objectID": "chap11.html#prediction-results-i",
+    "href": "chap11.html#prediction-results-i",
+    "title": "Applied Survival Analysis",
+    "section": "Prediction Results (I)",
+    "text": "Prediction Results (I)\n\nBiomarker trajectories"
+  },
+  {
+    "objectID": "chap11.html#prediction-results-ii",
+    "href": "chap11.html#prediction-results-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Prediction Results (II)",
+    "text": "Prediction Results (II)\n\nPredict survival curve\n\n\n# Predict survival probabilities\npred_surv &lt;- predict(obj, newdata = newdf, process = \"event\",\n                     times = seq(t0, 10, length.out = 10),\n                     return_newdata = TRUE)\n# Plot the predicted survival probabilities\nplot(pred_longit, pred_surv, outcomes = 1:3,\n     fun_event = function(x) 1 - x, ...)"
+  },
+  {
+    "objectID": "chap11.html#prediction-results-iii",
+    "href": "chap11.html#prediction-results-iii",
+    "title": "Applied Survival Analysis",
+    "section": "Prediction Results (III)",
+    "text": "Prediction Results (III)\n\nPredicted survival curve"
   }
 ]
