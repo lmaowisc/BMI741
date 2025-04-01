@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Welcome to BMI/STAT 741 – BMI/STAT 741 Course Study Site</title>
+<title>10-Minute In-Class Quiz 3: Survival Analysis (Chapters 8-9) – BMI/STAT 741 Course Study Site</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -98,13 +98,13 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Welcome to BMI/STAT 741 – BMI/STAT 741 Course Study Site">
+<meta property="og:title" content="10-Minute In-Class Quiz 3: Survival Analysis (Chapters 8-9) – BMI/STAT 741 Course Study Site">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://lmaowisc.github.io/BMI741/images/wordcloud.png">
+<meta property="og:image" content="https://lmaowisc.github.io/BMI741/quiz3_files/figure-html/fig-followup-1.png">
 <meta property="og:site_name" content="BMI/STAT 741 Course Study Site">
-<meta property="og:image:height" content="380">
-<meta property="og:image:width" content="773">
-<meta name="twitter:title" content="Welcome to BMI/STAT 741 – BMI/STAT 741 Course Study Site">
+<meta property="og:image:height" content="576">
+<meta property="og:image:width" content="1536">
+<meta name="twitter:title" content="10-Minute In-Class Quiz 3: Survival Analysis (Chapters 8-9) – BMI/STAT 741 Course Study Site">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://lmaowisc.github.io/BMI741/surv_hex.png">
 <meta name="twitter:creator" content="@lmaowisc">
@@ -131,7 +131,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -149,7 +149,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Welcome to BMI/STAT 741</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">10-Minute In-Class Quiz 3: Survival Analysis (Chapters 8-9)</li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -249,12 +249,6 @@ window.Quarto = {
  <span class="menu-text">Chapter 10 - Competing and Semi-Competing Risks</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 11 - Joint Analysis of Longitudinal and Survival Data</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -270,15 +264,23 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link active" data-scroll-target="#instructions"><strong>Instructions</strong></a></li>
+  <li><a href="#question-1-5-points-recurrent-events" id="toc-question-1-5-points-recurrent-events" class="nav-link" data-scroll-target="#question-1-5-points-recurrent-events"><strong>Question 1 (5 points) – Recurrent Events</strong></a></li>
+  <li><a href="#question-2-5-points-mean-model" id="toc-question-2-5-points-mean-model" class="nav-link" data-scroll-target="#question-2-5-points-mean-model"><strong>Question 2 (5 points) – Mean Model</strong></a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="quiz3.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Welcome to BMI/STAT 741</h1>
+<h1 class="title">10-Minute In-Class Quiz 3: Survival Analysis (Chapters 8-9)</h1>
 </div>
 
 
@@ -295,12 +297,52 @@ window.Quarto = {
 </header>
 
 
-<p>This site will post additional study materials for BMI/STAT 741 in Spring 2025. These include slides, extra data/code examples or mathematical results.</p>
-<p>Please check updated <a href="about.html">syllabus</a> for course schedule and other information.</p>
-<p><img src="images/wordcloud.png" class="img-fluid"></p>
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions"><strong>Instructions</strong></h2>
+<ul>
+<li>You have <strong>10 minutes</strong> to complete this quiz.</li>
+<li>Answer all questions <em>concisely</em>.</li>
+<li>Show all relevant calculations where applicable.</li>
+</ul>
+</section>
+<section id="question-1-5-points-recurrent-events" class="level2">
+<h2 class="anchored" data-anchor-id="question-1-5-points-recurrent-events"><strong>Question 1 (5 points) – Recurrent Events</strong></h2>
+<p><a href="#fig-followup" class="quarto-xref">Figure&nbsp;1</a> below shows the follow-up of six patients for repeated infections.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-followup" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-followup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="quiz3_files/figure-html/fig-followup-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-followup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Follow-up of six patients for repeated infections.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Calculate the (Nelsen–Aalen-type) estimates of the <strong>average number of infections per patient by month 2, 4, and 6</strong>.</li>
+<li>Why is the following arithmetic biased:</li>
+</ul>
+<p><span class="math display">\[
+\frac{\mbox{Total number of black dots by month }2, 4, 6}{6 \mbox{ subjects}}
+\]</span> </p>
+</section>
+<section id="question-2-5-points-mean-model" class="level2">
+<h2 class="anchored" data-anchor-id="question-2-5-points-mean-model"><strong>Question 2 (5 points) – Mean Model</strong></h2>
+<p>Let <span class="math inline">\(N^*(t)\)</span> denote the average number of recurrent events by time <span class="math inline">\(t\)</span> (such as estimated in Question 1). Let <span class="math inline">\(Z=1, 0\)</span> denote treatment and control groups, respectively. Under the multiplicative mean model: <span class="math display">\[
+E\{N^*(t) \mid Z\} = \exp(\beta Z)\mu_0(t),
+\]</span></p>
+<ul>
+<li><p>What is the mean function in each group, i.e., <span class="math inline">\(E\{N^*(t) \mid Z = z\}\)</span> for <span class="math inline">\(z= 1, 0\)</span>?</p></li>
+<li><p>Suppose <span class="math inline">\(\hat\beta = \log(0.8)\)</span>, interpret the treatment effect.</p></li>
+</ul>
 
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

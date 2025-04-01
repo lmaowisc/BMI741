@@ -281,6 +281,12 @@ window.Quarto = {
  <span class="menu-text">Chapter 10 - Competing and Semi-Competing Risks</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 11 - Joint Analysis of Longitudinal and Survival Data</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -346,23 +352,23 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="competing-risks">Competing risks</h3>
 <p>In competing risks, each subject can fail at most once from a single cause. The outcome data thus consist of the failure time <span class="math inline">\(T\)</span> along with failure cause <span class="math inline">\(\Delta=1,\ldots, K\)</span>.</p>
 <ul>
-<li><strong>Cause-specific hazard (CSH)</strong><br>
+<li><p><strong>Cause-specific hazard (CSH)</strong><br>
 <span class="math display">\[
 \mathrm{d}\Lambda_k^{\rm c}(t)
 \;=\;
 \Pr\bigl(t \le T &lt; t+\mathrm{d}t,\; \Delta=k \,\mid\, T \ge t\bigr),
-\]</span> i.e., the <em>conditional</em> incidence of cause <span class="math inline">\(k\)</span> among survivors of any cause.
+\]</span> i.e., the <em>conditional</em> incidence of cause <span class="math inline">\(k\)</span> among survivors of any cause.</p>
 <ul>
 <li><em>Estimation</em>: Treat other causes as censoring and fit a standard Cox model.<br>
 </li>
 <li><em>Interpretation</em>: Covariate effects reflect changes in risk <em>conditional on no failure so far</em>.</li>
 </ul></li>
-<li><strong>Cumulative Incidence Function (CIF)</strong><br>
+<li><p><strong>Cumulative Incidence Function (CIF)</strong><br>
 <span class="math display">\[
 F_k(t)
 \;=\;
 \Pr(T \le t,\;\Delta = k),
-\]</span> the <em>marginal</em> probability of having cause <span class="math inline">\(k\)</span> by time <span class="math inline">\(t\)</span>.
+\]</span> the <em>marginal</em> probability of having cause <span class="math inline">\(k\)</span> by time <span class="math inline">\(t\)</span>.</p>
 <ul>
 <li><em>Nonparametric</em>: Gray’s estimator integrates the cause-specific hazard with overall survival.<br>
 </li>
@@ -370,18 +376,18 @@ F_k(t)
 </li>
 <li><em>Sub-distribution hazard</em>: A transformation of CIF: <span class="math inline">\(\Lambda_k(t)=-\log\{1 - F_k(t)\}\)</span>.</li>
 </ul>
-The <em>Fine–Gray model</em> specifies a multiplicative structure on this sub-distribution hazard: <span class="math display">\[
+<p>The <em>Fine–Gray model</em> specifies a multiplicative structure on this sub-distribution hazard: <span class="math display">\[
 \mathrm{d}\Lambda_k(t\mid Z) \;=\; \exp(\beta_k^\mathrm{T} Z)\,\mathrm{d}\Lambda_{k0}(t),
-\]</span>
+\]</span></p>
 <ul>
 <li><span class="math inline">\(\beta_k\)</span>: log-sub-distribution hazard ratios associated with unit increases in the covariates.</li>
 </ul></li>
-<li><strong>Relationship between CSH and CIF</strong> (continuous): <span class="math display">\[\begin{align}
+<li><p><strong>Relationship between CSH and CIF</strong> (continuous): <span class="math display">\[\begin{align}
 \mathrm{d}\Lambda_k^{\rm c}(t)
 &amp;\;=\; \frac{ \mathrm{d} F_k(t)}{1 - \sum_{k'=1}^K F_{k'}(t)};\\
 \mathrm{d} F_k(t)  &amp;\;=\;
 \exp\left\{-\sum_{k'=1}^K \Lambda_{k'}^{\rm c}(t)\right\}\mathrm{d}\Lambda_k^{\rm c}(t).
-\end{align}\]</span></li>
+\end{align}\]</span></p></li>
 </ul>
 </section>
 <section id="semi-competing-risks" class="level3">

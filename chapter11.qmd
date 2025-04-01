@@ -6,243 +6,703 @@ title: "Chapter 11 - Joint Analysis of Longitudinal and Survival Data"
 
 Lecture slides [here](chap11.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-## Base R Code
+## Chapter Summary
+
+When longitudinal biomarkers are repeatedly measured alongside a time-to-event outcome, separate analyses can lead to biased or inefficient results, especially in the presence of informative dropout. *Joint models* address this by integrating a mixed-effects model for the biomarker process with a survival model for the event time, providing a coherent framework for estimation, interpretation, and prediction.
+
+### Longitudinal–survival joint models
+
+The data consist of repeated measurements $Y_{ij}$ over time $t_{ij}$ $(j=1,\ldots, n_i)$ and a survival outcome $T_i$ subject to right censoring.
+
+-   **Linear mixed-effects (LME) model**\
+    For continuous biomarkers, we assume:
+    $$
+    Y_{ij} = \gamma_0 + \gamma^\mathrm{T} Z_{ij} + b_i^\mathrm{T} \tilde{Z}_{ij} + \epsilon_{ij},
+    $$
+    where $b_i \sim \mathcal{N}(0, \Sigma_b)$ are subject-specific random effects and $\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$ are measurement errors.
+
+    -   *Interpretation*: $\gamma$ are population-level effects; $b_i$ captures individual-specific deviation.
+    -   *Estimation*: Maximum likelihood via EM algorithm with $b_i$ as missing data.
+
+-   **Cox model with latent trajectory**\
+    The survival process is linked to the "true" biomarker trajectory $m_i(t)$:
+    $$
+    \Pr(t \le T_i < t + \mathrm{d}t \mid Z_i^*, \overline{m}_i(t)) 
+    = \lambda_0(t) \exp\left(\beta^\mathrm{T} Z_i^* + \nu m_i(t)\right) \mathrm{d}t.
+    $$
+
+    -   $\nu$ quantifies the log-hazard ratio per unit increase in the biomarker.
+    -   $m_i(t)$ may be extracted from an LME or generalized LME model.
+
+### Extensions
+
+-   **Effect modification**\
+    Interaction of $m_i(t)$ with treatment or baseline factors:
+    $$
+    \exp\left\{\nu m_i(t) + \tilde{\nu}^\mathrm{T} \tilde{Z}_i^* m_i(t)\right\}.
+    $$
+
+-   **Lagged or cumulative effects**\
+    Replace $m_i(t)$ with lagged or average values, e.g.,
+    $$
+    \overline{m}_i(t - \tau_0, t) = \frac{1}{\tau_0} \int_{t - \tau_0}^t m_i(u) \, \mathrm{d}u.
+    $$
+
+-   **Rate of change as predictor**\
+    Include derivative $m_i'(t)$ in the hazard model:
+    $$
+    \exp\left\{\nu_0 m_i(t) + \nu_1 m_i'(t)\right\}.
+    $$
+
+-   **Non-continuous outcomes**\
+    Use generalized linear mixed models (GLMMs):
+    $$
+    g\left[E\{Y_i(t) \mid Z_i(t), b_i\}\right] = \gamma_0 + \gamma^\mathrm{T} Z_i(t) + b_i^\mathrm{T} \tilde{Z}_i(t).
+    $$
+
+-   **Multivariate extensions**\
+    For multiple biomarkers and/or multiple events:
+    $$
+    \Pr(t \le T_{ik} < t + \mathrm{d}t \mid \xi_i, \overline{m}_i(t)) 
+    = \xi_i \lambda_{0k}(t) \exp\left(\beta_k^\mathrm{T} Z_i^* + \nu_k^\mathrm{T} m_i(t)\right) \mathrm{d}t.
+    $$
+
+### Dynamic prediction
+
+
+
+Joint models enable real-time prediction of survival probability or biomarker levels:
+
+-   **Survival probability**:
+    $$
+    \mathcal{S}_i(t \mid u) = \Pr(T_i > t \mid T_i > u, \overline{Y}_i(u)).
+    $$
+-   **Future biomarker level**:
+    $$
+    \mathcal{M}_i(t \mid u) = E[Y_i(t) \mid T_i > u, \overline{Y}_i(u)].
+    $$
+
+These are computed via Monte Carlo integration over $p(b_i \mid \overline{Y}_i(u), T_i > u)$.
+
+### Example R code
+
+#### Univariate Gaussian response: `JM` package
+
+Below is a code snippet demonstrating two-stage joint modeling using the `JM` package. Assume a dataset `df` with:
+
+-   `id`: subject ID, `y`: longitudinal response, `obstime`: time of measurement,\
+-   `time`: event or censoring time, `status`: event indicator,\
+-   covariates: `covariates`.
+
+```{r}
+#| eval: false
+########################################
+# 1. Linear mixed-effects for biomarker
+########################################
+library(nlme)
+longit_sub <- lme(y ~ covariates + obstime,
+                  random = ~ obstime | id,
+                  data = df)
+
+########################################
+# 2. Cox model for survival outcome
+########################################
+library(survival)
+df_surv <- df[!duplicated(df$id), ]
+surv_sub <- coxph(Surv(time, status) ~ covariates, 
+                  data = df_surv, x = TRUE)
+
+########################################
+# 3. Fit joint model
+########################################
+library(JM)
+obj <- jointModel(longit_sub, surv_sub,
+                  timeVar = "obstime",
+                  method = "piecewise-PH-aGH")
+summary(obj)
+```
+
+#### More complex outcomes: `JMbayes2` package
+
+Assume longitudinal outcomes `y1` (continuous) and `y2` (binary) with covariates `obstime`, `age`, and `sex`.
+
+```{r}
+#| eval: false
+########################################
+# 1. Fit two longitudinal models
+########################################
+# y1: continuous outcome (e.g., biomarker)
+longit_sub1 <- lme(y1 ~ obstime + age + sex,
+                   random = ~ obstime | id, data = df)
+
+# y2: binary outcome (e.g., clinical status)
+library(JMbayes2)
+longit_sub2 <- mixed_model(y2 ~ obstime + age + sex,
+                           random = ~ obstime | id, data = df,
+                           family = binomial())
+
+########################################
+# 2. Fit survival model
+########################################
+df_surv <- df[!duplicated(df$id), ]
+surv_sub <- coxph(Surv(time, status) ~ age + sex, data = df_surv)
+
+########################################
+# 3. Fit joint model with multiple outcomes
+########################################
+# Define biomarker contributions to hazard
+fForms <- list(
+  "y1" = ~ value(y1) + slope(y1),
+  "y2" = ~ value(y2)
+)
+
+obj <- jm(surv_sub, list(longit_sub1, longit_sub2),
+          time_var = "obstime",
+          functional_forms = fForms)
+
+summary(obj)
+```
+
+-   `value(y)`: uses the fitted mean or link-transformed mean (GLMM) as a predictor.
+-   `slope(y)`: includes rate of change (i.e., $\mathrm{d} m_i(t)/\mathrm{d} t$).
+-   `area(y)`: uses cumulative biomarker value up to time $t$.
+
+`JMbayes2` enables subject-specific predictions of biomarker evolution and survival probabilities using `predict()`:
+
+```{r}
+#| eval: false
+# Predict for subject with ID = 3, up to time u = 3
+newdf <- df[df$id == 3 & df$obstime < 3, ]
+newdf$surv_time <- 3
+newdf$status <- 0
+
+# Longitudinal prediction
+pred_longit <- predict(obj, newdata = newdf, return_newdata = TRUE)
+
+# Survival prediction
+pred_surv <- predict(obj, newdata = newdf, process = "event", return_newdata = TRUE)
+
+```
+
+Use `plot()` to visualize predictions across biomarkers and time horizons, including posterior uncertainty bands.
+
+### Conclusion
+
+Joint modeling of longitudinal and survival data integrates biomarker evolution and event risk to improve efficiency, reduce bias from informative dropout, and provide individualized predictions. Extensions accommodate multiple or non-Gaussian biomarkers, flexible risk structures, and varying functional forms. These models are especially valuable in clinical studies where patient monitoring and outcome prediction are central goals.
+
+## R Code
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 #| eval: false
 
-##################################################################
-# This code generates all numerical results in chapter 11.      ##
-##################################################################
+###############################################################################
+# Chapter 11 R Code
+#
+# This script reproduces all major numerical results in Chapter 11, including:
+#   1. Joint modeling of HIV/AIDS data (antiretroviral trial) using {JM}
+#   2. Multivariate joint modeling for heart valve study using {JMbayes2}
+###############################################################################
 
 
-############################################################
-# Analysis of the anti-retroviral drug trial
-############################################################
+#==============================================================================
+# (A) Analysis of the Antiretroviral Drug Trial
+#==============================================================================
+library(tidyverse)   # For data manipulation and ggplot
+library(survival)    # For survival analysis (e.g., coxph)
+library(JM)          # Joint Modeling package
 
-#load required packages
-library(nlme) # for linear mixed effects model
-library(survival)
-library(tidyverse)
-#load the JM package
-install.packages("JM")
-library(JM)
-
-# read in the study dataset
+#------------------------------------------------------------------------------
+# 1. Read and Prepare Data
+#------------------------------------------------------------------------------
 df <- read.table("Data//Anti-retroviral Trial//aids.txt")
 head(df)
-nrow(df)
-print(df)
 
-#####################################################
-# Figure 11.2 Histograms of CD4 count and square-root
-#       transformation
-#####################################################
-# par(mfrow=c(1,2))
-# hist(data$CD4,xlab="CD4 count", main = "", lwd=2)
-# hist(sqrt(data$CD4),xlab="Square root of CD4 count",main="",lwd=2)
-# taking square root of CD4 count
-df$y <- df$CD4
-# create a de-duplicated data for survival sub-model
-df_surv <- df[!duplicated(df$id),]
+# Create a de-duplicated data set for the survival sub-model
+df_surv <- df[!duplicated(df$id), ]
 
-# Joint model fit for the HIV/AIDS dataset
-# longitudinal sub-model: linear time
-longit_sub <- lme(y ~ obsmo + obsmo:drug + sex + hist,
-                   random = ~ obsmo|id, data = df)
+#------------------------------------------------------------------------------
+# 2. Longitudinal Sub-Model
+#------------------------------------------------------------------------------
+# Linear trajectory for sqrt(CD4) over time
+longit_sub <- lme(
+  CD4 ~ obsmo + obsmo:drug + sex + hist,
+  random = ~ obsmo | id,
+  data   = df
+)
 
-# Alternative longitudinal sub-models
-# Natural splines
-# longit_sub <- lme(y ~ ns(obsmo, 3) + ns(obsmo, 3):drug + sex + hist,
-#                    random = ~ obsmo|id, data = df)
+# Alternative with natural splines:
+# longit_sub <- lme(
+#   CD4 ~ ns(obsmo, 3) + ns(obsmo, 3):drug + sex + hist,
+#   random = list(id = pdDiag(form = ~ ns(time, 3))),
+#   data   = df
+# )
 
+#------------------------------------------------------------------------------
+# 3. Survival Sub-Model
+#------------------------------------------------------------------------------
+surv_sub <- coxph(
+  Surv(time, status) ~ drug + sex + hist,
+  data = df_surv,
+  x    = TRUE
+)
 
-# survival sub-model
-surv_sub <- coxph(Surv(time, status) ~ drug + sex + hist,
-                     data = df_surv, x = TRUE)
+#------------------------------------------------------------------------------
+# 4. Joint Model (Piecewise-Constant Baseline Hazard)
+#------------------------------------------------------------------------------
+obj_joint <- jointModel(
+  longit_sub,
+  surv_sub,
+  timeVar = "obsmo",
+  method  = "piecewise-PH-aGH"
+)
 
-# combine the two models
-# piecewise linear baseline with six internal knots
-obj_joint <- jointModel(longit_sub, surv_sub, timeVar = "obsmo",
-                            method = "piecewise-PH-aGH")
-## 3-month lag
-# obj_join_l3m <- jointModel(longit_sub, surv_sub, timeVar = "obsmo", lag = 3,
-#                             method = "piecewise-PH-aGH")
+# Alternatively, a 3-month lag:
+# obj_join_l3m <- jointModel(
+#   longit_sub, surv_sub,
+#   timeVar = "obsmo", lag = 3,
+#   method  = "piecewise-PH-aGH"
+# )
 
-# print out the summary
+# Print summary
 summary(obj_joint)
-#> Call:
-#> jointModel(lmeObject = longit_sub, survObject = surv_sub, timeVar = "obsmo", 
-#>     method = "piecewise-PH-aGH")
-#> 
-#> Data Descriptives:
-#> Longitudinal Process		Event Process
-#> Number of Observations: 1405	Number of Events: 188 (40.3%)
-#> Number of Groups: 467
-#> 
-#> Joint Model Summary:
-#> Longitudinal Process: Linear mixed-effects model
-#> Event Process: Relative risk model with piecewise-constant
-#> 		baseline risk function
-#> Parameterization: Time-dependent 
-#> 
-#>    log.Lik      AIC      BIC
-#>  -4404.569 8849.139 8932.065
-#> 
-#> Variance Components:
-#>              StdDev    Corr
-#> (Intercept)  3.9797  (Intr)
-#> obsmo        0.1928 -0.0890
-#> Residual     2.0428        
-#> 
-#> Coefficients:
-#> Longitudinal Process
-#>                 Value Std.Err z-value p-value
-#> (Intercept)    5.8614  0.6562  8.9322 <0.0001
-#> obsmo         -0.1922  0.0240 -8.0175 <0.0001
-#> sexmale       -0.3823  0.6642 -0.5757  0.5649
-#> histnoAIDS     4.8617  0.4091 11.8835 <0.0001
-#> obsmo:drugddI  0.0219  0.0333  0.6558  0.5120
-#> 
-#> Event Process
-#>              Value Std.Err z-value p-value
-#> drugddI     0.3487  0.1576  2.2118  0.0270
-#> sexmale    -0.3313  0.2608 -1.2701  0.2040
-#> histnoAIDS -0.5873  0.2255 -2.6040  0.0092
-#> Assoct     -0.2569  0.0374 -6.8708 <0.0001
-#> ...
 
+#------------------------------------------------------------------------------
+# 5. Parameter Extraction and Basic Table
+#------------------------------------------------------------------------------
+coef   <- obj_joint$coefficients   # Coefficients from model
+coef$D                             # Covariance matrix of random effects
+beta   <- c(coef$gammas, coef$alpha)  # Survival-related parameters
+gamma  <- coef$betas                  # Longitudinal parameters
 
-obj_joint$coefficients
+hmat <- obj_joint$Hessian
+Var  <- solve(hmat)          # Inverse Hessian => approximate variance matrix
+se   <- sqrt(diag(Var))
 
+# Prepare table for survival sub-model
+se_beta <- se[str_detect(names(se), "T.")][1:4]  # Extract relevant subset
+za      <- qnorm(0.975)
 
-## Residual analysis 
+cox_tab <- tibble(
+  ` `       = c("ddI v. ddC", "Male v. female",
+                "Infection history (No v. yes)",
+                "CD4 count (mm^3)"),
+  HR       = round(exp(beta), 2),
+  CI       = paste0(
+    "(",
+    round(exp(beta - za * se_beta), 2), ", ",
+    round(exp(beta + za * se_beta), 2), ")"
+  ),
+  `p-value`= scales::pvalue(2 * (1 - pnorm(abs(beta / se_beta))))
+)
+
+knitr::kable(cox_tab, align = "c")
+
+#------------------------------------------------------------------------------
+# 6. Residual Analysis
+#------------------------------------------------------------------------------
+# Base R diagnostic plots
 par(mfrow = c(2, 2))
-plot(obj_joint) # Standard plot
+plot(obj_joint)  # built-in {JM} diagnostic
 
-# Longitudinal residuals
-epsilons <- residuals(obj_joint, process = "Longitudinal", type = "Subject")
-length(epsilons)
-Rs <- residuals(obj_joint, process = "Longitudinal", type = "Marginal")
-length(Rs)
-# Fitted m_i(t)
-ms <- fitted(obj_joint, process = "Longitudinal")
-length(ms)
-ms1 <- fitted(obj_joint, process = "Longitudinal", type = "EventTime")
-length(ms1)
+# Extract residuals
+epsilons <- residuals(obj_joint, process = "Longitudinal", type = "Subject")  # subject-level
+Rs       <- residuals(obj_joint, process = "Longitudinal", type = "Marginal") # marginal
+mart     <- residuals(obj_joint, process = "Event")                           # event-level
 
-ms2 <- df$y - epsilons
+# Fitted m_i(t): subtract subject-specific residual from observed
+ms <- df$CD4 - epsilons
 
-ms[1:10]
-ms1[1:10]
-ms2[1:10]
-
-# Martingale residuals
-mart <- residuals(obj_joint, process = "Event")
-
-plot(ms1, mart)
-
-tibble(
-  y_obs = df$y,
-  y_pred = ms2
-) |> 
-  ggplot(aes(x = y_obs, y = y_pred)) +
+# Plot 1: Observed vs. fitted Y
+pred_v_obs <- tibble(
+  x = ms,
+  y = df$CD4
+) %>%
+  ggplot(aes(x = x, y = y)) +
   geom_point(color = "gray20") +
-  geom_abline(intercept = 0, slope = 1, color = "red") +
-  coord_fixed() +
-  labs(title = "Martingale residuals vs. Fitted values",
-       x = expression("Fitted "~ sqrt(CD4)),
-       y = expression("Observed "~ sqrt(CD4))) +
-  theme_minimal()
+  geom_abline(intercept = 0, slope = 1, linewidth = 0.8, linetype = 2) +
+  xlim(c(0, 22)) +
+  ylim(c(0, 22)) +
+  labs(
+    x     = expression("Fitted " ~ hat(m)[i](t[j])),
+    y     = expression("Observed " ~ Y[ij]),
+    title = "Overall fit of longitudinal model"
+  ) +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 12))
 
-# Fitted value of true CD4
-mt <- df$y - epsilons
+pred_v_obs
 
-## Dynamic prediction
-head(df)
+# Plot 2: QQ plot for measurement error
+eps_qq <- tibble(
+  epsilons = epsilons
+) %>%
+  ggplot(aes(sample = epsilons)) +
+  stat_qq(color = "gray20") +
+  stat_qq_line(linewidth = 0.8, linetype = 2) +
+  labs(
+    x     = "Normal Quantiles",
+    y     = expression("Quantiles of " ~ hat(epsilon)[ij]),
+    title = "Normal QQ plot of measurement error"
+  ) +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 12))
 
-df$id
+eps_qq
 
-surv_pred2 <- survfitJM(obj_joint, newdata = df[df$id == 2, ], simulate = FALSE)
+# Plot 3: Residual vs. observed outcome
+eps_v_y <- tibble(
+  x = df$CD4,
+  y = epsilons
+) %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point(color = "gray20") +
+  geom_hline(yintercept = 0, linewidth = 0.8, linetype = 2) +
+  labs(
+    x     = expression("Observed " ~ Y[ij]),
+    y     = expression("Residual " ~ hat(epsilon)[ij]),
+    title = "Homoscedasticity of measurement error"
+  ) +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 12))
 
-surv_pred2 <- survfitJM(obj_joint, newdata = data.frame(id = 1, y = 3, obsmo = 6, drug = "ddI",  sex = "male", hist = "noAIDS"))
+eps_v_y
 
+# Plot 4: Martingale residual vs. fitted biomarker
+mart_v_mi <- tibble(
+  x = ms,
+  y = mart
+) %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point(color = "gray20") +
+  geom_smooth(color = "black", se = FALSE) +
+  geom_hline(yintercept = 0, linetype = 3) +
+  labs(
+    x     = expression("Fitted " ~ hat(m)[i](t[j])),
+    y     = "Martingale residuals",
+    title = "Martingale residual vs. biomarker"
+  ) +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 12))
 
-#######################################
-# Figure 11.3
-######################################
+mart_v_mi
 
-# compute the mean trajectories based on the longitudinal
-# sub-model results
+# Combine with patchwork
+library(patchwork)
+(pred_v_obs + eps_qq) / (eps_v_y + mart_v_mi)
 
-t <- (0:180)/10
+# Save figure
+# ggsave("images/longit_aids_resids.png", width = 8, height = 8)
+# ggsave("images/longit_aids_resids.eps", width = 8, height = 8)
+
+#------------------------------------------------------------------------------
+# 7. Model-Based Mean Trajectories (Figure)
+#------------------------------------------------------------------------------
+# Compute the mean trajectories based on the fitted longitudinal sub-model
+t <- (0:180) / 10
 
 g0 <- gamma[1]
 g1 <- gamma[2]
 g3 <- gamma[4]
 g4 <- gamma[5]
 
+# ddC: baseline drug, with/without history
+ddC_nonhist <- (g0 + g3 + g1 * t)^2
+ddC_hist    <- (g0 + g1 * t)^2
 
-ddC_nonhist <- (g0+g3+g1*t)^2
-ddC_hist <- (g0 + g1*t)^2
+# ddI: alternate drug, with/without history
+ddI_nonhist <- (g0 + g3 + (g1 + g4)*t)^2
+ddI_hist    <- (g0 + (g1 + g4)*t)^2
 
+# Base R: Two-panel plot
+par(mfrow = c(1, 2))
 
-ddI_nonhist <- (g0+g3+(g1+g4)*t)^2
-ddI_hist <- (g0+(g1+g4)*t)^2
+plot(
+  t, ddC_nonhist,
+  type       = "l",
+  frame.plot = FALSE,
+  main       = "No previous infection",
+  xlim       = c(0, 18),
+  ylim       = c(0, 120),
+  xlab       = "Time (months)",
+  ylab       = "Mean CD4 cell count",
+  lwd        = 2
+)
+lines(t, ddI_nonhist, lty = 3, lwd = 2)
 
+plot(
+  t, ddC_hist,
+  type       = "l",
+  frame.plot = FALSE,
+  main       = "Previous infection",
+  xlim       = c(0, 18),
+  ylim       = c(0, 120),
+  xlab       = "Time (months)",
+  ylab       = "Mean CD4 cell count",
+  lwd        = 2
+)
+lines(t, ddI_hist, lty = 3, lwd = 2)
 
-#######################################################
-# Figure 11.3
-# Model-based estimates of the mean trajectories
-#  of CD4 count for female patients by treatment
-#  group and previous infection status. Solid, ddC;
-#  dotted, ddI
-######################################################
-par(mfrow=c(1,2))
-
-plot(t, ddC_nonhist,type='l',frame.plot=F,
-     main="No previous infection",xlim=c(0,18),ylim=c(0,120),
-     xlab="Time (months)", ylab="Mean CD4 cell count", lwd=2, cex.main = 1)
-lines(t,ddI_nonhist,lty=3,lwd=2)
-
-plot(t, ddC_hist,type='l',frame.plot=F,
-     main="Previous infection",xlim=c(0,18),ylim=c(0,120),
-     xlab="Time (months)", ylab="Mean CD4 cell count", lwd=2, cex.main = 1)
-lines(t,ddI_hist,lty=3,lwd=2)
-
-## ggplot version
-
+# ggplot version
 m <- length(t)
 tibble(
-  t = rep(t, 4),
-  CD4 = c(ddC_nonhist, ddI_nonhist, ddC_hist, ddI_hist),
-  trt = rep(rep(c("ddC", "ddI"), each = m), 2),
+  t    = rep(t, 4),
+  CD4  = c(ddC_nonhist, ddI_nonhist, ddC_hist, ddI_hist),
+  trt  = rep(rep(c("ddC", "ddI"), each = m), 2),
   hist = rep(c("No previous infection", "Previous infection"), each = 2*m)
-    ) |> 
-  ggplot(aes(x = t, y = CD4)) +
-    geom_line(aes(linetype = trt), linewidth = 0.8) +
-    facet_wrap(~ hist) +
+) %>%
+  ggplot(aes(x = t, y = CD4, linetype = trt)) +
+  geom_line(linewidth = 0.8) +
+  facet_wrap(~ hist) +
   scale_x_continuous(breaks = seq(0, 18, 6)) +
   scale_y_continuous(limits = c(0, 120), breaks = seq(0, 120, 30)) +
   labs(
-    x = "Time (months)",
-    y = expression("CD4 cell count / mm"^3),
+    x        = "Time (months)",
+    y        = expression("CD4 cell count / mm"^3),
     linetype = NULL
   ) +
-    theme_minimal() +
+  theme_minimal() +
   theme(
     legend.position = "top",
-    strip.text = element_text(size = 11),
-    legend.text = element_text(size = 11),
-    legend.key.width = unit(1, "cm")
+    strip.text      = element_text(size = 11),
+    legend.text     = element_text(size = 11),
+    legend.key.width= unit(1, "cm")
   )
 
-ggsave("images/longit_mean_cd4.png", width = 8, height = 4.5)
-ggsave("images/longit_mean_cd4.eps", width = 8, height = 4.5)
+# ggsave("images/longit_mean_cd4.png", width = 8, height = 4.5)
+# ggsave("images/longit_mean_cd4.eps", width = 8, height = 4.5)
 
 
+#==============================================================================
+# (B) Multivariate Analysis (JMbayes2) – Heart Valve Study
+#==============================================================================
+library(JMbayes2)
 
+#------------------------------------------------------------------------------
+# 1. Read and Inspect Data
+#------------------------------------------------------------------------------
+df_valve <- read.table("Data//Heart Valve Implantation Study//heartv.txt", header = TRUE)
+
+# Basic descriptive info
+n <- length(unique(df_valve$id))
+num_deaths <- df_valve %>%
+  group_by(id) %>%
+  slice(1) %>%
+  filter(status == 1) %>%
+  nrow()
+
+#------------------------------------------------------------------------------
+# 2. Longitudinal Sub-Models
+#------------------------------------------------------------------------------
+# (1) Binary outcome: ejection fraction <= 50%
+ef_mod <- mixed_model(
+  ef50 ~ obsyear + age + sex + vsize + lvef + redo + cabg + acei + hc + emergenc,
+  random = ~ obsyear | id,
+  data   = df_valve,
+  family = binomial()
+)
+summary(ef_mod)
+
+# (2) Log valve gradient
+grad_mod <- lme(
+  grad ~ obsyear + age + sex + vsize + lvef + redo + cabg + acei + hc + emergenc,
+  random = ~ obsyear | id,
+  data   = df_valve
+)
+summary(grad_mod)
+
+# (3) Log LV mass index
+lvmi_mod <- lme(
+  lvmi ~ obsyear + age + sex + vsize + lvef + redo + cabg + acei + hc + emergenc,
+  random = ~ obsyear | id,
+  data   = df_valve
+)
+summary(lvmi_mod)
+
+#------------------------------------------------------------------------------
+# 3. Survival Sub-Model
+#------------------------------------------------------------------------------
+df_surv_valve <- df_valve[!duplicated(df_valve$id), ]
+surv_mod <- coxph(
+  Surv(surv_time, status) ~ age + sex,
+  data = df_surv_valve
+)
+
+#------------------------------------------------------------------------------
+# 4. Multivariate Joint Model in JMbayes2
+#------------------------------------------------------------------------------
+# Define functional forms in the Cox sub-model
+fForms <- list(
+  "ef50" = ~ value(ef50),
+  "grad" = ~ slope(grad) + value(grad),
+  "lvmi" = ~ slope(lvmi) + value(lvmi)
+)
+
+# Fit the joint model (may require MCMC or default settings)
+obj_valve <- jm(
+  surv_mod,
+  list(ef_mod, grad_mod, lvmi_mod),
+  time_var        = "obsyear",
+  functional_forms= fForms
+)
+summary(obj_valve)
+
+#------------------------------------------------------------------------------
+# 5. Extract and Tabulate Results
+#------------------------------------------------------------------------------
+stats <- obj_valve$statistics
+stats_mean <- stats$Mean
+stats_sd   <- stats$SD
+
+# A) Longitudinal sub-model estimates
+gamma_ef50_est <- stats_mean$betas1
+gamma_ef50_se  <- stats_sd$betas1
+
+gamma_grad_est <- stats_mean$betas2
+gamma_grad_se  <- stats_sd$betas2
+
+gamma_lvmi_est <- stats_mean$betas3
+gamma_lvmi_se  <- stats_sd$betas3
+
+za <- qnorm(0.975)
+
+# Helper function to format estimates + CIs
+est_ci <- function(est, se, r = 2, exponentiate = TRUE) {
+  if (exponentiate) {
+    paste0(
+      round(exp(est), r), " (",
+      round(exp(est - za * se), r), ", ",
+      round(exp(est + za * se), r), ")"
+    )
+  } else {
+    paste0(
+      round(est, r), " (",
+      round(est - za * se, r), ", ",
+      round(est + za * se, r), ")"
+    )
+  }
+}
+
+pval_calc <- function(est, se) {
+  scales::pvalue(1 - pchisq((est / se)^2, df = 1))
+}
+
+# Example table
+df_res <- tibble(
+  variable = c(
+    "(Intercept)", "Years after surgery", "Age (years)", "Male vs. female",
+    "Valve size", "LVEF grade (1–3)", "History of surgery", "CABG",
+    "ACE inhibitor", "High cholesterol", "Emergency grade (1–3)"
+  ),
+  EF_OR = est_ci(gamma_ef50_est, gamma_ef50_se, r = 2, exponentiate = TRUE),
+  Grad  = est_ci(gamma_grad_est, gamma_grad_se, r = 2, exponentiate = FALSE),
+  LVMI  = est_ci(gamma_lvmi_est, gamma_lvmi_se, r = 2, exponentiate = FALSE)
+)
+df_res
+
+# B) Survival sub-model
+nu    <- stats_mean$alphas
+nu_se <- stats_sd$alphas
+
+cox_df <- tibble(
+  variable = c(
+    "EF<= 50% (log-odds)",
+    "LV gradient (mmHg)",
+    "LV gradient slope (mmHg/yr)",
+    "LVMI (g/m^2)",
+    "LVMI slope (g/m^2/yr)"
+  ),
+  HR   = est_ci(nu, nu_se, r = 2, exponentiate = TRUE),
+  pval = pval_calc(nu, nu_se)
+)
+cox_df
+
+#------------------------------------------------------------------------------
+# 6. Dynamic Predictions
+#------------------------------------------------------------------------------
+# Example: time t0=3 years for patient id=3
+t0    <- 3
+newdf <- df_valve[df_valve$id == 3, ]            # data for this patient
+newdf <- newdf[newdf$obsyear < t0, ]             # only times before t0
+newdf$status     <- 0                            # assume alive at t0
+newdf$surv_time  <- t0
+
+# Predict longitudinal trajectories from t0 to 10
+pred_longit <- predict(
+  obj_valve,
+  newdata     = newdf,
+  times       = seq(t0, 10, length.out = 10),
+  return_newdata = TRUE
+)
+
+# Base R plot
+par(mfrow = c(1, 3))
+par(mar   = c(5, 5.2, 2, 1))
+
+plot(
+  pred_longit,
+  outcomes  = 1:3,
+  ylab_long = c(
+    "Probability of reduced LVEF",
+    "Valve gradient (mmHg)",
+    expression("LVMI (" ~ g/m^2 ~ ")")
+  ),
+  xlab        = "Time (years)",
+  xlim        = c(0, 10),
+  cex_axis    = 1.5,
+  cex_xlab    = 1.8,
+  cex_ylab_long = 1.8,
+  col_points   = "gray20",
+  col_line_long= "black",
+  fill_CI_long = "gray80"
+)
+
+# Predict survival probabilities
+pred_surv <- predict(
+  obj_valve,
+  newdata     = newdf,
+  process     = "event",
+  times       = seq(t0, 10, length.out = 10),
+  return_newdata = TRUE
+)
+
+# Combined event + longitudinal
+par(mfrow = c(1, 1))
+plot(
+  pred_longit, pred_surv,
+  outcomes   = 1:3,
+  fun_event  = function(x) 1 - x,  # survival = 1 - CIF
+  ylab_event = "Survival Probabilities",
+  ylab_long  = c(
+    "Probability of reduced LVEF",
+    "LV gradient (mmHg)",
+    expression("LVMI (" ~ g/m^2 ~ ")")
+  ),
+  pos_ylab_long = c(0.5, 40, 300),
+  col_points    = "gray20",
+  col_line_long = "black",
+  fill_CI_long  = "gray80",
+  col_line_event= "black",
+  fill_CI_event = "gray80",
+  xlab   = "Time (years)",
+  xlim   = c(0, 10),
+  cex_axis= 1.2,
+  cex_xlab= 1,
+  cex_ylab_long = 1.2,
+  cex_ylab_event= 1
+)
+
+# Print predicted survival at 10 years
+pred_surv %>%
+  dplyr::filter(surv_time == 10) %>%
+  dplyr::select(id, surv_time, pred_CIF, low_CIF, upp_CIF) %>%
+  mutate(
+    pred  = round(1 - pred_CIF, 3),
+    lower = round(1 - upp_CIF, 3),
+    upper = round(1 - low_CIF, 3)
+  )
 
 ```
+
+

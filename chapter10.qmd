@@ -6,75 +6,62 @@ title: "Chapter 10 - Competing and Semi-Competing Risks"
 
 Lecture slides [here](chap10.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-
 ## Chapter Summary
 
-When a subject can experience at most one event among multiple *competing risks* (e.g., distinct causes of death) or a non-terminal event followed by a terminal event (*semi-competing risks*), standard survival analysis techniques need adjustments to account for the terminality
-of all or a subset of the events. These adjustments typically involve defining, modeling, and interpreting the *cause-specific hazard*, *cumulative incidence*, and/or *sub-distribution hazards* functions for competing risks, along with adaptations to semi-competing scenarios.
-
-
+When a subject can experience at most one event among multiple *competing risks* (e.g., distinct causes of death) or a non-terminal event followed by a terminal event (*semi-competing risks*), standard survival analysis techniques need adjustments to account for the terminality of all or a subset of the events. These adjustments typically involve defining, modeling, and interpreting the *cause-specific hazard*, *cumulative incidence*, and/or *sub-distribution hazards* functions for competing risks, along with adaptations to semi-competing scenarios.
 
 ### Competing risks
 
 In competing risks, each subject can fail at most once from a single cause. The outcome data thus consist of the failure time $T$ along with failure cause $\Delta=1,\ldots, K$.
 
-- **Cause-specific hazard (CSH)**  
-  $$
-  \mathrm{d}\Lambda_k^{\rm c}(t) 
-  \;=\; 
-  \Pr\bigl(t \le T < t+\mathrm{d}t,\; \Delta=k \,\mid\, T \ge t\bigr),
-  $$
-  i.e., the *conditional* incidence of cause $k$ among survivors of any cause.  
-  - *Estimation*: Treat other causes as censoring and fit a standard Cox model.  
-  - *Interpretation*: Covariate effects reflect changes in risk *conditional on no failure so far*.
+-   **Cause-specific hazard (CSH)**\
+    $$
+    \mathrm{d}\Lambda_k^{\rm c}(t) 
+    \;=\; 
+    \Pr\bigl(t \le T < t+\mathrm{d}t,\; \Delta=k \,\mid\, T \ge t\bigr),
+    $$ i.e., the *conditional* incidence of cause $k$ among survivors of any cause.
 
-- **Cumulative Incidence Function (CIF)**  
-  $$
-  F_k(t) 
-  \;=\; 
-  \Pr(T \le t,\;\Delta = k),
-  $$
-  the *marginal* probability of having cause $k$ by time $t$.  
-  - *Nonparametric*: Gray’s estimator integrates the cause-specific hazard with overall survival.  
-  - *Testing*: Gray’s log-rank–type tests compare $F_k(t)$ across groups.  
-  - *Sub-distribution hazard*: A transformation of CIF: $\Lambda_k(t)=-\log\{1 - F_k(t)\}$.
-  
-  The *Fine--Gray model* specifies a multiplicative structure on this sub-distribution hazard:
-  $$
-  \mathrm{d}\Lambda_k(t\mid Z) \;=\; \exp(\beta_k^\mathrm{T} Z)\,\mathrm{d}\Lambda_{k0}(t),
-  $$
-  -   $\beta_k$: log-sub-distribution hazard ratios associated 
-with unit increases in the covariates.
+    -   *Estimation*: Treat other causes as censoring and fit a standard Cox model.\
+    -   *Interpretation*: Covariate effects reflect changes in risk *conditional on no failure so far*.
 
-- **Relationship between CSH and CIF** (continuous):
-\begin{align}
- \mathrm{d}\Lambda_k^{\rm c}(t) 
-  &\;=\; \frac{ \mathrm{d} F_k(t)}{1 - \sum_{k'=1}^K F_{k'}(t)};\\
-  \mathrm{d} F_k(t)  &\;=\;
-  \exp\left\{-\sum_{k'=1}^K \Lambda_{k'}^{\rm c}(t)\right\}\mathrm{d}\Lambda_k^{\rm c}(t).
-\end{align}
+-   **Cumulative Incidence Function (CIF)**\
+    $$
+    F_k(t) 
+    \;=\; 
+    \Pr(T \le t,\;\Delta = k),
+    $$ the *marginal* probability of having cause $k$ by time $t$.
 
-  
-  
-  
+    -   *Nonparametric*: Gray’s estimator integrates the cause-specific hazard with overall survival.\
+    -   *Testing*: Gray’s log-rank–type tests compare $F_k(t)$ across groups.\
+    -   *Sub-distribution hazard*: A transformation of CIF: $\Lambda_k(t)=-\log\{1 - F_k(t)\}$.
+
+    The *Fine--Gray model* specifies a multiplicative structure on this sub-distribution hazard: $$
+    \mathrm{d}\Lambda_k(t\mid Z) \;=\; \exp(\beta_k^\mathrm{T} Z)\,\mathrm{d}\Lambda_{k0}(t),
+    $$
+
+    -   $\beta_k$: log-sub-distribution hazard ratios associated with unit increases in the covariates.
+
+-   **Relationship between CSH and CIF** (continuous): \begin{align}
+     \mathrm{d}\Lambda_k^{\rm c}(t) 
+    &\;=\; \frac{ \mathrm{d} F_k(t)}{1 - \sum_{k'=1}^K F_{k'}(t)};\\
+    \mathrm{d} F_k(t)  &\;=\;
+    \exp\left\{-\sum_{k'=1}^K \Lambda_{k'}^{\rm c}(t)\right\}\mathrm{d}\Lambda_k^{\rm c}(t).
+    \end{align}
+
 ### Semi-Competing Risks
 
 Semi-competing risks arise when a non-terminal event (e.g., relapse) can only be observed if it occurs before the terminal event (e.g., death). Once the terminal event happens, the non-terminal event cannot.
 
-- **Two endpoints** $(T, D)$: $T$ = non-terminal, $D$ = terminal, partially ordered by $T \le D$ if $T$ occurs.  
-- **Recurrent events with death**: $N^*(t)$ = number of non-terminal events by time $t$,
-with $\mathrm{d} N^*(t)\equiv 0$ for $t> D$ (no event after death).
+-   **Two endpoints** $(T, D)$: $T$ = non-terminal, $D$ = terminal, partially ordered by $T \le D$ if $T$ occurs.\
+-   **Recurrent events with death**: $N^*(t)$ = number of non-terminal events by time $t$, with $\mathrm{d} N^*(t)\equiv 0$ for $t> D$ (no event after death).
 
 Analyses can be:
 
-- *Cause-specific*: treat death as censoring for the non-terminal event.  
-- *Sub-distribution*: treat death as a competing risk for the non-terminal event
-(acknowledging that there is no event after death).  
-- *Extended frameworks*: (multistate or shared frailty) for more detailed joint modeling.
+-   *Cause-specific*: treat death as censoring for the non-terminal event.\
+-   *Sub-distribution*: treat death as a competing risk for the non-terminal event (acknowledging that there is no event after death).\
+-   *Extended frameworks*: (multistate or shared frailty) for more detailed joint modeling.
 
-In particular, the *Ghosh-Lin test* is a two-sample test for comparing the cumulative frequency $E\{N^*(t)\}$, accounting for the terminal event. 
-The *proportional cumulative frequency regression* extends this to covariate-adjusted models:
-$$
+In particular, the *Ghosh-Lin test* is a two-sample test for comparing the cumulative frequency $E\{N^*(t)\}$, accounting for the terminal event. The *proportional cumulative frequency regression* extends this to covariate-adjusted models: $$
 E\{N^*(t)\mid Z\}\;=\;\exp(\beta^\mathrm{T} Z)\mu_0(t).
 $$
 
@@ -82,10 +69,9 @@ $$
 
 Below are code snippets demonstrating nonparametric estimation and regression for competing (and semi-competing) risks. Assume a data frame `df` with:
 
-- `time`: observed time to event or censor,  
-- `status`: integer-coded event indicator (0 = censor, 1, 2 for distinct causes),  
-- covariates: `x1`, `x2`, etc.
-
+-   `time`: observed time to event or censor,\
+-   `status`: integer-coded event indicator (0 = censor, 1, 2 for distinct causes),\
+-   covariates: `x1`, `x2`, etc.
 
 ```{r}
 #| eval: false
@@ -139,11 +125,10 @@ obj_rccf <- rccf(id = df$id, # subject ID
 
 obj_rccf # print results
 ```
-  
 
 ### Conclusion
 
-When analyzing competing risks, the cause-specific approach (treating other causes as censoring) targets the conditional hazard among survivors, while the cumulative incidence or sub-distribution hazard approach (Fine–Gray) provides a marginal interpretation of failure probability in the presence of competing events. For semi-competing risks---where a non-terminal event cannot follow a terminal event---researchers can treat the terminal event as a competing risk for the non-terminal one or use specialized multistate/frailty methods to capture joint behavior. Each method yields valid but different insights: cause-specific hazards focus on event rates among those alive, while cumulative incidence or sub-distribution models offer population-level probabilities. 
+When analyzing competing risks, the cause-specific approach (treating other causes as censoring) targets the conditional hazard among survivors, while the cumulative incidence or sub-distribution hazard approach (Fine–Gray) provides a marginal interpretation of failure probability in the presence of competing events. For semi-competing risks---where a non-terminal event cannot follow a terminal event---researchers can treat the terminal event as a competing risk for the non-terminal one or use specialized multistate/frailty methods to capture joint behavior. Each method yields valid but different insights: cause-specific hazards focus on event rates among those alive, while cumulative incidence or sub-distribution models offer population-level probabilities.
 
 ## R Code
 
@@ -625,5 +610,3 @@ obj_reg <- recreg(
 summary(obj_reg)
 
 ```
-
-
