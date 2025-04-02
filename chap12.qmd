@@ -271,6 +271,7 @@ $$
 ## Transition Probability vs. Intensity
 :::{.fragment}
 -   **Transition probability matrix**
+    -   **Definition**
 $$
 \textbf{P}(s, t) =
 \begin{bmatrix}
@@ -283,11 +284,12 @@ $$
 :::
 :::{.fragment}
 -   **Product limit**
+    -   $s = u_0 < u_1 < \cdots < u_m = t$, with $u_r - u_{r-1} = \dd u$
 $$
 \textbf{P}(s, t) \;=\; \lim_{\dd u \to 0} 
 \prod_{r = 1}^m \bigl\{ \mathbf{I} \,+\, \dd\mathbf{\Lambda}(u_r) \bigr\}
 $$
-    -   $s = u_0 < u_1 < \cdots < u_m = t$, with $u_r - u_{r-1} = \dd u$
+    -   $\mathbf{I}$: Identity matrix
 :::
 
 ## Estimating Discrete Intensities

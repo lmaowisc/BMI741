@@ -4221,7 +4221,7 @@
     "href": "chap12.html#transition-probability-vs.-intensity",
     "title": "Applied Survival Analysis",
     "section": "Transition Probability vs. Intensity",
-    "text": "Transition Probability vs. Intensity\n\n\nTransition probability matrix \\[\n\\textbf{P}(s, t) =\n\\begin{bmatrix}\nP_{00}(s, t) & P_{01}(s, t) & \\cdots & P_{0K}(s, t) \\\\\nP_{10}(s, t) & P_{11}(s, t) & \\cdots & P_{1K}(s, t) \\\\\n\\vdots       & \\vdots       & \\ddots & \\vdots       \\\\\nP_{K0}(s, t) & P_{K1}(s, t) & \\cdots & P_{KK}(s, t)\n\\end{bmatrix}\n\\]\n\n\n\n\nProduct limit \\[\n\\textbf{P}(s, t) \\;=\\; \\lim_{\\dd u \\to 0}\n\\prod_{r = 1}^m \\bigl\\{ \\mathbf{I} \\,+\\, \\dd\\mathbf{\\Lambda}(u_r) \\bigr\\}\n\\]\n\n\\(s = u_0 &lt; u_1 &lt; \\cdots &lt; u_m = t\\), with \\(u_r - u_{r-1} = \\dd u\\)"
+    "text": "Transition Probability vs. Intensity\n\n\nTransition probability matrix\n\nDefinition \\[\n\\textbf{P}(s, t) =\n\\begin{bmatrix}\nP_{00}(s, t) & P_{01}(s, t) & \\cdots & P_{0K}(s, t) \\\\\nP_{10}(s, t) & P_{11}(s, t) & \\cdots & P_{1K}(s, t) \\\\\n\\vdots       & \\vdots       & \\ddots & \\vdots       \\\\\nP_{K0}(s, t) & P_{K1}(s, t) & \\cdots & P_{KK}(s, t)\n\\end{bmatrix}\n\\]\n\n\n\n\n\nProduct limit\n\n\\(s = u_0 &lt; u_1 &lt; \\cdots &lt; u_m = t\\), with \\(u_r - u_{r-1} = \\dd u\\) \\[\n\\textbf{P}(s, t) \\;=\\; \\lim_{\\dd u \\to 0}\n\\prod_{r = 1}^m \\bigl\\{ \\mathbf{I} \\,+\\, \\dd\\mathbf{\\Lambda}(u_r) \\bigr\\}\n\\]\n\\(\\mathbf{I}\\): Identity matrix"
   },
   {
     "objectID": "chap12.html#aalenjohansen-estimator",

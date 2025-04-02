@@ -596,7 +596,9 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 <h2>Transition Probability vs.&nbsp;Intensity</h2>
 <div class="fragment">
 <ul>
-<li><strong>Transition probability matrix</strong> <span class="math display">\[
+<li><strong>Transition probability matrix</strong>
+<ul>
+<li><strong>Definition</strong> <span class="math display">\[
 \textbf{P}(s, t) =
 \begin{bmatrix}
 P_{00}(s, t) &amp; P_{01}(s, t) &amp; \cdots &amp; P_{0K}(s, t) \\
@@ -605,16 +607,18 @@ P_{10}(s, t) &amp; P_{11}(s, t) &amp; \cdots &amp; P_{1K}(s, t) \\
 P_{K0}(s, t) &amp; P_{K1}(s, t) &amp; \cdots &amp; P_{KK}(s, t)
 \end{bmatrix}
 \]</span></li>
+</ul></li>
 </ul>
 </div>
 <div class="fragment">
 <ul>
-<li><strong>Product limit</strong> <span class="math display">\[
+<li><strong>Product limit</strong>
+<ul>
+<li><span class="math inline">\(s = u_0 &lt; u_1 &lt; \cdots &lt; u_m = t\)</span>, with <span class="math inline">\(u_r - u_{r-1} = \dd u\)</span> <span class="math display">\[
 \textbf{P}(s, t) \;=\; \lim_{\dd u \to 0}
 \prod_{r = 1}^m \bigl\{ \mathbf{I} \,+\, \dd\mathbf{\Lambda}(u_r) \bigr\}
-\]</span>
-<ul>
-<li><span class="math inline">\(s = u_0 &lt; u_1 &lt; \cdots &lt; u_m = t\)</span>, with <span class="math inline">\(u_r - u_{r-1} = \dd u\)</span></li>
+\]</span></li>
+<li><span class="math inline">\(\mathbf{I}\)</span>: Identity matrix</li>
 </ul></li>
 </ul>
 </div>
