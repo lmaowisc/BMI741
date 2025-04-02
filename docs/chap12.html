@@ -462,25 +462,31 @@ Y(t)\in \{0, 1,\ldots, K\},\,\,\, t\geq 0
 </section>
 <section id="markov-semi-markov-processes" class="slide level2">
 <h2>Markov &amp; Semi-Markov Processes</h2>
+<div class="fragment">
 <ul>
-<li><strong>Simplifying assumptions</strong>
+<li><strong>Markov</strong>: transition independent of past given current state <span class="math display">\[
+    \lambda_{kj}\{t\mid\mathcal H^*(t-)\}=\lambda_{kj}(t)\,\,\, \mbox{fixed function}
+    \]</span>
 <ul>
-<li><p><strong>Markov</strong>: transition independent of past given current state <span class="math display">\[
-\lambda_{kj}\{t\mid\mathcal H^*(t-)\}=\lambda_{kj}(t)\,\,\, \mbox{fixed function}
-\]</span></p></li>
+<li><strong>Homogeneous Markov</strong>: <span class="math inline">\(\lambda_{kj}(t)\equiv \lambda_{kj}\)</span></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><p><strong>Semi-Markov</strong>: transition depends on past through time in current state <span class="math display">\[
-\lambda_{kj}\{t\mid\mathcal H^*(t-)\}=\lambda_{kj}\{t, B(t)\}
-\]</span></p>
+    \lambda_{kj}\{t\mid\mathcal H^*(t-)\}=\lambda_{kj}\{t, B(t)\}
+    \]</span></p>
 <ul>
 <li><span class="math inline">\(B(t)\)</span>: time since last entry into current state</li>
 <li><strong>Example</strong>: risk of death depends on how long cancer has reappeared</li>
 </ul></li>
-<li><p><strong>Homogeneity</strong>: Markov or semi-Markov process with intensity a constant function of <span class="math inline">\(t\)</span></p></li>
-</ul></li>
 </ul>
+</div>
 </section>
 <section id="markov-semi-markov-examples" class="slide level2">
 <h2>Markov &amp; Semi-Markov Examples</h2>
+<div class="fragment">
 <ul>
 <li><strong>Illness-death model (semi-competing risks)</strong>
 <ul>
@@ -488,7 +494,7 @@ Y(t)\in \{0, 1,\ldots, K\},\,\,\, t\geq 0
 \lambda_{01}(t) \mbox{ and } \lambda_{02}(t): \,\, \mbox{always deterministic}
 \]</span>
 <ul>
-<li>No prior data to speak of</li>
+<li>No prior data to condition on</li>
 </ul></li>
 <li>Transition intensity for <span class="math inline">\(1\to 2\)</span> (death with illness) <span class="math display">\[\begin{align}
 \mbox{Markov model}:&amp;\,\,\, \lambda_{12}\{t\mid\mathcal H^*(t-)\}=\lambda_{12}(t) \\
@@ -496,32 +502,34 @@ Y(t)\in \{0, 1,\ldots, K\},\,\,\, t\geq 0
 \end{align}\]</span> <span class="math inline">\(T\)</span>: time to onset of illness</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="transition-probability-definition" class="slide level2">
 <h2>Transition Probability: Definition</h2>
+<div class="fragment">
 <ul>
 <li><strong>Transition Probability</strong>
 <ul>
-<li>Probability of being in state <span class="math inline">\(j\)</span> at future time <span class="math inline">\(t\)</span> given current state <span class="math inline">\(k\)</span> at <span class="math inline">\(s\)</span> <span class="math display">\[\begin{equation}\label{eq:multi_state:trans_prob}
-P_{kj}\{s,t\mid\mathcal H^*(s-)\}=\pr\{Y(t)=j\mid Y(s-)=k, \mathcal H^*(s-)\}
-\end{equation}\]</span></li>
-<li><span class="math inline">\(\lambda_{kj}\{t\mid\mathcal H^*(t-)\}\dd t=P_{kj}\{t,t\mid\mathcal H^*(t-)\}\)</span> <span class="math display">\[\begin{align}
+<li><strong>Definition</strong> <span class="math display">\[\begin{equation}\label{eq:multi_state:trans_prob}
+P_{kj}\{s,t\mid\mathcal H^*(s-)\}=\pr\{\underbrace{Y(t)=j}_{\text{Future state}}\mid \underbrace{Y(s-)=k}_{\text{Current state}}, \underbrace{\mathcal H^*(s-)}_{\text{Past experience}}\}
+\end{equation}\]</span>
+<ul>
+<li>Probability of being in state <span class="math inline">\(j\)</span> at future time <span class="math inline">\(t\)</span> given current state <span class="math inline">\(k\)</span> at <span class="math inline">\(s\)</span></li>
+</ul></li>
+<li><strong>Relation with intensity</strong> <span class="math display">\[\lambda_{kj}\{t\mid\mathcal H^*(t-)\}\dd t=P_{kj}\{t,t\mid\mathcal H^*(t-)\}\]</span> <span class="math display">\[\begin{align}
 \mbox{Transition probability }
 \mymathop{\rightleftharpoons}_{\mbox{cumulative}}^{\mbox{instantaneous}} \mbox{ intensity}
 \end{align}\]</span>
 <ul>
 <li>Similarly to c.d.f. <span class="math inline">\(\leftrightarrows\)</span> hazard</li>
 </ul></li>
-<li>Formal relation with intensity is complex in general setting
-<ul>
-<li>A product limit form for Markov processes</li>
-<li>Numerical integration necessary</li>
-</ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="transition-probability-examples-i" class="slide level2">
 <h2>Transition Probability: Examples (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Life-death model</strong>
 <ul>
@@ -530,6 +538,10 @@ P_{00}(0, t)&amp;=\exp\left\{-\int_0^t\lambda_{01}(u)\dd u\right\}\,\,\, \mbox{(
 P_{01}(0, t)&amp;=1-\exp\left\{-\int_0^t\lambda_{01}(u)\dd u\right\}\,\,\,  \mbox{(c.d.f. of death)}
 \end{align}\]</span></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Competing risks</strong>
 <ul>
 <li><span class="math inline">\(\lambda_{0k}(t)\)</span>: cause-specific hazard for <span class="math inline">\(k\)</span>th risk <span class="math display">\[\begin{align}
@@ -539,9 +551,11 @@ of $k$th risk)}
 \end{align}\]</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="transition-probability-examples-ii" class="slide level2">
 <h2>Transition Probability: Examples (II)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Illness-death model (semi-competing risks)</strong>
 <ul>
@@ -549,11 +563,135 @@ of $k$th risk)}
 P_{00}(0, t)=\exp\left[-\int_0^t\{\lambda_{01}(u)+\lambda_{02}(u)\}\dd u\right]
 \]</span></li>
 <li><span class="math inline">\(P_{01}(0, t)\)</span> and <span class="math inline">\(P_{02}(0, t)\)</span> more complicated and depends on <span class="math inline">\(\lambda_{12}\{t\mid\mathcal H^*(t-)\}\)</span></li>
-<li><strong>Markov model</strong>: <span class="math inline">\(\lambda_{12}\{t\mid\mathcal H^*(t-)\}=\lambda_{12}(t)\)</span> <span class="math display">\[\begin{equation}\label{eq:multi_state:ill_death}
+<li><strong>Markov Process</strong>: <span class="math inline">\(\lambda_{12}\{t\mid\mathcal H^*(t-)\}=\lambda_{12}(t)\)</span> <span class="math display">\[\begin{equation}\label{eq:multi_state:ill_death}
 P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 \end{equation}\]</span></li>
 </ul></li>
 </ul>
+</div>
+</section>
+<section id="markov-process" class="slide level2">
+<h2>Markov Process</h2>
+<div class="fragment">
+<ul>
+<li><strong>Transition intensity matrix</strong> <span class="math display">\[
+\dd\Lambda_{kj}(u) \;=\;
+\begin{cases}
+\lambda_{kj}(u) \dd u, &amp; \text{if } k \neq j, \\
+-\sum_{l \neq k} \lambda_{kl}(u) \dd u, &amp; \text{if } k = j
+\end{cases}
+\]</span> i.e. <span class="math display">\[
+\dd\mathbf{\Lambda}(u) \;=\;
+\begin{bmatrix}
+-\sum_{k=1}^K \lambda_{0k}(u) &amp; \lambda_{01}(u) &amp; \cdots &amp; \lambda_{0K}(u) \\
+\lambda_{10}(u) &amp; -\sum_{k \neq 1} \lambda_{1k}(u) &amp; \cdots &amp; \lambda_{1K}(u) \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\lambda_{K0}(u) &amp; \lambda_{K1}(u) &amp; \cdots &amp; -\sum_{k=0}^{K-1} \lambda_{Kk}(u)
+\end{bmatrix} \dd u
+\]</span></li>
+</ul>
+</div>
+</section>
+<section id="transition-probability-vs.-intensity" class="slide level2">
+<h2>Transition Probability vs.&nbsp;Intensity</h2>
+<div class="fragment">
+<ul>
+<li><strong>Transition probability matrix</strong> <span class="math display">\[
+\textbf{P}(s, t) =
+\begin{bmatrix}
+P_{00}(s, t) &amp; P_{01}(s, t) &amp; \cdots &amp; P_{0K}(s, t) \\
+P_{10}(s, t) &amp; P_{11}(s, t) &amp; \cdots &amp; P_{1K}(s, t) \\
+\vdots       &amp; \vdots       &amp; \ddots &amp; \vdots       \\
+P_{K0}(s, t) &amp; P_{K1}(s, t) &amp; \cdots &amp; P_{KK}(s, t)
+\end{bmatrix}
+\]</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Product limit</strong> <span class="math display">\[
+\textbf{P}(s, t) \;=\; \lim_{\dd u \to 0}
+\prod_{r = 1}^m \bigl\{ \mathbf{I} \,+\, \dd\mathbf{\Lambda}(u_r) \bigr\}
+\]</span>
+<ul>
+<li><span class="math inline">\(s = u_0 &lt; u_1 &lt; \cdots &lt; u_m = t\)</span>, with <span class="math inline">\(u_r - u_{r-1} = \dd u\)</span></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="estimating-discrete-intensities" class="slide level2">
+<h2>Estimating Discrete Intensities</h2>
+<div class="fragment">
+<ul>
+<li><strong>Observed data</strong>
+<ul>
+<li><span class="math inline">\(C\)</span>: censoring time</li>
+<li><span class="math inline">\(N_{kj}(t) = N^*_{kj}(t \wedge C)\)</span> <span class="math display">\[\begin{equation}\label{eq:multi_state:censoredY}
+\tilde Y(t) \;=\;
+\begin{cases}
+Y(t), &amp; \text{if uncensored by } t, \\
+-1,   &amp; \text{if censored by } t.
+\end{cases}
+\end{equation}\]</span></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Nelsen–Aalen-type estimator</strong> <span class="math display">\[\begin{align}\label{eq:multi_state:np_intensity}
+\dd\hat\Lambda_{kj}(t)
+&amp;\;=\; \frac{\text{Number of observed }k \to j \text{ transitions}}
+{\text{Number of subjects at risk of a } k \to j \text{ transition}} \notag\\
+&amp;\;=\; \frac{\sum_{i=1}^n \dd N_{kji}(t)}{\sum_{i=1}^n I\left\{ \tilde Y_i(t) = k \right\}}
+\end{align}\]</span></li>
+</ul>
+</div>
+</section>
+<section id="aalenjohansen-estimator" class="slide level2">
+<h2>Aalen–Johansen Estimator</h2>
+<div class="fragment">
+<ul>
+<li><strong>Product-limit estimator</strong> <span class="math display">\[
+\hat{\textbf{P}}(s, t) \;=\; \lim_{\dd u \to 0}
+\prod_{r = 1}^m \bigl\{ \mathbf{I} \,+\, \dd\hat{\mathbf{\Lambda}}(u_r) \bigr\}
+\]</span>
+<ul>
+<li><span class="math inline">\(s = u_0 &lt; u_1 &lt; \cdots &lt; u_m = t\)</span>, with <span class="math inline">\(u_r - u_{r-1} = \dd u\)</span></li>
+<li>Reduces to KM, Gray’s estimator in life-death, competing risks models</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Robustness property</strong>
+<ul>
+<li>Valid even without Markov assumption</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="useful-functionals" class="slide level2">
+<h2>Useful Functionals</h2>
+<div class="fragment">
+<ul>
+<li><strong>State-occupancy probability</strong> <span class="math display">\[
+P_k(t) = \pr\{Y(t) = k\} = \sum_{l=0}^K \underbrace{\pr\{Y(0) = l\}}_{\text{Initial state}} \, \underbrace{P_{lk}(0, t)}_{\text{Transition probability}}
+\]</span>
+<ul>
+<li>Example: probability patient will be ill but still alive in one year</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Restricted mean sojourn time</strong> <span class="math display">\[
+\mu_k(\tau) = E\left[ \int_0^\tau I\{Y(t) = k\} \dd t \right] = \int_0^\tau P_k(t) \dd t
+\]</span>
+<ul>
+<li>Average time spent in state <span class="math inline">\(k\)</span> (healthy, ill but alive, etc.) by time <span class="math inline">\(\tau\)</span></li>
+</ul></li>
+</ul>
+</div>
 </section></section>
 <section>
 <section id="cox-type-models-for-intensity" class="title-slide slide level1 center">
@@ -562,12 +700,16 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 </section>
 <section id="observed-data" class="slide level2">
 <h2>Observed Data</h2>
+<div class="fragment">
 <ul>
 <li><strong>Censored life history</strong>
 <ul>
 <li><span class="math inline">\(\mathcal H(t)=\{Y(u):0\leq u\leq t\wedge C\}\)</span></li>
-<li><span class="math inline">\(C\)</span>: right censoring time</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Alternate formulation</strong>
 <ul>
 <li><strong>Focusing on (observed) transitions</strong> <span class="math inline">\(k\to j\)</span>
@@ -580,31 +722,39 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 <li>Suitable for models on intensities <span class="math inline">\(\lambda_{kj}\{t\mid\mathcal H^*(t-)\}\)</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="likelihood-function" class="slide level2">
 <h2>Likelihood Function</h2>
+<div class="fragment">
 <ul>
-<li><strong>Observed data</strong>
+<li><strong>Observed data</strong> <span class="math display">\[\begin{equation}\label{eq:multi_state:obs}
+    (u_k^{(r)}, v_k^{(r)}, \delta_{kj}^{(r)}),\hspace{3mm}r=1,2,\ldots;\hspace{2mm} 1\leq k\neq j\leq K
+    \end{equation}\]</span>
 <ul>
-<li>Collection of all observed transitions <span class="math display">\[\begin{equation}\label{eq:multi_state:obs}
-(u_k^{(r)}, v_k^{(r)}, \delta_{kj}^{(r)}),\hspace{3mm}r=1,2,\ldots;\hspace{2mm} 1\leq k\neq j\leq K
-\end{equation}\]</span></li>
-</ul></li>
-<li><strong>Likelihood for a single subject</strong>
-<ul>
-<li>Factorize by transition intensities <span class="math display">\[\begin{equation}\label{eq:multi_state:lik}
-\prod_{k\neq j}^K\prod_r\lambda_{kj}\left\{v_k^{(r)}\mid\mathcal H^*(v_k^{(r)}-)\right\}^{\delta_{kj}^{(r)}}
-\exp\left[-\int_{u_k^{(r)}}^{v_k^{(r)}}\lambda_{kj}\left\{t\mid\mathcal H^*(t-)\right\}\dd t\right]
-\end{equation}\]</span></li>
+<li>Collection of all observed transitions</li>
 </ul></li>
 </ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Likelihood for a single subject</strong> <span class="math display">\[\begin{equation}\label{eq:multi_state:lik}
+    \prod_{k\neq j}^K\prod_r\lambda_{kj}\left\{v_k^{(r)}\mid\mathcal H^*(v_k^{(r)}-)\right\}^{\delta_{kj}^{(r)}}
+    \exp\left[-\int_{u_k^{(r)}}^{v_k^{(r)}}\lambda_{kj}\left\{t\mid\mathcal H^*(t-)\right\}\dd t\right]
+    \end{equation}\]</span>
+<ul>
+<li>Factorize by transition intensities</li>
+</ul></li>
+</ul>
+</div>
 </section>
 <section id="inference-for-transition-intensity" class="slide level2">
 <h2>Inference for Transition Intensity</h2>
+<div class="fragment">
 <ul>
 <li><strong>Likelihood for</strong> <span class="math inline">\(k\to j\)</span> transition
 <ul>
-<li><strong>Simplify: progressive process</strong> <span class="math display">\[
+<li><strong>Progressive process</strong> <span class="math display">\[
 \lambda_{kj}\left\{v_k\mid\mathcal H^*(v_k-)\right\}^{\delta_{kj}}
 \exp\left[-\int_{u_k}^{v_k}\lambda_{kj}\left\{t\mid\mathcal H^*(t-)\right\}\dd t\right]
 \]</span></li>
@@ -616,9 +766,11 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="semiparametric-regression-i" class="slide level2">
 <h2>Semiparametric Regression (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Modeling target</strong>
 <ul>
@@ -629,20 +781,26 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 <li><span class="math inline">\(Z(t)\)</span>: possibly time-dependent covariates</li>
 </ul></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Multiplicative intensity models</strong>
 <ul>
-<li><strong>Modulated (by covariates) Markov models</strong> <span class="math display">\[\begin{equation}\label{eq:multi_state:markov}
+<li><strong>Modulated (by covariates) <em>Markov</em> models</strong> <span class="math display">\[\begin{equation}\label{eq:multi_state:markov}
 \lambda_{kj}\{t\mid\mathcal H^*(t-), \overline Z(t)\}=\exp\{\beta_{kj}^\T Z(t)\}\lambda_{kj0}(t)
 \end{equation}\]</span>
 <ul>
-<li>Risk of transition independent of past given (current values) of covariates</li>
+<li>Risk of transition independent of past given (current values of) covariates</li>
 <li><span class="math inline">\(\beta_{kj}\)</span>: log-intensity (risk) ratios of going to state <span class="math inline">\(j\)</span> for those in state <span class="math inline">\(k\)</span></li>
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="semiparametric-regression-ii" class="slide level2">
 <h2>Semiparametric Regression (II)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Multiplicative intensity models</strong>
 <ul>
@@ -660,9 +818,11 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="software-survivalcoxph-i" class="slide level2">
 <h2>Software: <code>survival::coxph()</code> (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Input data format</strong>
 <ul>
@@ -682,9 +842,11 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 <span id="cb1-8"><a></a><span class="co">#  2 46.557377 65.770492      0    1  2       1  52    1   20     1     1 </span></span>
 <span id="cb1-9"><a></a><span class="co">#   ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
 </section>
 <section id="software-survivalcoxph-ii" class="slide level2">
 <h2>Software: <code>survival::coxph()</code> (II)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Basic syntax for multiplicative intensity model</strong>
 <ul>
@@ -692,14 +854,15 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 <ul>
 <li>Factorization of likelihood</li>
 </ul></li>
-<li><code>covariates</code>: <span class="math inline">\(Z(t)\)</span> and/or elements of <span class="math inline">\(\mathcal H^*(t-)\)</span>, e.g., <span class="math inline">\(B(t)\)</span>, to be used as predictor</li>
+<li><code>covariates</code>: <span class="math inline">\(Z(t)\)</span> and/or elements of <span class="math inline">\(\mathcal H^*(t-)\)</span>, e.g., <span class="math inline">\(B(t)\)</span></li>
 </ul></li>
 </ul>
 <div class="big-code">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="co"># fit model for transition k-&gt;j</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="co"># Fit a model for transition k-&gt;j</span></span>
 <span id="cb2-2"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, status) <span class="sc">~</span> covariates, </span>
 <span id="cb2-3"><a></a>       <span class="at">subset =</span> (from <span class="sc">==</span> k) <span class="sc">&amp;</span> (to <span class="sc">==</span> j))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 </section></section>
@@ -710,6 +873,7 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 </section>
 <section id="whats-new" class="slide level2">
 <h2>What’s New</h2>
+<div class="fragment">
 <ul>
 <li><strong>Study information</strong>
 <ul>
@@ -719,6 +883,10 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 <li>Previously analyzed by time to earlier of relapse/death (RFS)</li>
 </ul></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Multistate perspective</strong>
 <ul>
 <li>Does hormonal treatment (or other risk factors) have differential effects on
@@ -729,9 +897,11 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 </ol></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="multistate-setup" class="slide level2">
 <h2>Multistate Setup</h2>
+<div class="fragment">
 <ul>
 <li><strong>Illness-death model</strong></li>
 </ul>
@@ -749,9 +919,11 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 <p><img data-src="images/ms_gbc_ms.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="multiplicative-intensity-models" class="slide level2">
 <h2>Multiplicative Intensity Models</h2>
+<div class="fragment">
 <ul>
 <li><strong>Three (semi-Markov) models</strong></li>
 </ul>
@@ -772,9 +944,11 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 <span id="cb4-14"><a></a>            <span class="sc">+</span> agec <span class="sc">+</span> size <span class="sc">+</span> prog <span class="sc">+</span> estrg <span class="sc">+</span> <span class="fu">strata</span>(grade), <span class="at">data =</span> gbc_ms,</span>
 <span id="cb4-15"><a></a>            <span class="at">subset =</span> ((from <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">&amp;</span> (to <span class="sc">==</span> <span class="dv">2</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
 </section>
 <section id="regression-results-i" class="slide level2">
 <h2>Regression Results (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Regression table</strong>
 <ul>
@@ -786,9 +960,11 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 <p><img data-src="images/ms_gbc_reg1.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="regression-results-ii" class="slide level2">
 <h2>Regression Results (II)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Regression table</strong>
 <ul>
@@ -800,6 +976,7 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 <figure>
 <p><img data-src="images/ms_gbc_reg2.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
 </figure>
+</div>
 </div>
 </section></section>
 <section>
@@ -848,16 +1025,16 @@ P_{12}(s, t)=\exp\left\{-\int_s^t\lambda_{12}(u)\dd u\right\}
 </ul></li>
 </ul>
 </section>
-<section id="hw5-due-april-17" class="slide level2">
-<h2>HW5 (Due April 17)</h2>
+<section id="hw5-due-april-16" class="slide level2">
+<h2>HW5 (Due April 16)</h2>
 <ul>
-<li>Problem 8.12</li>
+<li>Problem 8.18</li>
 <li>Choose one
 <ul>
-<li>Problem 10.4</li>
-<li>Problem 10.10</li>
+<li>Problem 10.6</li>
+<li>Problem 10.15</li>
 </ul></li>
-<li>Problem 11.11 (“Data &gt; Renal Transplants Study”)</li>
+<li>Problem 11.18 (a) (“Data &gt; Renal Transplants Study”)</li>
 <li>(Extra credit) Problem 11.2</li>
 </ul>
 

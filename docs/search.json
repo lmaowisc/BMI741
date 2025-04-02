@@ -4046,119 +4046,119 @@
     "href": "chap12.html#markov-semi-markov-processes",
     "title": "Applied Survival Analysis",
     "section": "Markov & Semi-Markov Processes",
-    "text": "Markov & Semi-Markov Processes\n\nSimplifying assumptions\n\nMarkov: transition independent of past given current state \\[\n\\lambda_{kj}\\{t\\mid\\mathcal H^*(t-)\\}=\\lambda_{kj}(t)\\,\\,\\, \\mbox{fixed function}\n\\]\nSemi-Markov: transition depends on past through time in current state \\[\n\\lambda_{kj}\\{t\\mid\\mathcal H^*(t-)\\}=\\lambda_{kj}\\{t, B(t)\\}\n\\]\n\n\\(B(t)\\): time since last entry into current state\nExample: risk of death depends on how long cancer has reappeared\n\nHomogeneity: Markov or semi-Markov process with intensity a constant function of \\(t\\)"
+    "text": "Markov & Semi-Markov Processes\n\n\nMarkov: transition independent of past given current state \\[\n    \\lambda_{kj}\\{t\\mid\\mathcal H^*(t-)\\}=\\lambda_{kj}(t)\\,\\,\\, \\mbox{fixed function}\n    \\]\n\nHomogeneous Markov: \\(\\lambda_{kj}(t)\\equiv \\lambda_{kj}\\)\n\n\n\n\n\nSemi-Markov: transition depends on past through time in current state \\[\n    \\lambda_{kj}\\{t\\mid\\mathcal H^*(t-)\\}=\\lambda_{kj}\\{t, B(t)\\}\n    \\]\n\n\\(B(t)\\): time since last entry into current state\nExample: risk of death depends on how long cancer has reappeared"
   },
   {
     "objectID": "chap12.html#markov-semi-markov-examples",
     "href": "chap12.html#markov-semi-markov-examples",
     "title": "Applied Survival Analysis",
     "section": "Markov & Semi-Markov Examples",
-    "text": "Markov & Semi-Markov Examples\n\nIllness-death model (semi-competing risks)\n\nTransition intensities for \\(0\\to 1\\) (onset of illness), \\(0\\to 2\\) (death w.o. illness) \\[\n\\lambda_{01}(t) \\mbox{ and } \\lambda_{02}(t): \\,\\, \\mbox{always deterministic}\n\\]\n\nNo prior data to speak of\n\nTransition intensity for \\(1\\to 2\\) (death with illness) \\[\\begin{align}\n\\mbox{Markov model}:&\\,\\,\\, \\lambda_{12}\\{t\\mid\\mathcal H^*(t-)\\}=\\lambda_{12}(t) \\\\\n  \\mbox{Semi-Markov model}:&\\,\\,\\, \\lambda_{12}\\{t\\mid\\mathcal H^*(t-)\\}=\\lambda_{12}(t, t - T)\n\\end{align}\\] \\(T\\): time to onset of illness"
+    "text": "Markov & Semi-Markov Examples\n\n\nIllness-death model (semi-competing risks)\n\nTransition intensities for \\(0\\to 1\\) (onset of illness), \\(0\\to 2\\) (death w.o. illness) \\[\n\\lambda_{01}(t) \\mbox{ and } \\lambda_{02}(t): \\,\\, \\mbox{always deterministic}\n\\]\n\nNo prior data to condition on\n\nTransition intensity for \\(1\\to 2\\) (death with illness) \\[\\begin{align}\n\\mbox{Markov model}:&\\,\\,\\, \\lambda_{12}\\{t\\mid\\mathcal H^*(t-)\\}=\\lambda_{12}(t) \\\\\n  \\mbox{Semi-Markov model}:&\\,\\,\\, \\lambda_{12}\\{t\\mid\\mathcal H^*(t-)\\}=\\lambda_{12}(t, t - T)\n\\end{align}\\] \\(T\\): time to onset of illness"
   },
   {
     "objectID": "chap12.html#transition-probability-definition",
     "href": "chap12.html#transition-probability-definition",
     "title": "Applied Survival Analysis",
     "section": "Transition Probability: Definition",
-    "text": "Transition Probability: Definition\n\nTransition Probability\n\nProbability of being in state \\(j\\) at future time \\(t\\) given current state \\(k\\) at \\(s\\) \\[\\begin{equation}\\label{eq:multi_state:trans_prob}\nP_{kj}\\{s,t\\mid\\mathcal H^*(s-)\\}=\\pr\\{Y(t)=j\\mid Y(s-)=k, \\mathcal H^*(s-)\\}\n\\end{equation}\\]\n\\(\\lambda_{kj}\\{t\\mid\\mathcal H^*(t-)\\}\\dd t=P_{kj}\\{t,t\\mid\\mathcal H^*(t-)\\}\\) \\[\\begin{align}\n\\mbox{Transition probability }\n\\mymathop{\\rightleftharpoons}_{\\mbox{cumulative}}^{\\mbox{instantaneous}} \\mbox{ intensity}\n\\end{align}\\]\n\nSimilarly to c.d.f. \\(\\leftrightarrows\\) hazard\n\nFormal relation with intensity is complex in general setting\n\nA product limit form for Markov processes\nNumerical integration necessary"
+    "text": "Transition Probability: Definition\n\n\nTransition Probability\n\nDefinition \\[\\begin{equation}\\label{eq:multi_state:trans_prob}\nP_{kj}\\{s,t\\mid\\mathcal H^*(s-)\\}=\\pr\\{\\underbrace{Y(t)=j}_{\\text{Future state}}\\mid \\underbrace{Y(s-)=k}_{\\text{Current state}}, \\underbrace{\\mathcal H^*(s-)}_{\\text{Past experience}}\\}\n\\end{equation}\\]\n\nProbability of being in state \\(j\\) at future time \\(t\\) given current state \\(k\\) at \\(s\\)\n\nRelation with intensity \\[\\lambda_{kj}\\{t\\mid\\mathcal H^*(t-)\\}\\dd t=P_{kj}\\{t,t\\mid\\mathcal H^*(t-)\\}\\] \\[\\begin{align}\n\\mbox{Transition probability }\n\\mymathop{\\rightleftharpoons}_{\\mbox{cumulative}}^{\\mbox{instantaneous}} \\mbox{ intensity}\n\\end{align}\\]\n\nSimilarly to c.d.f. \\(\\leftrightarrows\\) hazard"
   },
   {
     "objectID": "chap12.html#transition-probability-examples-i",
     "href": "chap12.html#transition-probability-examples-i",
     "title": "Applied Survival Analysis",
     "section": "Transition Probability: Examples (I)",
-    "text": "Transition Probability: Examples (I)\n\nLife-death model\n\n\\(\\lambda_{01}(t)\\): hazard for death \\[\\begin{align}\nP_{00}(0, t)&=\\exp\\left\\{-\\int_0^t\\lambda_{01}(u)\\dd u\\right\\}\\,\\,\\, \\mbox{(Survival)}\\\\\nP_{01}(0, t)&=1-\\exp\\left\\{-\\int_0^t\\lambda_{01}(u)\\dd u\\right\\}\\,\\,\\,  \\mbox{(c.d.f. of death)}\n\\end{align}\\]\n\nCompeting risks\n\n\\(\\lambda_{0k}(t)\\): cause-specific hazard for \\(k\\)th risk \\[\\begin{align}\nP_{00}(0, t)&=\\exp\\left\\{-\\int_0^t\\sum_{k=1}^K\\lambda_{0k}(u)\\dd u\\right\\}\\,\\,\\, \\mbox{(Overall survival)}\\\\\nP_{0k}(0, t)&=\\int_0^t P_{00}(0, u-)\\lambda_{0k}(u)\\dd u\\,\\,\\,  \\mbox{(Cumulative incidence\nof $k$th risk)}\n\\end{align}\\]"
+    "text": "Transition Probability: Examples (I)\n\n\nLife-death model\n\n\\(\\lambda_{01}(t)\\): hazard for death \\[\\begin{align}\nP_{00}(0, t)&=\\exp\\left\\{-\\int_0^t\\lambda_{01}(u)\\dd u\\right\\}\\,\\,\\, \\mbox{(Survival)}\\\\\nP_{01}(0, t)&=1-\\exp\\left\\{-\\int_0^t\\lambda_{01}(u)\\dd u\\right\\}\\,\\,\\,  \\mbox{(c.d.f. of death)}\n\\end{align}\\]\n\n\n\n\n\nCompeting risks\n\n\\(\\lambda_{0k}(t)\\): cause-specific hazard for \\(k\\)th risk \\[\\begin{align}\nP_{00}(0, t)&=\\exp\\left\\{-\\int_0^t\\sum_{k=1}^K\\lambda_{0k}(u)\\dd u\\right\\}\\,\\,\\, \\mbox{(Overall survival)}\\\\\nP_{0k}(0, t)&=\\int_0^t P_{00}(0, u-)\\lambda_{0k}(u)\\dd u\\,\\,\\,  \\mbox{(Cumulative incidence\nof $k$th risk)}\n\\end{align}\\]"
   },
   {
     "objectID": "chap12.html#transition-probability-examples-ii",
     "href": "chap12.html#transition-probability-examples-ii",
     "title": "Applied Survival Analysis",
     "section": "Transition Probability: Examples (II)",
-    "text": "Transition Probability: Examples (II)\n\nIllness-death model (semi-competing risks)\n\n\\(\\lambda_{01}(t), \\lambda_{02}(t)\\): cause-specific hazard for onset of illness or death w.o. illness \\[\nP_{00}(0, t)=\\exp\\left[-\\int_0^t\\{\\lambda_{01}(u)+\\lambda_{02}(u)\\}\\dd u\\right]\n\\]\n\\(P_{01}(0, t)\\) and \\(P_{02}(0, t)\\) more complicated and depends on \\(\\lambda_{12}\\{t\\mid\\mathcal H^*(t-)\\}\\)\nMarkov model: \\(\\lambda_{12}\\{t\\mid\\mathcal H^*(t-)\\}=\\lambda_{12}(t)\\) \\[\\begin{equation}\\label{eq:multi_state:ill_death}\nP_{12}(s, t)=\\exp\\left\\{-\\int_s^t\\lambda_{12}(u)\\dd u\\right\\}\n\\end{equation}\\]"
+    "text": "Transition Probability: Examples (II)\n\n\nIllness-death model (semi-competing risks)\n\n\\(\\lambda_{01}(t), \\lambda_{02}(t)\\): cause-specific hazard for onset of illness or death w.o. illness \\[\nP_{00}(0, t)=\\exp\\left[-\\int_0^t\\{\\lambda_{01}(u)+\\lambda_{02}(u)\\}\\dd u\\right]\n\\]\n\\(P_{01}(0, t)\\) and \\(P_{02}(0, t)\\) more complicated and depends on \\(\\lambda_{12}\\{t\\mid\\mathcal H^*(t-)\\}\\)\nMarkov Process: \\(\\lambda_{12}\\{t\\mid\\mathcal H^*(t-)\\}=\\lambda_{12}(t)\\) \\[\\begin{equation}\\label{eq:multi_state:ill_death}\nP_{12}(s, t)=\\exp\\left\\{-\\int_s^t\\lambda_{12}(u)\\dd u\\right\\}\n\\end{equation}\\]"
   },
   {
     "objectID": "chap12.html#observed-data",
     "href": "chap12.html#observed-data",
     "title": "Applied Survival Analysis",
     "section": "Observed Data",
-    "text": "Observed Data\n\nCensored life history\n\n\\(\\mathcal H(t)=\\{Y(u):0\\leq u\\leq t\\wedge C\\}\\)\n\\(C\\): right censoring time\n\nAlternate formulation\n\nFocusing on (observed) transitions \\(k\\to j\\)\n\n\\(u_k^{(r)}\\): \\(r\\)th time subject enters state \\(k\\)\n\\(v_k^{(r)}\\): exit or censoring time\n\\(\\delta_{kj}^{(r)}\\): indicator of observed transition to state \\(j\\) at \\(v_k^{(r)}\\) (0 if censored or going to other states)\n\nProgressive process \\(\\to\\) \\(r\\) redundant (why?)\nSuitable for models on intensities \\(\\lambda_{kj}\\{t\\mid\\mathcal H^*(t-)\\}\\)"
+    "text": "Observed Data\n\n\nCensored life history\n\n\\(\\mathcal H(t)=\\{Y(u):0\\leq u\\leq t\\wedge C\\}\\)\n\n\n\n\n\nAlternate formulation\n\nFocusing on (observed) transitions \\(k\\to j\\)\n\n\\(u_k^{(r)}\\): \\(r\\)th time subject enters state \\(k\\)\n\\(v_k^{(r)}\\): exit or censoring time\n\\(\\delta_{kj}^{(r)}\\): indicator of observed transition to state \\(j\\) at \\(v_k^{(r)}\\) (0 if censored or going to other states)\n\nProgressive process \\(\\to\\) \\(r\\) redundant (why?)\nSuitable for models on intensities \\(\\lambda_{kj}\\{t\\mid\\mathcal H^*(t-)\\}\\)"
   },
   {
     "objectID": "chap12.html#likelihood-function",
     "href": "chap12.html#likelihood-function",
     "title": "Applied Survival Analysis",
     "section": "Likelihood Function",
-    "text": "Likelihood Function\n\nObserved data\n\nCollection of all observed transitions \\[\\begin{equation}\\label{eq:multi_state:obs}\n(u_k^{(r)}, v_k^{(r)}, \\delta_{kj}^{(r)}),\\hspace{3mm}r=1,2,\\ldots;\\hspace{2mm} 1\\leq k\\neq j\\leq K\n\\end{equation}\\]\n\nLikelihood for a single subject\n\nFactorize by transition intensities \\[\\begin{equation}\\label{eq:multi_state:lik}\n\\prod_{k\\neq j}^K\\prod_r\\lambda_{kj}\\left\\{v_k^{(r)}\\mid\\mathcal H^*(v_k^{(r)}-)\\right\\}^{\\delta_{kj}^{(r)}}\n\\exp\\left[-\\int_{u_k^{(r)}}^{v_k^{(r)}}\\lambda_{kj}\\left\\{t\\mid\\mathcal H^*(t-)\\right\\}\\dd t\\right]\n\\end{equation}\\]"
+    "text": "Likelihood Function\n\n\nObserved data \\[\\begin{equation}\\label{eq:multi_state:obs}\n    (u_k^{(r)}, v_k^{(r)}, \\delta_{kj}^{(r)}),\\hspace{3mm}r=1,2,\\ldots;\\hspace{2mm} 1\\leq k\\neq j\\leq K\n    \\end{equation}\\]\n\nCollection of all observed transitions\n\n\n\n\n\nLikelihood for a single subject \\[\\begin{equation}\\label{eq:multi_state:lik}\n    \\prod_{k\\neq j}^K\\prod_r\\lambda_{kj}\\left\\{v_k^{(r)}\\mid\\mathcal H^*(v_k^{(r)}-)\\right\\}^{\\delta_{kj}^{(r)}}\n    \\exp\\left[-\\int_{u_k^{(r)}}^{v_k^{(r)}}\\lambda_{kj}\\left\\{t\\mid\\mathcal H^*(t-)\\right\\}\\dd t\\right]\n    \\end{equation}\\]\n\nFactorize by transition intensities"
   },
   {
     "objectID": "chap12.html#inference-for-transition-intensity",
     "href": "chap12.html#inference-for-transition-intensity",
     "title": "Applied Survival Analysis",
     "section": "Inference for Transition Intensity",
-    "text": "Inference for Transition Intensity\n\nLikelihood for \\(k\\to j\\) transition\n\nSimplify: progressive process \\[\n\\lambda_{kj}\\left\\{v_k\\mid\\mathcal H^*(v_k-)\\right\\}^{\\delta_{kj}}\n\\exp\\left[-\\int_{u_k}^{v_k}\\lambda_{kj}\\left\\{t\\mid\\mathcal H^*(t-)\\right\\}\\dd t\\right]\n\\]\nLeft-truncated, right-censored \\(N_{kj}^*(t)\\) with “hazard” \\(\\lambda_{kj}\\left\\{t\\mid\\mathcal H^*(t-)\\right\\}\\)\n\n\\(u_k\\): left-truncation (late entry) time\n\\(v_k\\): possibly censored event time\n\\(\\delta_{kj}\\): event indicator"
+    "text": "Inference for Transition Intensity\n\n\nLikelihood for \\(k\\to j\\) transition\n\nProgressive process \\[\n\\lambda_{kj}\\left\\{v_k\\mid\\mathcal H^*(v_k-)\\right\\}^{\\delta_{kj}}\n\\exp\\left[-\\int_{u_k}^{v_k}\\lambda_{kj}\\left\\{t\\mid\\mathcal H^*(t-)\\right\\}\\dd t\\right]\n\\]\nLeft-truncated, right-censored \\(N_{kj}^*(t)\\) with “hazard” \\(\\lambda_{kj}\\left\\{t\\mid\\mathcal H^*(t-)\\right\\}\\)\n\n\\(u_k\\): left-truncation (late entry) time\n\\(v_k\\): possibly censored event time\n\\(\\delta_{kj}\\): event indicator"
   },
   {
     "objectID": "chap12.html#semiparametric-regression-i",
     "href": "chap12.html#semiparametric-regression-i",
     "title": "Applied Survival Analysis",
     "section": "Semiparametric Regression (I)",
-    "text": "Semiparametric Regression (I)\n\nModeling target\n\nCovariate-specific transition intensity \\[\n  \\lambda_{kj}\\{t\\mid\\mathcal H^*(t-), \\overline Z(t)\\} = E\\{\\dd N_{kj}^*(t)\\mid Y(t-)=k,\\mathcal H^*(t-), \\overline Z(t)\\}\n  \\]\n\n\\(Z(t)\\): possibly time-dependent covariates\n\n\nMultiplicative intensity models\n\nModulated (by covariates) Markov models \\[\\begin{equation}\\label{eq:multi_state:markov}\n\\lambda_{kj}\\{t\\mid\\mathcal H^*(t-), \\overline Z(t)\\}=\\exp\\{\\beta_{kj}^\\T Z(t)\\}\\lambda_{kj0}(t)\n\\end{equation}\\]\n\nRisk of transition independent of past given (current values) of covariates\n\\(\\beta_{kj}\\): log-intensity (risk) ratios of going to state \\(j\\) for those in state \\(k\\)"
+    "text": "Semiparametric Regression (I)\n\n\nModeling target\n\nCovariate-specific transition intensity \\[\n  \\lambda_{kj}\\{t\\mid\\mathcal H^*(t-), \\overline Z(t)\\} = E\\{\\dd N_{kj}^*(t)\\mid Y(t-)=k,\\mathcal H^*(t-), \\overline Z(t)\\}\n  \\]\n\n\\(Z(t)\\): possibly time-dependent covariates\n\n\n\n\n\n\nMultiplicative intensity models\n\nModulated (by covariates) Markov models \\[\\begin{equation}\\label{eq:multi_state:markov}\n\\lambda_{kj}\\{t\\mid\\mathcal H^*(t-), \\overline Z(t)\\}=\\exp\\{\\beta_{kj}^\\T Z(t)\\}\\lambda_{kj0}(t)\n\\end{equation}\\]\n\nRisk of transition independent of past given (current values of) covariates\n\\(\\beta_{kj}\\): log-intensity (risk) ratios of going to state \\(j\\) for those in state \\(k\\)"
   },
   {
     "objectID": "chap12.html#semiparametric-regression-ii",
     "href": "chap12.html#semiparametric-regression-ii",
     "title": "Applied Survival Analysis",
     "section": "Semiparametric Regression (II)",
-    "text": "Semiparametric Regression (II)\n\nMultiplicative intensity models\n\nModulated semi-Markov models \\[\\begin{equation}\\label{eq:multi_state:semi_markov}\n\\lambda_{kj}\\{t\\mid\\mathcal H^*(t-)\\}=\\exp\\{\\beta_{kj}^\\T Z(t)+\\gamma_{kj} B(t)\\}\\lambda_{kj0}(t)\n\\end{equation}\\]\n\nRisk of transition depend on past through time last spent in current state and (current values) of covariates\n\\(\\gamma_{kj}\\): log-intensity (risk) ratio with unit increase in the time spent in current state\n\nExample: illness-death model\n\nSemi-Markov for \\(1\\to 2\\): risk of death in illness depends on how long the patient has been ill\n\\(\\gamma_{kj}\\): log-intensity (risk) ratio for death with unit increase in the time being ill"
+    "text": "Semiparametric Regression (II)\n\n\nMultiplicative intensity models\n\nModulated semi-Markov models \\[\\begin{equation}\\label{eq:multi_state:semi_markov}\n\\lambda_{kj}\\{t\\mid\\mathcal H^*(t-)\\}=\\exp\\{\\beta_{kj}^\\T Z(t)+\\gamma_{kj} B(t)\\}\\lambda_{kj0}(t)\n\\end{equation}\\]\n\nRisk of transition depend on past through time last spent in current state and (current values) of covariates\n\\(\\gamma_{kj}\\): log-intensity (risk) ratio with unit increase in the time spent in current state\n\nExample: illness-death model\n\nSemi-Markov for \\(1\\to 2\\): risk of death in illness depends on how long the patient has been ill\n\\(\\gamma_{kj}\\): log-intensity (risk) ratio for death with unit increase in the time being ill"
   },
   {
     "objectID": "chap12.html#software-survivalcoxph-i",
     "href": "chap12.html#software-survivalcoxph-i",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::coxph() (I)",
-    "text": "Software: survival::coxph() (I)\n\nInput data format\n\nLong format, one transition per row\n(start, stop): \\((u_k^{(r)}, v_k^{(r)})\\); status: \\(\\delta^{(r)}_{kj}\\)\n(from, to): \\((k, j)\\)\n\n\n\n# &gt; gbc_ms\n# id     start      stop status from to hormone age meno size grade nodes \n#  1  0.000000 43.836066      1    0  1       1  38    1   18     3     5  \n#  1  0.000000 43.836066      0    0  2       1  38    1   18     3     5 \n#  1 43.836066 74.819672      0    1  2       1  38    1   18     3     5 \n#  2  0.000000 46.557377      1    0  1       1  52    1   20     1     1 \n#  2  0.000000 46.557377      0    0  2       1  52    1   20     1     1 \n#  2 46.557377 65.770492      0    1  2       1  52    1   20     1     1 \n#   ..."
+    "text": "Software: survival::coxph() (I)\n\n\nInput data format\n\nLong format, one transition per row\n(start, stop): \\((u_k^{(r)}, v_k^{(r)})\\); status: \\(\\delta^{(r)}_{kj}\\)\n(from, to): \\((k, j)\\)\n\n\n\n# &gt; gbc_ms\n# id     start      stop status from to hormone age meno size grade nodes \n#  1  0.000000 43.836066      1    0  1       1  38    1   18     3     5  \n#  1  0.000000 43.836066      0    0  2       1  38    1   18     3     5 \n#  1 43.836066 74.819672      0    1  2       1  38    1   18     3     5 \n#  2  0.000000 46.557377      1    0  1       1  52    1   20     1     1 \n#  2  0.000000 46.557377      0    0  2       1  52    1   20     1     1 \n#  2 46.557377 65.770492      0    1  2       1  52    1   20     1     1 \n#   ..."
   },
   {
     "objectID": "chap12.html#software-survivalcoxph-ii",
     "href": "chap12.html#software-survivalcoxph-ii",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::coxph() (II)",
-    "text": "Software: survival::coxph() (II)\n\nBasic syntax for multiplicative intensity model\n\nFit each type of transition \\((k\\to j)\\) separately\n\nFactorization of likelihood\n\ncovariates: \\(Z(t)\\) and/or elements of \\(\\mathcal H^*(t-)\\), e.g., \\(B(t)\\), to be used as predictor\n\n\n\n\n# fit model for transition k-&gt;j\nobj &lt;- coxph(Surv(start, stop, status) ~ covariates, \n       subset = (from == k) & (to == j))"
+    "text": "Software: survival::coxph() (II)\n\n\nBasic syntax for multiplicative intensity model\n\nFit each type of transition \\((k\\to j)\\) separately\n\nFactorization of likelihood\n\ncovariates: \\(Z(t)\\) and/or elements of \\(\\mathcal H^*(t-)\\), e.g., \\(B(t)\\)\n\n\n\n\n# Fit a model for transition k-&gt;j\nobj &lt;- coxph(Surv(start, stop, status) ~ covariates, \n       subset = (from == k) & (to == j))"
   },
   {
     "objectID": "chap12.html#whats-new",
     "href": "chap12.html#whats-new",
     "title": "Applied Survival Analysis",
     "section": "What’s New",
-    "text": "What’s New\n\nStudy information\n\nPopulation: 686 patients with primary node positive breast cancer\nEndpoints: relapse of cancer and death (semi-competing risks)\n\nPreviously analyzed by time to earlier of relapse/death (RFS)\n\n\nMultistate perspective\n\nDoes hormonal treatment (or other risk factors) have differential effects on\n\nRelapse\nDeath in remission\nDeath after relapse"
+    "text": "What’s New\n\n\nStudy information\n\nPopulation: 686 patients with primary node positive breast cancer\nEndpoints: relapse of cancer and death (semi-competing risks)\n\nPreviously analyzed by time to earlier of relapse/death (RFS)\n\n\n\n\n\n\nMultistate perspective\n\nDoes hormonal treatment (or other risk factors) have differential effects on\n\nRelapse\nDeath in remission\nDeath after relapse"
   },
   {
     "objectID": "chap12.html#multistate-setup",
     "href": "chap12.html#multistate-setup",
     "title": "Applied Survival Analysis",
     "section": "Multistate Setup",
-    "text": "Multistate Setup\n\nIllness-death model\n\n\n# &gt; gbc_ms\n# id     start      stop status from to hormone age meno size grade nodes \n#  1  0.000000 43.836066      1    0  1       1  38    1   18     3     5  \n#  1  0.000000 43.836066      0    0  2       1  38    1   18     3     5 \n#  1 43.836066 74.819672      0    1  2       1  38    1   18     3     5 \n#  2  0.000000 46.557377      1    0  1       1  52    1   20     1     1 \n#   ..."
+    "text": "Multistate Setup\n\n\nIllness-death model\n\n\n# &gt; gbc_ms\n# id     start      stop status from to hormone age meno size grade nodes \n#  1  0.000000 43.836066      1    0  1       1  38    1   18     3     5  \n#  1  0.000000 43.836066      0    0  2       1  38    1   18     3     5 \n#  1 43.836066 74.819672      0    1  2       1  38    1   18     3     5 \n#  2  0.000000 46.557377      1    0  1       1  52    1   20     1     1 \n#   ..."
   },
   {
     "objectID": "chap12.html#multiplicative-intensity-models",
     "href": "chap12.html#multiplicative-intensity-models",
     "title": "Applied Survival Analysis",
     "section": "Multiplicative Intensity Models",
-    "text": "Multiplicative Intensity Models\n\nThree (semi-Markov) models\n\n\n# B(t): time spent in current state\ngbc_ms$Bt &lt;- gbc_ms$stop - gbc_ms$start\n\n### 0-&gt;1: remission to relapse ----------------------------------------\nobj01 &lt;- coxph(Surv(start, stop, status) ~ hormone + meno\n            + agec + size + prog + estrg + strata(grade), data = gbc_ms,\n            subset = ((from==0) & (to == 1)))\n### 0-&gt;2: remission to death ------------------------------------------\nobj02 &lt;- coxph(Surv(start, stop, status) ~ hormone + meno\n            + size + prog + estrg + strata(grade), data = gbc_ms,\n            subset = ((from == 0) & (to == 2)))\n### 1-&gt;2: relapse to death --------------------------------------------\nobj12 &lt;- coxph(Surv(start, stop, status) ~ Bt + hormone + meno\n            + agec + size + prog + estrg + strata(grade), data = gbc_ms,\n            subset = ((from == 1) & (to == 2)))"
+    "text": "Multiplicative Intensity Models\n\n\nThree (semi-Markov) models\n\n\n# B(t): time spent in current state\ngbc_ms$Bt &lt;- gbc_ms$stop - gbc_ms$start\n\n### 0-&gt;1: remission to relapse ----------------------------------------\nobj01 &lt;- coxph(Surv(start, stop, status) ~ hormone + meno\n            + agec + size + prog + estrg + strata(grade), data = gbc_ms,\n            subset = ((from==0) & (to == 1)))\n### 0-&gt;2: remission to death ------------------------------------------\nobj02 &lt;- coxph(Surv(start, stop, status) ~ hormone + meno\n            + size + prog + estrg + strata(grade), data = gbc_ms,\n            subset = ((from == 0) & (to == 2)))\n### 1-&gt;2: relapse to death --------------------------------------------\nobj12 &lt;- coxph(Surv(start, stop, status) ~ Bt + hormone + meno\n            + agec + size + prog + estrg + strata(grade), data = gbc_ms,\n            subset = ((from == 1) & (to == 2)))"
   },
   {
     "objectID": "chap12.html#regression-results-i",
     "href": "chap12.html#regression-results-i",
     "title": "Applied Survival Analysis",
     "section": "Regression Results (I)",
-    "text": "Regression Results (I)\n\nRegression table\n\nHormonal therapy beneficial on relapse (31.5% risk reduction; \\(p\\)-value 0.003)"
+    "text": "Regression Results (I)\n\n\nRegression table\n\nHormonal therapy beneficial on relapse (31.5% risk reduction; \\(p\\)-value 0.003)"
   },
   {
     "objectID": "chap12.html#regression-results-ii",
     "href": "chap12.html#regression-results-ii",
     "title": "Applied Survival Analysis",
     "section": "Regression Results (II)",
-    "text": "Regression Results (II)\n\nRegression table\n\nHormonal therapy no effect on progression from relapse to death\nOne month away from relapse patient is at 10.7% less risk of mortality"
+    "text": "Regression Results (II)\n\n\nRegression table\n\nHormonal therapy no effect on progression from relapse to death\nOne month away from relapse patient is at 10.7% less risk of mortality"
   },
   {
     "objectID": "chap12.html#notes",
@@ -4179,6 +4179,76 @@
     "href": "chap12.html#hw5-due-april-17",
     "title": "Applied Survival Analysis",
     "section": "HW5 (Due April 17)",
-    "text": "HW5 (Due April 17)\n\nProblem 8.12\nChoose one\n\nProblem 10.4\nProblem 10.10\n\nProblem 11.11 (“Data &gt; Renal Transplants Study”)\n(Extra credit) Problem 11.2"
+    "text": "HW5 (Due April 17)\n\nProblem 8.18\nChoose one\n\nProblem 10.6\nProblem 10.15\n\nProblem 11.18 (a) (“Data &gt; Renal Transplants Study”)\n(Extra credit) Problem 11.2"
+  },
+  {
+    "objectID": "chap12.html#nonparametric-estimation-in-markov-process",
+    "href": "chap12.html#nonparametric-estimation-in-markov-process",
+    "title": "Applied Survival Analysis",
+    "section": "Nonparametric Estimation in Markov Process",
+    "text": "Nonparametric Estimation in Markov Process\n\n**Markov process*"
+  },
+  {
+    "objectID": "chap12.html#estimation-in-markov-process",
+    "href": "chap12.html#estimation-in-markov-process",
+    "title": "Applied Survival Analysis",
+    "section": "Estimation in Markov Process",
+    "text": "Estimation in Markov Process\n\nTransition probability matrix \\[\n\\textbf{P}(s, t) \\;=\\;\n\\begin{bmatrix}\nP_{00}(s, t) & P_{01}(s, t) & \\cdots & P_{0K}(s, t) \\\\\nP_{10}(s, t) & P_{11}(s, t) & \\cdots & P_{1K}(s, t) \\\\\n\\vdots       & \\vdots       & \\ddots & \\vdots       \\\\\nP_{K0}(s, t) & P_{K1}(s, t) & \\cdots & P_{KK}(s, t)\n\\end{bmatrix}\n\\]"
+  },
+  {
+    "objectID": "chap12.html#estimation-for-markov-process",
+    "href": "chap12.html#estimation-for-markov-process",
+    "title": "Applied Survival Analysis",
+    "section": "Estimation for Markov Process",
+    "text": "Estimation for Markov Process\n\nTransition probability vs. intensity\n\nTransition probability matrix \\[\n\\textbf{P}(s, t) \\;=\\;\n\\begin{bmatrix}\nP_{00}(s, t) & P_{01}(s, t) & \\cdots & P_{0K}(s, t) \\\\\nP_{10}(s, t) & P_{11}(s, t) & \\cdots & P_{1K}(s, t) \\\\\n\\vdots       & \\vdots       & \\ddots & \\vdots       \\\\\nP_{K0}(s, t) & P_{K1}(s, t) & \\cdots & P_{KK}(s, t)\n\\end{bmatrix}\n\\]\nIntensity matrix \\[\n\\dd\\mathbf{\\Lambda}(u) \\;=\\;\n\\begin{bmatrix}\n-\\sum_{k=1}^K \\lambda_{0k}(u) & \\lambda_{01}(u) & \\cdots & \\lambda_{0K}(u) \\\\\n\\lambda_{10}(u) & -\\sum_{k \\neq 1} \\lambda_{1k}(u) & \\cdots & \\lambda_{1K}(u) \\\\\n\\vdots & \\vdots & \\ddots & \\vdots \\\\\n\\lambda_{K0}(u) & \\lambda_{K1}(u) & \\cdots & -\\sum_{k=0}^{K-1} \\lambda_{Kk}(u)\n\\end{bmatrix} \\dd u.\n\\]"
+  },
+  {
+    "objectID": "chap12.html#markov-process",
+    "href": "chap12.html#markov-process",
+    "title": "Applied Survival Analysis",
+    "section": "Markov Process",
+    "text": "Markov Process\n\n\nTransition intensity matrix \\[\n\\dd\\Lambda_{kj}(u) \\;=\\;\n\\begin{cases}\n\\lambda_{kj}(u) \\dd u, & \\text{if } k \\neq j, \\\\\n-\\sum_{l \\neq k} \\lambda_{kl}(u) \\dd u, & \\text{if } k = j\n\\end{cases}\n\\] i.e. \\[\n\\dd\\mathbf{\\Lambda}(u) \\;=\\;\n\\begin{bmatrix}\n-\\sum_{k=1}^K \\lambda_{0k}(u) & \\lambda_{01}(u) & \\cdots & \\lambda_{0K}(u) \\\\\n\\lambda_{10}(u) & -\\sum_{k \\neq 1} \\lambda_{1k}(u) & \\cdots & \\lambda_{1K}(u) \\\\\n\\vdots & \\vdots & \\ddots & \\vdots \\\\\n\\lambda_{K0}(u) & \\lambda_{K1}(u) & \\cdots & -\\sum_{k=0}^{K-1} \\lambda_{Kk}(u)\n\\end{bmatrix} \\dd u\n\\]"
+  },
+  {
+    "objectID": "chap12.html#estimation-of-transition-intensity",
+    "href": "chap12.html#estimation-of-transition-intensity",
+    "title": "Applied Survival Analysis",
+    "section": "Estimation of Transition Intensity",
+    "text": "Estimation of Transition Intensity\n-   **Transition probability matrix**\n\\[\n\\textbf{P}(s, t) \\;=\\;\n\\begin{bmatrix}\nP_{00}(s, t) & P_{01}(s, t) & \\cdots & P_{0K}(s, t) \\\\\nP_{10}(s, t) & P_{11}(s, t) & \\cdots & P_{1K}(s, t) \\\\\n\\vdots       & \\vdots       & \\ddots & \\vdots       \\\\\nP_{K0}(s, t) & P_{K1}(s, t) & \\cdots & P_{KK}(s, t)\n\\end{bmatrix}\n\\]"
+  },
+  {
+    "objectID": "chap12.html#transition-probability-vs.-intensity",
+    "href": "chap12.html#transition-probability-vs.-intensity",
+    "title": "Applied Survival Analysis",
+    "section": "Transition Probability vs. Intensity",
+    "text": "Transition Probability vs. Intensity\n\n\nTransition probability matrix \\[\n\\textbf{P}(s, t) =\n\\begin{bmatrix}\nP_{00}(s, t) & P_{01}(s, t) & \\cdots & P_{0K}(s, t) \\\\\nP_{10}(s, t) & P_{11}(s, t) & \\cdots & P_{1K}(s, t) \\\\\n\\vdots       & \\vdots       & \\ddots & \\vdots       \\\\\nP_{K0}(s, t) & P_{K1}(s, t) & \\cdots & P_{KK}(s, t)\n\\end{bmatrix}\n\\]\n\n\n\n\nProduct limit \\[\n\\textbf{P}(s, t) \\;=\\; \\lim_{\\dd u \\to 0}\n\\prod_{r = 1}^m \\bigl\\{ \\mathbf{I} \\,+\\, \\dd\\mathbf{\\Lambda}(u_r) \\bigr\\}\n\\]\n\n\\(s = u_0 &lt; u_1 &lt; \\cdots &lt; u_m = t\\), with \\(u_r - u_{r-1} = \\dd u\\)"
+  },
+  {
+    "objectID": "chap12.html#aalenjohansen-estimator",
+    "href": "chap12.html#aalenjohansen-estimator",
+    "title": "Applied Survival Analysis",
+    "section": "Aalen–Johansen Estimator",
+    "text": "Aalen–Johansen Estimator\n\n\nProduct-limit estimator \\[\n\\hat{\\textbf{P}}(s, t) \\;=\\; \\lim_{\\dd u \\to 0}\n\\prod_{r = 1}^m \\bigl\\{ \\mathbf{I} \\,+\\, \\dd\\hat{\\mathbf{\\Lambda}}(u_r) \\bigr\\}\n\\]\n\n\\(s = u_0 &lt; u_1 &lt; \\cdots &lt; u_m = t\\), with \\(u_r - u_{r-1} = \\dd u\\)\nReduces to KM, Gray’s estimator in life-death, competing risks models\n\n\n\n\n\nRobustness property\n\nValid even without Markov assumption"
+  },
+  {
+    "objectID": "chap12.html#estimating-discrete-intensities",
+    "href": "chap12.html#estimating-discrete-intensities",
+    "title": "Applied Survival Analysis",
+    "section": "Estimating Discrete Intensities",
+    "text": "Estimating Discrete Intensities\n\n\nObserved data\n\n\\(C\\): censoring time\n\\(N_{kj}(t) = N^*_{kj}(t \\wedge C)\\) \\[\\begin{equation}\\label{eq:multi_state:censoredY}\n\\tilde Y(t) \\;=\\;\n\\begin{cases}\nY(t), & \\text{if uncensored by } t, \\\\\n-1,   & \\text{if censored by } t.\n\\end{cases}\n\\end{equation}\\]\n\n\n\n\n\nNelsen–Aalen-type estimator \\[\\begin{align}\\label{eq:multi_state:np_intensity}\n\\dd\\hat\\Lambda_{kj}(t)\n&\\;=\\; \\frac{\\text{Number of observed }k \\to j \\text{ transitions}}\n{\\text{Number of subjects at risk of a } k \\to j \\text{ transition}} \\notag\\\\\n&\\;=\\; \\frac{\\sum_{i=1}^n \\dd N_{kji}(t)}{\\sum_{i=1}^n I\\left\\{ \\tilde Y_i(t) = k \\right\\}}\n\\end{align}\\]"
+  },
+  {
+    "objectID": "chap12.html#useful-functionals",
+    "href": "chap12.html#useful-functionals",
+    "title": "Applied Survival Analysis",
+    "section": "Useful Functionals",
+    "text": "Useful Functionals\n\n\nState-occupancy probability \\[\nP_k(t) = \\pr\\{Y(t) = k\\} = \\sum_{l=0}^K \\underbrace{\\pr\\{Y(0) = l\\}}_{\\text{Initial state}} \\, \\underbrace{P_{lk}(0, t)}_{\\text{Transition probability}}\n\\]\n\nExample: probability patient will be ill but still alive in one year\n\n\n\n\n\nRestricted mean sojourn time \\[\n\\mu_k(\\tau) = E\\left[ \\int_0^\\tau I\\{Y(t) = k\\} \\dd t \\right] = \\int_0^\\tau P_k(t) \\dd t\n\\]\n\nAverage time spent in state \\(k\\) (healthy, ill but alive, etc.) by time \\(\\tau\\)"
+  },
+  {
+    "objectID": "chap12.html#hw5-due-april-16",
+    "href": "chap12.html#hw5-due-april-16",
+    "title": "Applied Survival Analysis",
+    "section": "HW5 (Due April 16)",
+    "text": "HW5 (Due April 16)\n\nProblem 8.18\nChoose one\n\nProblem 10.6\nProblem 10.15\n\nProblem 11.18 (a) (“Data &gt; Renal Transplants Study”)\n(Extra credit) Problem 11.2"
   }
 ]
