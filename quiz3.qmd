@@ -82,12 +82,37 @@ ggsave("images/rec_fu_prob.eps", width = 8, height = 3)
 
 ```
 
--   Calculate the (Nelsen--Aalen-type) estimates of the **average number of infections per patient by month 2, 4, and 6**.\vspace{2cm}
+-   Calculate the (Nelsen--Aalen-type) estimates of the **average number of infections per patient by month 2, 4, and 6**.
+    -   `d_j`: observed number of events $d_j$
+    -   `n_j`: observed number of patients at risk $n_j$
+    -   `cum_avg`: $\sum_{l=1}^j d_{l}/n_l$
+
+```{r}
+#| label: tbl-NA-estimates
+#| tbl-cap: Nelsen--Aalen-type estimates of the cumulative average number of infections.
+
+
+library(knitr)
+tbl <- tibble(
+  month = 1:6,
+  d_j = c(4, 4, 4, 2, 3, 2),
+  n_j = c(6, 5, 5, 4, 3, 3),
+  `d_j/n_j` = round(d_j / n_j, 2),
+  cum_avg = round(cumsum(`d_j/n_j`), 2)
+)
+
+kable(tbl, align = "c")
+
+```
+
 -   Why is the following arithmetic biased:
 
 $$
 \frac{\mbox{Total number of black dots by month }2, 4, 6}{6 \mbox{ subjects}}
-$$ \vspace{2cm}
+$$ 
+
+This is equivalent to setting $n_j=6$ for all months. However, not all six patients are at risk when infections occur. 
+
 
 ## **Question 2 (5 points) – Mean Model**
 
@@ -95,6 +120,12 @@ Let $N^*(t)$ denote the average number of recurrent events by time $t$ (such as 
 E\{N^*(t) \mid Z\} = \exp(\beta Z)\mu_0(t),
 $$
 
--   What is the mean function in each group, i.e., $E\{N^*(t) \mid Z = z\}$ for $z= 1, 0$?\vspace{2cm}
+-   What is the mean function in each group, i.e., $E\{N^*(t) \mid Z = z\}$ for $z= 1, 0$?
+
+    -   $E\{N^*(t) \mid Z = 0\} = \mu_0(t)$;
+    -   $E\{N^*(t) \mid Z = 1\} =  \exp(\beta)\mu_0(t)$.
+
 
 -   Suppose $\hat\beta = \log(0.8)$, interpret the treatment effect.
+
+The treatment group has a **20% reduction** ($1-\exp(\hat\beta)$) in the average number of recurrent events compared to the control group.
