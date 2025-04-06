@@ -20,7 +20,7 @@ Some examples are shown in the diagrams below:
 
 ![](images/ms_ill_death.png){fig-align="center" width="70%"}
 
-![](images/ms_rec.png){fig-align="center" width="80%"}
+![](images/ms_rec.png){fig-align="center" width="70%"}
 
 Transitions between states are governed by:
 

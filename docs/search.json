@@ -3985,8 +3985,8 @@
     "objectID": "chap12.html#outline",
     "href": "chap12.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "Outline",
-    "text": "Outline\n\n\nBasic concepts and examples\nTransition intensity and probability\nCox-type Markov and semi-Markov models\nAnalysis of the German breast cancer study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\]"
+    "section": "",
+    "text": "Basic concepts and examples\nTransition intensity and probability\nCox-type Markov and semi-Markov models\nAnalysis of the German breast cancer study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\]"
   },
   {
     "objectID": "chap12.html#definition-and-concepts",
@@ -4284,5 +4284,12 @@
       "Part II - Complex Outcomes",
       "Chapter 12 - Multistate Modeling of Life History"
     ]
+  },
+  {
+    "objectID": "chap12.html",
+    "href": "chap12.html",
+    "title": "Applied Survival Analysis",
+    "section": "",
+    "text": "Basic concepts and examples\nTransition intensity and probability\nCox-type Markov and semi-Markov models\nAnalysis of the German breast cancer study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\]"
   }
 ]
