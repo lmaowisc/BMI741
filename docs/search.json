@@ -4451,70 +4451,70 @@
     "href": "chap13.html#standard-two-sample",
     "title": "Applied Survival Analysis",
     "section": "Standard Two-Sample",
-    "text": "Standard Two-Sample\n\nTwo-sample comparison (Pocock et al., 2012)\n\nData: \\(D_i^{(a)}, T_i^{(a)}, C_i^{(a)}\\): survival, hospitalization, censoring times on \\(i\\)th subject in group \\(a\\) \\((i=1,\\ldots, N_a; a= 1, 0)\\)\nHierarchical composite: Death &gt; hospitalization\nPairwise comparisons \\[\\begin{align}\n\\hat w^{(a, 1-a)}_{ij}&= \\underbrace{I(D_j^{(1-a)}&lt; D_i^{(a)}\\wedge C_i^{(a)}\\wedge C_j^{(1-a)})}_{\\mbox{win on survival}}\\\\\n& + \\underbrace{I(\\min(D_i^{(a)}, D_j^{(1-a)}) &gt; C_i^{(a)}\\wedge C_j^{(1-a)}, T_j^{(1-a)}&lt; T_i^{(a)}\\wedge C_i^{(1)}\\wedge C_j^{(0)})}_{\\mbox{inconclusive on survival, win on hospitalization}}\n\\end{align}\\]\nPrioritized comparison on survival \\(\\to\\) time to hospitalization over \\([0, C_i^{(a)}\\wedge C_j^{(1-a)}]\\)"
+    "text": "Standard Two-Sample\n\n\nTwo-sample comparison (Pocock et al., 2012)\n\nData: \\(D_i^{(a)}, T_i^{(a)}, C_i^{(a)}\\): survival, hospitalization, censoring times on \\(i\\)th subject in group \\(a\\) \\((i=1,\\ldots, N_a; a= 1, 0)\\)\nHierarchical composite: Death &gt; hospitalization\nPairwise comparisons \\[\\begin{align}\n\\hat w^{(a, 1-a)}_{ij}&= \\underbrace{I(D_j^{(1-a)}&lt; D_i^{(a)}\\wedge C_i^{(a)}\\wedge C_j^{(1-a)})}_{\\mbox{win on survival}}\\\\\n& + \\underbrace{I(\\min(D_i^{(a)}, D_j^{(1-a)}) &gt; C_i^{(a)}\\wedge C_j^{(1-a)}, T_j^{(1-a)}&lt; T_i^{(a)}\\wedge C_i^{(1)}\\wedge C_j^{(0)})}_{\\mbox{inconclusive on survival, win on hospitalization}}\n\\end{align}\\]\nPrioritized comparison on \\(\\left[0, C_i^{(a)}\\wedge C_j^{(1-a)}\\right]\\)"
   },
   {
     "objectID": "chap13.html#pococks-rule",
     "href": "chap13.html#pococks-rule",
     "title": "Applied Survival Analysis",
     "section": "Pocock’s Rule",
-    "text": "Pocock’s Rule\n\nWin, lose, or tie?"
+    "text": "Pocock’s Rule\n\n\nWin, lose, or tie?"
   },
   {
     "objectID": "chap13.html#calculation-of-win-ratio",
     "href": "chap13.html#calculation-of-win-ratio",
     "title": "Applied Survival Analysis",
     "section": "Calculation of Win Ratio",
-    "text": "Calculation of Win Ratio\n\nTwo-sample statistics\n\nWin (loss) fraction for group \\(a\\) (\\(1-a\\)) \\[\n\\hat w^{(a, 1-a)}=(N_0N_1)^{-1}\\sum_{i=1}^{N_a}\\sum_{j=1}^{N_{1-a}}\\hat w^{(a, 1-a)}_{ij}\\]\nWin ratio statistic \\[\nWR = \\hat w^{(1, 0)} / \\hat w^{(0, 1)}\n\\]\nOther measures\n\nNet benefit (proportion in favor): \\(\\hat w^{(1, 0)} - \\hat w^{(0, 1)}\\)\nWin odds: \\((\\hat w^{(1, 0)} - \\hat w^{(0, 1)} + 1)/ (\\hat w^{(0, 1)} - \\hat w^{(1, 0)} + 1)\\)"
+    "text": "Calculation of Win Ratio\n\n\nTwo-sample statistics\n\nWin (loss) fraction for group \\(a\\) (\\(1-a\\)) \\[\n\\hat w^{(a, 1-a)}=(N_0N_1)^{-1}\\sum_{i=1}^{N_a}\\sum_{j=1}^{N_{1-a}}\\hat w^{(a, 1-a)}_{ij}\\]\nWin ratio statistic \\[\nWR = \\hat w^{(1, 0)} / \\hat w^{(0, 1)}\n\\]\nOther measures\n\nNet benefit (proportion in favor): \\(\\hat w^{(1, 0)} - \\hat w^{(0, 1)}\\)\nWin odds: \\((\\hat w^{(1, 0)} - \\hat w^{(0, 1)} + 1)/ (\\hat w^{(0, 1)} - \\hat w^{(1, 0)} + 1)\\)"
   },
   {
     "objectID": "chap13.html#the-binary-case",
     "href": "chap13.html#the-binary-case",
     "title": "Applied Survival Analysis",
     "section": "The Binary Case",
-    "text": "The Binary Case\n\nConsider binary \\(Y^{(a)}= 1, 0\\)\n\n\\(\\hat w^{(a, 1-a)}_{ij} = I(Y_i^{(a)}&gt; Y_j^{(1-a)})=Y_i^{(a)}(1-Y_j^{(1-a)})\\)\nWin (loss) fraction \\[\n\\hat w^{(a, 1-a)} = (N_1N_0)^{-1}\\sum_{i=1}^{N_a}\\sum_{j=1}^{N_{1-a}}Y_i^{(a)}(1-Y_j^{(1-a)})\n= \\hat p^{(a)}(1-\\hat p^{(1-a)})\\] where \\(\\hat p^{(a)}= N_a^{-1}\\sum_{i=1}^{N_a} Y_i^{(a)}\\)\nEquivalencies \\[\\begin{align}\n{\\rm Win\\,\\, ratio}&= \\frac{\\hat w^{(1, 0)}}{\\hat w^{(0, 1)}} = \\frac{\\hat p^{(1)}(1-\\hat p^{(0)})}{\\hat p^{(0)}(1-\\hat p^{(1)})} = {\\rm Odds \\,\\, ratio}\\\\\n{\\rm Net \\,\\, benefit}&=\\hat w^{(1, 0)} - \\hat w^{(0, 1)} = \\hat p^{(1)}- \\hat p^{(0)}= {\\rm Risk \\,\\, difference}\n\\end{align}\\]"
+    "text": "The Binary Case\n\n\nConsider binary \\(Y^{(a)}= 1, 0\\)\n\n\\(\\hat w^{(a, 1-a)}_{ij} = I(Y_i^{(a)}&gt; Y_j^{(1-a)})=Y_i^{(a)}(1-Y_j^{(1-a)})\\)\nWin (loss) fraction \\[\n\\hat w^{(a, 1-a)} = (N_1N_0)^{-1}\\sum_{i=1}^{N_a}\\sum_{j=1}^{N_{1-a}}Y_i^{(a)}(1-Y_j^{(1-a)})\n= \\hat p^{(a)}(1-\\hat p^{(1-a)})\\] where \\(\\hat p^{(a)}= N_a^{-1}\\sum_{i=1}^{N_a} Y_i^{(a)}\\)\nEquivalencies \\[\\begin{align}\n{\\rm Win\\,\\, ratio}&= \\frac{\\hat w^{(1, 0)}}{\\hat w^{(0, 1)}} = \\frac{\\hat p^{(1)}(1-\\hat p^{(0)})}{\\hat p^{(0)}(1-\\hat p^{(1)})} = {\\rm Odds \\,\\, ratio}\\\\\n{\\rm Net \\,\\, benefit}&=\\hat w^{(1, 0)} - \\hat w^{(0, 1)} = \\hat p^{(1)}- \\hat p^{(0)}= {\\rm Risk \\,\\, difference}\n\\end{align}\\]"
   },
   {
     "objectID": "chap13.html#general-data",
     "href": "chap13.html#general-data",
     "title": "Applied Survival Analysis",
     "section": "General Data",
-    "text": "General Data\n\nOutcome data\n\nA subject in group \\(a\\) \\[\\mathcal H^{*{(a)}}(t)=\\left\\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \\ldots, N^{*{(a)}}_K(u):0\\leq u\\leq t\\right\\}\\]\n\\(N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \\ldots, N^{*{(a)}}_K(u)\\): counting processes for death and \\(K\\) different types of nonfatal events\n\nObserved data\n\nLife history observed up to \\(X^{(a)}= D^{(a)}\\wedge C^{(a)}\\) \\[\\{\\mathcal H^{*{(a)}}(X^{(a)}), X^{(a)}\\}\\]"
+    "text": "General Data\n\n\nOutcome data \\[\\mathcal H^{*{(a)}}(t)=\\left\\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \\ldots, N^{*{(a)}}_K(u):0\\leq u\\leq t\\right\\}\\]\n\n\\(N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \\ldots, N^{*{(a)}}_K(u)\\): counting processes for death and \\(K\\) different types of nonfatal events\n\n\n\n\n\nObserved data \\[\\{\\mathcal H^{*{(a)}}(X^{(a)}), X^{(a)}\\}\\]\n\nLife history observed up to \\(X^{(a)}= D^{(a)}\\wedge C^{(a)}\\)"
   },
   {
     "objectID": "chap13.html#general-rule",
     "href": "chap13.html#general-rule",
     "title": "Applied Survival Analysis",
     "section": "General Rule",
-    "text": "General Rule\n\nWin function\n\n\\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t) =I\\left\\{\\mathcal H^{*{(a)}}(t) \\mbox{ is more favorable than } \\mathcal H^{*{(1-a)}}(t)\\right\\}\\)\nBasic requirements\n\n(W1) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)\\) is a function only of \\(\\mathcal H^{*{(a)}}(t)\\) and \\(\\mathcal H^{*{(1-a)}}(t)\\)\n(W2) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)+\\mathcal W(\\mathcal H^{*{(1-a)}}, \\mathcal H^{*{(a)}})(t) \\in \\{0, 1\\}\\)\n(W3) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)=\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(D^{(a)}\\wedge D^{(1-a)}\\wedge t)\\)\n\nInterpretations\n\n(W1) Consistency of time frame\n(W2) Either win, loss, or tie\n(W3) No change of win-loss status after death (satisfied if death is prioritized)"
+    "text": "General Rule\n\n\nWin function \\[\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t) =I\\left\\{\\mathcal H^{*{(a)}}(t) \\mbox{ is more favorable than } \\mathcal H^{*{(1-a)}}(t)\\right\\}\\]\n\nBasic requirements\n\n(W1) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)\\) is a function only of \\(\\mathcal H^{*{(a)}}(t)\\) and \\(\\mathcal H^{*{(1-a)}}(t)\\)\n(W2) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)+\\mathcal W(\\mathcal H^{*{(1-a)}}, \\mathcal H^{*{(a)}})(t) \\in \\{0, 1\\}\\)\n(W3) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)=\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(D^{(a)}\\wedge D^{(1-a)}\\wedge t)\\)\n\nInterpretations\n\n(W1) Consistency of time frame\n(W2) Either win, loss, or tie\n(W3) No change of win-loss status after death (satisfied if death is prioritized)"
   },
   {
     "objectID": "chap13.html#generalized-win-ratio",
     "href": "chap13.html#generalized-win-ratio",
     "title": "Applied Survival Analysis",
     "section": "Generalized Win Ratio",
-    "text": "Generalized Win Ratio\n\nUnder general win function \\(\\mathcal W(\\cdot,\\cdot)\\)\n\nWin ratio statistic \\[\\begin{equation}\\label{eq:wr:gen_WR}\n\\hat{\\mathcal E}_n(\\mathcal W)=\\frac{(N_1N_0)^{-1}\\sum_{i=1}^{N_1}\\sum_{j=1}^{N_0}\\mathcal W(\\mathcal H^{*{(1)}}_{i}, \\mathcal H^{*{(0)}}_{j})(X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j})}\n{(N_1N_0)^{-1}\\sum_{i=1}^{N_1}\\sum_{j=1}^{N_0}\\mathcal W(\\mathcal H^{*{(0)}}_{j}, \\mathcal H^{*{(1)}}_{i})(X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j})}\n\\end{equation}\\]\nStill each pair is compared over \\([0, X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j}]\\), but by a general rule \\(\\mathcal W\\)\nStratified win ratio: ratio between weighted sum of within-stratum win/loss fractions"
+    "text": "Generalized Win Ratio\n\n\nGeneral WR statistics \\[\\begin{equation}\\label{eq:wr:gen_WR}\n    \\hat{\\mathcal E}_n(\\mathcal W)=\\frac{(N_1N_0)^{-1}\\sum_{i=1}^{N_1}\\sum_{j=1}^{N_0}\\mathcal W(\\mathcal H^{*{(1)}}_{i}, \\mathcal H^{*{(0)}}_{j})(X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j})}\n    {(N_1N_0)^{-1}\\sum_{i=1}^{N_1}\\sum_{j=1}^{N_0}\\mathcal W(\\mathcal H^{*{(0)}}_{j}, \\mathcal H^{*{(1)}}_{i})(X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j})}\n    \\end{equation}\\]\n\nWindow of comparison: \\([0, X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j}]\\), by a general \\(\\mathcal W\\)\nStratified win ratio \\[\n\\frac{\\text{Weighted sum of within-stratum wins}}{\\text{Weighted sum of within-stratum losses}}\n\\]"
   },
   {
     "objectID": "chap13.html#pococks-win-ratio",
     "href": "chap13.html#pococks-win-ratio",
     "title": "Applied Survival Analysis",
     "section": "Pocock’s Win Ratio",
-    "text": "Pocock’s Win Ratio\n\nWin function\n\n\\(K\\) nonfatal events hierarchically ranked\n\\(T^{(a)}_k\\): time of first event in \\(N_k^{*{(a)}}(t)\\) \\((k=1,\\ldots, K)\\) \\[\\begin{align}\\label{eq:wr:PWR}\n\\mathcal W_{\\rm P}(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)&=I\\{D^{(1-a)}&lt;D^{(a)}\\wedge t\\}\\notag\\\\\n&\\hspace{2mm}+I\\{D^{(a)}\\wedge D^{(1-a)}&gt;t, T_{1}^{(1-a)}&lt;T_{1}^{(a)}\\wedge t\\}\\notag\\\\\n&\\hspace{2mm}+\\sum_{k=2}^KI\\{\\tilde T_{k-1}^{(a)}\\wedge \\tilde T_{k-1}^{(1-a)}&gt;t, T_{k}^{(1-a)}&lt;T_{k}^{(a)}\\wedge t\\}\n\\end{align}\\]\n\n\\(\\tilde T_{k-1}^{(a)}=D^{(a)}\\wedge T_{1}^{(a)}\\wedge\\cdots\\wedge T_{k-1}^{(a)}\\)\n\n\nWin ratio statistic\n\n\\(\\hat{\\mathcal E}_n(\\mathcal W_{\\rm P})\\)"
+    "text": "Pocock’s Win Ratio\n\n\nWin function\n\n\\(K\\) nonfatal events hierarchically ranked\n\\(T^{(a)}_k\\): time of first event in \\(N_k^{*{(a)}}(t)\\) \\((k=1,\\ldots, K)\\) \\[\\begin{align}\\label{eq:wr:PWR}\n\\mathcal W_{\\rm P}(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)&=I\\{D^{(1-a)}&lt;D^{(a)}\\wedge t\\}\\notag\\\\\n&\\hspace{2mm}+I\\{D^{(a)}\\wedge D^{(1-a)}&gt;t, T_{1}^{(1-a)}&lt;T_{1}^{(a)}\\wedge t\\}\\notag\\\\\n&\\hspace{2mm}+\\sum_{k=2}^KI\\{\\tilde T_{k-1}^{(a)}\\wedge \\tilde T_{k-1}^{(1-a)}&gt;t, T_{k}^{(1-a)}&lt;T_{k}^{(a)}\\wedge t\\}\n\\end{align}\\]\n\n\\(\\tilde T_{k-1}^{(a)}=D^{(a)}\\wedge T_{1}^{(a)}\\wedge\\cdots\\wedge T_{k-1}^{(a)}\\)\n\n\n\n\n\n\nWin ratio statistic: \\(\\hat{\\mathcal E}_n(\\mathcal W_{\\rm P})\\)"
   },
   {
     "objectID": "chap13.html#taking-recurrent-events",
     "href": "chap13.html#taking-recurrent-events",
     "title": "Applied Survival Analysis",
     "section": "Taking Recurrent Events",
-    "text": "Taking Recurrent Events\n\nRecurrent-event win ratio (RWR)\n\nDeath &gt; number of recurrent events &gt; time to last event"
+    "text": "Taking Recurrent Events\n\n\nRecurrent-event win ratio (RWR)\n\nDeath &gt; number of recurrent events &gt; time to last event"
   },
   {
     "objectID": "chap13.html#time-to-first-event",
     "href": "chap13.html#time-to-first-event",
     "title": "Applied Survival Analysis",
     "section": "Time-to-First-Event",
-    "text": "Time-to-First-Event\n\nCompare on order of first event\n\nWin function \\[\n\\mathcal W_{\\rm TFE}(\\mathcal H^{*{(a)}},\\mathcal H^{*{(1-a)}})(t)=I(\\tilde T^{(1-a)}&lt;\\tilde T^{(a)}\\wedge t)\n\\]\n\n\\(\\tilde T^{(a)}=\\min(D^{(a)}, T_1^{(a)},\\ldots, T_K^{(a)})\\)\n\nAllowable but not desirable"
+    "text": "Time-to-First-Event\n\n\nCompare on order of first event\n\nWin function \\[\n\\mathcal W_{\\rm TFE}(\\mathcal H^{*{(a)}},\\mathcal H^{*{(1-a)}})(t)=I(\\tilde T^{(1-a)}&lt;\\tilde T^{(a)}\\wedge t)\n\\]\n\n\\(\\tilde T^{(a)}=\\min(D^{(a)}, T_1^{(a)},\\ldots, T_K^{(a)})\\)\n\nAllowable but not desirable"
   },
   {
     "objectID": "chap13.html#regression-framework",

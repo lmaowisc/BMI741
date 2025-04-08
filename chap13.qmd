@@ -413,7 +413,7 @@ kable(hf_infer, align = c("llrrr"))
 # Win Ratio Basics
 
 ## Standard Two-Sample
-
+:::{.fragment}
 -   **Two-sample comparison** (Pocock et al., 2012)
     -   **Data**: $D_i^{(a)}, T_i^{(a)}, C_i^{(a)}$: survival, hospitalization, censoring times on $i$th subject in group $a$ $(i=1,\ldots, N_a; a= 1, 0)$
     -   **Hierarchical composite**: Death \> hospitalization
@@ -421,16 +421,18 @@ kable(hf_infer, align = c("llrrr"))
         \hat w^{(a, 1-a)}_{ij}&= \underbrace{I(D_j^{(1-a)}< D_i^{(a)}\wedge C_i^{(a)}\wedge C_j^{(1-a)})}_{\mbox{win on survival}}\\
         & + \underbrace{I(\min(D_i^{(a)}, D_j^{(1-a)}) > C_i^{(a)}\wedge C_j^{(1-a)}, T_j^{(1-a)}< T_i^{(a)}\wedge C_i^{(1)}\wedge C_j^{(0)})}_{\mbox{inconclusive on survival, win on hospitalization}}
         \end{align}
-    -   **Prioritized comparison** on survival $\to$ time to hospitalization over $[0, C_i^{(a)}\wedge C_j^{(1-a)}]$
+    -   **Prioritized comparison** on $\left[0, C_i^{(a)}\wedge C_j^{(1-a)}\right]$
+:::
 
 ## Pocock's Rule
-
+:::{.fragment}
 -   **Win, lose, or tie?**
 
 ![](images/comp_wrp.png){fig-align="center" width="80%"}
+:::
 
 ## Calculation of Win Ratio
-
+:::{.fragment}
 -   **Two-sample statistics**
     -   **Win (loss) fraction** for group $a$ ($1-a$) $$
         \hat w^{(a, 1-a)}=(N_0N_1)^{-1}\sum_{i=1}^{N_a}\sum_{j=1}^{N_{1-a}}\hat w^{(a, 1-a)}_{ij}$$
@@ -440,9 +442,10 @@ kable(hf_infer, align = c("llrrr"))
     -   **Other measures**
         -   **Net benefit (proportion in favor)**: $\hat w^{(1, 0)} - \hat w^{(0, 1)}$
         -   **Win odds**: $(\hat w^{(1, 0)} - \hat w^{(0, 1)} + 1)/ (\hat w^{(0, 1)} - \hat w^{(1, 0)} + 1)$
+:::
 
 ## The Binary Case
-
+:::{.fragment}
 -   **Consider binary** $Y^{(a)}= 1, 0$
     -   $\hat w^{(a, 1-a)}_{ij} = I(Y_i^{(a)}> Y_j^{(1-a)})=Y_i^{(a)}(1-Y_j^{(1-a)})$
     -   **Win (loss) fraction** $$
@@ -452,19 +455,24 @@ kable(hf_infer, align = c("llrrr"))
         {\rm Win\,\, ratio}&= \frac{\hat w^{(1, 0)}}{\hat w^{(0, 1)}} = \frac{\hat p^{(1)}(1-\hat p^{(0)})}{\hat p^{(0)}(1-\hat p^{(1)})} = {\rm Odds \,\, ratio}\\
         {\rm Net \,\, benefit}&=\hat w^{(1, 0)} - \hat w^{(0, 1)} = \hat p^{(1)}- \hat p^{(0)}= {\rm Risk \,\, difference}
         \end{align}
+:::
 
 ## General Data
-
+:::{.fragment}
 -   **Outcome data**
-    -   A subject in group $a$ $$\mathcal H^{*{(a)}}(t)=\left\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(a)}}_K(u):0\leq u\leq t\right\}$$
+$$\mathcal H^{*{(a)}}(t)=\left\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(a)}}_K(u):0\leq u\leq t\right\}$$
     -   $N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(a)}}_K(u)$: counting processes for death and $K$ different types of nonfatal events
+:::
+:::{.fragment}
 -   **Observed data**
-    -   Life history observed up to $X^{(a)}= D^{(a)}\wedge C^{(a)}$ $$\{\mathcal H^{*{(a)}}(X^{(a)}), X^{(a)}\}$$
+   $$\{\mathcal H^{*{(a)}}(X^{(a)}), X^{(a)}\}$$
+    -   Life history observed up to $X^{(a)}= D^{(a)}\wedge C^{(a)}$
+:::
 
 ## General Rule
-
+:::{.fragment}
 -   **Win function**
-    -   $\mathcal W(\mathcal H^{*{(a)}}, \mathcal H^{*{(1-a)}})(t) =I\left\{\mathcal H^{*{(a)}}(t) \mbox{ is more favorable than } \mathcal H^{*{(1-a)}}(t)\right\}$
+    $$\mathcal W(\mathcal H^{*{(a)}}, \mathcal H^{*{(1-a)}})(t) =I\left\{\mathcal H^{*{(a)}}(t) \mbox{ is more favorable than } \mathcal H^{*{(1-a)}}(t)\right\}$$
     -   **Basic requirements**
         -   (W1) $\mathcal W(\mathcal H^{*{(a)}}, \mathcal H^{*{(1-a)}})(t)$ is a function only of $\mathcal H^{*{(a)}}(t)$ and $\mathcal H^{*{(1-a)}}(t)$
         -   (W2) $\mathcal W(\mathcal H^{*{(a)}}, \mathcal H^{*{(1-a)}})(t)+\mathcal W(\mathcal H^{*{(1-a)}}, \mathcal H^{*{(a)}})(t) \in \{0, 1\}$
@@ -473,19 +481,24 @@ kable(hf_infer, align = c("llrrr"))
         -   (W1) Consistency of time frame
         -   (W2) Either win, loss, or tie
         -   (W3) No change of win-loss status after death (satisfied if death is prioritized)
+:::
 
 ## Generalized Win Ratio
-
--   **Under general win function** $\mathcal W(\cdot,\cdot)$
-    -   **Win ratio statistic** \begin{equation}\label{eq:wr:gen_WR}
+:::{.fragment}
+-   **General WR statistics** 
+    \begin{equation}\label{eq:wr:gen_WR}
         \hat{\mathcal E}_n(\mathcal W)=\frac{(N_1N_0)^{-1}\sum_{i=1}^{N_1}\sum_{j=1}^{N_0}\mathcal W(\mathcal H^{*{(1)}}_{i}, \mathcal H^{*{(0)}}_{j})(X^{{(1)}}_{i}\wedge X^{{(0)}}_{j})}
         {(N_1N_0)^{-1}\sum_{i=1}^{N_1}\sum_{j=1}^{N_0}\mathcal W(\mathcal H^{*{(0)}}_{j}, \mathcal H^{*{(1)}}_{i})(X^{{(1)}}_{i}\wedge X^{{(0)}}_{j})}
         \end{equation}
-    -   Still each pair is compared over $[0, X^{{(1)}}_{i}\wedge X^{{(0)}}_{j}]$, but by a general rule $\mathcal W$
-    -   **Stratified win ratio**: ratio between weighted sum of *within-stratum* win/loss fractions
+    -   **Window of comparison**: $[0, X^{{(1)}}_{i}\wedge X^{{(0)}}_{j}]$, by a general  $\mathcal W$
+    -   **Stratified win ratio** 
+    $$
+    \frac{\text{Weighted sum of within-stratum wins}}{\text{Weighted sum of within-stratum losses}}
+    $$
+:::
 
 ## Pocock's Win Ratio
-
+:::{.fragment}
 -   **Win function**
     -   $K$ nonfatal events hierarchically ranked
     -   $T^{(a)}_k$: time of first event in $N_k^{*{(a)}}(t)$ $(k=1,\ldots, K)$ \begin{align}\label{eq:wr:PWR}
@@ -494,24 +507,28 @@ kable(hf_infer, align = c("llrrr"))
         &\hspace{2mm}+\sum_{k=2}^KI\{\tilde T_{k-1}^{(a)}\wedge \tilde T_{k-1}^{(1-a)}>t, T_{k}^{(1-a)}<T_{k}^{(a)}\wedge t\}
         \end{align}
         -   $\tilde T_{k-1}^{(a)}=D^{(a)}\wedge T_{1}^{(a)}\wedge\cdots\wedge T_{k-1}^{(a)}$
--   **Win ratio statistic**
-    -   $\hat{\mathcal E}_n(\mathcal W_{\rm P})$
+:::
+:::{.fragment}
+-   **Win ratio statistic**: $\hat{\mathcal E}_n(\mathcal W_{\rm P})$
+:::
 
 ## Taking Recurrent Events
-
+:::{.fragment}
 -   **Recurrent-event win ratio (RWR)**
     -   Death \> number of recurrent events \> time to last event
 
 ![](images/comp_rwr.png){fig-align="center" width="80%"}
+:::
 
 ## Time-to-First-Event
-
+:::{.fragment}
 -   **Compare on order of first event**
     -   **Win function** $$
         \mathcal W_{\rm TFE}(\mathcal H^{*{(a)}},\mathcal H^{*{(1-a)}})(t)=I(\tilde T^{(1-a)}<\tilde T^{(a)}\wedge t)
         $$
         -   $\tilde T^{(a)}=\min(D^{(a)}, T_1^{(a)},\ldots, T_K^{(a)})$
     -   Allowable but not desirable
+:::
 
 # Semiparametric Regression of Win Ratio
 

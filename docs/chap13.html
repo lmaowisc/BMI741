@@ -905,6 +905,7 @@ Table&nbsp;2: Analysis of 4-year RMT-IF of exercise training in HF-ACTION trial.
 </section>
 <section id="standard-two-sample" class="slide level2">
 <h2>Standard Two-Sample</h2>
+<div class="fragment">
 <ul>
 <li><strong>Two-sample comparison</strong> (Pocock et al., 2012)
 <ul>
@@ -914,12 +915,14 @@ Table&nbsp;2: Analysis of 4-year RMT-IF of exercise training in HF-ACTION trial.
 \hat w^{(a, 1-a)}_{ij}&amp;= \underbrace{I(D_j^{(1-a)}&lt; D_i^{(a)}\wedge C_i^{(a)}\wedge C_j^{(1-a)})}_{\mbox{win on survival}}\\
 &amp; + \underbrace{I(\min(D_i^{(a)}, D_j^{(1-a)}) &gt; C_i^{(a)}\wedge C_j^{(1-a)}, T_j^{(1-a)}&lt; T_i^{(a)}\wedge C_i^{(1)}\wedge C_j^{(0)})}_{\mbox{inconclusive on survival, win on hospitalization}}
 \end{align}\]</span></li>
-<li><strong>Prioritized comparison</strong> on survival <span class="math inline">\(\to\)</span> time to hospitalization over <span class="math inline">\([0, C_i^{(a)}\wedge C_j^{(1-a)}]\)</span></li>
+<li><strong>Prioritized comparison</strong> on <span class="math inline">\(\left[0, C_i^{(a)}\wedge C_j^{(1-a)}\right]\)</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="pococks-rule" class="slide level2">
 <h2>Pocock’s Rule</h2>
+<div class="fragment">
 <ul>
 <li><strong>Win, lose, or tie?</strong></li>
 </ul>
@@ -928,9 +931,11 @@ Table&nbsp;2: Analysis of 4-year RMT-IF of exercise training in HF-ACTION trial.
 <p><img data-src="images/comp_wrp.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="calculation-of-win-ratio" class="slide level2">
 <h2>Calculation of Win Ratio</h2>
+<div class="fragment">
 <ul>
 <li><strong>Two-sample statistics</strong>
 <ul>
@@ -946,9 +951,11 @@ WR = \hat w^{(1, 0)} / \hat w^{(0, 1)}
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="the-binary-case" class="slide level2">
 <h2>The Binary Case</h2>
+<div class="fragment">
 <ul>
 <li><strong>Consider binary</strong> <span class="math inline">\(Y^{(a)}= 1, 0\)</span>
 <ul>
@@ -962,27 +969,33 @@ WR = \hat w^{(1, 0)} / \hat w^{(0, 1)}
 \end{align}\]</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="general-data" class="slide level2">
 <h2>General Data</h2>
+<div class="fragment">
 <ul>
-<li><strong>Outcome data</strong>
+<li><strong>Outcome data</strong> <span class="math display">\[\mathcal H^{*{(a)}}(t)=\left\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(a)}}_K(u):0\leq u\leq t\right\}\]</span>
 <ul>
-<li>A subject in group <span class="math inline">\(a\)</span> <span class="math display">\[\mathcal H^{*{(a)}}(t)=\left\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(a)}}_K(u):0\leq u\leq t\right\}\]</span></li>
 <li><span class="math inline">\(N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(a)}}_K(u)\)</span>: counting processes for death and <span class="math inline">\(K\)</span> different types of nonfatal events</li>
 </ul></li>
-<li><strong>Observed data</strong>
+</ul>
+</div>
+<div class="fragment">
 <ul>
-<li>Life history observed up to <span class="math inline">\(X^{(a)}= D^{(a)}\wedge C^{(a)}\)</span> <span class="math display">\[\{\mathcal H^{*{(a)}}(X^{(a)}), X^{(a)}\}\]</span></li>
+<li><strong>Observed data</strong> <span class="math display">\[\{\mathcal H^{*{(a)}}(X^{(a)}), X^{(a)}\}\]</span>
+<ul>
+<li>Life history observed up to <span class="math inline">\(X^{(a)}= D^{(a)}\wedge C^{(a)}\)</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="general-rule" class="slide level2">
 <h2>General Rule</h2>
+<div class="fragment">
 <ul>
-<li><strong>Win function</strong>
+<li><strong>Win function</strong> <span class="math display">\[\mathcal W(\mathcal H^{*{(a)}}, \mathcal H^{*{(1-a)}})(t) =I\left\{\mathcal H^{*{(a)}}(t) \mbox{ is more favorable than } \mathcal H^{*{(1-a)}}(t)\right\}\]</span>
 <ul>
-<li><span class="math inline">\(\mathcal W(\mathcal H^{*{(a)}}, \mathcal H^{*{(1-a)}})(t) =I\left\{\mathcal H^{*{(a)}}(t) \mbox{ is more favorable than } \mathcal H^{*{(1-a)}}(t)\right\}\)</span></li>
 <li><strong>Basic requirements</strong>
 <ul>
 <li>(W1) <span class="math inline">\(\mathcal W(\mathcal H^{*{(a)}}, \mathcal H^{*{(1-a)}})(t)\)</span> is a function only of <span class="math inline">\(\mathcal H^{*{(a)}}(t)\)</span> and <span class="math inline">\(\mathcal H^{*{(1-a)}}(t)\)</span></li>
@@ -997,23 +1010,28 @@ WR = \hat w^{(1, 0)} / \hat w^{(0, 1)}
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="generalized-win-ratio" class="slide level2">
 <h2>Generalized Win Ratio</h2>
+<div class="fragment">
 <ul>
-<li><strong>Under general win function</strong> <span class="math inline">\(\mathcal W(\cdot,\cdot)\)</span>
+<li><strong>General WR statistics</strong> <span class="math display">\[\begin{equation}\label{eq:wr:gen_WR}
+    \hat{\mathcal E}_n(\mathcal W)=\frac{(N_1N_0)^{-1}\sum_{i=1}^{N_1}\sum_{j=1}^{N_0}\mathcal W(\mathcal H^{*{(1)}}_{i}, \mathcal H^{*{(0)}}_{j})(X^{{(1)}}_{i}\wedge X^{{(0)}}_{j})}
+    {(N_1N_0)^{-1}\sum_{i=1}^{N_1}\sum_{j=1}^{N_0}\mathcal W(\mathcal H^{*{(0)}}_{j}, \mathcal H^{*{(1)}}_{i})(X^{{(1)}}_{i}\wedge X^{{(0)}}_{j})}
+    \end{equation}\]</span>
 <ul>
-<li><strong>Win ratio statistic</strong> <span class="math display">\[\begin{equation}\label{eq:wr:gen_WR}
-\hat{\mathcal E}_n(\mathcal W)=\frac{(N_1N_0)^{-1}\sum_{i=1}^{N_1}\sum_{j=1}^{N_0}\mathcal W(\mathcal H^{*{(1)}}_{i}, \mathcal H^{*{(0)}}_{j})(X^{{(1)}}_{i}\wedge X^{{(0)}}_{j})}
-{(N_1N_0)^{-1}\sum_{i=1}^{N_1}\sum_{j=1}^{N_0}\mathcal W(\mathcal H^{*{(0)}}_{j}, \mathcal H^{*{(1)}}_{i})(X^{{(1)}}_{i}\wedge X^{{(0)}}_{j})}
-\end{equation}\]</span></li>
-<li>Still each pair is compared over <span class="math inline">\([0, X^{{(1)}}_{i}\wedge X^{{(0)}}_{j}]\)</span>, but by a general rule <span class="math inline">\(\mathcal W\)</span></li>
-<li><strong>Stratified win ratio</strong>: ratio between weighted sum of <em>within-stratum</em> win/loss fractions</li>
+<li><strong>Window of comparison</strong>: <span class="math inline">\([0, X^{{(1)}}_{i}\wedge X^{{(0)}}_{j}]\)</span>, by a general <span class="math inline">\(\mathcal W\)</span></li>
+<li><strong>Stratified win ratio</strong> <span class="math display">\[
+\frac{\text{Weighted sum of within-stratum wins}}{\text{Weighted sum of within-stratum losses}}
+\]</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="pococks-win-ratio" class="slide level2">
 <h2>Pocock’s Win Ratio</h2>
+<div class="fragment">
 <ul>
 <li><strong>Win function</strong>
 <ul>
@@ -1027,14 +1045,17 @@ WR = \hat w^{(1, 0)} / \hat w^{(0, 1)}
 <li><span class="math inline">\(\tilde T_{k-1}^{(a)}=D^{(a)}\wedge T_{1}^{(a)}\wedge\cdots\wedge T_{k-1}^{(a)}\)</span></li>
 </ul></li>
 </ul></li>
-<li><strong>Win ratio statistic</strong>
-<ul>
-<li><span class="math inline">\(\hat{\mathcal E}_n(\mathcal W_{\rm P})\)</span></li>
-</ul></li>
 </ul>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Win ratio statistic</strong>: <span class="math inline">\(\hat{\mathcal E}_n(\mathcal W_{\rm P})\)</span></li>
+</ul>
+</div>
 </section>
 <section id="taking-recurrent-events" class="slide level2">
 <h2>Taking Recurrent Events</h2>
+<div class="fragment">
 <ul>
 <li><strong>Recurrent-event win ratio (RWR)</strong>
 <ul>
@@ -1046,9 +1067,11 @@ WR = \hat w^{(1, 0)} / \hat w^{(0, 1)}
 <p><img data-src="images/comp_rwr.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="time-to-first-event" class="slide level2">
 <h2>Time-to-First-Event</h2>
+<div class="fragment">
 <ul>
 <li><strong>Compare on order of first event</strong>
 <ul>
@@ -1061,6 +1084,7 @@ WR = \hat w^{(1, 0)} / \hat w^{(0, 1)}
 <li>Allowable but not desirable</li>
 </ul></li>
 </ul>
+</div>
 </section></section>
 <section>
 <section id="semiparametric-regression-of-win-ratio" class="title-slide slide level1 center">
