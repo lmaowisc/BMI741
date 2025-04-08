@@ -4291,5 +4291,327 @@
     "title": "Applied Survival Analysis",
     "section": "",
     "text": "Basic concepts and examples\nTransition intensity and probability\nCox-type Markov and semi-Markov models\nAnalysis of the German breast cancer study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\]"
+  },
+  {
+    "objectID": "chap13.html#outline",
+    "href": "chap13.html#outline",
+    "title": "Applied Survival Analysis",
+    "section": "Outline",
+    "text": "Outline\n\n\nTraditional vs hierarchical composites\nThe restricted mean time in favor (RMT-IF) of treatment\nWin ratio: two-sample analysis\nSemiparametric regression of win ratio\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]\n$$ \n$$"
+  },
+  {
+    "objectID": "chap13.html#the-composite-approach",
+    "href": "chap13.html#the-composite-approach",
+    "title": "Applied Survival Analysis",
+    "section": "The Composite Approach",
+    "text": "The Composite Approach\n\n\nComplex outcomes\n\nMultivariate/Recurrent events\n(Semi-)Competing risks\nLongitudinal measures with survival endpoint\n\n\n\n\n\nStandard methods\n\nJoint models (frailty, random effects)\nMarginal models (component-wise robust methods, cumulative incidence)\n\n\n\n\n\nTraditional composite\n\nTime to first event (event-free survival)"
+  },
+  {
+    "objectID": "chap13.html#examples-and-advantages",
+    "href": "chap13.html#examples-and-advantages",
+    "title": "Applied Survival Analysis",
+    "section": "Examples and Advantages",
+    "text": "Examples and Advantages\n\n\nExamples\n\nCardiovascular: major adverse cardiovascular events (MACE), e.g., death, nonfatal heart failure, myocardial infarction, stroke, etc.\nOncology: death and tumor progression (progression-free survival)\n\n\n\n\n\nAdvantages\n\nMore events \\(\\to\\) higher power \\(\\to\\) smaller sample size/lower costs\nNo need for multiplicity adjustment\nA unified measure of treatment effect\nRecommended by ICH-E9 “Statistical Principles for Clinical Trials” (1998)"
+  },
+  {
+    "objectID": "chap13.html#data-and-notation",
+    "href": "chap13.html#data-and-notation",
+    "title": "Applied Survival Analysis",
+    "section": "Data and Notation",
+    "text": "Data and Notation\n\n\nTime-to-event\n\n\\(D\\): survival time; \\(N^*_D(t)=I(D\\leq t)\\)\n\\(N^*_1(t), \\ldots, N^*_K(t)\\): counting processes for \\(K\\) nonfatal event types\nLife history: \\(\\mathcal H^*(t)=\\{N^*_D(u), N^*_1(u), \\ldots, N^*_K(u):0\\leq u\\leq t\\}\\)\n\n\n\n\n\nMultistate\n\n\\(Y(t)=0, 1,\\ldots, K,\\infty\\): multistate process; \\(\\infty=\\)death\nLife history: \\(\\mathcal H^*(t)= \\{Y(u):0\\leq u\\leq t\\}\\)\n\n\n\n\n\nCommon features\n\nDeath most important, followed by some other events/states"
+  },
+  {
+    "objectID": "chap13.html#traditional-composite-endpoints",
+    "href": "chap13.html#traditional-composite-endpoints",
+    "title": "Applied Survival Analysis",
+    "section": "Traditional Composite Endpoints",
+    "text": "Traditional Composite Endpoints\n\n\nTime to first event\n\n\\(N_{\\rm TFE}(t) = I\\{N^*_D(t)+\\sum_{k=1}^KN^*_k(t)\\geq 1\\}= I\\{Y(t)\\geq 1\\}\\)\n\n\n\n\n\nWeighted composite event process\n\n\\(N_{\\rm R}(t)=w_DN^*_D(t)+\\sum_{k=1}^Kw_kN^*_k(t)\\)\n\n\n\n\n\nHierarchical composite endpoints (HCE)\n\nDeath &gt; nonfatal MACE &gt; minor symptoms &gt; …\nUse more data, avoid arbitrary specification of weights"
+  },
+  {
+    "objectID": "chap13.html#motivating-examples",
+    "href": "chap13.html#motivating-examples",
+    "title": "Applied Survival Analysis",
+    "section": "Motivating Examples",
+    "text": "Motivating Examples\n\n\n\n\n\nColon cancer trial\n\nLevamisole + fluorouracil (\\(n=304\\)) vs control (\\(n=315\\))\nRelapse-free survival\n\n258 (89%) deaths ignored\n\n\nHF-ACTION trial\n\nExercise training (\\(n=205\\)) vs usual care (\\(n=221\\))\nHospitalization-free survival\n\n82 (88%) deaths + 707 (69%) hospitalizations ignored"
+  },
+  {
+    "objectID": "chap13.html#hierarchical-composite-endpoints",
+    "href": "chap13.html#hierarchical-composite-endpoints",
+    "title": "Applied Survival Analysis",
+    "section": "Hierarchical Composite Endpoints",
+    "text": "Hierarchical Composite Endpoints\n\n\nRestricted mean time in favor (RMT-IF)\n\nNonparametric measure of effect size on HCE\nNet average time treatment gains in a more favorable state\n\nAn extension of RMST\n\nUses all events (hierarchically)\n\n\n\n\n\nWin ratio\n\nRatio of probability of better / worse outcomes\nInitially two-sample comparison (Pocock et al., 2012)\nExtended to semiparametric regression"
+  },
+  {
+    "objectID": "chap13.html#outcome-data",
+    "href": "chap13.html#outcome-data",
+    "title": "Applied Survival Analysis",
+    "section": "Outcome Data",
+    "text": "Outcome Data\n\n\nTarget of inference\n\nMultistate outcomes \\[Y(t) \\in \\{0, 1,\\ldots, K, \\infty\\}\\]\n\n\\(0\\): initial state (e.g., remission)\n\\(1, \\ldots, K\\): a series of progressively worse states\n\\(\\infty\\): death\n\nExamples\n\n\\(1\\): relapse; \\(2\\): metastasis\n\\(1, 2, \\ldots\\): cumulative number of hospitalizations\n\nTwo-sample comparison\n\n\\(Y^{(a)}(t)\\): a random patient in group \\(a\\) (\\(a=1\\): treatment; \\(0\\): control)"
+  },
+  {
+    "objectID": "chap13.html#time-on-a-win-or-loss",
+    "href": "chap13.html#time-on-a-win-or-loss",
+    "title": "Applied Survival Analysis",
+    "section": "Time on a Win or Loss",
+    "text": "Time on a Win or Loss\n\n\nPairwise win-loss time\n\n\\(Y^{(1)}(t)\\) vs \\(Y^{(0)}(t)\\) over \\([0, \\tau]\\);\n\n\\(\\tau\\): restiction time (e.g., 5 years)\n\nWin time \\(=\\) time residing in a lower-tiered (thus more favorable) state \\[\nW^{(a, 1-a)}(\\tau)=\\int_0^\\tau I\\{Y^{(a)}(t)&lt;Y^{(1-a)}(t)\\}{\\rm d}t\n\\]"
+  },
+  {
+    "objectID": "chap13.html#net-average-win-time",
+    "href": "chap13.html#net-average-win-time",
+    "title": "Applied Survival Analysis",
+    "section": "Net Average Win Time",
+    "text": "Net Average Win Time\n\n\nRestricted mean time in favor (RMT-IF) of treatment \\[\n    \\mu(\\tau) = E\\{W^{(1, 0)}(\\tau)\\} - E\\{W^{(0, 1)}(\\tau)\\}\n    \\]\n\n\\(E\\{W^{(1, 0)}(\\tau)\\}\\): average win time by treatment vs control\n\\(E\\{W^{(0, 1)}(\\tau)\\}\\): average loss time by treatment vs control\n\\(\\mu(\\tau)\\): net average win time by treatment vs control\n\nReduces to difference in RMST in life-death model\n\nDecomposition: Time won on which component?\n\nExtra survival time + extra relapse-free time + …"
+  },
+  {
+    "objectID": "chap13.html#decomposition",
+    "href": "chap13.html#decomposition",
+    "title": "Applied Survival Analysis",
+    "section": "Decomposition",
+    "text": "Decomposition\n\n\nStage-wise effects \\[\\mu(\\tau) = \\sum_{k=1}^{K,\\infty} \\mu_k(\\tau)\\]\n\nTime won on \\(k\\)th state (being in a better state) \\[W_k^{(a, 1-a)}(\\tau)=\\int_0^\\tau I\\{Y^{(a)}(t)&lt;Y^{(1-a)}(t) = k\\}{\\rm d}t\\]\nNet average win time on state \\(k\\) \\[\n\\mu_k(\\tau)= E\\{W_k^{(1, 0)}(\\tau)\\} - E\\{W_k^{(0, 1)}(\\tau)\\}\n  \\]\n\n\\(\\mu_\\infty(\\tau)\\): net win time on survival \\(=\\) difference in \\(\\tau\\)-RMST (regardless of other states)\n\\(\\mu_2(\\tau)\\): extra metastasis-free time; \\(\\mu_1(\\tau)\\): extra relapse-free time"
+  },
+  {
+    "objectID": "chap13.html#simplify-for-progressive-processes",
+    "href": "chap13.html#simplify-for-progressive-processes",
+    "title": "Applied Survival Analysis",
+    "section": "Simplify for Progressive Processes",
+    "text": "Simplify for Progressive Processes\n\n\nProgressive process \\[Y^{(a)}(t)\\leq Y^{(a)}(s) \\mbox{ for all } 0\\leq t\\leq s\\]\n\nTransition time \\(T_k^{(a)}\\): time to transition to a state \\(\\geq k\\)\n\n\\(T_1^{(a)}\\): time to relapse/metastasis/death\n\\(T_2^{(a)}\\): time to metastasis/death\n\\(T_\\infty^{(a)}=D^{(a)}\\): time to death\n\nReformulation: \\[Y^{(a)}(\\cdot)\\equiv \\big\\{0\\leq T_1^{(a)}\\leq\\cdots\\leq T_K^{(a)}\\leq T_\\infty^{(a)}\\big\\}\\]\n\nA progressive process \\(\\Longleftrightarrow\\) a sequence of transition marks"
+  },
+  {
+    "objectID": "chap13.html#delve-into-estimand",
+    "href": "chap13.html#delve-into-estimand",
+    "title": "Applied Survival Analysis",
+    "section": "Delve into Estimand",
+    "text": "Delve into Estimand\n\n\nAverage win time on state \\(k\\)\n\nRe-expression with \\(S_k^{(a)}(t)=P\\{T_k^{(a)}&gt; t\\}\\) \\[\\begin{align}\nE\\{W_k^{(a, 1-a)}(\\tau)\\}&=E\\left\\{\\int_0^\\tau I\\{Y^{(a)}(t)&lt;Y^{(1-a)}(t) = k\\}{\\rm d}t\\right\\}\\\\\n&=\\int_0^\\tau P\\{Y^{(a)}(t)&lt; k\\}P\\{Y^{(1-a)}(t) = k\\}{\\rm d}t\\\\\n&=\\int_0^\\tau P\\{T_k^{(a)}&gt; t\\}P\\{T_k^{(1-a)}\\leq t &lt; T_{k+1}^{(1-a)}\\}{\\rm d}t\\\\\n&=\\int_0^\\tau S_k^{(a)}(t)\\left\\{S_{k+1}^{(1-a)}(t) - S_k^{(1-a)}(t)\\right\\}{\\rm d}t\\\\\n\\end{align}\\]\nNet average win time \\[\\mu_k(\\tau)=E\\{W_k^{(1, 0)}(\\tau)\\}-E\\{W_k^{(0, 1)}(\\tau)\\}=\n  \\int_0^\\tau \\left\\{S_k^{(1)}(t)S_{k+1}^{(0)}(t) - S_k^{(0)}(t)S_{k+1}^{(1)}(t)\\right\\}{\\rm d}t\\]"
+  },
+  {
+    "objectID": "chap13.html#observed-data-estimation",
+    "href": "chap13.html#observed-data-estimation",
+    "title": "Applied Survival Analysis",
+    "section": "Observed Data & Estimation",
+    "text": "Observed Data & Estimation\n\n\nCensored observations \\[\n      (X_k^{(a)}, \\delta_k^{(a)}),\\,\\,\\, k =1,\\ldots, K, \\infty\n      \\]\n\n\\(X_k^{(a)}= \\min(T_k^{(a)}, C^{(a)})\\); \\(\\delta_k^{(a)}= I(T_k^{(a)}\\leq C^{(a)})\\); \\(C^{(a)}=\\)censoring time\nKaplan–Meier estimator \\(\\hat S_k^{(a)}(t)\\)\n\n\n\n\n\nEstimation: Plug-in KM estimator \\[\n    \\hat\\mu_k(\\tau)=\n      \\int_0^\\tau \\left\\{\\hat S_k^{(1)}(t)\\hat S_{k+1}^{(0)}(t) - \\hat S_k^{(0)}(t)\\hat S_{k+1}^{(1)}(t)\\right\\}{\\rm d}t\n    \\]\n\nRobust variance estimator"
+  },
+  {
+    "objectID": "chap13.html#hypothesis-testing",
+    "href": "chap13.html#hypothesis-testing",
+    "title": "Applied Survival Analysis",
+    "section": "Hypothesis Testing",
+    "text": "Hypothesis Testing\n\n\nTest of overall effect \\[\n    H_0: \\mu(\\tau)= 0\n    \\]\n\n\\(\\chi_1^2\\) test based on \\(\\hat\\mu(\\tau)=\\sum_{k=1}^{K,\\infty}\\hat\\mu_k(\\tau)\\)\n\n\n\n\n\nJoint test on components \\[\n    H_0: \\mu_1(\\tau)=\\cdots=\\mu_K(\\tau)=\\mu_\\infty(\\tau)\n    \\]\n\n\\(\\chi_{K+1}^2\\) test based on \\(\\hat\\mu_1(\\tau),\\ldots,\\hat\\mu_K(\\tau),\\hat\\mu_\\infty(\\tau)\\)\n\nOr individual components for secondary analyses"
+  },
+  {
+    "objectID": "chap13.html#software-rmtrmtfit-i",
+    "href": "chap13.html#software-rmtrmtfit-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: rmt::rmtfit() (I)",
+    "text": "Software: rmt::rmtfit() (I)\n\n\nInput data format (long)\n\nStandard multistate\n\nstatus = k for entry into state \\(k\\), K+1 for death, 0 for censoring\n\nRecurrent events with death\n\nstatus = 1 for nonfatal event, 2 for death, 0 for censoring\n\n\n\n\nhead(hfaction)\n#&gt;       patid       time status trt_ab age60\n#&gt;  HFACT00001 0.60506502      1      0     1\n#&gt;  HFACT00001 1.04859685      0      0     1\n#&gt;  HFACT00002 0.06297057      1      0     1\n#&gt;  HFACT00002 0.35865845      1      0     1\n#&gt;  HFACT00002 0.39698836      1      0     1\n#&gt;  HFACT00002 3.83299110      0      0     1\n#&gt;  ..."
+  },
+  {
+    "objectID": "chap13.html#software-rmtrmtfit-ii",
+    "href": "chap13.html#software-rmtrmtfit-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: rmt::rmtfit() (II)",
+    "text": "Software: rmt::rmtfit() (II)\n\n\nBasic syntax\n\n\n\nlibrary(rmt)\n# trt: binary treatment\nobj &lt;- rmtfit(id, time, status, trt, \n              type = c(\"multistate\", \"recurrent\"))\n\n\n\nOutput: a list of class rmtfit\n\nobj$t: \\(t\\); obj$mu: a matrix of \\((K+2)\\) rows, \\(\\hat\\mu_k(t)\\) in \\(k\\)th row, \\(\\hat\\mu(t)\\) in last; obj$var: variances of point estimates in mu\nsummary(obj, tau) for summary results on \\(\\mu(\\tau)\\), including the \\(\\mu_k(\\tau)\\)\n\nRecurrent events: specify Kmax = k to merge \\(\\mu_{k+}(\\tau)\\sum_{k'=k}^K=\\mu_{k'}(\\tau)\\)\n\nplot(obj) to plot \\(\\hat\\mu(t)\\) against \\(t\\)"
+  },
+  {
+    "objectID": "chap13.html#example-hf-action",
+    "href": "chap13.html#example-hf-action",
+    "title": "Applied Survival Analysis",
+    "section": "Example: HF-ACTION",
+    "text": "Example: HF-ACTION\n\n\nExercise training vs usual care\n\n\n\n\n\nTable 1: Descriptive statistics for a high-risk subgroup (n=426) in HF-ACTION trial.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUsual care (N = 221)\nExercise training (N = 205)\n\n\n\n\nAge\n≤ 60 years\n122 (55.2%)\n128 (62.4%)\n\n\n\n&gt; 60 years\n99 (44.8%)\n77 (37.6%)\n\n\nFollow-up\n(months)\n28.6 (18.4, 39.3)\n27.6 (19, 40.2)\n\n\nDeath\n\n57 (25.8%)\n36 (17.6%)\n\n\nHospitalizations\n0\n51 (23.1%)\n60 (29.3%)\n\n\n\n1-3\n114 (51.6%)\n102 (49.8%)\n\n\n\n4-10\n49 (22.2%)\n39 (19%)\n\n\n\n&gt;10\n7 (3.2%)\n4 (2%)"
+  },
+  {
+    "objectID": "chap13.html#standard-analyses",
+    "href": "chap13.html#standard-analyses",
+    "title": "Applied Survival Analysis",
+    "section": "Standard Analyses",
+    "text": "Standard Analyses\n\n\nTraditional composite and overall survival"
+  },
+  {
+    "objectID": "chap13.html#r-code",
+    "href": "chap13.html#r-code",
+    "title": "Applied Survival Analysis",
+    "section": "R-Code",
+    "text": "R-Code\n\n\nlibrary(rmt)\nhead(hfaction)\n#&gt;       patid       time status trt_ab age60\n#&gt;  HFACT00001 0.60506502      1      0     1\n#&gt;  HFACT00001 1.04859685      0      0     1\n#&gt; ...\n\n\n\n\n# fit RMT-IF\nobj &lt;- rmtfit(hfaction$patid, hfaction$time, hfaction$status, hfaction$trt, \n              type = \"recurrent\")\nsummary(obj, Kmax=4, tau=3.97) ## combined recurrent events &gt;= 4\n# Restricted mean time in favor of group \"1\" by time tau = 3.97:\n#   Estimate    Std.Err Z value Pr(&gt;|z|)    \n# Event 1   0.0140515  0.0498836  0.2817 0.778184    \n# Event 2   0.0358028  0.0499618  0.7166 0.473619    \n# Event 3   0.1385287  0.0409533  3.3826 0.000718 ***\n# Event 4+ -0.0064731  0.0600813 -0.1077 0.914203    \n# Survival  0.2384169  0.1143484  2.0850 0.037069 *  \n# Overall   0.4203268  0.1777363  2.3649 0.018035 *"
+  },
+  {
+    "objectID": "chap13.html#graphics",
+    "href": "chap13.html#graphics",
+    "title": "Applied Survival Analysis",
+    "section": "Graphics",
+    "text": "Graphics\n\n\n\\(\\hat\\mu(t)\\) as a function of \\(t\\)\n\nOverall RMT-IF becomes significant after 1 year (see lower CL)\n\n\nplot(obj, conf = TRUE, conf.col = \"gray\", lwd = 2, xlab = \"t (years)\",\n     ylab = \"expression(mu(t))\", main = \"\")"
+  },
+  {
+    "objectID": "chap13.html#inference-results",
+    "href": "chap13.html#inference-results",
+    "title": "Applied Survival Analysis",
+    "section": "Inference Results",
+    "text": "Inference Results\n\n\n4-year RMT-IF of exercise training\n\nTraining on average gains 5.1 months (\\(P\\)=0.018) in favorable state\n\n2.9 months net survival \\(+\\) 2.2 months net time with fewer hospitalizations (little effect on 1st)\n\n\n\n\n\n\n\nTable 2: Analysis of 4-year RMT-IF of exercise training in HF-ACTION trial.\n\n\n\n\n\n\n\n\nEstimate\nSE\nP-value\n\n\n\n\nHopitalization\n\n2.18\n1.22\n0.073\n\n\n\n1\n0.17\n0.60\n0.778\n\n\n\n2\n0.43\n0.60\n0.474\n\n\n\n3\n1.66\n0.49\n&lt;0.001\n\n\n\n4+\n-0.08\n0.72\n0.914\n\n\nDeath\n\n2.86\n1.37\n0.037\n\n\nOverall\n\n5.04\n2.13\n0.018"
+  },
+  {
+    "objectID": "chap13.html#standard-two-sample",
+    "href": "chap13.html#standard-two-sample",
+    "title": "Applied Survival Analysis",
+    "section": "Standard Two-Sample",
+    "text": "Standard Two-Sample\n\nTwo-sample comparison (Pocock et al., 2012)\n\nData: \\(D_i^{(a)}, T_i^{(a)}, C_i^{(a)}\\): survival, hospitalization, censoring times on \\(i\\)th subject in group \\(a\\) \\((i=1,\\ldots, N_a; a= 1, 0)\\)\nHierarchical composite: Death &gt; hospitalization\nPairwise comparisons \\[\\begin{align}\n\\hat w^{(a, 1-a)}_{ij}&= \\underbrace{I(D_j^{(1-a)}&lt; D_i^{(a)}\\wedge C_i^{(a)}\\wedge C_j^{(1-a)})}_{\\mbox{win on survival}}\\\\\n& + \\underbrace{I(\\min(D_i^{(a)}, D_j^{(1-a)}) &gt; C_i^{(a)}\\wedge C_j^{(1-a)}, T_j^{(1-a)}&lt; T_i^{(a)}\\wedge C_i^{(1)}\\wedge C_j^{(0)})}_{\\mbox{inconclusive on survival, win on hospitalization}}\n\\end{align}\\]\nPrioritized comparison on survival \\(\\to\\) time to hospitalization over \\([0, C_i^{(a)}\\wedge C_j^{(1-a)}]\\)"
+  },
+  {
+    "objectID": "chap13.html#pococks-rule",
+    "href": "chap13.html#pococks-rule",
+    "title": "Applied Survival Analysis",
+    "section": "Pocock’s Rule",
+    "text": "Pocock’s Rule\n\nWin, lose, or tie?"
+  },
+  {
+    "objectID": "chap13.html#calculation-of-win-ratio",
+    "href": "chap13.html#calculation-of-win-ratio",
+    "title": "Applied Survival Analysis",
+    "section": "Calculation of Win Ratio",
+    "text": "Calculation of Win Ratio\n\nTwo-sample statistics\n\nWin (loss) fraction for group \\(a\\) (\\(1-a\\)) \\[\n\\hat w^{(a, 1-a)}=(N_0N_1)^{-1}\\sum_{i=1}^{N_a}\\sum_{j=1}^{N_{1-a}}\\hat w^{(a, 1-a)}_{ij}\\]\nWin ratio statistic \\[\nWR = \\hat w^{(1, 0)} / \\hat w^{(0, 1)}\n\\]\nOther measures\n\nNet benefit (proportion in favor): \\(\\hat w^{(1, 0)} - \\hat w^{(0, 1)}\\)\nWin odds: \\((\\hat w^{(1, 0)} - \\hat w^{(0, 1)} + 1)/ (\\hat w^{(0, 1)} - \\hat w^{(1, 0)} + 1)\\)"
+  },
+  {
+    "objectID": "chap13.html#the-binary-case",
+    "href": "chap13.html#the-binary-case",
+    "title": "Applied Survival Analysis",
+    "section": "The Binary Case",
+    "text": "The Binary Case\n\nConsider binary \\(Y^{(a)}= 1, 0\\)\n\n\\(\\hat w^{(a, 1-a)}_{ij} = I(Y_i^{(a)}&gt; Y_j^{(1-a)})=Y_i^{(a)}(1-Y_j^{(1-a)})\\)\nWin (loss) fraction \\[\n\\hat w^{(a, 1-a)} = (N_1N_0)^{-1}\\sum_{i=1}^{N_a}\\sum_{j=1}^{N_{1-a}}Y_i^{(a)}(1-Y_j^{(1-a)})\n= \\hat p^{(a)}(1-\\hat p^{(1-a)})\\] where \\(\\hat p^{(a)}= N_a^{-1}\\sum_{i=1}^{N_a} Y_i^{(a)}\\)\nEquivalencies \\[\\begin{align}\n{\\rm Win\\,\\, ratio}&= \\frac{\\hat w^{(1, 0)}}{\\hat w^{(0, 1)}} = \\frac{\\hat p^{(1)}(1-\\hat p^{(0)})}{\\hat p^{(0)}(1-\\hat p^{(1)})} = {\\rm Odds \\,\\, ratio}\\\\\n{\\rm Net \\,\\, benefit}&=\\hat w^{(1, 0)} - \\hat w^{(0, 1)} = \\hat p^{(1)}- \\hat p^{(0)}= {\\rm Risk \\,\\, difference}\n\\end{align}\\]"
+  },
+  {
+    "objectID": "chap13.html#general-data",
+    "href": "chap13.html#general-data",
+    "title": "Applied Survival Analysis",
+    "section": "General Data",
+    "text": "General Data\n\nOutcome data\n\nA subject in group \\(a\\) \\[\\mathcal H^{*{(a)}}(t)=\\left\\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \\ldots, N^{*{(a)}}_K(u):0\\leq u\\leq t\\right\\}\\]\n\\(N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \\ldots, N^{*{(a)}}_K(u)\\): counting processes for death and \\(K\\) different types of nonfatal events\n\nObserved data\n\nLife history observed up to \\(X^{(a)}= D^{(a)}\\wedge C^{(a)}\\) \\[\\{\\mathcal H^{*{(a)}}(X^{(a)}), X^{(a)}\\}\\]"
+  },
+  {
+    "objectID": "chap13.html#general-rule",
+    "href": "chap13.html#general-rule",
+    "title": "Applied Survival Analysis",
+    "section": "General Rule",
+    "text": "General Rule\n\nWin function\n\n\\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t) =I\\left\\{\\mathcal H^{*{(a)}}(t) \\mbox{ is more favorable than } \\mathcal H^{*{(1-a)}}(t)\\right\\}\\)\nBasic requirements\n\n(W1) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)\\) is a function only of \\(\\mathcal H^{*{(a)}}(t)\\) and \\(\\mathcal H^{*{(1-a)}}(t)\\)\n(W2) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)+\\mathcal W(\\mathcal H^{*{(1-a)}}, \\mathcal H^{*{(a)}})(t) \\in \\{0, 1\\}\\)\n(W3) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)=\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(D^{(a)}\\wedge D^{(1-a)}\\wedge t)\\)\n\nInterpretations\n\n(W1) Consistency of time frame\n(W2) Either win, loss, or tie\n(W3) No change of win-loss status after death (satisfied if death is prioritized)"
+  },
+  {
+    "objectID": "chap13.html#generalized-win-ratio",
+    "href": "chap13.html#generalized-win-ratio",
+    "title": "Applied Survival Analysis",
+    "section": "Generalized Win Ratio",
+    "text": "Generalized Win Ratio\n\nUnder general win function \\(\\mathcal W(\\cdot,\\cdot)\\)\n\nWin ratio statistic \\[\\begin{equation}\\label{eq:wr:gen_WR}\n\\hat{\\mathcal E}_n(\\mathcal W)=\\frac{(N_1N_0)^{-1}\\sum_{i=1}^{N_1}\\sum_{j=1}^{N_0}\\mathcal W(\\mathcal H^{*{(1)}}_{i}, \\mathcal H^{*{(0)}}_{j})(X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j})}\n{(N_1N_0)^{-1}\\sum_{i=1}^{N_1}\\sum_{j=1}^{N_0}\\mathcal W(\\mathcal H^{*{(0)}}_{j}, \\mathcal H^{*{(1)}}_{i})(X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j})}\n\\end{equation}\\]\nStill each pair is compared over \\([0, X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j}]\\), but by a general rule \\(\\mathcal W\\)\nStratified win ratio: ratio between weighted sum of within-stratum win/loss fractions"
+  },
+  {
+    "objectID": "chap13.html#pococks-win-ratio",
+    "href": "chap13.html#pococks-win-ratio",
+    "title": "Applied Survival Analysis",
+    "section": "Pocock’s Win Ratio",
+    "text": "Pocock’s Win Ratio\n\nWin function\n\n\\(K\\) nonfatal events hierarchically ranked\n\\(T^{(a)}_k\\): time of first event in \\(N_k^{*{(a)}}(t)\\) \\((k=1,\\ldots, K)\\) \\[\\begin{align}\\label{eq:wr:PWR}\n\\mathcal W_{\\rm P}(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)&=I\\{D^{(1-a)}&lt;D^{(a)}\\wedge t\\}\\notag\\\\\n&\\hspace{2mm}+I\\{D^{(a)}\\wedge D^{(1-a)}&gt;t, T_{1}^{(1-a)}&lt;T_{1}^{(a)}\\wedge t\\}\\notag\\\\\n&\\hspace{2mm}+\\sum_{k=2}^KI\\{\\tilde T_{k-1}^{(a)}\\wedge \\tilde T_{k-1}^{(1-a)}&gt;t, T_{k}^{(1-a)}&lt;T_{k}^{(a)}\\wedge t\\}\n\\end{align}\\]\n\n\\(\\tilde T_{k-1}^{(a)}=D^{(a)}\\wedge T_{1}^{(a)}\\wedge\\cdots\\wedge T_{k-1}^{(a)}\\)\n\n\nWin ratio statistic\n\n\\(\\hat{\\mathcal E}_n(\\mathcal W_{\\rm P})\\)"
+  },
+  {
+    "objectID": "chap13.html#taking-recurrent-events",
+    "href": "chap13.html#taking-recurrent-events",
+    "title": "Applied Survival Analysis",
+    "section": "Taking Recurrent Events",
+    "text": "Taking Recurrent Events\n\nRecurrent-event win ratio (RWR)\n\nDeath &gt; number of recurrent events &gt; time to last event"
+  },
+  {
+    "objectID": "chap13.html#time-to-first-event",
+    "href": "chap13.html#time-to-first-event",
+    "title": "Applied Survival Analysis",
+    "section": "Time-to-First-Event",
+    "text": "Time-to-First-Event\n\nCompare on order of first event\n\nWin function \\[\n\\mathcal W_{\\rm TFE}(\\mathcal H^{*{(a)}},\\mathcal H^{*{(1-a)}})(t)=I(\\tilde T^{(1-a)}&lt;\\tilde T^{(a)}\\wedge t)\n\\]\n\n\\(\\tilde T^{(a)}=\\min(D^{(a)}, T_1^{(a)},\\ldots, T_K^{(a)})\\)\n\nAllowable but not desirable"
+  },
+  {
+    "objectID": "chap13.html#regression-framework",
+    "href": "chap13.html#regression-framework",
+    "title": "Applied Survival Analysis",
+    "section": "Regression Framework",
+    "text": "Regression Framework\n\nMotivation\n\nMeaningful estimand of effect size\nMultiple (quantitative) predictors\n\nModelin target\n\nTwo independent subjects \\((\\mathcal H_i, Z_i)\\) and \\((\\mathcal H_j, Z_j)\\)\n\n\\(E\\{\\mathcal W(\\mathcal H_i,\\mathcal H_j)(t)\\mid Z_i, Z_j\\}\\): Conditional win fraction (probability) for \\(i\\) against \\(j\\) at \\(t\\)\n\\(E\\{\\mathcal W(\\mathcal H_j,\\mathcal H_i)(t)\\mid Z_i, Z_j\\}\\): Conditional win fraction (probability) for \\(j\\) against \\(i\\) at \\(t\\)\n\nCovariate-specific win ratio \\[\\begin{equation}\\label{eq:cov_spec_curtail_wr}\nWR(t; Z_i, Z_j;\\mathcal W):= \\frac{E\\{\\mathcal W(\\mathcal H_i,\\mathcal H_j)(t)\\mid Z_i,Z_j\\}}{E\\{\\mathcal W(\\mathcal H_j,\\mathcal H_i)(t)\\mid Z_i, Z_j\\}}\n\\end{equation}\\]\nModel it against \\(Z_i\\) and \\(Z_j\\) to study covariate effect on WR"
+  },
+  {
+    "objectID": "chap13.html#model-specification",
+    "href": "chap13.html#model-specification",
+    "title": "Applied Survival Analysis",
+    "section": "Model Specification",
+    "text": "Model Specification\n\nProportional win-fractions (PW) model \\[\\begin{equation}\\label{eq:wr_reg}\nWR(t\\mid Z_i, Z_j;\\mathcal W)=\\exp\\left\\{\\beta^{\\rm T}\\left(Z_i- Z_j\\right)\\right\\}\n\\end{equation}\\]\n\nPW: covariate-specific win/loss fractions proportional over time\n\nWR constant over time\n\n\\(\\beta\\): log-win ratio associated with unit increases in covariates (regardless of follow-up time)\nSemiparametric model\n\nParametric covariate-specific WRs\nNonparametric in other aspects (baseline event rates, etc.)\n\nDenote model by PW\\((\\mathcal W)\\)\n\nStresses model’s dependency on \\(\\mathcal W\\) chosen"
+  },
+  {
+    "objectID": "chap13.html#special-cases",
+    "href": "chap13.html#special-cases",
+    "title": "Applied Survival Analysis",
+    "section": "Special Cases",
+    "text": "Special Cases\n\nPocock’s two-sample WR\n\n\\(Z = 1, 0\\)\n\\(\\exp(\\beta)\\): WR comparing group \\(z=1\\) with group \\(0\\)\n\nCox PH model\n\nPW\\((\\mathcal W_{\\rm TFE})\\) \\(\\Leftrightarrow\\) Cox PH model on time to first event"
+  },
+  {
+    "objectID": "chap13.html#estimation",
+    "href": "chap13.html#estimation",
+    "title": "Applied Survival Analysis",
+    "section": "Estimation",
+    "text": "Estimation\n\nConstruction of estimating function\n\nObserved win process \\(\\delta_{ij}(t)=\\mathcal W(\\mathcal H_i,\\mathcal H_j)(X_i\\wedge X_j\\wedge t)\\)\nDeterminancy (win or loss): \\(R_{ij}(t)=\\delta_{ij}(t)+\\delta_{ji}(t)\\)\nMean-zero residual \\[\\begin{equation}\\label{eq:wr:resid}\nM_{ij}(t\\mid Z_i, Z_j;\\beta)=\\underbrace{\\delta_{ij}(t)}_{\\rm observed\\,\\,win} -\n\\underbrace{R_{ij}(t)\\frac{\\exp\\left\\{\\beta^{\\rm T}\\left( Z_i- Z_j\\right)\\right\\}}{\n1+\\exp\\left\\{\\beta^{\\rm T}\\left(Z_i- Z_j\\right)\\right\\}}}_{\\rm model-based\\,\\, prediction}\n\\end{equation}\\]\nEstimating equation \\[\\begin{equation}\\label{eq:wr:ee}\n\\Ut\\int_0^\\infty (Z_i - Z_j) h(t; Z_i, Z_j)\\dd M_{ij}(t \\mid Z_i, Z_j;\\beta)=0\n\\end{equation}\\]\n\nWeight function \\(h(t; Z_i, Z_j)\\equiv 1\\)"
+  },
+  {
+    "objectID": "chap13.html#checking-proportionality",
+    "href": "chap13.html#checking-proportionality",
+    "title": "Applied Survival Analysis",
+    "section": "Checking Proportionality",
+    "text": "Checking Proportionality\n\nCumulative residuals\n\nRescaled \\(\\hat U_n(t)=\\Ut(Z_i - Z_j)\\underbrace{M_{ij}(t \\mid Z_i, Z_j;\\hat\\beta)}_{\\rm observed\\,\\, minus\\,\\, model-based\\,\\,wins\\,\\, by\\,\\, t}\\)"
+  },
+  {
+    "objectID": "chap13.html#software-wrpwreg-i",
+    "href": "chap13.html#software-wrpwreg-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: WR::pwreg() (I)",
+    "text": "Software: WR::pwreg() (I)\n\nInput data format\n\nstatus = 1 for death, 2 for nonfatal events, 0 for censoring\n\n\n\nlibrary(WR)\n#&gt; Loading required package: survival\nhead(non_ischemic)\n#&gt;   ID time status trt_ab age sex Black.vs.White Other.vs.White   bmi\n#&gt; 1  1  221      2      0  62   1              0              0 25.18\n#&gt; 2  1  383      0      0  62   1              0              0 25.18\n#&gt; 3  2   23      2      0  75   1              1              0 22.96\n#&gt; 4  2 1400      0      0  75   1              1              0 22.96\n#&gt; ..."
+  },
+  {
+    "objectID": "chap13.html#software-wrpwreg-ii",
+    "href": "chap13.html#software-wrpwreg-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: WR::pwreg() (II)",
+    "text": "Software: WR::pwreg() (II)\n\nBasic syntax for PW\\((\\mathcal W_{\\rm P})\\)\n\nID: subject identifier\nZ: covariate matrix; strata: possible stratifier (categorical)\n\n\n\n\n# fit PW model (death &gt; nonfatal event)\nobj &lt;- pwreg(ID, time, status, Z, strata = NULL)\n\n\n\nOutput: an object of class pwreg\n\nobj$beta: \\(\\hat\\beta\\)\nobj$Var: \\(\\hat\\var(\\hat\\beta)\\)\nprint(obj) to summarize regression results"
+  },
+  {
+    "objectID": "chap13.html#software-wrscore.proc",
+    "href": "chap13.html#software-wrscore.proc",
+    "title": "Applied Survival Analysis",
+    "section": "Software: WR::score.proc()",
+    "text": "Software: WR::score.proc()\n\nChecking proportionality\n\nobj: a pwreg object\n\n\n\n\n# fit PW model (death &gt; nonfatal event)\nscore.obj &lt;- score.proc(obj)\n\n\n\nOutput: an object of class score.proc\n\nscore.obj$t: \\(t\\)\nscore.obj$score: a matrix with rescaled residual process for each covariate per row\nplot(score.obj, k): plot the rescaled residuals for \\(k\\)th covariate"
+  },
+  {
+    "objectID": "chap13.html#hf-action-data",
+    "href": "chap13.html#hf-action-data",
+    "title": "Applied Survival Analysis",
+    "section": "HF-ACTION: Data",
+    "text": "HF-ACTION: Data\n\nAnother subset of HF-ACTION\n\nPopulation: \\(n=451\\) non-ischemic patients followed over median length of 31.6 months\nEndpoints: death &gt; first hospitalization\nPredictors: training vs usual care, age, sex, race, bmi, LVEF, medications, etc.\n\n\n\nlibrary(WR)\n#&gt; Loading required package: survival\nhead(non_ischemic)\n#&gt;   ID time status trt_ab age sex Black.vs.White Other.vs.White   bmi  ...\n#&gt; 1  1  221      2      0  62   1              0              0 25.18\n#&gt; 2  1  383      0      0  62   1              0              0 25.18\n#&gt; 3  2   23      2      0  75   1              1              0 22.96\n#&gt; 4  2 1400      0      0  75   1              1              0 22.96\n#&gt; ..."
+  },
+  {
+    "objectID": "chap13.html#hf-action-regression-coding",
+    "href": "chap13.html#hf-action-regression-coding",
+    "title": "Applied Survival Analysis",
+    "section": "HF-ACTION: Regression Coding",
+    "text": "HF-ACTION: Regression Coding\n\nSet up PW\\((\\mathcal W_{\\rm P})\\)\n\n\n# extract variables and covariate matrix\nID &lt;- non_ischemic[,\"ID\"]\ntime &lt;- non_ischemic[,\"time\"]\nstatus &lt;- non_ischemic[,\"status\"]\nZ &lt;- as.matrix(non_ischemic[, 4:(3+p)], nr, p)\n# pass the parameters into the function\npwreg.obj &lt;- pwreg(ID, time, status, Z)\n# print out results\nprint(pwreg.obj)"
+  },
+  {
+    "objectID": "chap13.html#hf-action-regression-results",
+    "href": "chap13.html#hf-action-regression-results",
+    "title": "Applied Survival Analysis",
+    "section": "HF-ACTION: Regression Results",
+    "text": "HF-ACTION: Regression Results\n\nSummary results\n\nTraining \\(\\exp(0.191) - 1= 21\\%\\) more likely to get favorable outcome than UC\nRace differences substantial and significant\nLVEF: 1% increases win likelihood by \\(\\exp(0.021) = 1.02\\) (\\(p\\)-value 0.013)\n\n\n\n#&gt; Estimates for Regression parameters:\n#&gt;                     Estimate         se z.value p.value\n#&gt; Training vs Usual  0.1906687  0.1264658  1.5077 0.13164\n#&gt; Age (year)        -0.0128306  0.0057285 -2.2398 0.02510 *\n#&gt; Male vs Female    -0.1552923  0.1294198 -1.1999 0.23017\n#&gt; Black vs White    -0.3026335  0.1461330 -2.0709 0.03836 *\n#&gt; Other vs White    -0.3565390  0.3424360 -1.0412 0.29779\n#&gt; BMI               -0.0181310  0.0097582 -1.8580 0.06316 .\n#&gt; LVEF               0.0214905  0.0086449  2.4859 0.01292 *\n#&gt; ..."
+  },
+  {
+    "objectID": "chap13.html#hf-action-residual-analyses",
+    "href": "chap13.html#hf-action-residual-analyses",
+    "title": "Applied Survival Analysis",
+    "section": "HF-ACTION: Residual Analyses",
+    "text": "HF-ACTION: Residual Analyses\n\nChecking proportionality\n\n\nscore.obj &lt;- score.proc(pwreg.obj)\npar(mfrow = c(1, 3)) # plot residual processes for treatment, age, LVEF\nfor(i in c(1, 2, 7)){\n  plot(score.obj, k = i, xlab = \"Time (Days)\")\n}"
+  },
+  {
+    "objectID": "chap13.html#notes",
+    "href": "chap13.html#notes",
+    "title": "Applied Survival Analysis",
+    "section": "Notes",
+    "text": "Notes\n\nBefore win ratio\n\nContinuous outcome: Wilcoxon (1945), Mann & Whitney (1947)\nHierarchical endpoints: Finkelstein and Schoenfeld (1999), Buyse (2010)\n\nMore on RMT-IF\n\nMao (2023, Biometrics)\n\nHierarchical endpoints\n\nGaining popularity and an active area of research"
+  },
+  {
+    "objectID": "chap13.html#summary",
+    "href": "chap13.html#summary",
+    "title": "Applied Survival Analysis",
+    "section": "Summary",
+    "text": "Summary\n\nRMT-IF\n\nModel-free, component-wise decomposable \\[\n\\mu(\\tau) = \\underbrace{E\\{W^{(1, 0)}(\\tau)\\}}_{\\rm win\\,time\\,by\\,\\tau} -\n\\underbrace{E\\{W^{(0, 1)}(\\tau)\\}}_{\\rm loss\\,time\\,by\\,\\tau}\n\\]\nrmt::rmtfit()\n\nWin ratio regression\n\nProportionality and multiplicativity \\[\nWR(t\\mid Z_i, Z_j;\\mathcal W)=\\exp\\left\\{\\beta^{\\rm T}\\left(Z_i- Z_j\\right)\\right\\}\n\\]\n\\(\\exp(\\beta)\\): WRs with unit increases in covariates\nWR::pwreg()"
   }
 ]
