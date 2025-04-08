@@ -3985,8 +3985,8 @@
     "objectID": "chap12.html#outline",
     "href": "chap12.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "",
-    "text": "Basic concepts and examples\nTransition intensity and probability\nCox-type Markov and semi-Markov models\nAnalysis of the German breast cancer study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\]"
+    "section": "Outline",
+    "text": "Outline\n\n\nBasic concepts and examples\nTransition intensity and probability\nCox-type Markov and semi-Markov models\nAnalysis of the German breast cancer study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\]"
   },
   {
     "objectID": "chap12.html#definition-and-concepts",
@@ -4217,7 +4217,7 @@
     "href": "chap12.html#markov-process",
     "title": "Applied Survival Analysis",
     "section": "Markov Process",
-    "text": "Markov Process\n\n\nTransition intensity matrix \\[\n\\dd\\Lambda_{kj}(u) \\;=\\;\n\\begin{cases}\n\\lambda_{kj}(u) \\dd u, & \\text{if } k \\neq j, \\\\\n-\\sum_{l \\neq k} \\lambda_{kl}(u) \\dd u, & \\text{if } k = j\n\\end{cases}\n\\] i.e. \\[\n\\dd\\mathbf{\\Lambda}(u) \\;=\\;\n\\begin{bmatrix}\n-\\sum_{k=1}^K \\lambda_{0k}(u) & \\lambda_{01}(u) & \\cdots & \\lambda_{0K}(u) \\\\\n\\lambda_{10}(u) & -\\sum_{k \\neq 1} \\lambda_{1k}(u) & \\cdots & \\lambda_{1K}(u) \\\\\n\\vdots & \\vdots & \\ddots & \\vdots \\\\\n\\lambda_{K0}(u) & \\lambda_{K1}(u) & \\cdots & -\\sum_{k=0}^{K-1} \\lambda_{Kk}(u)\n\\end{bmatrix} \\dd u\n\\]"
+    "text": "Markov Process\n\n\nTransition intensity matrix \\[\n\\dd\\Lambda_{kj}(u) \\;=\\;\n\\begin{cases}\n\\lambda_{kj}(u) \\dd u, & \\text{if } k \\neq j, \\\\\n-\\sum_{l \\neq k} \\lambda_{kl}(u) \\dd u, & \\text{if } k = j\n\\end{cases}\n\\] i.e. \\[\n\\dd\\mathbf{\\Lambda}(u) \\;=\\;\n\\begin{bmatrix}\n-\\sum_{k=1}^K \\lambda_{0k}(u) & \\lambda_{01}(u) & \\cdots & \\lambda_{0K}(u) \\\\\n\\lambda_{10}(u) & -\\sum_{k \\neq 1} \\lambda_{1k}(u) & \\cdots & \\lambda_{1K}(u) \\\\\n\\vdots & \\vdots & \\ddots & \\vdots \\\\\n\\lambda_{K0}(u) & \\lambda_{K1}(u) & \\cdots & -\\sum_{k=0}^{K-1} \\lambda_{Kk}(u)\n\\end{bmatrix} \\dd u\n\\]"
   },
   {
     "objectID": "chap12.html#estimation-of-transition-intensity",

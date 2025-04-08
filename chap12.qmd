@@ -38,13 +38,14 @@ $$
 
 ## Definition and Concepts
 
-:::{.fragment}
+::: fragment
 -   **Multistate processes**
     -   **Stochastic process** with discrete values indicating the subject's current state
         -   An alternative way of looking at (complex) time-to-event data
     -   **Example**: healthy $\to$ ill (hospitalized) $\to$ dead
 :::
-:::{.fragment}
+
+::: fragment
 -   **Terminology**
     -   **Transition**: change of state, e.g., relapse, hospitalization, death
     -   **Absorbing state**: a terminal state (no transition after entering), e.g., dead
@@ -52,19 +53,21 @@ $$
 :::
 
 ## Life-Death & Competing Risks
-:::{.fragment}
+
+::: fragment
 -   **Multistate model**
-    -   A model specifying possible transitions 
+    -   A model specifying possible transitions
 :::
-:::{.fragment}
+
+::: fragment
 -   **Examples**
     -   **Life-death** (*two states*: transient $\to$ absorbing)
-    -   **Competing risks** ($K+1$ states: transient $\to$ $K$ absorbing states)
-![](images/ms_exam1.png){fig-align="center" width="70%"}
+    -   **Competing risks** ($K+1$ states: transient $\to$ $K$ absorbing states) ![](images/ms_exam1.png){fig-align="center" width="70%"}
 :::
 
 ## Illness-Death Model
-:::{.fragment}
+
+::: fragment
 -   **Examples**
     -   **Illness-death model** (*three states*: healthy, ill/hospitalized, dead)
     -   **Semi-competing risks**
@@ -74,24 +77,24 @@ $$
 ![](images/ms_ill_death.png){fig-align="center" width="70%"}
 :::
 
-
 ## Recurrent Events
-:::{.fragment}
+
+::: fragment
 -   **Examples**
-    -   **Recurrent events (with death)** (progressive transient states $\to$ absorbing) 
-    ![](images/ms_rec.png){fig-align="center" width="80%"}
+    -   **Recurrent events (with death)** (progressive transient states $\to$ absorbing) ![](images/ms_rec.png){fig-align="center" width="80%"}
 :::
 
-:::{.fragment}
+::: fragment
 -   **Two types of processes**
-    -   **Progressive**: only forward, no turning back 
+    -   **Progressive**: only forward, no turning back
     -   **Reversible**: may go back and forth (hospital admission/discharge)
 :::
 
 # Transition Intensity & Probability
 
 ## Outcome Data
-:::{.fragment}
+
+::: fragment
 -   **Outcome**: multistate process $$
     Y(t)\in \{0, 1,\ldots, K\},\,\,\, t\geq 0
     $$
@@ -100,7 +103,8 @@ $$
         -   $0=$ remission, $1=$ relapsed, $2$ = dead
         -   $0=$ event-free, $k=1,\ldots, K$: cumulative number of hospitalizations ($K + 1 =$ dead)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Life history**\
     \begin{equation}\label{eq:multi_state:lh1}
     \mathcal H^*(t)=\{Y(u):0\leq u\leq t\}
@@ -109,25 +113,26 @@ $$
 :::
 
 ## Counting Process Notation
-:::{.fragment}
+
+::: fragment
 -   **Counting transitions**
-    -   $N_{kj}^*(t)$: number of $k\to j$ transitions  by $t$ $$
+    -   $N_{kj}^*(t)$: number of $k\to j$ transitions by $t$ $$
         \dd N_{kj}^*(t)=I\{Y(t)=j, Y(t-)=k\}
         $$
         -   $0\leq k\neq j\leq K$ (not all are possible)
     -   **Examples**
         -   **Life-death model**: $N_{01}^*(t)$ counting process for death
         -   **Illness-death model**: $N_{01}^*(t)$ counting process for onset of illness, $N_{02}^*(t)$ for death without illness, $N_{12}^*(t)$ for death with illness
-    -   **Life history re-formulated**
-    $$
-      \mathcal H^*(t)=\{Y(0), N_{kj}^*(u): 1\leq k\neq j\leq K; 0\leq u\leq t\}
-    $$
+    -   **Life history re-formulated** $$
+          \mathcal H^*(t)=\{Y(0), N_{kj}^*(u): 1\leq k\neq j\leq K; 0\leq u\leq t\}
+        $$
 :::
 
 ## Intensity Function: Definition
-:::{.fragment}
+
+::: fragment
 -   **Transition intensity**
-    -   **Instantaneous rate of transition** given past  \begin{align}\label{eq:multi_state:intensity}
+    -   **Instantaneous rate of transition** given past \begin{align}\label{eq:multi_state:intensity}
         \lambda_{kj}\{t\mid\mathcal H^*(t-)\}\dd t&=\pr\{\underbrace{Y(t+\dd t)=j}_{\text{Next state}}\mid \underbrace{Y(t-)=k}_{\text{Current state}}, \underbrace{\mathcal H^*(t-)}_{\text{Past experience}}\}\notag\\
         &=E\{\dd N_{kj}^*(t)\mid Y(t-)=k,\mathcal H^*(t-)\}
         \end{align}
@@ -141,7 +146,8 @@ $$
 :::
 
 ## Intensity Function: Examples (I)
-:::{.fragment}
+
+::: fragment
 -   **With** $Y(0)\equiv 0$
     -   **Life-death model** ($T$: time to death) $$
         \lambda_{01}\{t\mid\mathcal H^*(t-)\} = \lambda(t):\,\, \mbox{hazard of $T$}
@@ -154,7 +160,8 @@ $$
 :::
 
 ## Intensity Function: Examples (II)
-:::{.fragment}
+
+::: fragment
 -   **Recurrent events**
     -   **Counting process**: $N^*(t)$
     -   **Intensity for recurrent-event process** (Chapter 9) \begin{equation}\label{eq:rec:intensity}
@@ -168,27 +175,27 @@ $$
 ![](images/ms_intens_exam_rec.png){fig-align="center" width="60%"}
 :::
 
-
 ## Markov & Semi-Markov Processes
-:::{.fragment}
+
+::: fragment
 -   **Markov**: transition independent of past given current state $$
         \lambda_{kj}\{t\mid\mathcal H^*(t-)\}=\lambda_{kj}(t)\,\,\, \mbox{fixed function}
         $$
     -   **Homogeneous Markov**: $\lambda_{kj}(t)\equiv \lambda_{kj}$
 :::
 
-:::{.fragment}
+::: fragment
 -   **Semi-Markov**: transition depends on past through time in current state $$
         \lambda_{kj}\{t\mid\mathcal H^*(t-)\}=\lambda_{kj}\{t, B(t)\}
         $$
 
     -   $B(t)$: time since last entry into current state
     -   **Example**: risk of death depends on how long cancer has reappeared
-
 :::
 
 ## Markov & Semi-Markov Examples
-:::{.fragment}
+
+::: fragment
 -   **Illness-death model (semi-competing risks)**
     -   Transition intensities for $0\to 1$ (onset of illness), $0\to 2$ (death w.o. illness) $$
         \lambda_{01}(t) \mbox{ and } \lambda_{02}(t): \,\, \mbox{always deterministic}
@@ -201,16 +208,14 @@ $$
 :::
 
 ## Transition Probability: Definition
-:::{.fragment}
+
+::: fragment
 -   **Transition Probability**
-    -   **Definition**
-    \begin{equation}\label{eq:multi_state:trans_prob}
+    -   **Definition** \begin{equation}\label{eq:multi_state:trans_prob}
         P_{kj}\{s,t\mid\mathcal H^*(s-)\}=\pr\{\underbrace{Y(t)=j}_{\text{Future state}}\mid \underbrace{Y(s-)=k}_{\text{Current state}}, \underbrace{\mathcal H^*(s-)}_{\text{Past experience}}\}
-    \end{equation}
+        \end{equation}
         -   Probability of being in state $j$ at future time $t$ given current state $k$ at $s$
-    -   **Relation with intensity**
-    $$\lambda_{kj}\{t\mid\mathcal H^*(t-)\}\dd t=P_{kj}\{t,t\mid\mathcal H^*(t-)\}$$
-    \begin{align}
+    -   **Relation with intensity** $$\lambda_{kj}\{t\mid\mathcal H^*(t-)\}\dd t=P_{kj}\{t,t\mid\mathcal H^*(t-)\}$$ \begin{align}
         \mbox{Transition probability } 
         \mymathop{\rightleftharpoons}_{\mbox{cumulative}}^{\mbox{instantaneous}} \mbox{ intensity} 
         \end{align}
@@ -218,14 +223,16 @@ $$
 :::
 
 ## Transition Probability: Examples (I)
-:::{.fragment}
+
+::: fragment
 -   **Life-death model**
     -   $\lambda_{01}(t)$: hazard for death \begin{align}
         P_{00}(0, t)&=\exp\left\{-\int_0^t\lambda_{01}(u)\dd u\right\}\,\,\, \mbox{(Survival)}\\
         P_{01}(0, t)&=1-\exp\left\{-\int_0^t\lambda_{01}(u)\dd u\right\}\,\,\,  \mbox{(c.d.f. of death)}
         \end{align}
 :::
-:::{.fragment}
+
+::: fragment
 -   **Competing risks**
     -   $\lambda_{0k}(t)$: cause-specific hazard for $k$th risk \begin{align}
         P_{00}(0, t)&=\exp\left\{-\int_0^t\sum_{k=1}^K\lambda_{0k}(u)\dd u\right\}\,\,\, \mbox{(Overall survival)}\\
@@ -235,7 +242,8 @@ $$
 :::
 
 ## Transition Probability: Examples (II)
-:::{.fragment}
+
+::: fragment
 -   **Illness-death model (semi-competing risks)**
     -   $\lambda_{01}(t), \lambda_{02}(t)$: cause-specific hazard for onset of illness or death w.o. illness $$
         P_{00}(0, t)=\exp\left[-\int_0^t\{\lambda_{01}(u)+\lambda_{02}(u)\}\dd u\right]
@@ -247,114 +255,114 @@ $$
 :::
 
 ## Markov Process
-:::{.fragment}
--   **Transition intensity matrix**
-$$
-\dd\Lambda_{kj}(u) \;=\;
-\begin{cases}
-\lambda_{kj}(u) \dd u, & \text{if } k \neq j, \\
--\sum_{l \neq k} \lambda_{kl}(u) \dd u, & \text{if } k = j
-\end{cases}
-$$
-i.e.
-$$
-\dd\mathbf{\Lambda}(u) \;=\; 
-\begin{bmatrix}
--\sum_{k=1}^K \lambda_{0k}(u) & \lambda_{01}(u) & \cdots & \lambda_{0K}(u) \\
-\lambda_{10}(u) & -\sum_{k \neq 1} \lambda_{1k}(u) & \cdots & \lambda_{1K}(u) \\
-\vdots & \vdots & \ddots & \vdots \\
-\lambda_{K0}(u) & \lambda_{K1}(u) & \cdots & -\sum_{k=0}^{K-1} \lambda_{Kk}(u)
-\end{bmatrix} \dd u
-$$
+
+::: fragment
+-   **Transition intensity matrix** $$
+    \dd\Lambda_{kj}(u) \;=\;
+    \begin{cases}
+    \lambda_{kj}(u) \dd u, & \text{if } k \neq j, \\
+    -\sum_{l \neq k} \lambda_{kl}(u) \dd u, & \text{if } k = j
+    \end{cases}
+    $$ i.e. $$
+    \dd\mathbf{\Lambda}(u) \;=\; 
+    \begin{bmatrix}
+    -\sum_{k=1}^K \lambda_{0k}(u) & \lambda_{01}(u) & \cdots & \lambda_{0K}(u) \\
+    \lambda_{10}(u) & -\sum_{k \neq 1} \lambda_{1k}(u) & \cdots & \lambda_{1K}(u) \\
+    \vdots & \vdots & \ddots & \vdots \\
+    \lambda_{K0}(u) & \lambda_{K1}(u) & \cdots & -\sum_{k=0}^{K-1} \lambda_{Kk}(u)
+    \end{bmatrix} \dd u
+    $$
 :::
 
 ## Transition Probability vs. Intensity
-:::{.fragment}
+
+::: fragment
 -   **Transition probability matrix**
-    -   **Definition**
-$$
-\textbf{P}(s, t) =
-\begin{bmatrix}
-P_{00}(s, t) & P_{01}(s, t) & \cdots & P_{0K}(s, t) \\
-P_{10}(s, t) & P_{11}(s, t) & \cdots & P_{1K}(s, t) \\
-\vdots       & \vdots       & \ddots & \vdots       \\
-P_{K0}(s, t) & P_{K1}(s, t) & \cdots & P_{KK}(s, t)
-\end{bmatrix}
-$$
+    -   **Definition** $$
+        \textbf{P}(s, t) =
+        \begin{bmatrix}
+        P_{00}(s, t) & P_{01}(s, t) & \cdots & P_{0K}(s, t) \\
+        P_{10}(s, t) & P_{11}(s, t) & \cdots & P_{1K}(s, t) \\
+        \vdots       & \vdots       & \ddots & \vdots       \\
+        P_{K0}(s, t) & P_{K1}(s, t) & \cdots & P_{KK}(s, t)
+        \end{bmatrix}
+        $$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Product limit**
-    -   $s = u_0 < u_1 < \cdots < u_m = t$, with $u_r - u_{r-1} = \dd u$
-$$
-\textbf{P}(s, t) \;=\; \lim_{\dd u \to 0} 
-\prod_{r = 1}^m \bigl\{ \mathbf{I} \,+\, \dd\mathbf{\Lambda}(u_r) \bigr\}
-$$
+    -   $s = u_0 < u_1 < \cdots < u_m = t$, with $u_r - u_{r-1} = \dd u$ $$
+        \textbf{P}(s, t) \;=\; \lim_{\dd u \to 0} 
+        \prod_{r = 1}^m \bigl\{ \mathbf{I} \,+\, \dd\mathbf{\Lambda}(u_r) \bigr\}
+        $$
     -   $\mathbf{I}$: Identity matrix
 :::
 
 ## Estimating Discrete Intensities
-:::{.fragment}
+
+::: fragment
 -   **Observed data**
     -   $C$: censoring time
-    -   $N_{kj}(t) = N^*_{kj}(t \wedge C)$
-\begin{equation}\label{eq:multi_state:censoredY}
-\tilde Y(t) \;=\;
-\begin{cases}
-Y(t), & \text{if uncensored by } t, \\
--1,   & \text{if censored by } t.
-\end{cases}
-\end{equation}
+    -   $N_{kj}(t) = N^*_{kj}(t \wedge C)$ \begin{equation}\label{eq:multi_state:censoredY}
+        \tilde Y(t) \;=\;
+        \begin{cases}
+        Y(t), & \text{if uncensored by } t, \\
+        -1,   & \text{if censored by } t.
+        \end{cases}
+        \end{equation}
 :::
-:::{.fragment}
--   **Nelsen--Aalen-type estimator**
-\begin{align}\label{eq:multi_state:np_intensity}
-\dd\hat\Lambda_{kj}(t) 
-&\;=\; \frac{\text{Number of observed }k \to j \text{ transitions}} 
-{\text{Number of subjects at risk of a } k \to j \text{ transition}} \notag\\
-&\;=\; \frac{\sum_{i=1}^n \dd N_{kji}(t)}{\sum_{i=1}^n I\left\{ \tilde Y_i(t) = k \right\}}
-\end{align}
+
+::: fragment
+-   **Nelsen--Aalen-type estimator** \begin{align}\label{eq:multi_state:np_intensity}
+    \dd\hat\Lambda_{kj}(t) 
+    &\;=\; \frac{\text{Number of observed }k \to j \text{ transitions}} 
+    {\text{Number of subjects at risk of a } k \to j \text{ transition}} \notag\\
+    &\;=\; \frac{\sum_{i=1}^n \dd N_{kji}(t)}{\sum_{i=1}^n I\left\{ \tilde Y_i(t) = k \right\}}
+    \end{align}
 :::
 
 ## Aalen--Johansen Estimator
-:::{.fragment}
--   **Product-limit estimator**
-$$
-\hat{\textbf{P}}(s, t) \;=\; \lim_{\dd u \to 0} 
-\prod_{r = 1}^m \bigl\{ \mathbf{I} \,+\, \dd\hat{\mathbf{\Lambda}}(u_r) \bigr\}
-$$
+
+::: fragment
+-   **Product-limit estimator** $$
+    \hat{\textbf{P}}(s, t) \;=\; \lim_{\dd u \to 0} 
+    \prod_{r = 1}^m \bigl\{ \mathbf{I} \,+\, \dd\hat{\mathbf{\Lambda}}(u_r) \bigr\}
+    $$
     -   $s = u_0 < u_1 < \cdots < u_m = t$, with $u_r - u_{r-1} = \dd u$
     -   Reduces to KM, Gray's estimator in life-death, competing risks models
 :::
-:::{.fragment}
+
+::: fragment
 -   **Robustness property**
     -   Valid even without Markov assumption
-:::   
-
+:::
 
 ## Useful Functionals
-:::{.fragment}
--   **State-occupancy probability**
-$$
-P_k(t) = \pr\{Y(t) = k\} = \sum_{l=0}^K \underbrace{\pr\{Y(0) = l\}}_{\text{Initial state}} \, \underbrace{P_{lk}(0, t)}_{\text{Transition probability}}
-$$
+
+::: fragment
+-   **State-occupancy probability** $$
+    P_k(t) = \pr\{Y(t) = k\} = \sum_{l=0}^K \underbrace{\pr\{Y(0) = l\}}_{\text{Initial state}} \, \underbrace{P_{lk}(0, t)}_{\text{Transition probability}}
+    $$
     -   Example: probability patient will be ill but still alive in one year
-::: 
-:::{.fragment}
--   **Restricted mean sojourn time**
-$$
-\mu_k(\tau) = E\left[ \int_0^\tau I\{Y(t) = k\} \dd t \right] = \int_0^\tau P_k(t) \dd t
-$$
+:::
+
+::: fragment
+-   **Restricted mean sojourn time** $$
+    \mu_k(\tau) = E\left[ \int_0^\tau I\{Y(t) = k\} \dd t \right] = \int_0^\tau P_k(t) \dd t
+    $$
     -   Average time spent in state $k$ (healthy, ill but alive, etc.) by time $\tau$
-::: 
+:::
 
 # Cox-Type Models for Intensity
 
 ## Observed Data
-:::{.fragment}
+
+::: fragment
 -   **Censored life history**
     -   $\mathcal H(t)=\{Y(u):0\leq u\leq t\wedge C\}$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Alternate formulation**
     -   **Focusing on (observed) transitions** $k\to j$
         -   $u_k^{(r)}$: $r$th time subject enters state $k$
@@ -365,24 +373,25 @@ $$
 :::
 
 ## Likelihood Function
-:::{.fragment}
--   **Observed data**
- \begin{equation}\label{eq:multi_state:obs}
+
+::: fragment
+-   **Observed data** \begin{equation}\label{eq:multi_state:obs}
         (u_k^{(r)}, v_k^{(r)}, \delta_{kj}^{(r)}),\hspace{3mm}r=1,2,\ldots;\hspace{2mm} 1\leq k\neq j\leq K
         \end{equation}
     -   Collection of all observed transitions
 :::
-:::{.fragment}
--   **Likelihood for a single subject**
-  \begin{equation}\label{eq:multi_state:lik}
+
+::: fragment
+-   **Likelihood for a single subject** \begin{equation}\label{eq:multi_state:lik}
         \prod_{k\neq j}^K\prod_r\lambda_{kj}\left\{v_k^{(r)}\mid\mathcal H^*(v_k^{(r)}-)\right\}^{\delta_{kj}^{(r)}}
         \exp\left[-\int_{u_k^{(r)}}^{v_k^{(r)}}\lambda_{kj}\left\{t\mid\mathcal H^*(t-)\right\}\dd t\right]
         \end{equation}
-    -   Factorize by transition intensities 
+    -   Factorize by transition intensities
 :::
 
 ## Inference for Transition Intensity
-:::{.fragment}
+
+::: fragment
 -   **Likelihood for** $k\to j$ transition
     -   **Progressive process** $$
         \lambda_{kj}\left\{v_k\mid\mathcal H^*(v_k-)\right\}^{\delta_{kj}}
@@ -395,14 +404,16 @@ $$
 :::
 
 ## Semiparametric Regression (I)
-:::{.fragment}
+
+::: fragment
 -   **Modeling target**
     -   **Covariate-specific transition intensity** $$
           \lambda_{kj}\{t\mid\mathcal H^*(t-), \overline Z(t)\} = E\{\dd N_{kj}^*(t)\mid Y(t-)=k,\mathcal H^*(t-), \overline Z(t)\}
           $$
         -   $Z(t)$: possibly time-dependent covariates
 :::
-:::{.fragment}
+
+::: fragment
 -   **Multiplicative intensity models**
     -   **Modulated (by covariates) *Markov* models** \begin{equation}\label{eq:multi_state:markov}
         \lambda_{kj}\{t\mid\mathcal H^*(t-), \overline Z(t)\}=\exp\{\beta_{kj}^\T Z(t)\}\lambda_{kj0}(t)
@@ -412,7 +423,8 @@ $$
 :::
 
 ## Semiparametric Regression (II)
-:::{.fragment}
+
+::: fragment
 -   **Multiplicative intensity models**
     -   **Modulated semi-Markov models** \begin{equation}\label{eq:multi_state:semi_markov}
         \lambda_{kj}\{t\mid\mathcal H^*(t-)\}=\exp\{\beta_{kj}^\T Z(t)+\gamma_{kj} B(t)\}\lambda_{kj0}(t)
@@ -425,7 +437,8 @@ $$
 :::
 
 ## Software: `survival::coxph()` (I)
-:::{.fragment}
+
+::: fragment
 -   **Input data format**
     -   Long format, one transition per row
     -   (`start`, `stop`): $(u_k^{(r)}, v_k^{(r)})$; `status`: $\delta^{(r)}_{kj}$
@@ -447,7 +460,8 @@ $$
 :::
 
 ## Software: `survival::coxph()` (II)
-:::{.fragment}
+
+:::: fragment
 -   **Basic syntax for multiplicative intensity model**
     -   Fit each type of transition $(k\to j)$ separately
         -   Factorization of likelihood
@@ -462,18 +476,20 @@ obj <- coxph(Surv(start, stop, status) ~ covariates,
 	   subset = (from == k) & (to == j))
 ```
 :::
-:::
+::::
 
 # GBC: A Multistate Perspective
 
 ## What's New
-:::{.fragment}
+
+::: fragment
 -   **Study information**
     -   **Population**: 686 patients with primary node positive breast cancer
     -   **Endpoints**: relapse of cancer and death (semi-competing risks)
         -   Previously analyzed by time to earlier of relapse/death (RFS)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Multistate perspective**
     -   Does hormonal treatment (or other risk factors) have differential effects on
         (a) Relapse
@@ -482,7 +498,8 @@ obj <- coxph(Surv(start, stop, status) ~ covariates,
 :::
 
 ## Multistate Setup
-:::{.fragment}
+
+::: fragment
 -   **Illness-death model**
 
 ```{r}
@@ -501,7 +518,8 @@ obj <- coxph(Surv(start, stop, status) ~ covariates,
 :::
 
 ## Multiplicative Intensity Models
-:::{.fragment}
+
+::: fragment
 -   **Three (semi-Markov) models**
 
 ```{r}
@@ -525,17 +543,19 @@ obj12 <- coxph(Surv(start, stop, status) ~ Bt + hormone + meno
 
 ```
 :::
+
 ## Regression Results (I)
-:::{.fragment}
+
+::: fragment
 -   **Regression table**
     -   **Hormonal therapy** beneficial on relapse (31.5% risk reduction; $p$-value 0.003)
 
 ![](images/ms_gbc_reg1.png){fig-align="center" width="70%"}
 :::
 
-
 ## Regression Results (II)
-:::{.fragment}
+
+::: fragment
 -   **Regression table**
     -   **Hormonal therapy** no effect on progression from relapse to death
     -   **One month away from relapse** patient is at 10.7% less risk of mortality
