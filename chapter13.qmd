@@ -6,7 +6,134 @@ title: "Chapter 13 - Composite Endpoints"
 
 Lecture slides [here](chap13.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-## Base R Code
+## Chapter Summary
+
+Composite endpoints combine fatal and nonfatal events, typically ranked by clinical importance, into a single outcome. They are especially useful in clinical trials for increasing statistical efficiency and avoiding multiple testing. Traditional methods such as time to first event can obscure the relative severity of outcomes. Newer techniques—such as *restricted mean time in favor* (RMT-IF) and the *proportional win-fractions* (PW) model—offer interpretable, flexible alternatives that respect the hierarchical structure of composite events.
+
+### Multistate outcome structure
+
+Let $Y_a(t)$ denote the clinical state of a subject in treatment arm $a$ at time $t$, taking values in the ordered set $\{0, 1, \ldots, K, K+1\}$:
+
+-   $a \in \{0, 1\}$: treatment assignment (0 = control, 1 = treatment),\
+-   $Y_a(t)$ increases as the subject’s health condition worsens,\
+-   State $K+1$ is an absorbing state corresponding to death.
+
+Examples include:
+
+-   **Progressive disease (e.g., cancer)**:\
+    $Y_a(t) = 0$: remission,\
+    $1$: relapse,\
+    $2$: metastasis,\
+    $3$: death ($K+1 = 3$).
+
+-   **Recurrent hospitalizations with death**:\
+    $Y_a(t)$ = number of hospitalizations up to $t$ (0 to $K$), with $K+1$ = death.
+
+The process $Y_a(t)$ is assumed to be *progressive*, i.e., non-decreasing over time, and all transitions eventually terminate in the absorbing state.
+
+### Restricted Mean Time in Favor (RMT-IF)
+
+The RMT-IF measures the average duration over which a subject in one group is in a more favorable state than a subject in the other group, over a follow-up window $[0, \tau]$.
+
+-   **Definition**:
+    $$
+    \theta(\tau) = E\Bigg[ \underbrace{\int_0^\tau I\{ Y_1(t) < Y_0(t)\} \mathrm{d} t}_{\text{Win time } W^{(1, 0)}(\tau)} \Bigg]
+                  - E\Bigg[ \underbrace{\int_0^\tau I\{ Y_0(t) < Y_1(t) \} \mathrm{d} t}_{\text{Loss time } W^{(0, 1)}(\tau)}  \Bigg].
+    $$
+
+![](images/rmt_cases.png){fig-align="center" width="80%"}
+
+-   **Component-wise decomposition**:
+    $$
+    \theta(\tau) = \sum_{k=1}^{K+1} \theta_k(\tau),
+    $$
+    where each $\theta_k(\tau)$ corresponds to a net gain in time prior to entering state $k$.
+
+-   **Estimation**: Uses Kaplan–Meier survival curves for $T_{ak}$ = time to entry into state $k$ or worse.\
+-   **Interpretation**: Reduces to RMST when only two states are considered (e.g., survival vs. death).
+
+-   **Regression**:
+    $$
+    g\{\theta(Z_i, Z_j)(\tau)\} = \beta_\tau^\mathrm{T}(Z_i - Z_j),
+    $$
+    where $\theta(Z_i, Z_j)(\tau)$ is the conditional RMT-IF between covariate profiles $Z_i$ and $Z_j$.
+
+
+### Win Ratio and Proportional Win-Fractions (PW) Model
+
+The *win ratio* compares all possible treatment–control subject pairs, assigning a “win” to the subject in the more favorable state based on a pre-specified hierarchical rule.
+
+-   **Basic win ratio**:
+    $$
+    \hat{\text{WR}} = \frac{\text{\# of treatment wins}}{\text{\# of control wins}}.
+    $$
+
+-   **General win function** $\mathcal{W}(\mathcal{H}^*_i, \mathcal{H}^*_j)(t)$:\
+    Compares cumulative histories $\mathcal{H}^*(t)$ up to time $t$ for two subjects, assigning 1 for a win and 0 otherwise.
+
+-   **Examples**:
+    - *Pocock win ratio* (PWR): prioritize survival first, then first nonfatal event.
+    - *Recurrent win ratio* (RWR): compare cumulative event counts and recency.
+    - *Time to first event*: inverse of hazard ratio.
+    - *Binary response*: reduces to odds ratio.
+
+![](images/comp_rwr.png){fig-align="center" width="80%"}
+
+-   **PW model**:
+    $$
+    \text{WR}(t; Z_i, Z_j) = \exp\left\{ \beta^\mathrm{T}(Z_i - Z_j) \right\}.
+    $$
+    This assumes proportional win fractions across time; $\exp(\beta_j)$ gives the win ratio per unit increase in covariate $j$.
+
+-   **Inference**:\
+    Estimation is performed via U-statistic–based pairwise comparisons and weighted logistic regression. Score processes are used for model checking.
+
+### Example R code
+
+```{r}
+#| eval: false
+########################################
+# 1. Two-sample RMT-IF
+########################################
+library(rmt)
+obj <- rmtfit(id, time, status, trt, 
+              type = "recurrent" # "recurrent" (default) or "multistate"
+              )
+summary(obj, tau = 4) # Summarize effect sizes at restriction time 4
+plot(obj)        # RMT-IF curve
+bouquet(obj)     # Bouquet plot
+```
+Here:
+
+-   `id`: subject identifier;\
+-   `time`: time to event or censoring;\
+-   `status`: event type indicator
+    -   `type = "recurrent"`: `1`: nonfatal event, `2`: death, `0`: censoring;\
+    -   `type = "multistate"`: `k`: a transition to state $k$ 
+      (`K+1` for death, `0` for censoring)
+-   `trt`: treatment group (0 = control, 1 = treatment);\
+```{r}
+#| eval: false
+########################################
+# 2. Proportional Win-Fractions model
+########################################
+library(WR)
+obj <- pwreg(ID, time, status, Z, strata = NULL)
+```
+Here:
+
+-   `ID`: subject identifier;\
+-   `time`: time to event or censoring;\
+-   `status = 1`: death, `2`: nonfatal event, `0`: censoring;\
+-   `Z`: matrix of baseline covariates;\
+-   `strata`: optional stratification variable.
+
+### Conclusion
+
+RMT-IF and PW models provide robust, interpretable alternatives to traditional time-to-first-event analysis for composite endpoints. They respect the ordering of clinical priorities and utilize full patient histories, including both fatal and nonfatal events. RMT-IF summarizes effects in absolute time units, while PW models yield covariate-adjusted win ratios with a semiparametric interpretation. Together, they offer powerful tools for improving clinical trial analyses of complex outcomes.
+
+
+## R Code
 
 ```{r}
 #| code-fold: true
@@ -14,351 +141,255 @@ Lecture slides [here](chap13.html){target="_blank"}. (To convert html to pdf, pr
 #| eval: false
 
 
-#######################################################
-#  Section 13.2 RMT-IF analysis of the high-risk
-#   subgroup of the HF-ACTION study data
-#######################################################
+###############################################################################
+# Chapter 13 R Code
+#
+# This script reproduces all major numerical results in Chapter 13, including:
+#   1. RMT-IF analysis of the high-risk subgroup of the HF-ACTION study
+#   2. Additional illustration with the WR package for heart failure data
+###############################################################################
 
 
-# install load the rmt package
-install.packages("rmt")
+#==============================================================================
+# (A) RMT-IF Analysis of the HF-ACTION Study (High-Risk Subgroup)
+#==============================================================================
+#------------------------------------------------------------------------------
+# 1. Load Packages
+#------------------------------------------------------------------------------
+# install.packages("rmt")
 library(rmt)
-##### Read in HF-ACTION DATA########
+
+# The "hfaction" data is built into the {rmt} package
 data("hfaction")
 
 data <- hfaction
 
-# number of unique patients by treatment
-# group and overall
+#------------------------------------------------------------------------------
+# 2. Basic Data Summary
+#------------------------------------------------------------------------------
+# Sample size
 uid <- unique(data$patid)
-n <- length(uid)
+n   <- length(uid)
 
-uid1 <- unique(data$patid[data$trt_ab==1])
-n1 <- length(uid1)
+# By treatment group
+uid1 <- unique(data$patid[data$trt_ab == 1])
+n1   <- length(uid1)
 
-uid0 <- unique(data$patid[data$trt_ab==0])
-n0 <- length(uid0)
+uid0 <- unique(data$patid[data$trt_ab == 0])
+n0   <- length(uid0)
 
+# Average # of hospitalizations by group
+mean_hosp_1 <- sum(data$status[data$trt_ab == 1] == 1) / n1
+mean_hosp_0 <- sum(data$status[data$trt_ab == 0] == 1) / n0
 
-## average number of hosps
-sum(data$status[data$trt_ab==1]==1)/n1
-sum(data$status[data$trt_ab==0]==1)/n0
+# Total # hospitalizations and # deaths
+total_hosp <- sum(data$status == 1)
+total_death <- sum(data$status == 2)
 
-## total number of hosps
-sum(data$status==1)
-## total number of deaths
-sum(data$status==2)
-
-
-# extract variables for analysis by
-# rmtfit()
-id <- data$patid
-time <- data$time
-status <- data$status
-trt <- data$trt_ab
-
-
-
-###### Standard RMST analysis #################
+#------------------------------------------------------------------------------
+# 3. Time-to-First-Event and Mortality Sub-Analyses
+#------------------------------------------------------------------------------
 library(survRM2)
 
-### create datasets for time to first event ###
-data.TFE <- data[!duplicated(data$patid),]
+# Create data for time to first event (TFE)
+data.TFE <- data[!duplicated(data$patid), ]
 
-### create datasets for overall mortality ###
-## death: status=2
-data_death <- data[data$status==2|data$status==0,]
+# Create data for overall mortality (status==2 or 0)
+data_death <- data[data$status == 2 | data$status == 0, ]
 
-##RMST analysis for hospitalization-free survival and overall survival
-rmst2(data.TFE$time, data.TFE$status>0, data.TFE$trt_ab, tau=3.97)
-rmst2(data_death$time, data_death$status>0, data_death$trt_ab, tau=3.97)
+# RMST analysis for hospitalization-free survival & overall survival, up to ~4 years
+rmst_tfe   <- rmst2(data.TFE$time,   data.TFE$status > 0,   data.TFE$trt_ab, tau = 3.97)
+rmst_death <- rmst2(data_death$time, data_death$status > 0, data_death$trt_ab, tau = 3.97)
 
+#------------------------------------------------------------------------------
+# 4. Kaplan-Meier Curves for Hospitalization-Free Survival and Overall Survival
+#------------------------------------------------------------------------------
+obj.TFE   <- survfit(Surv(time, status > 0) ~ trt_ab, data = data.TFE)
+obj.death <- survfit(Surv(time, status == 2) ~ trt_ab, data = data_death)
 
-#### Kaplan-Meier (KM) curves for the hospitalization-free survival
-## (time to the first event) and overall survival by treatment group.
+# Plot (Figure 13.1)
+par(mfrow = c(1, 2))
 
-# Fit KM curves by trt_ab
-obj.TFE <- survfit(Surv(time,status>0)~trt_ab,data=data.TFE)
-obj.death <- survfit(Surv(time,status==2)~trt_ab,data=data_death)
+# (A) TFE
+plot(
+  obj.TFE,
+  main = "Hospitalization-free survival",
+  lty  = 1:2,
+  ylab = "Survival probabilities",
+  xlab = "Time (years)",
+  lwd  = 2
+)
+legend("bottomleft", c("Usual care", "Exercise training"), lwd = 2, lty = 1:2)
+abline(v = 4, lty = 3, lwd = 2)
 
+# (B) Overall survival
+plot(
+  obj.death,
+  main = "Overall survival",
+  lty  = 1:2,
+  ylab = "Survival probabilities",
+  xlab = "Time (years)",
+  lwd  = 2
+)
+legend("bottomleft", lty = 1:2, c("Usual care", "Exercise training"), lwd = 2)
+abline(v = 4, lty = 3, lwd = 2)
 
-# Plot Fig 13.1
-par(mfrow=c(1,2))
-plot(obj.TFE,main="Hopitalization-free survival",lty=1:2,ylab="Survival probabilities",
-     xlab="Time (years)", lwd=2)
-legend("bottomleft",c("Usual care","Exercise training"),lwd=2, lty=1:2)
-abline(v=4,lty=3,lwd=2)
+par(mfrow = c(1, 1))
 
-plot(obj.death,main="Overall survival",lty=1:2,ylab="Survival probabilities",
-     xlab="Time (years)", lwd=2)
-legend("bottomleft",lty=1:2,c("Usual care","Exercise training"),lwd=2)
-abline(v=4,lty=3,lwd=2)
+#------------------------------------------------------------------------------
+# 5. RMT-IF Analysis via rmtfit()
+#------------------------------------------------------------------------------
+# Here we treat the composite event as repeated events:
+#  status=1 => hospitalization, status=2 => death.
+obj_rmt <- rmtfit(rec(patid, time, status) ~ trt_ab, data = data)
 
-########################
-# RMT-IF analysis
-########################
+# Alternatively:
+# obj_rmt <- rmtfit(id, time, status, trt, type = "recurrent")
 
+summary(obj_rmt, Kmax = 1, tau = 3.97)
 
-# analyze the data using rmtfit()
-obj <- rmtfit(rec(patid,time,status)~trt_ab,data=data)
-# Alternatively
-# obj=rmtfit(id,time,status,trt,type="recurrent")
+#------------------------------------------------------------------------------
+# 6. Graphical Summaries of RMT-IF (Figure 13.2)
+#------------------------------------------------------------------------------
+par(mfrow = c(1, 2))
 
-summary(obj, Kmax=1, tau=3.97)
+# (A) bouquet() with Kmax=4 => aggregated for k = 4,...,K
+bouquet(
+  obj_rmt,
+  Kmax     = 4,
+  cex.group= 1.0,
+  cex.lab  = 1.5,
+  cex.axis = 1.5,
+  xlab     = "Restricted mean win/loss time (years)",
+  ylab     = "Follow-up time (years)",
+  group.label = FALSE,
+  ylim     = c(0, 4.2)
+)
+text(-0.8, 4.15, "Usual care",    cex = 1.2)
+text( 0.8, 4.15, "Exercise training", cex = 1.2)
 
-#############################################################
-# Graphical analysis of the HF-ACTION trial to
-# evaluate the effect of exercise training.
-###########################################################
+# (B) plot() for difference in RMT-IF (Exercise - Usual)
+plot(
+  obj_rmt,
+  conf      = TRUE,
+  lwd       = 2,
+  cex.lab   = 1.5,
+  cex.axis  = 1.5,
+  xlab      = "Follow-up time (years)",
+  ylab      = "RMT-IF of training (years)",
+  main      = ""
+)
 
-par(mfrow=c(1,2))
-# Kmax=4: to aggregate k=4,..., K
-bouquet(obj,Kmax=4,cex.group = 1.0,cex.lab=1.5,cex.axis=1.5,
-        xlab="Restricted mean win/loss time (years)",
-        ylab="Follow-up time (years)",group.label=F,ylim=c(0,4.2))
-text(-0.8,4.15,paste("Usual care"),cex=1.2)
-text(0.8,4.15,paste("Exercise training"),cex=1.2)
+par(mfrow = c(1, 1))
 
-plot(obj,conf=T,lwd=2, cex.lab=1.5,cex.axis=1.5,xlab="Follow-up time (years)",
-     ylab="RMT-IF of training (years)",main="")
-par(mfrow=c(1,1))
-
-### LaTeX table ###
-
-### format to LATEX table
-pval_fmt3=function(x){
-  if(x<0.001){
+#------------------------------------------------------------------------------
+# 7. Creating a LaTeX-Style Table of Results
+#------------------------------------------------------------------------------
+pval_fmt3 <- function(x) {
+  if (x < 0.001) {
     return("$<$0.001")
-  }else{
-    return(round(x,3))
+  } else {
+    return(round(x, 3))
   }
 }
 
+ltable <- NULL
 
-ltable=NULL
-# aggregate the results for k=1,..., K
-hosp_sum=summary(obj,Kmax=1,tau=3.97)$tab
-# aggregate the results for k=4,..., K
-all_sum=summary(obj,Kmax=4,tau=3.97)$tab
+# (A) k=1 => first events only
+hosp_sum <- summary(obj_rmt, Kmax = 1, tau = 3.97)$tab
 
-ltable=c("&","&","&",round(12*hosp_sum[1,1],2),"&",round(12*hosp_sum[1,2],2),"&",pval_fmt3(hosp_sum[1,4]),"\\")
+# (B) k=4 => aggregated for k=4,...,K
+all_sum  <- summary(obj_rmt, Kmax = 4, tau = 3.97)$tab
 
-for (i in 1:6){
-  tmp=c("&",i,"&&",round(12*all_sum[i,1],2),"&",round(12*all_sum[i,2],2),"&",pval_fmt3(all_sum[i,4]),"\\")
-  ltable=rbind(ltable,tmp)
+# First row => hospitalization
+ltable <- c(
+  "&", "&", "&",
+  round(12 * hosp_sum[1, 1], 2),
+  "&", round(12 * hosp_sum[1, 2], 2),
+  "&", pval_fmt3(hosp_sum[1, 4]),
+  "\\"
+)
+
+# Next rows => k=1,...,6 (or re-labeled in loop)
+for (i in 1:6) {
+  tmp <- c(
+    "&", i, "&&",
+    round(12 * all_sum[i, 1], 2), "&",
+    round(12 * all_sum[i, 2], 2), "&",
+    pval_fmt3(all_sum[i, 4]),
+    "\\"
+  )
+  ltable <- rbind(ltable, tmp)
 }
 
-ltable[5,2]="4+"
-ltable[6:7,2]=""
+# Adjust labeling
+ltable[5, 2] <- "4+"
+ltable[6:7, 2] <- ""
 
-rownames(ltable)=c("Hopitalization","","" ,"","","Death","Overall")
+rownames(ltable) <- c("Hospitalization", "", "", "", "", "Death", "Overall")
 
 noquote(ltable)
 
 
-
-
-
-##################################################################
-# This code is related to the numerical results in chapter 13   ##
-##################################################################
-
-
-# The real data used in Section 13.3.7 are protected by data sharing agreement.
-# Below is a similar analysis based on a subset of the data using the "WR" package.
-# The analysis illustrates the use of the pwreg() function for fitting Pocock's PW
-# regression model and score.proc() function for plotting standardized score processes
-
-
-# An example: HF-ACTION study
-
-# We consider a dataset from the HF-ACTION study consisting of 451 non-ischemic heart failure
-# patients. The study was conducted between April 2003 through Feb 2007 at 82 sites in the USA,
-# Canada, and France (O'Connor et al., 2009). The study objective was to assess the effect of
-# adding aerobic exercise training to usual care on the patients CV outcomes. The primary
-# endpoint was a composite of all-cause death and all-cause hospitalization.
-
-#######################################################################
-# We first load the WR package and the analysis dataset non_ischemic
-#######################################################################
-
-# If the "WR" hasn't been installed, need to download and install it
-# from CRAN
-install.packages("WR")
+#==============================================================================
+# (B) Additional Analysis with WR Package (Non-Ischemic HF Data)
+#==============================================================================
+# The real data used in Section 13.3 are protected. Below is a similar example
+# from the {WR} package for HF-ACTION with 451 non-ischemic heart failure patients
+#------------------------------------------------------------------------------
+# 1. Load Package and Example Data
+#------------------------------------------------------------------------------
+# install.packages("WR")
 library(WR)
-#> Loading required package: survival
+# The "non_ischemic" dataset is built into {WR}
 head(non_ischemic)
-#>   ID time status trt_ab age sex Black.vs.White Other.vs.White   bmi
-#> 1  1  221      2      0  62   1              0              0 25.18
-#> 2  1  383      0      0  62   1              0              0 25.18
-#> 3  2   23      2      0  75   1              1              0 22.96
-#> 4  2 1400      0      0  75   1              1              0 22.96
-#> 5  5    7      2      0  48   1              1              0 34.37
-#> 6  5   10      1      0  48   1              1              0 34.37
-#>   bipllvef hyperten COPD diabetes acei betab smokecurr
-#> 1    32.24        0    0        0    0     1         1
-#> 2    32.24        0    0        0    0     1         1
-#> 3    21.71        1    0        0    0     1         0
-#> 4    21.71        1    0        0    0     1         0
-#> 5    22.97        1    0        0    0     1         0
-#> 6    22.97        1    0        0    0     1         0
 
-
-# Re-label the covariates with informative names.
-
-colnames(non_ischemic)[4:16]=c(
-  "Training vs Usual","Age (year)","Male vs Female","Black vs White",
-  "Other vs White", "BMI","LVEF","Hypertension","COPD","Diabetes",
-  "ACE Inhibitor","Beta Blocker", "Smoker"
+# Re-label the covariates with more informative names
+colnames(non_ischemic)[4:16] <- c(
+  "Training vs Usual", "Age (year)", "Male vs Female", "Black vs White",
+  "Other vs White", "BMI", "LVEF", "Hypertension", "COPD", "Diabetes",
+  "ACE Inhibitor", "Beta Blocker", "Smoker"
 )
 
-#Compute the sample size the median length of follow-up.
-
-# sample size
+# Sample size
 length(unique(non_ischemic$ID))
-#> [1] 451
-# median length of follow-up time
-median(non_ischemic$time[non_ischemic$status<2])/30.5
-#> [1] 31.63934
 
-#So we have n=451 unique patients with a median follow-up of 31.6 months.
+# Median follow-up (in months) among those status < 2 (no event or non-fatal)
+median(non_ischemic$time[non_ischemic$status < 2]) / 30.5
 
-
-################################################################
-# Next, we use the pwreg() function to fit the PW model:
-################################################################
-
-# get the number of rows and number of covariates.
+#------------------------------------------------------------------------------
+# 2. Fit Pocock's Proportional Win-Fractions Regression Model
+#------------------------------------------------------------------------------
 nr <- nrow(non_ischemic)
-p <- ncol(non_ischemic) - 3
+p  <- ncol(non_ischemic) - 3
 
-# extract ID, time, status and covariates matrix Z from the data.
-# note that: ID, time and status should be column vector.
-# covariatesZ should be (nr, p) matrix.
-ID <- non_ischemic[,"ID"]
-time <- non_ischemic[,"time"]
-status <- non_ischemic[,"status"]
-Z <- as.matrix(non_ischemic[,4:(3+p)], nr, p)
+ID     <- non_ischemic[, "ID"]
+time   <- non_ischemic[, "time"]
+status <- non_ischemic[, "status"]
+Z      <- as.matrix(non_ischemic[, 4:(3 + p)], nr, p)
 
-
-# pass the parameters into the function
-pwreg.obj <- pwreg(ID=ID, time=time, status=status, Z=Z)
-
+pwreg.obj <- pwreg(ID = ID, time = time, status = status, Z = Z)
 print(pwreg.obj)
-#> Call:
-#> pwreg(time = time, status = status, Z = Z, ID = ID)
-#>
-#> Proportional win-fractions regression models for priority-adjusted composite endpoint
-#>
-#>
-#>
-#> Total number of pairs: 101475
-#> Wins-losses on death:  7644 (7.5%)
-#> Wins-losses on non-fatal event:  78387 (77.2%)
-#> Indeterminate pairs 15444 (15.2%)
-#>
-#> Newton-Raphson algorithm converged in 5 iterations.
-#>
-#> Overall test: chisq test with 13 degrees of freedom;
-#>  Wald statistic 24.9 with p-value 0.02392931
-#>
-#> Estimates for Regression parameters:
-#>
-#>                     Estimate         se z.value p.value
-#> Training vs Usual  0.1906687  0.1264658  1.5077 0.13164
-#> Age (year)        -0.0128306  0.0057285 -2.2398 0.02510 *
-#> Male vs Female    -0.1552923  0.1294198 -1.1999 0.23017
-#> Black vs White    -0.3026335  0.1461330 -2.0709 0.03836 *
-#> Other vs White    -0.3565390  0.3424360 -1.0412 0.29779
-#> BMI               -0.0181310  0.0097582 -1.8580 0.06316 .
-#> LVEF               0.0214905  0.0086449  2.4859 0.01292 *
-#> Hypertension      -0.0318291  0.1456217 -0.2186 0.82698
-#> COPD              -0.4023069  0.2066821 -1.9465 0.05159 .
-#> Diabetes           0.0703990  0.1419998  0.4958 0.62006
-#> ACE Inhibitor     -0.1068201  0.1571317 -0.6798 0.49662
-#> Beta Blocker      -0.5344979  0.3289319 -1.6250 0.10417
-#> Smoker            -0.0602350  0.1682826 -0.3579 0.72039
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#>
-#>
-#> Point and interval estimates for for win ratios:
-#>
-#>                   Win Ratio 95% lower CL 95% higher CL
-#> Training vs Usual 1.2100585    0.9444056     1.5504374
-#> Age (year)        0.9872513    0.9762288     0.9983983
-#> Male vs Female    0.8561648    0.6643471     1.1033663
-#> Black vs White    0.7388699    0.5548548     0.9839127
-#> Other vs White    0.7000951    0.3578286     1.3697431
-#> BMI               0.9820323    0.9634287     1.0009952
-#> LVEF              1.0217231    1.0045572     1.0391823
-#> Hypertension      0.9686721    0.7281543     1.2886357
-#> COPD              0.6687755    0.4460178     1.0027865
-#> Diabetes          1.0729362    0.8122757     1.4172433
-#> ACE Inhibitor     0.8986873    0.6604773     1.2228110
-#> Beta Blocker      0.5859634    0.3075270     1.1164977
-#> Smoker            0.9415433    0.6770144     1.3094312
-#
-# The output consists of three parts. The first part presents some descriptive statistics
-# on the proportions of win-loss status among all (n2)=101,475
-# pairs. According to the output, 7.5% of them are determined by death;
-# 77.2% by hospitalization, and the remaining 7.2% are indeterminate.
-# It also reports an overall (Wald) test with p-value 0.024, suggesting that,
-# at the conventional 0.05 level, the 13 covariates are significantly associated
-# with the composite outcome.
-#
-# The second part presents a table for the estimates and standard errors of the regression
-# coefficient, along with their corresponding p -value for testing the coefficient being
-# zero. The third part is perhaps the most informative, tabulating the estimated win ratios
-# (exponential of the regression coefficients) and their associated 95% confidence intervals.
-# We can see that a patient in exercise training is 21% more likely to have a better
-#  priority-adjusted composite outcome than one in usual care. However, this difference
-# is statistically not significant. In addition, younger age, white race, higher LVEF are
-# significantly associated with more favorable outcomes than otherwise, while the beneficial
-# effects of low BMI and absence of COPD history are border-line significant.
-#
 
-
-# To assess the effect of race on the composite outcome, we test the null hypothesis
-# H0:\beta_4=\beta_5=0.
-# We conduct a 2-df Chi-square Wald test based on (\beta_4,\beta_5)
-
-
-  #extract estimates of (\beta_4,\beta_5)
-  beta <- matrix(pwreg.obj$beta[4:5])
-  #extract estimated covariance matrix for (\beta_4,\beta_5)
-  Sigma <- pwreg.obj$Var[4:5,4:5]
-  #compute chisq statistic in quadratic form
-  chistats <- t(beta) %*% solve(Sigma) %*% beta
-
-# compare the Wald statistic with the reference
-# distribution of chisq(2) to obtain the p-value
+#------------------------------------------------------------------------------
+# 3. Hypothesis Testing for Race
+#------------------------------------------------------------------------------
+# Test H0: beta_4 = beta_5 = 0 for race (Black vs White, Other vs White)
+beta_race <- matrix(pwreg.obj$beta[4:5])
+Sigma_race<- pwreg.obj$Var[4:5, 4:5]
+chistats  <- t(beta_race) %*% solve(Sigma_race) %*% beta_race
 1 - pchisq(chistats, df = 2)
-#>           [,1]
-#> [1,] 0.1016988
 
-#  The p -value is 0.102. So the overall effect of race on the composite outcome is
-# non-significant.
+#------------------------------------------------------------------------------
+# 4. Standardized Score Processes
+#------------------------------------------------------------------------------
+score.obj <- score.proc(pwreg.obj)
+print(score.obj)
 
-
-#  Finally, we use the score.proc() function to plot the standardized score process
-# for each covariate:
-
-  score.obj <- score.proc(pwreg.obj)
-  print(score.obj)
-#> This object contains two components:
-#>  't': an l-vector of times
-#>  'score': a p-by-l matrix whose k'th row is the standardized score process for the k'th
-  # covariate
-#>           as a function of t
-#>
-#> Use 'plot(object,k=k)' to plot the k'th score process.
-
-oldpar <- par(mfrow = par("mfrow"))
-par(mfrow = c(4,4))
-for(i in c(1:13)){
+oldpar <- par(mfrow = c(4, 4))
+for (i in 1:13) {
   plot(score.obj, k = i)
 }
 par(oldpar)
-```
 
+```

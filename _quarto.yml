@@ -38,7 +38,7 @@ website:
           - chapter10.qmd
           - chapter11.qmd
           - chapter12.qmd
-          # - chapter13.qmd
+          - chapter13.qmd
       - section: "Part III - Special Topics" 
         contents:
           # - chapter14.qmd
