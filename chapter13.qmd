@@ -20,10 +20,9 @@ Let $Y_a(t)$ denote the clinical state of a subject in treatment arm $a$ at time
 
 Examples include:
 
--   **Progressive disease (e.g., cancer)**:\
-    $Y_a(t) = 0$: remission,\
-    $1$: relapse,\
-    $2$: metastasis,\
+-   **Progressive disease (e.g., cancer)**: $Y_a(t) = 0$: remission,
+    $1$: relapse,
+    $2$: metastasis,
     $3$: death ($K+1 = 3$).
 
 -   **Recurrent hospitalizations with death**:\
