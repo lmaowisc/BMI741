@@ -39,7 +39,7 @@ WARF 207A, 610 Walnut St, Madison, WI 53726\
 Email: lmao\@biostat.wisc.edu\
 Phone: 608-263-5674\
 Office Hours: T&Th 3–4pm, or by appointment.\
-Zoom link provided on Canvas. 
+Zoom link provided on Canvas.
 
 #### Teaching Assistant
 
@@ -67,7 +67,7 @@ Zoom link provided on Canvas.
 #### Part I: Univariate Events
 
 | Date | Topic                                                      | Notes     |
-|----------------|-----------------------------------------|----------------|
+|-----------------|--------------------------------------|-----------------|
 | 1/27 | Introduction                                               | Chapter 1 |
 | 1/29 | Mathematical Foundations                                   | Chapter 2 |
 | 2/3  | Nonparametric Estimation of the Survival Curve             | Chapter 3 |
@@ -83,7 +83,7 @@ Zoom link provided on Canvas.
 #### Part II: Complex Outcomes
 
 | Date | Topic                                                      | Notes      |
-|----------------|-----------------------------------------|----------------|
+|-----------------|--------------------------------------|-----------------|
 | 3/5  | Multivariate Events – Conditional (Frailty) Models         | Chapter 8  |
 | 3/10 | Multivariate Event Times – Marginal Models                 | Chapter 8  |
 | 3/12 | Recurrent Events                                           | Chapter 9  |
@@ -97,8 +97,8 @@ Zoom link provided on Canvas.
 #### Part III: Special Topics
 
 | Date | Topic | Notes |
-|----------------|-----------------------------------------|----------------|
-| 4/19 | Causal Inference with Censored Data – IPTW and Standardization | Chapter 14 |
+|-----------------|--------------------------------------|-----------------|
+| 4/16 | Causal Inference with Censored Data – IPTW and Standardization | Chapter 14 |
 | 4/21 | Causal Inference with Censored Data – Marginal Structural Models | Chapter 14 |
 | 4/23 | Machine Learning with Censored Data – Variable Selection | Chapter 15 |
 | 4/28 | Machine Learning with Censored Data – Nonlinear Regression | Chapter 15 |
