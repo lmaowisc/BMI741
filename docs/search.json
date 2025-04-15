@@ -4647,5 +4647,341 @@
       "Part II - Complex Outcomes",
       "Chapter 13 - Composite Endpoints"
     ]
+  },
+  {
+    "objectID": "chap14.html#outline",
+    "href": "chap14.html#outline",
+    "title": "Applied Survival Analysis",
+    "section": "Outline",
+    "text": "Outline\n\n\nThe counterfactual framework\nInverse weighting and standardization\nEstimating causal survival curves\nMarginal structural models with time-varying treatment/confounding\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\def\\a{{(a)}} \\def\\b{{(1-a)}} \\def\\t{{(1)}} \\def\\c{{(0)}} \\def\\d{{\\rm d}} \\def\\T{{\\rm T}}\n\\]"
+  },
+  {
+    "objectID": "chap14.html#association-vs-causation",
+    "href": "chap14.html#association-vs-causation",
+    "title": "Applied Survival Analysis",
+    "section": "Association vs Causation",
+    "text": "Association vs Causation\n\n\nStatistical inference\n\nAssociation: test of group difference, correlation, regression\nCausation: informal or irrelevant\n\n\n\n\n\nCausal inference: study causal relationships\n\nCounterfactual framework\nCausal diagrams\n\n\n\n\n\nMotivating example: German Breast Cancer Study\n\nRelapse-free survival (\\(T\\)) vs hormonal therapy (\\(A=1\\) yes; \\(A=0\\): no)\nFirst assume \\(T\\) is fully observed (no censoring)"
+  },
+  {
+    "objectID": "chap14.html#rct-as-gold-standard",
+    "href": "chap14.html#rct-as-gold-standard",
+    "title": "Applied Survival Analysis",
+    "section": "RCT as Gold Standard",
+    "text": "RCT as Gold Standard\n\n\nRandomized controlled trial (RCT)\n\nPatients randomly assigned to hormonal vs non-hormonal treatments\nTwo groups identical (exchangeable) in terms of baseline characteristic\nAny between-group difference in relapse-free survival attributable to treatment (no confounding)\n\nIncrease in \\(t=5\\) years relapse-free survival rate caused by hormonal treatment\n\n\\[\n\\hat\\pr(T&gt;t\\mid A=1)-\\hat\\pr(T&gt;t\\mid A=0)\n\\]\n\n(Causal) Hazard ratio under Cox model with binary group as covariate"
+  },
+  {
+    "objectID": "chap14.html#possible-confounding",
+    "href": "chap14.html#possible-confounding",
+    "title": "Applied Survival Analysis",
+    "section": "Possible Confounding",
+    "text": "Possible Confounding\n\n\nHormone non-randomized \n\nWomen under hormonal treatment more likely to be post-menopausal than non-treatment (76.0% vs 47.5%)\nDifference in RFS \\(\\to\\) treatment or menopause?\nConfounder: menopausal status"
+  },
+  {
+    "objectID": "chap14.html#traditional-methods",
+    "href": "chap14.html#traditional-methods",
+    "title": "Applied Survival Analysis",
+    "section": "Traditional Methods",
+    "text": "Traditional Methods\n\n\nAdjustment for confounding\n\nLog-rank test stratified by menopausal status (Ch. 3)\nCox regression with menopausal status as a covariate (Ch. 4; conditional hazard ratio)\nNeither provides a population-level causal effect size of hormone treatment like that derived from an RCT\n\n\n\n\n\nGoal\n\nDrawing causal inference in an RCT-like setting, even with observational data"
+  },
+  {
+    "objectID": "chap14.html#counterfactual-framework",
+    "href": "chap14.html#counterfactual-framework",
+    "title": "Applied Survival Analysis",
+    "section": "Counterfactual Framework",
+    "text": "Counterfactual Framework\n\n\nPotential outcomes\n\nEach subject has two potential outcomes \\(T^{(a)}\\) \\((a=1, 0)\\)\n\n\\(T^{(1)}\\): had the subject been assigned to treatment\n\\(T^{(0)}\\): had the subject been assigned to control\n\n\n\n\n\n\nCausal estimand\n\nAny contrast in distribution between \\(T^{(1)}\\) vs \\(T^{(0)}\\)\nExample\n\nSurvival probability: \\(\\pr(T^{(1)}&gt;t)-\\pr(T^{(0)}&gt;t)\\)\nRMST: \\(E(T^{(1)}\\wedge t) - E(T^{(0)}\\wedge t)\\)"
+  },
+  {
+    "objectID": "chap14.html#exchangeability-assumption",
+    "href": "chap14.html#exchangeability-assumption",
+    "title": "Applied Survival Analysis",
+    "section": "Exchangeability Assumption",
+    "text": "Exchangeability Assumption\n\n\nObserved outcome\n\n\\(A = 1, 0\\): actually assigned group \\[T=AT^{(1)}+(1-A)T^{(0)}\\,\\,\\,\\, (\\rm consistency)\\]\n\n\n\n\n\nAssumptions\n\nComplete randomization \\(T^{(a)}\\indep A,\\hspace{5mm}a=1, 0\\)\n\nToo strong, typically not satisfied\n\nConditional exchangeability \\[\\begin{equation}\\label{eq:causal:cond_exch}\nT^{(a)}\\indep A \\mid W,\\hspace{5mm} a=1, 0\n\\end{equation}\\]\n\nAssignment independent of potential outcome given confounders \\(W\\)\nAll confounders are captured in \\(W\\)"
+  },
+  {
+    "objectID": "chap14.html#causal-diagrams",
+    "href": "chap14.html#causal-diagrams",
+    "title": "Applied Survival Analysis",
+    "section": "Causal Diagrams",
+    "text": "Causal Diagrams\n\n\nDirected Acyclic Graph"
+  },
+  {
+    "objectID": "chap14.html#estimand",
+    "href": "chap14.html#estimand",
+    "title": "Applied Survival Analysis",
+    "section": "Estimand",
+    "text": "Estimand\n\n\nObserved data (\\(T_i\\) fully observed) \\[(T_i, A_i, W_i),\\,\\,\\,\\, i=1,\\ldots, n\\]\n\n\n\n\nTwo classes of methods\n\nInverse probability treatment weighting (IPTW)\nStandardization\n\n\n\n\n\nCausal estimand \\[\\begin{equation*}\nS_a(t)=\\pr(T^{(a)}&gt;t)\n\\end{equation*}\\]"
+  },
+  {
+    "objectID": "chap14.html#propensity-score",
+    "href": "chap14.html#propensity-score",
+    "title": "Applied Survival Analysis",
+    "section": "Propensity Score",
+    "text": "Propensity Score\n\n\nSelection bias \\[\n    \\text{Naive estimator:}\\quad \\hat S_a^{\\rm naive}(t)=\\frac{\\sum_{i=1}^nI(A_i=a, T_i&gt;t)}{\\sum_{i=1}^nI(A_i = a)}\n    \\]\n\n\\((Y\\mid A = 1)\\) and \\((Y\\mid A = 0)\\) non-representative of general population\n\n\n\n\n\nPropensity score \\[\n    \\pi_a(W)=\\pr(A=a\\mid W)\n\\]\n\nProbability of entering treatment \\(a\\)\nGeneral population \\(\\stackrel{\\pi_a(W)}{\\rightleftarrows}\\) Group \\(a\\)"
+  },
+  {
+    "objectID": "chap14.html#iptw",
+    "href": "chap14.html#iptw",
+    "title": "Applied Survival Analysis",
+    "section": "IPTW",
+    "text": "IPTW\n\n\nRe-constitute general population\n\nInverse weighting: Group \\(a\\) \\(\\stackrel{\\pi_a(W)^{-1}}{\\rightarrow}\\) General population \\[\\begin{equation}\\label{eq:causal:ipw_surv}\n\\hat S_a^{\\rm IP}(t)=n^{-1}\\sum_{i=1}^n\\frac{I(A_i=a, T_i&gt;t)}{\\pi_a(W_i)}\n\\end{equation}\\]\nUnbiased \\[\\begin{align*}\nE\\left\\{\\frac{I(A=a, T&gt;t)}{\\pi_a(W)}\\right\\}&=E\\left\\{\\frac{I(A=a, T^{(a)}&gt;t)}{\\pi_a(W)}\\right\\}\\\\\n&=E\\left[\\pi_a(W)^{-1}E\\left\\{I(A=a, T^{(a)}&gt;t)\\mid W\\right\\}\\right]\\\\\n&=E\\left\\{\\pi_a(W)^{-1}\\pr(A=a\\mid W)\\pr(T^{(a)}&gt;t\\mid W)\\right\\}\\\\\n&=E\\left\\{\\pr(T^{(a)}&gt;t\\mid W)\\right\\}\\\\\n&=S_a(t)\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "chap14.html#estimate-propensity-score",
+    "href": "chap14.html#estimate-propensity-score",
+    "title": "Applied Survival Analysis",
+    "section": "Estimate Propensity Score",
+    "text": "Estimate Propensity Score\n\n\n\\(\\pi_a(W)\\) unknown unless by design\n\nEstimate \\(\\hat\\pi_a(\\cdot)\\) using \\[\n(A_i, W_i),\\,\\,\\ i=1,\\ldots,n\n\\]\nLogistic regression/machine learning classification\n\n\n\n\n\nIPTW estimator\n\nPlug in \\(\\hat\\pi_a(W_i)\\) \\[\\begin{equation}\n\\hat S_a^{\\rm IP}(t)=n^{-1}\\sum_{i=1}^n\\frac{I(A_i=a, T_i&gt;t)}{\\hat\\pi_a(W_i)}\n\\end{equation}\\]\nVariance estimation needs to account for randomness in \\(\\hat\\pi_a(\\cdot)\\)"
+  },
+  {
+    "objectID": "chap14.html#standardization",
+    "href": "chap14.html#standardization",
+    "title": "Applied Survival Analysis",
+    "section": "Standardization",
+    "text": "Standardization\n\n\nModel outcome vs confounder\n\nInstead of treatment vs confounder \\[\n\\hat S_a(t\\mid W)= \\hat\\pr(T^{(a)}&gt;t\\mid W)\n\\]\nE.g., Cox model based on \\[\n\\{(T_i, W_i): A_i=a, i=1,\\ldots, n\\}\n\\]\n\\((T\\mid A =a, W) = (T^{(a)}\\mid A =a, W) = (T^{(a)}\\mid W)\\) (conditional exchangeability)\n\n\n\n\n\nStandardized estimator\n\nAverage across population: \\(\\hat S_a^{\\rm reg}(t)=n^{-1}\\sum_{i=1}^n\\hat S_a(t\\mid W_i)\\)"
+  },
+  {
+    "objectID": "chap14.html#iptw-vs-standardization",
+    "href": "chap14.html#iptw-vs-standardization",
+    "title": "Applied Survival Analysis",
+    "section": "IPTW vs Standardization",
+    "text": "IPTW vs Standardization\n\n\nModeling target\n\nIPTW: treatment vs confounder\nStandardization: outcome vs confounder \n\n\n\n\n\nProperties\n\nNonparametric setting (categorical confounder): \\(\\hat S_a^{\\rm IP}(t)=\\hat S_a^{\\rm reg}(t)\\)\nDoubly robust estimator: valid when either model is true, efficient when both are true"
+  },
+  {
+    "objectID": "chap14.html#dealing-with-censored-data",
+    "href": "chap14.html#dealing-with-censored-data",
+    "title": "Applied Survival Analysis",
+    "section": "Dealing with Censored Data",
+    "text": "Dealing with Censored Data\n\n\nIn presence of censoring\n\nIPTW (+ IPCW)\nStandardardization (adjust for cenosring)\nObserved data \\((X, \\delta, A, W)\\)\n\n\\(X=T\\wedge C\\), \\(\\delta = I(T\\leq C)\\), \\(C\\): censoring time\n\n\n\n\n\n\nTwo levels of coarsening\n\n\\(T^{(a)}\\to T\\): treatment assignment\n\\(T\\to (X, \\delta)\\): Censoring"
+  },
+  {
+    "objectID": "chap14.html#assumptions-about-censoring",
+    "href": "chap14.html#assumptions-about-censoring",
+    "title": "Applied Survival Analysis",
+    "section": "Assumptions about Censoring",
+    "text": "Assumptions about Censoring\n\n\nTwo types of assumption\n\nCensoring depends on confounder (general) \\[\\begin{equation}\\label{eq:causal:indep_cens1}\nT\\indep C\\mid (A, W)\n\\end{equation}\\]\nCensoring not dependent on confounder \\[\\begin{equation}\\label{eq:causal:indep_cens2}\nT\\indep C\\mid A\n\\end{equation}\\]"
+  },
+  {
+    "objectID": "chap14.html#ipcw",
+    "href": "chap14.html#ipcw",
+    "title": "Applied Survival Analysis",
+    "section": "IPCW",
+    "text": "IPCW\n\n\nGeneral assumption \\((W\\to C)\\)\n\nAdjust for selection bias by censoring\nInverse probability treatment weighting (IPTW) + Inverse probability censoring weighting (IPCW)\n\n\n\n\n\nCensoring weight\n\n\\(G_a(t\\mid W)=\\pr(C\\geq t\\mid A=a, W)\\)\nE.g., Cox model fit on \\[\n(X_i, 1-\\delta_i, W_i)\\,\\,\\,\\, i=1,\\ldots, n\n\\] with \\(C_i\\) as outcome"
+  },
+  {
+    "objectID": "chap14.html#inverse-weighting",
+    "href": "chap14.html#inverse-weighting",
+    "title": "Applied Survival Analysis",
+    "section": "Inverse Weighting",
+    "text": "Inverse Weighting\n\n\nSelection probability\n\nIn group \\(a\\) and not censored by \\(t\\): \\(\\pi_a(W)G_a(t\\mid W)\\)\nInverse weight \\[\n\\hat w_{ai}(t)=\\frac{I(A_i=a)}{\\hat\\pi_a(W_i)\\hat G_a(t\\mid W_i)}\n\\]\n\n\n\n\n\nIPT(C)W-adjusted KM estimator\n\n\\(N_i(t)=I(X_i\\leq t,\\delta_i=1)\\) \\[\\begin{equation}\\label{eq:causal_ipcw}\n\\hat S_a^{\\rm IP}(t)=\\prod_{0\\leq u\\leq t}\\left\\{1-\\frac{\\sum_{i=1}^n \\hat w_{ai}(u)\\dd N_i(u)}{\\sum_{i=1}^n \\hat w_{ai}(u)I(X_i\\geq u)}\\right\\}\n\\end{equation}\\]\nIf \\((T\\indep C)\\mid A\\), then \\(\\hat G_a(t\\mid W_i)\\equiv 1\\)"
+  },
+  {
+    "objectID": "chap14.html#causal-cox-model",
+    "href": "chap14.html#causal-cox-model",
+    "title": "Applied Survival Analysis",
+    "section": "Causal Cox Model",
+    "text": "Causal Cox Model\n\n\nMarginal structural model\n\n\\(\\lambda_a(t)\\): hazard function of \\(T^{(a)}\\) \\[\\begin{equation}\\label{eq:causal:msm_cox}\n\\lambda_a(t)=\\exp(a\\beta)\\lambda_0(t)\n\\end{equation}\\]\n\n\n\n\n\nIPT(C)W-adjusted partial likelihood score\n\n\\(\\hat w_i(t)=\\{\\hat\\pi_{A_i}(W_i)\\hat G_{A_i}(t\\mid W_i)\\}^{-1}\\) \\[\\begin{equation}\\label{eq:causal:score}\nn^{-1}\\sum_{i=1}^n\\int_0^\\infty\\left\\{A_i-\\frac{\\sum_{j=1}^nA_j\\hat w_{j}(t) I(X_j\\geq t)\\exp(A_j\\beta)}\n{\\sum_{j=1}^n \\hat w_{j}(t) I(X_j\\geq t)\\exp(A_j\\beta)}\\right\\}\\hat w_{i}(t)\\dd N_i(t)=0\n\\end{equation}\\]\n\\(\\exp(\\beta)\\): causal hazard ratio"
+  },
+  {
+    "objectID": "chap14.html#standardization-approach",
+    "href": "chap14.html#standardization-approach",
+    "title": "Applied Survival Analysis",
+    "section": "Standardization Approach",
+    "text": "Standardization Approach\n\n\nTwo-steps\n\nOutcome (censored) vs confounder \\[S_a(t\\mid W)=\\pr(T^{(a)}&gt;t\\mid W)\\]\nAverage \\(\\hat S_a^{\\rm reg}(t)=n^{-1}\\sum_{i=1}^n\\hat S_a(t\\mid W_i)\\)\nStandard software"
+  },
+  {
+    "objectID": "chap14.html#software-ipwipwpoint",
+    "href": "chap14.html#software-ipwipwpoint",
+    "title": "Applied Survival Analysis",
+    "section": "Software: ipw::ipwpoint()",
+    "text": "Software: ipw::ipwpoint()\n\n\nBasic syntax for computing propensity scores\n\nA: A; confounders: W\nfamily = \"binomial\", link=\"logit\": logistic regression for binary \\(A\\)\n\n\n\n\ntmp &lt;- ipwpoint(exposure = A, denominator=~ confounders,\n                family = \"binomial\", link=\"logit\")\n\n\n\n\n\nOutput\n\ntmp$ipw.weights: \\(n\\)-Vector of inverse weights\nPlug in survfit() and coxph()\n\n\n# IPTW-adjusted KM\nobj &lt;- survfit(Surv(time,status) ~ A, weights = tmp$ipw.weights)"
+  },
+  {
+    "objectID": "chap14.html#gbc-an-example",
+    "href": "chap14.html#gbc-an-example",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: An Example",
+    "text": "GBC: An Example\n\n\nGerman Breast Cancer study\n\n\\(A\\): hormone treatment (1) vs no treatment (0)\n\\(T\\): relapse-free survival time\n\\(𝑊\\): confounders (menopausal status, tumor size, tumor grade, progesterone and estrogen receptor levels)\n\n\n\n\n\nAssumption about censoring \\[(T\\indep C)\\mid A\\]\n\nOnly IPTW needed (no IPCW)"
+  },
+  {
+    "objectID": "chap14.html#gbc-coding-results",
+    "href": "chap14.html#gbc-coding-results",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Coding & Results",
+    "text": "GBC: Coding & Results\n\n\nIPTW-adjusted vs unweighted KM\n\nCausal hazard ratio: 69.5% (\\(p\\)-value 0.006)\nStandard error may be incorrect due to randomness in estimated weights\n\nBootstrap\n\n\n\n# estimate propensity score\ntmp &lt;- ipwpoint(exposure = A, family=\"binomial\",link=\"logit\",\n             denominator =~ meno + size + factor(grade) + nodes + prog \n                      + estrg, data=data.CE)\n# IPTW-adjusted KM\nobj &lt;- survfit(Surv(time, status) ~ A, weights = tmp$ipw.weights, \n                       data = data.CE)\n# IPTW Cox model (essentially a marginal structural Cox model)\ncoxph(Surv(time,status) ~ A, weights=tmp$ipw.weights, data=data.CE)\n#&gt;       coef exp(coef) se(coef) robust se     z       p\n#&gt; A -0.36947   0.69110  0.08318   0.13632 -2.71 0.00672"
+  },
+  {
+    "objectID": "chap14.html#gbc-iptw-vs-naive",
+    "href": "chap14.html#gbc-iptw-vs-naive",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: IPTW vs Naive",
+    "text": "GBC: IPTW vs Naive\n\n\nConfounding not obvious"
+  },
+  {
+    "objectID": "chap14.html#point-treatment",
+    "href": "chap14.html#point-treatment",
+    "title": "Applied Survival Analysis",
+    "section": "Point Treatment",
+    "text": "Point Treatment\n\n\nCausal inference\n\nRelationship between \\(T^{(a)}\\) vs \\(a\\), rather than \\(T\\) vs \\(A\\)\n\n\n\n\n\nMarginal structural models\n\nDefinition: a model for \\(T^{(a)}\\) against \\(a\\), possibly adjusting for baseline covariates \\(V\\subset W\\)\nMarginal: no need to condition on full \\(W\\) as covariates\nStructural: treatment is \\(a\\) (as in RCT), not observed \\(A\\)\nSimplest case: \\(V=\\emptyset\\) \\[\\begin{equation}\n\\lambda_a(t)=\\exp(a\\beta)\\lambda_0(t)\n\\end{equation}\\]\nMost useful in time-varying treatment/confounding"
+  },
+  {
+    "objectID": "chap14.html#marginal-structural-cox-model",
+    "href": "chap14.html#marginal-structural-cox-model",
+    "title": "Applied Survival Analysis",
+    "section": "Marginal Structural Cox Model",
+    "text": "Marginal Structural Cox Model\n\n\nGeneral form\n\n\\(\\lambda_a(t\\mid V)\\): conditional hazard of \\(T^{(a)}\\) given \\(V\\) \\[\\begin{equation}\\label{eq:causal:msm_cox1}\n\\lambda_a(t\\mid V)=\\exp(\\beta a+\\gamma^{\\rm T}V)\\lambda_0(t)\n\\end{equation}\\]\n\\(\\exp(\\beta)\\): causal hazard ratio for treatment vs control adjusting for \\(V\\)\n\nDifferent from the causal HR conditional on all of \\(W\\)\n\nTreatment \\(\\times\\) covariate interaction \\[\\begin{equation}\\label{eq:causal:msm_cox2}\n\\lambda_a(t\\mid V)=\\exp(\\beta a+\\gamma^{\\rm T}V+a\\eta^{\\rm T}V)\\lambda_0(t)\n\\end{equation}\\]"
+  },
+  {
+    "objectID": "chap14.html#fitting-msm",
+    "href": "chap14.html#fitting-msm",
+    "title": "Applied Survival Analysis",
+    "section": "Fitting MSM",
+    "text": "Fitting MSM\n\n\nGeneral assumption: \\(T\\indep C\\mid (A, W)\\)\nWeight construction\n\nStandard IPTW-IPCW weights \\[w_i(t)=\\frac{1}{\\pi_{A_i}(W_i)G_{A_i}(t\\mid W_i)}\\]\nStablized IPTW-IPCW weights \\[\\begin{equation}\\label{eq:causal:swights}\nw^{\\rm s}_i(t)=\\frac{\\pi_{A_i}(V_i)G_{A_i}(t\\mid V_i)}{\\pi_{A_i}(W_i)G_{A_i}(t\\mid W_i)},\n\\end{equation}\\]\n\n\\(\\pi_{a}(V)=\\pr(A=a\\mid V)\\) and \\(G_{a}(t\\mid V)=\\pr(C&gt;t\\mid A=a, V)\\)\nSet \\(G_{a}(t\\mid V)=G_{a}(t\\mid W)\\equiv 1\\) if \\(W\\not\\to C\\)"
+  },
+  {
+    "objectID": "chap14.html#weighted-partial-likelihood-score",
+    "href": "chap14.html#weighted-partial-likelihood-score",
+    "title": "Applied Survival Analysis",
+    "section": "Weighted Partial-Likelihood Score",
+    "text": "Weighted Partial-Likelihood Score\n\n\nUsing stablized weights \\[\\begin{equation}\\label{eq:causal:msm_ee}\n    n^{-1}\\sum_{i=1}^n\\int_0^\\infty\\left\\{Z_i-\\frac{\\sum_{j=1}^nZ_j\\hat w^{\\rm s}_j(t) I(X_j\\geq t)\\exp(\\zeta^{\\rm T}Z_j)}\n    {\\sum_{j=1}^n \\hat w^{\\rm s}_j(t) I(X_j\\geq t)\\exp(\\zeta^{\\rm T}Z_j)}\\right\\} \\hat w^{\\rm s}_i(t)\\dd N_i(t)=0\n    \\end{equation}\\]\n\n\\(\\hat w^{\\rm s}_i(t)\\): an estimate of \\(w^{\\rm s}_i(t)\\)\n\\(Z_i=(A_i, V_i^{\\rm T})^{\\rm T}\\) and \\(\\zeta=(\\beta,\\gamma^{\\rm T})^{\\rm T}\\)"
+  },
+  {
+    "objectID": "chap14.html#time-varying-treatment",
+    "href": "chap14.html#time-varying-treatment",
+    "title": "Applied Survival Analysis",
+    "section": "Time-Varying Treatment",
+    "text": "Time-Varying Treatment\n\n\nMSM\n\nAdjust for confounders \\(\\not\\leftrightarrow\\) adjust for covariates\nConditioning on covariate changes meaning of covariate effects\n\n\n\n\n\nMost useful in time-varying treatment/confounding\n\nMediator of previous treatment \\(\\leftrightarrow\\) Confounder for current/future treatment\nPrevious anti-retroviral treatment \\(\\to\\) current CD4 count \\(\\stackrel{\\rm prescribe}{\\rightarrow}\\) ART\n\nConditioning on CD4 \\(\\to\\) corrects confounding for current trt, blocks causal path of previous trt"
+  },
+  {
+    "objectID": "chap14.html#notation-dag",
+    "href": "chap14.html#notation-dag",
+    "title": "Applied Survival Analysis",
+    "section": "Notation & DAG",
+    "text": "Notation & DAG\n\n\nNotation\n\n\\(a(t)\\): hypothetical treatment at \\(t\\); \\(A(t)\\): observed treatment at \\(t\\)\n\\(W(t)\\): possible confounders at \\(t\\)\nDiscretization\n\n\\(0=t_0&lt;t_1&lt;\\cdots&lt;t_m\\): time points\n\\(A_{\\cdot j}=A(t_j)\\) and \\(W_{\\cdot j}=W(t_j)\\)\n\\(\\overline A_{\\cdot j}=\\{A_{\\cdot 0},\\ldots, A_{\\cdot j}\\}\\); \\(\\overline W_{\\cdot j}=\\{W_{\\cdot 0},\\ldots, W_{\\cdot j}\\}\\); \\(V\\subset W_{\\cdot 0}\\): baseline covariates"
+  },
+  {
+    "objectID": "chap14.html#msm-for-time-varying-treatment",
+    "href": "chap14.html#msm-for-time-varying-treatment",
+    "title": "Applied Survival Analysis",
+    "section": "MSM for Time-Varying Treatment",
+    "text": "MSM for Time-Varying Treatment\n\n\nModeling target\n\nTreatment path (sequence): \\(\\overline a(t)=\\{a(u): 0\\leq u\\leq t\\}\\)\nOutcome: \\(T^{(\\overline a)}\\) = potential outcome under treatment path \\(\\overline a(\\infty)\\) against \\(a(\\cdot)\\)\n\n\n\n\n\nModel specification\n\n\\(\\lambda_{\\overline a}(t\\mid V)\\): conditional hazard of \\(T^{(\\overline a)}\\) given \\(V\\) \\[\\begin{equation}\\label{eq:causal:msm_tv}\n\\lambda_{\\overline a}(t\\mid V)=\\exp\\{\\beta a(t)+\\gamma^{\\rm T}V\\}\n\\end{equation}\\]\nCox model with external (why?) time-varying covariate \\(a(t)\\)\n\nReplace \\(a(t)\\) by any summary of \\(\\overline a(t)\\), e.g., total time on treatment"
+  },
+  {
+    "objectID": "chap14.html#sequential-randomization-assumption",
+    "href": "chap14.html#sequential-randomization-assumption",
+    "title": "Applied Survival Analysis",
+    "section": "Sequential Randomization Assumption",
+    "text": "Sequential Randomization Assumption\n\n\nSequential conditional exchangeability\n\nAn time-varying version of CE \\[\\begin{equation}\\label{eq:causal:cond_exch1}\nT^{(\\overline a)}\\indep A_{\\cdot j}\\mid (\\overline A_{\\cdot, j-1}, \\overline W_{\\cdot j})  \\hspace{2mm}j=1,\\ldots, m.\n\\end{equation}\\]\nTreatment assignment random given previous treatments and current/previous confounders (biomarkers)"
+  },
+  {
+    "objectID": "chap14.html#longitudinal-weights",
+    "href": "chap14.html#longitudinal-weights",
+    "title": "Applied Survival Analysis",
+    "section": "Longitudinal Weights",
+    "text": "Longitudinal Weights\n\n\nAt time \\(t_j\\)\n\nPropensity scores/non-censoring hazards \\[\\begin{align}\n\\pi_k(t_j; \\overline A_{\\cdot, j-1}, V)&=\\pr(A_{\\cdot j}=k\\mid \\overline A_{\\cdot, j-1}, V)\\\\\n\\pi_k(t_j; \\overline A_{\\cdot, j-1}, \\overline W_{\\cdot j})&=\\pr(A_{\\cdot j}=k\\mid \\overline A_{\\cdot, j-1}, \\overline W_{\\cdot j})\\\\\n\\lambda_C(t_j\\mid \\overline A_{\\cdot, j-1}, V)&=\\pr(C&gt;t_j \\mid\nC&gt;t_{j-1}, \\overline A_{\\cdot, j-1}, V)\\\\\n\\lambda_C(t_j\\mid \\overline A_{\\cdot, j-1}, \\overline W_{\\cdot j})&=\\pr(C&gt;t_j \\mid\nC&gt;t_{j-1}, \\overline A_{\\cdot, j-1}, \\overline W_{\\cdot j})\n\\end{align}\\]\n\n\n\n\n\nStablized weight at \\(t\\)\n\nIPTW + IPCW \\[\\begin{equation}\\label{eq:causal:swights_tv}\nw^{\\rm s}(t)=\\prod_{t_j\\leq t}\\frac{\\pi_{A_{\\cdot, j}}(t_j; \\overline A_{\\cdot, j-1}, V)\\lambda_C(t_j\\mid \\overline A_{\\cdot, j-1}, V)}\n{\\pi_{A_{\\cdot, j}}(t_j; \\overline A_{\\cdot, j-1}, \\overline W_{\\cdot j})\\lambda_C(t_j\\mid \\overline A_{\\cdot, j-1}, \\overline W_{\\cdot j})}\n\\end{equation}\\]"
+  },
+  {
+    "objectID": "chap14.html#weighted-partial-likelihood-score-1",
+    "href": "chap14.html#weighted-partial-likelihood-score-1",
+    "title": "Applied Survival Analysis",
+    "section": "Weighted Partial-Likelihood Score",
+    "text": "Weighted Partial-Likelihood Score\n\n\nUsing stablized weights\n\n\\(\\hat w^{\\rm s}_i(t)\\): estimated \\(w^{\\rm s}(t)\\) for \\(i\\)th subject \\[\\begin{align*}\nn^{-1}\\sum_{i=1}^n\\int_0^\\infty\\left\\{Z_i(t)-\\frac{\\sum_{j=1}^n\\hat w^{\\rm s}_j(t) Z_j(t) I(X_j\\geq t)\\exp\\{\\zeta^{\\rm T}Z_j(t)\\}}\n{\\sum_{j=1}^n \\hat w^{\\rm s}_j(t) I(X_j\\geq t)\\exp\\{\\zeta^{\\rm T}Z_j(t)\\}}\\right\\} \\hat w^{\\rm s}_i(t)\\dd N_i(t)\n\\end{align*}\\]\n\n\\(Z_i(t)=\\{A_i(t), V_i^{\\rm T})\\}^{\\rm T}\\); \\(\\zeta=(\\beta,\\gamma^{\\rm T})^{\\rm T}\\)"
+  },
+  {
+    "objectID": "chap14.html#software-ipwipwtm-i",
+    "href": "chap14.html#software-ipwipwtm-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: ipw::ipwtm() (I)",
+    "text": "Software: ipw::ipwtm() (I)\n\n\nInput data (long format)\n\n\nhead(haartdat)\n # patient tstart fuptime haartind event sex age      cd4 endtime dropout\n #       1   -100       0        0     0   1  22 23.83275    2900       0\n #       1      0     100        0     0   1  22 25.59297    2900       0\n #       1    100     200        0     0   1  22 23.47339    2900       0\n #       1    200     300        0     0   1  22 24.16609    2900       0\n #       1    300     400        0     0   1  22 23.23790    2900       0\n #       1    400     500        0     0   1  22 24.85961    2900       0\n # ..."
+  },
+  {
+    "objectID": "chap14.html#software-ipwipwtm-ii",
+    "href": "chap14.html#software-ipwipwtm-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: ipw::ipwtm() (II)",
+    "text": "Software: ipw::ipwtm() (II)\n\n\nBasic syntax for IPTW weights\n\ntrt: treatment indicator; V: baseline covariates \\(V\\); W: (time-varying) confounders; (tstart, timevar): start/stop times; id: subject identifier\n\n\n\n\n# treatment changes only once, from 0 to 1, \n# e.g., initiation of ART \niptw &lt;- ipwtm(exposure = trt, family = \"survival\",\n        numerator =~ V, denominator =~ W, id, \n        tstart, timevar, type = \"first\")\n\n# treatment binary and changes arbitrarily\niptw &lt;- ipwtm(exposure = trt, family = \"binomial\",\n        link=\"logit\", numerator =~ V, denominator =~ W,\n        id, type = \"all\")"
+  },
+  {
+    "objectID": "chap14.html#software-ipwipwtm-iii",
+    "href": "chap14.html#software-ipwipwtm-iii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: ipw::ipwtm() (III)",
+    "text": "Software: ipw::ipwtm() (III)\n\n\nIPTW output:\n\niptw$ipw.weights: \\[\n\\prod_{t_j\\leq t}\\frac{\\pi_{A_{\\cdot, j}}(t_j; \\overline A_{\\cdot, j-1}, V)}\n{\\pi_{A_{\\cdot, j}}(t_j; \\overline A_{\\cdot, j-1}, \\overline W_{\\cdot j})}\n\\]\n\nBasic syntax for IPCW weights\n\ncensor = 1: censored, 0: not censored\n\n\n\n\nipcw &lt;- ipwtm(exposure = censor, family = \"survival\",\n        numerator = ~V, denominator = ~W, id, \n        tstart, timevar, type = \"first\")"
+  },
+  {
+    "objectID": "chap14.html#software-ipwipwtm-iii-1",
+    "href": "chap14.html#software-ipwipwtm-iii-1",
+    "title": "Applied Survival Analysis",
+    "section": "Software: ipw::ipwtm() (III)",
+    "text": "Software: ipw::ipwtm() (III)\n\n\nIPCW output:\n\nipcw$ipw.weights: \\[\n\\prod_{t_j\\leq t}\\frac{\\lambda_C(t_j\\mid \\overline A_{\\cdot, j-1}, V)}\n{\\lambda_C(t_j\\mid \\overline A_{\\cdot, j-1}, \\overline W_{\\cdot j})}\n\\]\n\n\n\n\n\nFit MSM using combined weights\n\niptw$ipw.weights * ipcw$ipw.weights: \\(\\hat w^{\\rm s}_i(t)\\)\n\n\n\n\nobj &lt;- coxph(Surv(tstart, timevar, status) ~ trt + V \n             + cluster(id), \n             weights = iptw$ipw.weights * ipcw$ipw.weights)"
+  },
+  {
+    "objectID": "chap14.html#an-hiv-study",
+    "href": "chap14.html#an-hiv-study",
+    "title": "Applied Survival Analysis",
+    "section": "An HIV Study",
+    "text": "An HIV Study\n\n\nStudy infomation\n\nPopulation: 1200 HIV-infected patients (van der Wal and Geskus, 2011) followed until death or censoring\nTreatment: Some initiate highly active anti-retroviral therapy (HAART) during follow-up, as determined by patient CD4 cell count\n\n\\(A=\\) haartind; \\(V=\\) sex, age; \\(W=\\) sex, age, cd4\n\n\n\n\nhead(haartdat)\n # patient tstart fuptime haartind event sex age      cd4 endtime dropout\n #       1   -100       0        0     0   1  22 23.83275    2900       0\n #       1      0     100        0     0   1  22 25.59297    2900       0\n #       1    100     200        0     0   1  22 23.47339    2900       0\n # ..."
+  },
+  {
+    "objectID": "chap14.html#fit-msm-for-haart",
+    "href": "chap14.html#fit-msm-for-haart",
+    "title": "Applied Survival Analysis",
+    "section": "Fit MSM for HAART",
+    "text": "Fit MSM for HAART\n\n\nCompute weights and fit model\n\n\n# Compute the IPTW weights\niptw &lt;- ipwtm(exposure = haartind, family = \"survival\",\n          numerator = ~ sex + age, denominator = ~ cd4 + sex +\n          age, id = patient, tstart = tstart, timevar = fuptime, \n          type = \"first\", data = haartdat)\n\n# Compute the IPCW weights\nipcw &lt;- ipwtm(exposure = dropout, family = \"survival\",\n          numerator = ~ sex + age, denominator = ~ cd4 + sex +\n          age, id = patient, tstart = tstart, timevar = fuptime, \n          type = \"first\", data = haartdat)\n\n# Fit IPTW/IPCW marginal structural Cox model\nobj &lt;- coxph(Surv(tstart, fuptime, event) ~ haartind + sex +\n             age + cluster(patient), data = haartdat, \n             weights = iptw$ipw.weights * ipcw$ipw.weights)"
+  },
+  {
+    "objectID": "chap14.html#inference",
+    "href": "chap14.html#inference",
+    "title": "Applied Survival Analysis",
+    "section": "Inference",
+    "text": "Inference\n\n\nResults\n\nHAART initiation reduces the mortality risk by \\(1 – 0.382 = 61.8\\%\\)\nCox model without adjusting for CD4 confounding \\(\\to\\) only \\(46.1\\%\\) reduction\n\nPatients who initiate HAART tend to have poor prognosis\n\n\n\n\nsummary(obj)\n#&gt;              coef exp(coef) se(coef) robust se      z Pr(&gt;|z|)    \n#&gt; haartind -0.96171   0.38224  0.43017   0.45148 -2.130 0.033160 *  \n#&gt; sex       0.09761   1.10253  0.43770   0.45351  0.215 0.829592    \n#&gt; age       0.06400   1.06609  0.01414   0.01678  3.815 0.000136 ***\n\n\n\n\n\n\n\nExercise\n\n\nWhat happens if you adjust for CD4 cell count as a time-varying covariate?"
+  },
+  {
+    "objectID": "chap14.html#notes-i",
+    "href": "chap14.html#notes-i",
+    "title": "Applied Survival Analysis",
+    "section": "Notes (I)",
+    "text": "Notes (I)\n\nCounterfactual framework\n\nCausal inference for statistics, social, and biomedical sciences (Imbens and Rubin, 2015)\n\nPoint/time-varying treatment/confounding\n\nCausal inference: what if (Hernan and Robins, 2024)\n\nhttps://www.hsph.harvard.edu/miguel-hernan/causal-inference-book\n\n\nDirected acyclic graph (DAG) approach\n\nCausality: models, reasoning, and inference (Pearl, 2011)"
+  },
+  {
+    "objectID": "chap14.html#notes-ii",
+    "href": "chap14.html#notes-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Notes (II)",
+    "text": "Notes (II)\n\nTexts"
+  },
+  {
+    "objectID": "chap14.html#summary-i",
+    "href": "chap14.html#summary-i",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (I)",
+    "text": "Summary (I)\n\nCounterfactual framework\n\nPotential outcomes \\(T^{(a)}\\) \\((a=1, 0)\\)- mimicking RCT\n\nConditional exchangeability\n\nAll confounders captured in \\(W\\) \n\nMethods\n\nInverse probability treatment weighting (IPTW; ipw R-package)\nStandardization"
+  },
+  {
+    "objectID": "chap14.html#summary-ii",
+    "href": "chap14.html#summary-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (II)",
+    "text": "Summary (II)\n\nMarginal structural model (MSM) \\[\\begin{equation}\n    \\lambda_{\\overline a}(t\\mid V)=\\exp\\{\\beta a(t)+\\gamma^{\\rm T}V\\}\n    \\end{equation}\\] \n\nIPTW/IPCW computed by ipw::ipwtm() and fed into survival::coxph()"
+  },
+  {
+    "objectID": "chap14.html#hw6-due-may-1",
+    "href": "chap14.html#hw6-due-may-1",
+    "title": "Applied Survival Analysis",
+    "section": "HW6 (Due May 1)",
+    "text": "HW6 (Due May 1)\n\nProblem 12.5\nProblem 13.13\nProblem 14.10\n(Extra credit) Problem 14.9"
+  },
+  {
+    "objectID": "chap14.html#hw6-due-april-30",
+    "href": "chap14.html#hw6-due-april-30",
+    "title": "Applied Survival Analysis",
+    "section": "HW6 (Due April 30)",
+    "text": "HW6 (Due April 30)\n\nProblem 12.11\nProblem 13.13\nProblem 14.10\n(Extra credit) Problem 14.9"
+  },
+  {
+    "objectID": "chap14.html#weighted-partial-likelihood-score-2",
+    "href": "chap14.html#weighted-partial-likelihood-score-2",
+    "title": "Applied Survival Analysis",
+    "section": "Weighted Partial-Likelihood Score",
+    "text": "Weighted Partial-Likelihood Score\n\n\nInput data (long format)\n\n\nhead(haartdat)\n # patient tstart fuptime haartind event sex age      cd4 endtime dropout\n #       1   -100       0        0     0   1  22 23.83275    2900       0\n #       1      0     100        0     0   1  22 25.59297    2900       0\n #       1    100     200        0     0   1  22 23.47339    2900       0\n #       1    200     300        0     0   1  22 24.16609    2900       0\n #       1    300     400        0     0   1  22 23.23790    2900       0\n #       1    400     500        0     0   1  22 24.85961    2900       0\n # ..."
   }
 ]

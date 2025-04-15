@@ -23,7 +23,7 @@ include-in-header:
 
 ## Outline
 
-:::{.incremental}
+::: incremental
 1.  Traditional vs hierarchical composites
 
 2.  The restricted mean time in favor (RMT-IF) of treatment
@@ -46,29 +46,34 @@ $$
 # Background & Rationale
 
 ## The Composite Approach
-:::{.fragment}
+
+::: fragment
 -   **Complex outcomes**
     -   Multivariate/Recurrent events
     -   (Semi-)Competing risks
     -   Longitudinal measures with survival endpoint
 :::
-:::{.fragment}
+
+::: fragment
 -   **Standard methods**
     -   Joint models (frailty, random effects)
     -   Marginal models (component-wise robust methods, cumulative incidence)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Traditional composite**
     -   Time to first event (event-free survival)
 :::
 
 ## Examples and Advantages
-:::{.fragment}
+
+::: fragment
 -   **Examples**
     -   **Cardiovascular**: major adverse cardiovascular events (MACE), e.g., death, nonfatal heart failure, myocardial infarction, stroke, etc.
     -   **Oncology**: death and tumor progression (progression-free survival)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Advantages**
     -   More events $\to$ higher power $\to$ smaller sample size/lower costs
     -   No need for multiplicity adjustment
@@ -77,39 +82,46 @@ $$
 :::
 
 ## Data and Notation
-:::{.fragment}
+
+::: fragment
 -   **Time-to-event**
     -   $D$: survival time; $N^*_D(t)=I(D\leq t)$
     -   $N^*_1(t), \ldots, N^*_K(t)$: counting processes for $K$ nonfatal event types
     -   Life history: $\mathcal H^*(t)=\{N^*_D(u), N^*_1(u), \ldots, N^*_K(u):0\leq u\leq t\}$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Multistate**
     -   $Y(t)=0, 1,\ldots, K,\infty$: multistate process; $\infty=$death
     -   Life history: $\mathcal H^*(t)= \{Y(u):0\leq u\leq t\}$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Common features**
     -   **Death most important**, followed by some other events/states
 :::
 
 ## Traditional Composite Endpoints
-:::{.fragment}
+
+::: fragment
 -   **Time to first event**
     -   $N_{\rm TFE}(t) = I\{N^*_D(t)+\sum_{k=1}^KN^*_k(t)\geq 1\}= I\{Y(t)\geq 1\}$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Weighted composite event process**
     -   $N_{\rm R}(t)=w_DN^*_D(t)+\sum_{k=1}^Kw_kN^*_k(t)$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Hierarchical composite endpoints (HCE)**
     -   Death \> nonfatal MACE \> minor symptoms \> ...
     -   Use more data, avoid arbitrary specification of weights
 :::
 
 ## Motivating Examples
-:::{.fragment}
+
+::::::: fragment
 :::::: columns
 :::: {.column width="45%"}
 ::: {style="font-size: 95%"}
@@ -128,17 +140,19 @@ $$
 ![](images/rmt_exams.png){fig-align="right" width="100%"}
 :::
 ::::::
-:::
+:::::::
 
 ## Hierarchical Composite Endpoints
-:::{.fragment}
+
+::: fragment
 -   **Restricted mean time in favor (RMT-IF)**
     -   Nonparametric measure of effect size on HCE
     -   Net average time treatment gains in a more favorable state
         -   An extension of RMST
     -   Uses all events (hierarchically)
 :::
-:::{.fragment}
+
+::: fragment
 -   **Win ratio**
     -   Ratio of probability of better / worse outcomes
     -   Initially two-sample comparison (Pocock et al., 2012)
@@ -148,7 +162,8 @@ $$
 # Restricted Mean Time in Favor
 
 ## Outcome Data
-:::{.fragment}
+
+::: fragment
 -   **Target of inference**
     -   **Multistate outcomes** $$Y(t) \in \{0, 1,\ldots, K, \infty\}$$
         -   $0$: initial state (e.g., remission)
@@ -162,22 +177,24 @@ $$
 :::
 
 ## Time on a Win or Loss
-:::{.fragment}
+
+::: fragment
 -   **Pairwise win-loss time**
     -   $Y^{(1)}(t)$ vs $Y^{(0)}(t)$ over $[0, \tau]$;
         -   $\tau$: restiction time (e.g., 5 years)
     -   Win time $=$ time residing in a lower-tiered (thus more favorable) state $$
         W^{(a, 1-a)}(\tau)=\int_0^\tau I\{Y^{(a)}(t)<Y^{(1-a)}(t)\}{\rm d}t
-        $$ 
-:::        
-:::{.fragment}        
+        $$
+:::
+
+::: fragment
 ![](images/rmt_cases.png){fig-align="center" width="80%"}
-::: 
+:::
 
 ## Net Average Win Time
-:::{.fragment} 
--   **Restricted mean time in favor (RMT-IF)** of treatment
-        $$
+
+::: fragment
+-   **Restricted mean time in favor (RMT-IF)** of treatment $$
         \mu(\tau) = E\{W^{(1, 0)}(\tau)\} - E\{W^{(0, 1)}(\tau)\}
         $$
     -   $E\{W^{(1, 0)}(\tau)\}$: average *win time* by treatment vs control
@@ -189,7 +206,8 @@ $$
 :::
 
 ## Decomposition
-:::{.fragment}
+
+::: fragment
 -   **Stage-wise effects** $$\mu(\tau) = \sum_{k=1}^{K,\infty} \mu_k(\tau)$$
     -   **Time won on** $k$th state (being in a better state) $$W_k^{(a, 1-a)}(\tau)=\int_0^\tau I\{Y^{(a)}(t)<Y^{(1-a)}(t) = k\}{\rm d}t$$
     -   **Net average win time on state** $k$ $$
@@ -199,11 +217,10 @@ $$
         -   $\mu_2(\tau)$: extra metastasis-free time; $\mu_1(\tau)$: extra relapse-free time
 :::
 
-
 ## Simplify for Progressive Processes
-:::{.fragment}
--   **Progressive process**
-    $$Y^{(a)}(t)\leq Y^{(a)}(s) \mbox{ for all } 0\leq t\leq s$$
+
+::: fragment
+-   **Progressive process** $$Y^{(a)}(t)\leq Y^{(a)}(s) \mbox{ for all } 0\leq t\leq s$$
     -   **Transition time** $T_k^{(a)}$: time to transition to a state $\geq k$
         -   $T_1^{(a)}$: time to relapse/metastasis/death
         -   $T_2^{(a)}$: time to metastasis/death
@@ -213,7 +230,8 @@ $$
 :::
 
 ## Delve into Estimand
-:::{.fragment}
+
+::: fragment
 -   **Average win time on state** $k$
     -   **Re-expression** with $S_k^{(a)}(t)=P\{T_k^{(a)}> t\}$ \begin{align}
         E\{W_k^{(a, 1-a)}(\tau)\}&=E\left\{\int_0^\tau I\{Y^{(a)}(t)<Y^{(1-a)}(t) = k\}{\rm d}t\right\}\\
@@ -226,15 +244,16 @@ $$
 :::
 
 ## Observed Data & Estimation
-:::{.fragment}
--   **Censored observations**
-    $$
+
+::: fragment
+-   **Censored observations** $$
           (X_k^{(a)}, \delta_k^{(a)}),\,\,\, k =1,\ldots, K, \infty
           $$
     -   $X_k^{(a)}= \min(T_k^{(a)}, C^{(a)})$; $\delta_k^{(a)}= I(T_k^{(a)}\leq C^{(a)})$; $C^{(a)}=$censoring time
     -   Kaplan--Meier estimator $\hat S_k^{(a)}(t)$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Estimation**: Plug-in KM estimator $$
         \hat\mu_k(\tau)=
           \int_0^\tau \left\{\hat S_k^{(1)}(t)\hat S_{k+1}^{(0)}(t) - \hat S_k^{(0)}(t)\hat S_{k+1}^{(1)}(t)\right\}{\rm d}t
@@ -243,24 +262,25 @@ $$
 :::
 
 ## Hypothesis Testing
-:::{.fragment}
--   **Test of overall effect**
-        $$
+
+::: fragment
+-   **Test of overall effect** $$
         H_0: \mu(\tau)= 0
         $$
-    -   $\chi_1^2$ test based on $\hat\mu(\tau)=\sum_{k=1}^{K,\infty}\hat\mu_k(\tau)$ 
+    -   $\chi_1^2$ test based on $\hat\mu(\tau)=\sum_{k=1}^{K,\infty}\hat\mu_k(\tau)$
 :::
-:::{.fragment}
--   **Joint test on components**
-        $$
+
+::: fragment
+-   **Joint test on components** $$
         H_0: \mu_1(\tau)=\cdots=\mu_K(\tau)=\mu_\infty(\tau)
         $$
-    -   $\chi_{K+1}^2$ test based on $\hat\mu_1(\tau),\ldots,\hat\mu_K(\tau),\hat\mu_\infty(\tau)$ 
+    -   $\chi_{K+1}^2$ test based on $\hat\mu_1(\tau),\ldots,\hat\mu_K(\tau),\hat\mu_\infty(\tau)$
         -   Or individual components for secondary analyses
 :::
 
 ## Software: `rmt::rmtfit()` (I)
-:::{.fragment}
+
+::: fragment
 ```{r}
 #| echo: false
 library(rmt)
@@ -288,7 +308,8 @@ head(hfaction)
 :::
 
 ## Software: `rmt::rmtfit()` (II)
-:::{.fragment}
+
+:::: fragment
 -   **Basic syntax**
 
 ::: big-code
@@ -308,10 +329,11 @@ obj <- rmtfit(id, time, status, trt,
     -   `summary(obj, tau)` for summary results on $\mu(\tau)$, including the $\mu_k(\tau)$
         -   **Recurrent events**: specify `Kmax = k` to merge $\mu_{k+}(\tau)\sum_{k'=k}^K=\mu_{k'}(\tau)$
     -   `plot(obj)` to plot $\hat\mu(t)$ against $t$
-:::
+::::
 
 ## Example: HF-ACTION
-:::{.fragment}
+
+::: fragment
 -   **Exercise training vs usual care**
 
 ```{r}
@@ -336,13 +358,16 @@ kable(hf_desc, align = c("lccc"))
 
 ```
 :::
+
 ## Standard Analyses
-:::{.fragment}
+
+::: fragment
 -   **Traditional composite and overall survival** ![](images/rmt_rmest.png){fig-align="right" width="90%"}
 :::
 
 ## R-Code
-:::{.fragment}
+
+::: fragment
 ```{r}
 #| eval: false
 #| echo: true
@@ -354,7 +379,8 @@ head(hfaction)
 #> ...
 ```
 :::
-:::{.fragment}
+
+::: fragment
 ```{r}
 #| eval: false
 #| echo: true
@@ -374,7 +400,8 @@ summary(obj, Kmax=4, tau=3.97) ## combined recurrent events >= 4
 :::
 
 ## Graphics
-:::{.fragment}
+
+::: fragment
 -   $\hat\mu(t)$ as a function of $t$
 
     -   Overall RMT-IF becomes significant after 1 year (see lower CL)
@@ -386,12 +413,14 @@ summary(obj, Kmax=4, tau=3.97) ## combined recurrent events >= 4
          ylab = "expression(mu(t))", main = "")
     ```
 :::
-:::{.fragment}
+
+::: fragment
 ![](images/rmt_mut.png){fig-align="center" width="70%"}
 :::
 
 ## Inference Results
-:::{.fragment}
+
+::: fragment
 -   **4-year RMT-IF of exercise training**
     -   Training on average gains 5.1 months ($P$=0.018) in favorable state
 
@@ -413,7 +442,8 @@ kable(hf_infer, align = c("llrrr"))
 # Win Ratio Basics
 
 ## Standard Two-Sample
-:::{.fragment}
+
+::: fragment
 -   **Two-sample comparison** (Pocock et al., 2012)
     -   **Data**: $D_i^{(a)}, T_i^{(a)}, C_i^{(a)}$: survival, hospitalization, censoring times on $i$th subject in group $a$ $(i=1,\ldots, N_a; a= 1, 0)$
     -   **Hierarchical composite**: Death \> hospitalization
@@ -425,14 +455,16 @@ kable(hf_infer, align = c("llrrr"))
 :::
 
 ## Pocock's Rule
-:::{.fragment}
+
+::: fragment
 -   **Win, lose, or tie?**
 
 ![](images/comp_wrp.png){fig-align="center" width="80%"}
 :::
 
 ## Calculation of Win Ratio
-:::{.fragment}
+
+::: fragment
 -   **Two-sample statistics**
     -   **Win (loss) fraction** for group $a$ ($1-a$) $$
         \hat w^{(a, 1-a)}=(N_0N_1)^{-1}\sum_{i=1}^{N_a}\sum_{j=1}^{N_{1-a}}\hat w^{(a, 1-a)}_{ij}$$
@@ -445,7 +477,8 @@ kable(hf_infer, align = c("llrrr"))
 :::
 
 ## The Binary Case
-:::{.fragment}
+
+::: fragment
 -   **Consider binary** $Y^{(a)}= 1, 0$
     -   $\hat w^{(a, 1-a)}_{ij} = I(Y_i^{(a)}> Y_j^{(1-a)})=Y_i^{(a)}(1-Y_j^{(1-a)})$
     -   **Win (loss) fraction** $$
@@ -458,21 +491,21 @@ kable(hf_infer, align = c("llrrr"))
 :::
 
 ## General Data
-:::{.fragment}
--   **Outcome data**
-$$\mathcal H^{*{(a)}}(t)=\left\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(a)}}_K(u):0\leq u\leq t\right\}$$
+
+::: fragment
+-   **Outcome data** $$\mathcal H^{*{(a)}}(t)=\left\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(a)}}_K(u):0\leq u\leq t\right\}$$
     -   $N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(a)}}_K(u)$: counting processes for death and $K$ different types of nonfatal events
 :::
-:::{.fragment}
--   **Observed data**
-   $$\{\mathcal H^{*{(a)}}(X^{(a)}), X^{(a)}\}$$
+
+::: fragment
+-   **Observed data** $$\{\mathcal H^{*{(a)}}(X^{(a)}), X^{(a)}\}$$
     -   Life history observed up to $X^{(a)}= D^{(a)}\wedge C^{(a)}$
 :::
 
 ## General Rule
-:::{.fragment}
--   **Win function**
-    $$\mathcal W(\mathcal H^{*{(a)}}, \mathcal H^{*{(1-a)}})(t) =I\left\{\mathcal H^{*{(a)}}(t) \mbox{ is more favorable than } \mathcal H^{*{(1-a)}}(t)\right\}$$
+
+::: fragment
+-   **Win function** $$\mathcal W(\mathcal H^{*{(a)}}, \mathcal H^{*{(1-a)}})(t) =I\left\{\mathcal H^{*{(a)}}(t) \mbox{ is more favorable than } \mathcal H^{*{(1-a)}}(t)\right\}$$
     -   **Basic requirements**
         -   (W1) $\mathcal W(\mathcal H^{*{(a)}}, \mathcal H^{*{(1-a)}})(t)$ is a function only of $\mathcal H^{*{(a)}}(t)$ and $\mathcal H^{*{(1-a)}}(t)$
         -   (W2) $\mathcal W(\mathcal H^{*{(a)}}, \mathcal H^{*{(1-a)}})(t)+\mathcal W(\mathcal H^{*{(1-a)}}, \mathcal H^{*{(a)}})(t) \in \{0, 1\}$
@@ -484,21 +517,21 @@ $$\mathcal H^{*{(a)}}(t)=\left\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(
 :::
 
 ## Generalized Win Ratio
-:::{.fragment}
--   **General WR statistics** 
-    \begin{equation}\label{eq:wr:gen_WR}
+
+::: fragment
+-   **General WR statistics** \begin{equation}\label{eq:wr:gen_WR}
         \hat{\mathcal E}_n(\mathcal W)=\frac{(N_1N_0)^{-1}\sum_{i=1}^{N_1}\sum_{j=1}^{N_0}\mathcal W(\mathcal H^{*{(1)}}_{i}, \mathcal H^{*{(0)}}_{j})(X^{{(1)}}_{i}\wedge X^{{(0)}}_{j})}
         {(N_1N_0)^{-1}\sum_{i=1}^{N_1}\sum_{j=1}^{N_0}\mathcal W(\mathcal H^{*{(0)}}_{j}, \mathcal H^{*{(1)}}_{i})(X^{{(1)}}_{i}\wedge X^{{(0)}}_{j})}
         \end{equation}
-    -   **Window of comparison**: $[0, X^{{(1)}}_{i}\wedge X^{{(0)}}_{j}]$, by a general  $\mathcal W$
-    -   **Stratified win ratio** 
-    $$
-    \frac{\text{Weighted sum of within-stratum wins}}{\text{Weighted sum of within-stratum losses}}
-    $$
+    -   **Window of comparison**: $[0, X^{{(1)}}_{i}\wedge X^{{(0)}}_{j}]$, by a general $\mathcal W$
+    -   **Stratified win ratio** $$
+        \frac{\text{Weighted sum of within-stratum wins}}{\text{Weighted sum of within-stratum losses}}
+        $$
 :::
 
 ## Pocock's Win Ratio
-:::{.fragment}
+
+::: fragment
 -   **Win function**
     -   $K$ nonfatal events hierarchically ranked
     -   $T^{(a)}_k$: time of first event in $N_k^{*{(a)}}(t)$ $(k=1,\ldots, K)$ \begin{align}\label{eq:wr:PWR}
@@ -508,12 +541,14 @@ $$\mathcal H^{*{(a)}}(t)=\left\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(
         \end{align}
         -   $\tilde T_{k-1}^{(a)}=D^{(a)}\wedge T_{1}^{(a)}\wedge\cdots\wedge T_{k-1}^{(a)}$
 :::
-:::{.fragment}
+
+::: fragment
 -   **Win ratio statistic**: $\hat{\mathcal E}_n(\mathcal W_{\rm P})$
 :::
 
 ## Taking Recurrent Events
-:::{.fragment}
+
+::: fragment
 -   **Recurrent-event win ratio (RWR)**
     -   Death \> number of recurrent events \> time to last event
 
@@ -521,7 +556,8 @@ $$\mathcal H^{*{(a)}}(t)=\left\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \ldots, N^{*{(
 :::
 
 ## Time-to-First-Event
-:::{.fragment}
+
+::: fragment
 -   **Compare on order of first event**
     -   **Win function** $$
         \mathcal W_{\rm TFE}(\mathcal H^{*{(a)}},\mathcal H^{*{(1-a)}})(t)=I(\tilde T^{(1-a)}<\tilde T^{(a)}\wedge t)
