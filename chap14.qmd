@@ -58,7 +58,7 @@ $$
 :::
 :::{.fragment}
 -   **Motivating example**: German Breast Cancer Study
-    -   Relapse-free survival ($T$) vs hormonal therapy ($A=1$ yes; $A=0$: no)
+    -   Relapse-free survival ($T$) vs hormonal therapy ($A=1$: yes; $A=0$: no)
     -   First assume $T$ is fully observed (no censoring)
 :::
 
