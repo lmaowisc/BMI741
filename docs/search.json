@@ -4306,8 +4306,8 @@
     "objectID": "chap13.html#outline",
     "href": "chap13.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "",
-    "text": "Traditional vs hierarchical composites\nThe restricted mean time in favor (RMT-IF) of treatment\nWin ratio: two-sample analysis\nSemiparametric regression of win ratio\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]\n$$ \n$$"
+    "section": "Outline",
+    "text": "Outline\n\n\nTraditional vs hierarchical composites\nThe restricted mean time in favor (RMT-IF) of treatment\nWin ratio: two-sample analysis\nSemiparametric regression of win ratio\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]\n$$ \n$$"
   },
   {
     "objectID": "chap13.html#the-composite-approach",
@@ -4426,7 +4426,7 @@
     "href": "chap13.html#example-hf-action",
     "title": "Applied Survival Analysis",
     "section": "Example: HF-ACTION",
-    "text": "Example: HF-ACTION\n\n\nExercise training vs usual care\n\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.1\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\n✖ lubridate::ms() masks rmt::ms()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\n\n\nTable 1: Descriptive statistics for a high-risk subgroup (n=426) in HF-ACTION trial.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUsual care (N = 221)\nExercise training (N = 205)\n\n\n\n\nAge\n≤ 60 years\n122 (55.2%)\n128 (62.4%)\n\n\n\n&gt; 60 years\n99 (44.8%)\n77 (37.6%)\n\n\nFollow-up\n(months)\n28.6 (18.4, 39.3)\n27.6 (19, 40.2)\n\n\nDeath\n\n57 (25.8%)\n36 (17.6%)\n\n\nHospitalizations\n0\n51 (23.1%)\n60 (29.3%)\n\n\n\n1-3\n114 (51.6%)\n102 (49.8%)\n\n\n\n4-10\n49 (22.2%)\n39 (19%)\n\n\n\n&gt;10\n7 (3.2%)\n4 (2%)"
+    "text": "Example: HF-ACTION\n\n\nExercise training vs usual care\n\n\n\n\n\nTable 1: Descriptive statistics for a high-risk subgroup (n=426) in HF-ACTION trial.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUsual care (N = 221)\nExercise training (N = 205)\n\n\n\n\nAge\n≤ 60 years\n122 (55.2%)\n128 (62.4%)\n\n\n\n&gt; 60 years\n99 (44.8%)\n77 (37.6%)\n\n\nFollow-up\n(months)\n28.6 (18.4, 39.3)\n27.6 (19, 40.2)\n\n\nDeath\n\n57 (25.8%)\n36 (17.6%)\n\n\nHospitalizations\n0\n51 (23.1%)\n60 (29.3%)\n\n\n\n1-3\n114 (51.6%)\n102 (49.8%)\n\n\n\n4-10\n49 (22.2%)\n39 (19%)\n\n\n\n&gt;10\n7 (3.2%)\n4 (2%)"
   },
   {
     "objectID": "chap13.html#standard-analyses",
