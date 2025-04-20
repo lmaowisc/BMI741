@@ -4,9 +4,7 @@ title: "Chapter 15 - Machine Learning in Survival Analysis"
 
 ## Slides
 
-
 Lecture slides [here](chap15.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
-
 
 ## Base R Code
 
