@@ -5003,98 +5003,98 @@
     "href": "chap15.html#rationale",
     "title": "Applied Survival Analysis",
     "section": "Rationale",
-    "text": "Rationale\n\nWith many covariates\n\nPrediction accuracy: under- vs over-fitting \n\nToo many predictors \\(\\to\\) overfitting\n\nInterpretation: easier with fewer predictors"
+    "text": "Rationale\n\n\nWith many covariates\n\nPrediction accuracy: under- vs over-fitting \n\nToo many predictors \\(\\to\\) overfitting\n\nInterpretation: easier with fewer predictors"
   },
   {
     "objectID": "chap15.html#linear-model-basics",
     "href": "chap15.html#linear-model-basics",
     "title": "Applied Survival Analysis",
     "section": "Linear Model Basics",
-    "text": "Linear Model Basics\n\nSet-up \\[\nY=\\alpha+\\beta^\\T Z+\\epsilon\n\\]\n\n\\(Z\\): a \\(p\\)-vector of covariates (predictors)\n\\(E(\\epsilon\\mid Z)=0\\)\nAssume WLOG \\(\\sum_{i=1}^n Y_i=0\\) and \\(\\sum_{i=1}^n Z_i=0\\)\nOrdinary least-squares (OLS) estimator \\[\\begin{align*}\n\\hat\\beta_{\\rm OLS}=\\arg\\min_\\beta R_n(\\beta)=\\left(\\sum_{i=1}^n Z_i^{\\otimes 2}\\right)^{-1}\\sum_{i=1}^nZ_iY_i\n\\end{align*}\\]\n\n\\(R_n(\\beta)=\\sum_{i=1}^n(Y_i-\\beta^\\T Z_i)^2\\): residual sum of squares (RSS)"
+    "text": "Linear Model Basics\n\n\nSet-up \\[\nY=\\alpha+\\beta^\\T Z+\\epsilon\n\\]\n\n\\(Z\\): a \\(p\\)-vector of covariates (predictors)\n\\(E(\\epsilon\\mid Z)=0\\)\nAssume WLOG \\(\\sum_{i=1}^n Y_i=0\\) and \\(\\sum_{i=1}^n Z_i=0\\)\nOrdinary least-squares (OLS) estimator \\[\\begin{align*}\n\\hat\\beta_{\\rm OLS}=\\arg\\min_\\beta R_n(\\beta)=\\left(\\sum_{i=1}^n Z_i^{\\otimes 2}\\right)^{-1}\\sum_{i=1}^nZ_iY_i\n\\end{align*}\\]\n\n\\(R_n(\\beta)=\\sum_{i=1}^n(Y_i-\\beta^\\T Z_i)^2\\): residual sum of squares (RSS)"
   },
   {
     "objectID": "chap15.html#subset-selection",
     "href": "chap15.html#subset-selection",
     "title": "Applied Survival Analysis",
     "section": "Subset Selection",
-    "text": "Subset Selection\n\nBig \\(p\\) problem\n\nLarge variance (overfit) \\(\\to\\) poor prediction\n\\(p&gt;n\\): no fit\n\nBest-subset selection\n\nFor each \\(l\\in\\{0, 1,\\ldots, p\\}\\), choose best model with \\(l\\) covariates with least RSS\n\\((p+1)\\) best models with decreasing RSS (as \\(l=0,1,\\ldots, p\\))\nChoose \\(l\\) by cross-validation\n\nPartition sample into \\(k\\) pieces\nSet one piece aside to evaluate RSS of model fit on remaining data\nCycle through all \\(k\\) pieces and average validation errors"
+    "text": "Subset Selection\n\n\nBig \\(p\\) problem\n\nLarge variance (overfit) \\(\\to\\) poor prediction\n\\(p&gt;n\\): no fit\n\n\n\n\n\nBest-subset selection\n\nFor each \\(l\\in\\{0, 1,\\ldots, p\\}\\), choose best model with \\(l\\) covariates with least RSS\n\\((p+1)\\) best models with decreasing RSS (as \\(l=0,1,\\ldots, p\\))\nChoose \\(l\\) by cross-validation\n\nPartition sample into \\(k\\) pieces\nSet one piece aside to evaluate RSS of model fit on remaining data\nCycle through all \\(k\\) pieces and average validation errors"
   },
   {
     "objectID": "chap15.html#cross-validation",
     "href": "chap15.html#cross-validation",
     "title": "Applied Survival Analysis",
     "section": "Cross-Validation",
-    "text": "Cross-Validation\n\nComputing validation error"
+    "text": "Cross-Validation\n\n\nComputing validation error"
   },
   {
     "objectID": "chap15.html#subset-selection-limitations",
     "href": "chap15.html#subset-selection-limitations",
     "title": "Applied Survival Analysis",
     "section": "Subset Selection: Limitations",
-    "text": "Subset Selection: Limitations\n\nBest subset\n\nFit all \\(2^p\\) submodels\n\nForward/backward stepwise selections\n\nStart with null/full model, add/drop most/least significant predictor\nWhere to stop \\(\\to\\) cross-validation\n\nDisadvantages\n\nComputationally costly\nA discrete process: covariates are either retained or dropped; may be sub-optimal for prediction"
+    "text": "Subset Selection: Limitations\n\n\nBest subset\n\nFit all \\(2^p\\) submodels\n\n\n\n\n\nForward/backward stepwise selections\n\nStart with null/full model, add/drop most/least significant predictor\nWhere to stop \\(\\to\\) cross-validation\n\n\n\n\n\nDisadvantages\n\nComputationally costly\nA discrete process: covariates are either retained or dropped; may be sub-optimal for prediction"
   },
   {
     "objectID": "chap15.html#penalized-regression-i",
     "href": "chap15.html#penalized-regression-i",
     "title": "Applied Survival Analysis",
     "section": "Penalized Regression (I)",
-    "text": "Penalized Regression (I)\n\nConstrained least-squares\n\nRestricting \\(L_q\\)-norm of \\(\\beta\\) reduces effective d.f. \\[\\begin{equation}\\label{eq:vs:constrained}\n\\tilde\\beta(c)=\\arg\\min_\\beta R_n(\\beta), \\mbox{ subject to }\\sum_{j=1}^p|\\beta_j|^q\\leq c,\n\\end{equation}\\]\n\nEquivalent form by Lagrange multiplier\n\n\\(L_q\\)-penalized regression \\[\\begin{equation}\\label{eq:vs:penal}\n\\hat\\beta(\\lambda)=\\arg\\min_\\beta \\left\\{R_n(\\beta)+\\lambda\\sum_{j=1}^p|\\beta_j|^q\\right\\}\n\\end{equation}\\]\n\n\\(\\lambda\\geq 0\\): tuning parameter controlling degree of regulation, determined by cross-validation\n\\(\\hat\\beta(0)=\\hat\\beta_{\\rm OLS}\\); \\(\\hat\\beta(\\infty)=0\\)"
+    "text": "Penalized Regression (I)\n\n\nConstrained least-squares\n\nRestricting \\(L_q\\)-norm of \\(\\beta\\) reduces effective d.f. \\[\\begin{equation}\\label{eq:vs:constrained}\n\\tilde\\beta(c)=\\arg\\min_\\beta R_n(\\beta), \\mbox{ subject to }\\sum_{j=1}^p|\\beta_j|^q\\leq c,\n\\end{equation}\\]\n\n\n\n\n\nEquivalent form by Lagrange multiplier\n\n\\(L_q\\)-penalized regression \\[\\begin{equation}\\label{eq:vs:penal}\n\\hat\\beta(\\lambda)=\\arg\\min_\\beta \\left\\{R_n(\\beta)+\\lambda\\sum_{j=1}^p|\\beta_j|^q\\right\\}\n\\end{equation}\\]\n\n\\(\\lambda\\geq 0\\): tuning parameter controlling degree of regulation, determined by cross-validation\n\\(\\hat\\beta(0)=\\hat\\beta_{\\rm OLS}\\); \\(\\hat\\beta(\\infty)=0\\)"
   },
   {
     "objectID": "chap15.html#penalized-regression-ii",
     "href": "chap15.html#penalized-regression-ii",
     "title": "Applied Survival Analysis",
     "section": "Penalized Regression (II)",
-    "text": "Penalized Regression (II)\n\nExamples\n\nRidge regression \\((q=2)\\)\n\nClosed-form solution (not sparse; every \\(\\beta_j\\neq 0\\)) \\[\\begin{equation}\\label{eq:vs:ridge}\n\\hat\\beta(\\lambda)=\\left(\\sum_{i=1}^n Z_i^{\\otimes 2}+\\lambda I_p\\right)^{-1}\\sum_{i=1}^nZ_iY_i\n\\end{equation}\\]\n\nLasso \\((q=1)\\)\n\nFor “least absolute shrinkage and selection operator”\nSets some \\(\\hat\\beta_j\\equiv 0\\); sparse solution\n\nElastic net\n\nCombines the strengths of ridge regression and lasso \\[\\begin{equation}\\label{eq:vs:en}\n\\hat\\beta(\\lambda)=\\arg\\min_\\beta \\left[R_n(\\beta)+\\lambda\\sum_{j=1}^p\\left\\{\\alpha|\\beta_j|+2^{-1}(1-\\alpha)\\beta_j^2\\right\\}\\right]\n\\end{equation}\\]\nHandles correlated covariates better than lasso"
+    "text": "Penalized Regression (II)\n\n\nExamples\n\nRidge regression \\((q=2)\\)\n\nClosed-form solution (not sparse; every \\(\\beta_j\\neq 0\\)) \\[\\begin{equation}\\label{eq:vs:ridge}\n\\hat\\beta(\\lambda)=\\left(\\sum_{i=1}^n Z_i^{\\otimes 2}+\\lambda I_p\\right)^{-1}\\sum_{i=1}^nZ_iY_i\n\\end{equation}\\]\n\nLasso (\\(q=1\\); Least absolute shrinkage and selection operator)\n\nSets some \\(\\hat\\beta_j\\equiv 0\\); sparse solution\n\nElastic net\n\nCombines the strengths of ridge regression and lasso \\[\\begin{equation}\\label{eq:vs:en}\n\\hat\\beta(\\lambda)=\\arg\\min_\\beta \\left[R_n(\\beta)+\\lambda\\sum_{j=1}^p\\left\\{\\alpha|\\beta_j|+2^{-1}(1-\\alpha)\\beta_j^2\\right\\}\\right]\n\\end{equation}\\]\nHandles correlated covariates better than lasso"
   },
   {
     "objectID": "chap15.html#l_1-regularized-cox-model",
     "href": "chap15.html#l_1-regularized-cox-model",
     "title": "Applied Survival Analysis",
     "section": "\\(L_1\\)-Regularized Cox Model",
-    "text": "\\(L_1\\)-Regularized Cox Model\n\nWhat’s with Cox model\n\nObjective function (RSS not computable due to censoring)\nComputational algorithm\nDefinition of error for cross-validation\n\nObjective function: negative log-partial likelihood\n\nRegularize by \\(L_1\\) penalty \\[\\begin{equation}\\label{eq:vs:cox_lasso}\nQ_n(\\beta;\\lambda)=-n^{-1}pl_n(\\beta)+\\lambda\\sum_{j=1}^p|\\beta_j|\n\\end{equation}\\]\n\\(L_1\\)-penalized partial-likelihood estimator \\[\\begin{equation}\\label{eq:vs:optimize}\n\\hat\\beta(\\lambda)=\\arg\\min_\\beta Q_n(\\beta;\\lambda)\n\\end{equation}\\]"
+    "text": "\\(L_1\\)-Regularized Cox Model\n\n\nWhat’s with Cox model\n\nObjective function (RSS not computable due to censoring)\nComputational algorithm\nDefinition of error for cross-validation\n\n\n\n\n\nObjective function: negative log-partial likelihood\n\nRegularize by \\(L_1\\) penalty \\[\\begin{equation}\\label{eq:vs:cox_lasso}\nQ_n(\\beta;\\lambda)=-n^{-1}pl_n(\\beta)+\\lambda\\sum_{j=1}^p|\\beta_j|\n\\end{equation}\\]\nSoltution: \\(\\hat\\beta(\\lambda)=\\arg\\min_\\beta Q_n(\\beta;\\lambda)\\)"
   },
   {
     "objectID": "chap15.html#pathwise-solution",
     "href": "chap15.html#pathwise-solution",
     "title": "Applied Survival Analysis",
     "section": "Pathwise Solution",
-    "text": "Pathwise Solution\n\n\\(\\hat\\beta(\\lambda)\\) as a path of \\(\\lambda\\)\n\nIterative \\(pl_n(\\beta)\\approx\\) weighted sum of squares\nCoordinate descent at each iteration for \\(L_1\\)-penalized weighted least-squares\nDetails in Section 15.1.3 of lecture notes\n\n\\(K\\)-fold cross-validation to select \\(\\lambda_{\\rm opt}\\)\n\nSome \\(\\hat\\beta_j(\\lambda_{\\rm opt})=0\\)\nSelected variables \\(\\{Z_{\\cdot j}: \\hat\\beta_j(\\lambda_{\\rm opt})\\neq 0, j=1,\\ldots, p\\}\\)"
+    "text": "Pathwise Solution\n\n\n\\(\\hat\\beta(\\lambda)\\) as a path of \\(\\lambda\\)\n\nIterative \\(pl_n(\\beta)\\approx\\) weighted sum of squares\nCoordinate descent at each iteration for \\(L_1\\)-penalized weighted least-squares\nDetails in Section 15.1.3 of lecture notes\n\n\n\n\n\n\\(K\\)-fold cross-validation to select \\(\\lambda_{\\rm opt}\\)\n\nSome \\(\\hat\\beta_j(\\lambda_{\\rm opt})=0\\)\nSelected variables \\(\\{Z_{\\cdot j}: \\hat\\beta_j(\\lambda_{\\rm opt})\\neq 0, j=1,\\ldots, p\\}\\)"
   },
   {
     "objectID": "chap15.html#cross-validation-error",
     "href": "chap15.html#cross-validation-error",
     "title": "Applied Survival Analysis",
     "section": "Cross-Validation Error",
-    "text": "Cross-Validation Error\n\nWhat is measure of error?\n\nRSS not applicable due to censoring\nNegative partial-likelihood?\n\nUnstable with small validation set (risk set too small)\n\n\nPartial-likelihood deviance\n\nOn \\(j\\)th validation set \\[\n  \\mbox{CV}_j(\\lambda)=pl_{n,-j}\\{\\hat\\beta(\\lambda)\\}-pl_{n}\\{\\hat\\beta(\\lambda)\\}\n  \\]\n\n\\(pl_{n,-j}(\\beta)\\): log-partial likelihood based on training set\n\n\\(\\mbox{CV}(\\lambda)=k^{-1}\\sum_{j=1}^k\\mbox{CV}_j(\\lambda)\\)"
+    "text": "Cross-Validation Error\n\n\nWhat is measure of error?\n\nRSS not applicable due to censoring\nNegative partial-likelihood?\n\nUnstable with small validation set (risk set too small)\n\n\n\n\n\n\nPartial-likelihood deviance\n\nOn \\(j\\)th validation set \\[\n  \\mbox{CV}_j(\\lambda)=pl_{n,-j}\\{\\hat\\beta(\\lambda)\\}-pl_{n}\\{\\hat\\beta(\\lambda)\\}\n  \\]\n\n\\(pl_{n,-j}(\\beta)\\): log-partial likelihood based on training set\n\n\\(\\mbox{CV}(\\lambda)=k^{-1}\\sum_{j=1}^k\\mbox{CV}_j(\\lambda)\\)"
   },
   {
     "objectID": "chap15.html#prediction-error-brier-score",
     "href": "chap15.html#prediction-error-brier-score",
     "title": "Applied Survival Analysis",
     "section": "Prediction Error: Brier Score",
-    "text": "Prediction Error: Brier Score\n\nBrier score\n\nMean squared error for predicted vs observed in test set\nCommonly used for binary outcomes\n\nExtension to time-to-event endpoint\n\nIPCW \\[\\begin{align}\\label{eq:ml:BS}\n\\hat{BS}(t)&=n^{-1}\\sum_{i=1}^n\\Bigg[I(X_i\\leq t, \\delta_i=1)\\hat G(X_i)^{-1}\\hat S_i(t)^2\\notag\\\\\n&\\hspace{20mm} + I(X_i&gt;t)\\hat G(t)^{-1}\\{1-\\hat S_i(t)\\}^2 \\Bigg]\n\\end{align}\\]\n\n\\(\\hat S_i(t)\\): predicted survival function for \\(i\\)th subject\n\\(\\hat G(t)\\): KM estimator for the censoring distribution in test set"
+    "text": "Prediction Error: Brier Score\n\n\nBrier score\n\nMean squared error for predicted vs observed in test set\nCommonly used for binary outcomes\n\n\n\n\n\nExtension to time-to-event endpoint\n\nIPCW \\[\\begin{align}\\label{eq:ml:BS}\n\\hat{BS}(t)&=n^{-1}\\sum_{i=1}^n\\Bigg[I(X_i\\leq t, \\delta_i=1)\\hat G(X_i)^{-1}\\hat S_i(t)^2\\notag\\\\\n&\\hspace{20mm} + I(X_i&gt;t)\\hat G(t)^{-1}\\{1-\\hat S_i(t)\\}^2 \\Bigg]\n\\end{align}\\]\n\n\\(\\hat S_i(t)\\): predicted survival function for \\(i\\)th subject\n\\(\\hat G(t)\\): KM estimator for the censoring distribution in test set"
   },
   {
     "objectID": "chap15.html#software-glmnetglmnet-i",
     "href": "chap15.html#software-glmnetglmnet-i",
     "title": "Applied Survival Analysis",
     "section": "Software: glmnet::glmnet() (I)",
-    "text": "Software: glmnet::glmnet() (I)\n\nBasic syntax for regularized Cox model\n\nElastic net \\[\n\\hat\\beta(\\lambda)=\\arg\\min_\\beta \\left[-n^{-1}pl_n(\\beta)+\\lambda\\sum_{j=1}^p\\left\\{\\alpha|\\beta_j|+2^{-1}(1-\\alpha)\\beta_j^2\\right\\}\\right]\n\\]\nZ: covariate matrix; alpha: \\(\\alpha\\)\n\n\n\n\n# compute the covariate path as a function of lambda\n# alpha=1: L_1 penalty (lasso)\nobj &lt;- glmnet(Z, Surv(time, status), family = \"cox\", alpha = 1)\n# compute 10-fold (default) cross-validation\nobj.cv &lt;- cv.glmnet(Z, Surv(time, status), family = \"cox\", \n                    alpha = 1)"
+    "text": "Software: glmnet::glmnet() (I)\n\n\nBasic syntax for regularized Cox model\n\nElastic net \\[\n\\hat\\beta(\\lambda)=\\arg\\min_\\beta \\left[-n^{-1}pl_n(\\beta)+\\lambda\\sum_{j=1}^p\\left\\{\\alpha|\\beta_j|+2^{-1}(1-\\alpha)\\beta_j^2\\right\\}\\right]\n\\]\nZ: covariate matrix; alpha: \\(\\alpha\\)\n\n\n\n\n# compute the covariate path as a function of lambda\n# alpha=1: L_1 penalty (lasso)\nobj &lt;- glmnet(Z, Surv(time, status), family = \"cox\", alpha = 1)\n# compute 10-fold (default) cross-validation\nobj.cv &lt;- cv.glmnet(Z, Surv(time, status), family = \"cox\", \n                    alpha = 1)"
   },
   {
     "objectID": "chap15.html#software-glmnetglmnet-ii",
     "href": "chap15.html#software-glmnetglmnet-ii",
     "title": "Applied Survival Analysis",
     "section": "Software: glmnet::glmnet() (II)",
-    "text": "Software: glmnet::glmnet() (II)\n\nFind optimal \\(\\lambda\\)\n\n\n\n# plot validation error (partial-likelihood deviance)\n# as a function of log-lambda\nplot(obj.cv)\n# the optimal lambda\nobj.cv$lambda.min\n# the beta at optimal lambda\nbeta &lt;- coef(obj.cv, s = \"lambda.min\")"
+    "text": "Software: glmnet::glmnet() (II)\n\n\nFind optimal \\(\\lambda\\)\n\n\n\n# plot validation error (partial-likelihood deviance)\n# as a function of log-lambda\nplot(obj.cv)\n# the optimal lambda\nobj.cv$lambda.min\n# the beta at optimal lambda\nbeta &lt;- coef(obj.cv, s = \"lambda.min\")"
   },
   {
     "objectID": "chap15.html#gbc-an-example",
     "href": "chap15.html#gbc-an-example",
     "title": "Applied Survival Analysis",
     "section": "GBC: An Example",
-    "text": "GBC: An Example\n\nGerman Breast Cancer (GBC) study\n\nCohort: 686 breast cancer patients\n\nOutcome: relapse-free survival\nPredictors: age (\\(\\leq\\) 40 vs &gt;40), menopausal status, hormone treatment, tumor grade, tumor size, lymph nodes, estrogen and progesterone receptor levels\nTraining set (\\(n=400\\)) + test set (\\(n=286\\))\n\n\n\n# select training set N=400\nset.seed(1234)\nind &lt;- sample(1:n)[1:400]\ntrain &lt;- data.CE[ind,]\ntest &lt;- data.CE[-ind,]"
+    "text": "GBC: An Example\n\n\nGerman Breast Cancer (GBC) study\n\nCohort: 686 breast cancer patients\n\nOutcome: relapse-free survival\nPredictors: age (\\(\\leq\\) 40 vs &gt;40), menopausal status, hormone treatment, tumor grade, tumor size, lymph nodes, estrogen and progesterone receptor levels\nTraining set (\\(n=400\\)) + test set (\\(n=286\\))\n\n\n\n# select training set N=400\nset.seed(1234)\nind &lt;- sample(1:n)[1:400]\ntrain &lt;- data.CE[ind,]\ntest &lt;- data.CE[-ind,]"
   },
   {
     "objectID": "chap15.html#graphics",
@@ -5108,84 +5108,84 @@
     "href": "chap15.html#selected-predictors",
     "title": "Applied Survival Analysis",
     "section": "Selected Predictors",
-    "text": "Selected Predictors\n\nCV results\n\n\\(\\log(\\lambda_{\\rm opt}) = -3.89\\)\n\n\n# the optimal lambda\nobj.cv$lambda.min\nlog(obj.cv$lambda.min)\n#&gt; [1] -3.886169\n# the beta at optimal lambda\nbeta &lt;- coef(obj.cv, s = \"lambda.min\")\n# the non-zero coefficients\nbeta.selected &lt;- beta[abs(beta[,1])&gt;0,]\n# print out the non-zero coefficients\nbeta.selected\n#&gt;      hormone        age40         size        grade        nodes \n#&gt; -0.371809445  0.455421368  0.003448500  0.201404194  0.040170638\n#&gt;      prog \n#&gt; -0.002908887"
+    "text": "Selected Predictors\n\n\nCV results\n\n\\(\\log(\\lambda_{\\rm opt}) = -3.89\\)\n\n\n# the optimal lambda\nobj.cv$lambda.min\nlog(obj.cv$lambda.min)\n#&gt; [1] -3.886169\n# the beta at optimal lambda\nbeta &lt;- coef(obj.cv, s = \"lambda.min\")\n# the non-zero coefficients\nbeta.selected &lt;- beta[abs(beta[,1])&gt;0,]\n# print out the non-zero coefficients\nbeta.selected\n#&gt;      hormone        age40         size        grade        nodes \n#&gt; -0.371809445  0.455421368  0.003448500  0.201404194  0.040170638\n#&gt;      prog \n#&gt; -0.002908887"
   },
   {
     "objectID": "chap15.html#decision-trees",
     "href": "chap15.html#decision-trees",
     "title": "Applied Survival Analysis",
     "section": "Decision Trees",
-    "text": "Decision Trees\n\nLimitations of regularized Cox model\n\nProportionality\nLinearity of covariate effects\nInteractions\n\nTree-based classification and regression\n\nClassification and Regression Trees (CART; Breiman et al., 1984)\nRoot node (all sample) \\(\\stackrel{\\rm covariates}{\\rightarrow}\\) split into (more homogeneous) daughter nodes \\(\\stackrel{\\rm covariates}{\\rightarrow}\\) split recursively"
+    "text": "Decision Trees\n\n\nLimitations of regularized Cox model\n\nProportionality\nLinearity of covariate effects\nInteractions\n\n\n\n\n\nTree-based classification and regression\n\nClassification and Regression Trees (CART; Breiman et al., 1984)\nRoot node (all sample) \\(\\stackrel{\\rm covariates}{\\rightarrow}\\) split into (more homogeneous) daughter nodes \\(\\stackrel{\\rm covariates}{\\rightarrow}\\) split recursively"
   },
   {
     "objectID": "chap15.html#basic-procedures",
     "href": "chap15.html#basic-procedures",
     "title": "Applied Survival Analysis",
     "section": "Basic Procedures",
-    "text": "Basic Procedures\n\nGrowing the tree\n\nStarting with root node, search partition criteria \\[Z_{\\cdot j}\\leq z \\,\\,\\,(j=1,\\ldots, p; z \\in\\mathbb R)\\] for one that minimizes “impurity” within daughter nodes \\[\\begin{equation}\\label{eq:tree:nodes}\nA=\\{i=1,\\ldots, n: Z_{ij}\\leq z\\} \\mbox{ and }\nB=\\{i=1,\\ldots, n: Z_{ij}&gt; z\\}\n\\end{equation}\\]\nRecursive splitting until terminal nodes sufficiently “pure” in outcome\n\nTree-based prediction\n\nA new covariate vector \\(\\to\\) terminal node it belongs \\(\\to\\) predicted outcome\n\nMajority class\nempirical mean\nKaplan-Meier estimator"
+    "text": "Basic Procedures\n\n\nGrowing the tree\n\nStarting with root node, search partition criteria \\[Z_{\\cdot j}\\leq z \\,\\,\\,(j=1,\\ldots, p; z \\in\\mathbb R)\\] for one that minimizes “impurity” within daughter nodes \\[\\begin{equation}\\label{eq:tree:nodes}\nA=\\{i=1,\\ldots, n: Z_{ij}\\leq z\\} \\mbox{ and }\nB=\\{i=1,\\ldots, n: Z_{ij}&gt; z\\}\n\\end{equation}\\]\nRecursive splitting until terminal nodes sufficiently “pure” in outcome\n\n\n\n\n\nTree-based prediction\n\nA new covariate vector \\(\\to\\) terminal node it belongs \\(\\to\\) predicted outcome\n\nMajority class\nempirical mean\nKaplan-Meier estimator"
   },
   {
     "objectID": "chap15.html#splitting-criterion",
     "href": "chap15.html#splitting-criterion",
     "title": "Applied Survival Analysis",
     "section": "Splitting Criterion",
-    "text": "Splitting Criterion\n\nObjective function\n\nChoose partition \\(A|B\\) to minimize \\[\nR(A\\mid\\mid B)=\\hat P(A)\\hat{\\mathcal G}(A)+\\hat P(B)\\hat{\\mathcal G}(B)\n\\]\n\n\\(\\hat P(A)\\), \\(\\hat P(B)\\): proportions of observations in daughter nodes\n\\(\\hat{\\mathcal G}(A)\\), \\(\\hat{\\mathcal G}(B)\\): impurity measures within daughter nodes\n\n\nImpurity measure\n\nCategorical \\(Y \\in\\{1,\\ldots, K\\}\\): Gini index \\(\\pr(Y_i\\neq Y_j) = 1-\\sum_{k=1}^K \\pi_k^2\\)\nContinuous: mean squared error\nSurvival: mean squared deviance residuals (Cox model with binary node) \\[\\begin{equation}\\label{eq:tree:deviance}\nR(A\\mid\\mid B)=n^{-1}\\sum_{i \\in A}d_{i}^2 +n^{-1}\\sum_{i \\in B}d_{i}^2\n\\end{equation}\\]"
+    "text": "Splitting Criterion\n\n\nObjective function\n\nChoose partition \\(A|B\\) to minimize \\[\nR(A\\mid\\mid B)=\\hat P(A)\\hat{\\mathcal G}(A)+\\hat P(B)\\hat{\\mathcal G}(B)\n\\]\n\n\\(\\hat P(A)\\), \\(\\hat P(B)\\): proportions of observations in daughter nodes\n\\(\\hat{\\mathcal G}(A)\\), \\(\\hat{\\mathcal G}(B)\\): impurity measures within daughter nodes\n\n\n\n\n\n\nImpurity measure\n\nCategorical \\(Y \\in\\{1,\\ldots, K\\}\\): Gini index \\(\\pr(Y_i\\neq Y_j) = 1-\\sum_{k=1}^K \\pi_k^2\\)\nContinuous: mean squared error\nSurvival: mean squared deviance residuals (Cox model with binary node) \\[\\begin{equation}\\label{eq:tree:deviance}\nR(A\\mid\\mid B)=n^{-1}\\sum_{i \\in A}d_{i}^2 +n^{-1}\\sum_{i \\in B}d_{i}^2\n\\end{equation}\\]"
   },
   {
     "objectID": "chap15.html#pruning-the-tree",
     "href": "chap15.html#pruning-the-tree",
     "title": "Applied Survival Analysis",
     "section": "Pruning the Tree",
-    "text": "Pruning the Tree\n\nPenalize complexity\n\nCut overgrown branches \\(\\to\\) prevent overfitting \\(\\to\\) generalizability\n\nMinimize \\[\\begin{equation}\\label{eq:tree:risk}\nR(\\mathcal T;\\lambda)=R(\\mathcal T)+\\lambda|\\mathcal T|\n\\end{equation}\\]\n\n\\(R(\\mathcal T)\\): mean squared (deviance) residuals for terminal nodes of tree \\(\\mathcal T\\)\n\\(|\\mathcal T|\\): number of terminal nodes\n\\(\\lambda\\geq 0\\): complexity parameter determined by cross-validation\n\n\nFinal tree\n\n\\(\\mathcal T^{\\rm opt} = \\arg\\min_{\\mathcal T}R(\\mathcal T;\\lambda_{\\rm opt})\\)\n\\(\\mathcal T^{\\rm opt}(z)\\): terminal node for new covariate vector \\(z\\)\n\\(\\hat S(t\\mid z)\\): KM estimates in node \\(\\mathcal T^{\\rm opt}(z)\\)"
+    "text": "Pruning the Tree\n\n\nPenalize complexity\n\nCut overgrown branches \\(\\to\\) prevent overfitting \\(\\to\\) generalizability\n\nMinimize \\(R(\\mathcal T;\\lambda)=R(\\mathcal T)+\\lambda|\\mathcal T|\\)\n\n\\(R(\\mathcal T)\\): mean squared (deviance) residuals for terminal nodes of tree \\(\\mathcal T\\)\n\\(|\\mathcal T|\\): number of terminal nodes\n\\(\\lambda\\geq 0\\): complexity parameter determined by cross-validation\n\n\n\n\n\n\nFinal tree\n\n\\(\\mathcal T^{\\rm opt} = \\arg\\min_{\\mathcal T}R(\\mathcal T;\\lambda_{\\rm opt})\\)\n\\(\\mathcal T^{\\rm opt}(z)\\): terminal node for new covariate vector \\(z\\)\n\\(\\hat S(t\\mid z)\\): KM estimates in node \\(\\mathcal T^{\\rm opt}(z)\\)"
   },
   {
     "objectID": "chap15.html#bagging-and-random-forests",
     "href": "chap15.html#bagging-and-random-forests",
     "title": "Applied Survival Analysis",
     "section": "Bagging and Random Forests",
-    "text": "Bagging and Random Forests\n\nBagging\n\nA single tree \\(\\to\\) large variance\nTake \\(B\\) bootstrapped samples from training data\n\n\\(\\mathcal T_b\\): survival tree grown on \\(b\\)th bootstrap sample \\((b=1, \\ldots, B)\\) (without pruning)\n\\(\\hat S_b(t\\mid z)\\): predicted survival function\n\n\nFinal prediction \\[\n\\hat S(t\\mid z)=B^{-1}\\sum_{b=1}^B \\hat S_b(t\\mid z)\n\\]\n\nRandom forests\n\nSame except only a random subset of covariates are considered at each split\nDe-correlate the trees grown on different bootstrapped samples)"
+    "text": "Bagging and Random Forests\n\n\nBagging\n\nA single tree \\(\\to\\) large variance\nTake \\(B\\) bootstrapped samples from training data\n\n\\(\\mathcal T_b\\): survival tree grown on \\(b\\)th bootstrap sample \\((b=1, \\ldots, B)\\) (without pruning)\n\\(\\hat S_b(t\\mid z)\\): predicted survival function\n\n\nFinal prediction \\[\n\\hat S(t\\mid z)=B^{-1}\\sum_{b=1}^B \\hat S_b(t\\mid z)\n\\]\n\n\n\n\n\nRandom forests\n\nSame except only a random subset of covariates are considered at each split\nDe-correlate the trees grown on different bootstrapped samples)"
   },
   {
     "objectID": "chap15.html#software-rpartrpart",
     "href": "chap15.html#software-rpartrpart",
     "title": "Applied Survival Analysis",
     "section": "Software: rpart::rpart()",
-    "text": "Software: rpart::rpart()\n\nBasic syntax for growing survival tree\n\nxval = k: \\(k\\)-fold cross-validation; minbucket: minimum size of terminal node; cp: minimum reduction of impurity measure for a split\n\n\n\n\n# grow the tree, with cross-validation\nobj &lt;- rpart(Surv(time, status) ~ covariates, \n    control = rpart.control(xval = 10, minbucket = 2, cp = 0))\n# cross-validation results\ncptable &lt;- obj$cptable\n# complexity parameter (lambda)\nCP &lt;- cptable[, 1] \n# find optimal parameter\n# cptable[, 4]: error function\ncp.opt &lt;- CP[which.min(cptable[, 4])]"
+    "text": "Software: rpart::rpart()\n\n\nBasic syntax for growing survival tree\n\nxval = k: \\(k\\)-fold cross-validation; minbucket: minimum size of terminal node; cp: minimum reduction of impurity measure for a split\n\n\n\n\n# grow the tree, with cross-validation\nobj &lt;- rpart(Surv(time, status) ~ covariates, \n    control = rpart.control(xval = 10, minbucket = 2, cp = 0))\n# cross-validation results\ncptable &lt;- obj$cptable\n# complexity parameter (lambda)\nCP &lt;- cptable[, 1] \n# find optimal parameter\n# cptable[, 4]: error function\ncp.opt &lt;- CP[which.min(cptable[, 4])]"
   },
   {
     "objectID": "chap15.html#software-rpartprune",
     "href": "chap15.html#software-rpartprune",
     "title": "Applied Survival Analysis",
     "section": "Software: rpart::prune()",
-    "text": "Software: rpart::prune()\n\nBasic syntax for pruning survival tree\n\ntree: rpart object for grown tree; cp: optimal \\(\\lambda\\)\ntest: test data frame\n\n\n\n\n# prune the tree, with optimal lambda\nfit &lt;- prune(tree = obj, cp = cp.opt)\n# plot the pruned tree structure\nrpart.plot(fit)\n# fit$where: vector of terminal node for training data\n# compute KM estimates by terminal node\nkm &lt;- survfit(Surv(time, status) ~ fit$where)\n## prediction on test data ---------------------------\n# terminal node for test data\ntreeClust::rpart.predict.leaves(fit, test)"
+    "text": "Software: rpart::prune()\n\n\nBasic syntax for pruning survival tree\n\ntree: rpart object for grown tree; cp: optimal \\(\\lambda\\)\ntest: test data frame\n\n\n\n\n# prune the tree, with optimal lambda\nfit &lt;- prune(tree = obj, cp = cp.opt)\n# plot the pruned tree structure\nrpart.plot(fit)\n# fit$where: vector of terminal node for training data\n# compute KM estimates by terminal node\nkm &lt;- survfit(Surv(time, status) ~ fit$where)\n## prediction on test data ---------------------------\n# terminal node for test data\ntreeClust::rpart.predict.leaves(fit, test)"
   },
   {
     "objectID": "chap15.html#gbc-survival-trees",
     "href": "chap15.html#gbc-survival-trees",
     "title": "Applied Survival Analysis",
     "section": "GBC: Survival Trees",
-    "text": "GBC: Survival Trees\n\nSame training data\n\n\\(\\lambda_{\\rm opt}=0.017\\); 3 splits (4 terminal nodes)\n\n\n\n# Conduct 10-fold cross-validation (xval = 10)\nobj &lt;- rpart(Surv(time, status) ~ hormone + meno + size + grade + nodes + \n              prog + estrg + age,\n             control = rpart.control(xval = 10, minbucket = 2, cp = 0),\n             data = train)\nprintcp(obj) # xerror: objective \n#            CP  nsplit rel.error  xerror   xstd\n# 1  0.07556835      0   1.00000 1.00411 0.046231\n# 2  0.03720019      1   0.92443 0.96817 0.047281\n# 3  0.02661914      2   0.88723 0.95124 0.046567\n# 4  0.01716925      3   0.86061 0.92745 0.046606 # minimizer\n# 5  0.01398306      4   0.84344 0.92976 0.047514\n# 6  0.01394869      5   0.82946 0.93941 0.048404\n# 7  0.01055028      9   0.77120 0.97722 0.052133"
+    "text": "GBC: Survival Trees\n\n\nSame training data\n\n\\(\\lambda_{\\rm opt}=0.017\\); 3 splits (4 terminal nodes)\n\n\n\n# Conduct 10-fold cross-validation (xval = 10)\nobj &lt;- rpart(Surv(time, status) ~ hormone + meno + size + grade + nodes + \n              prog + estrg + age,\n             control = rpart.control(xval = 10, minbucket = 2, cp = 0),\n             data = train)\nprintcp(obj) # xerror: objective \n#            CP  nsplit rel.error  xerror   xstd\n# 1  0.07556835      0   1.00000 1.00411 0.046231\n# 2  0.03720019      1   0.92443 0.96817 0.047281\n# 3  0.02661914      2   0.88723 0.95124 0.046567\n# 4  0.01716925      3   0.86061 0.92745 0.046606 # minimizer\n# 5  0.01398306      4   0.84344 0.92976 0.047514\n# 6  0.01394869      5   0.82946 0.93941 0.048404\n# 7  0.01055028      9   0.77120 0.97722 0.052133"
   },
   {
     "objectID": "chap15.html#gbc-final-tree",
     "href": "chap15.html#gbc-final-tree",
     "title": "Applied Survival Analysis",
     "section": "GBC: Final Tree",
-    "text": "GBC: Final Tree\n\nPruned tree"
+    "text": "GBC: Final Tree\n\n\nPruned tree"
   },
   {
     "objectID": "chap15.html#gbc-brier-scores",
     "href": "chap15.html#gbc-brier-scores",
     "title": "Applied Survival Analysis",
     "section": "GBC: Brier Scores",
-    "text": "GBC: Brier Scores\n\nBrier scores of three models on test data"
+    "text": "GBC: Brier Scores\n\n\nBrier scores of three models on test data"
   },
   {
     "objectID": "chap15.html#notes-i",
     "href": "chap15.html#notes-i",
     "title": "Applied Survival Analysis",
     "section": "Notes (I)",
-    "text": "Notes (I)\n\nThe lasso\n\nFirst proposed by Tibshirani (1996) for least-squares\nExtended to Cox model by Tibshirani (1997)\nAlgorithms for \\(L_1\\)-regularized Cox model described in Simon et al. (2011)\n\nVariations\n\ngroup lasso (Yuan and Lin, 2006)\nadaptive lasso (Zou, 2006)\nsmoothly clipped absolute deviations (SCAD; Xie and Huang, 2009)"
+    "text": "Notes (I)\n\nThe lasso\n\nFirst proposed by Tibshirani (1996) for least-squares\nExtended to Cox model by Tibshirani (1997)\nAlgorithms for \\(L_1\\)-regularized Cox model described in Simon et al. (2011)\n\nVariations\n\ngroup lasso (Yuan and Lin, 2006)\nadaptive lasso (Zou, 2006)\nsmoothly clipped absolute deviations (SCAD; Xie and Huang, 2009)\n\nElastic net for win ratio\n\nWRnet (Mao, 2025)"
   },
   {
     "objectID": "chap15.html#notes-ii",
@@ -5199,7 +5199,7 @@
     "href": "chap15.html#notes-iii",
     "title": "Applied Survival Analysis",
     "section": "Notes (III)",
-    "text": "Notes (III)\n\nTidymodels\n\ncensored: a member of tidymodels family\nhttps://www.tidyverse.org/blog/2021/11/survival-analysis-parsnip-adjacent\n\n\n\n\nlibrary(censored) \n\ndecision_tree() %&gt;% \n  set_engine(\"rpart\") %&gt;% \n  set_mode(\"censored regression\")\n#&gt; Decision Tree Model Specification (censored regression)\n#&gt; \n#&gt; Computational engine: rpart"
+    "text": "Notes (III)\n\nTidymodels\n\ncensored: a member of tidymodels family\nhttps://censored.tidymodels.org/\n\n\n\n\nlibrary(censored) \n\ndecision_tree() %&gt;% \n  set_engine(\"rpart\") %&gt;% \n  set_mode(\"censored regression\")\n#&gt; Decision Tree Model Specification (censored regression)\n#&gt; \n#&gt; Computational engine: rpart"
   },
   {
     "objectID": "chap15.html#summary",
@@ -5211,210 +5211,210 @@
   {
     "objectID": "intro_comp_endpts.html#outline",
     "href": "intro_comp_endpts.html#outline",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Outline",
     "text": "Outline\n\n\nTraditional vs hierarchical composites\nWin ratio: two-sample analysis\nSemiparametric regression of win ratio\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]\n$$ \n$$"
   },
   {
     "objectID": "intro_comp_endpts.html#the-composite-approach",
     "href": "intro_comp_endpts.html#the-composite-approach",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "The Composite Approach",
     "text": "The Composite Approach\n\n\nComplex outcomes\n\nMultivariate/Recurrent events\n(Semi-)Competing risks (death vs nonfatal events)\nLongitudinal measures (biomarkers) with survival endpoint\n\n\n\n\n\nStandard methods\n\nJoint models (frailty, random effects)\nMarginal models (event-specific analyses)\n\n\n\n\n\nTraditional composite\n\nTime to first event (event-free survival)"
   },
   {
     "objectID": "intro_comp_endpts.html#examples-and-advantages",
     "href": "intro_comp_endpts.html#examples-and-advantages",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Examples and Advantages",
     "text": "Examples and Advantages\n\n\nExamples\n\nCardiovascular: major adverse cardiovascular events (MACE), e.g., death, nonfatal heart failure, myocardial infarction, stroke, etc.\nOncology: death and tumor progression (progression-free survival)\n\n\n\n\n\nAdvantages\n\nMore events \\(\\to\\) higher power \\(\\to\\) smaller sample size/lower costs\nNo need for multiplicity adjustment\nA unified measure of treatment effect\nRecommended by ICH-E9 “Statistical Principles for Clinical Trials” (1998)"
   },
   {
     "objectID": "intro_comp_endpts.html#data-and-notation",
     "href": "intro_comp_endpts.html#data-and-notation",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Data and Notation",
     "text": "Data and Notation\n\n\nTime-to-event\n\n\\(D\\): survival time; \\(N^*_D(t)=I(D\\leq t)\\)\n\\(N^*_1(t), \\ldots, N^*_K(t)\\): counting processes for \\(K\\) nonfatal event types\nLife history: \\(\\mathcal H^*(t)=\\{N^*_D(u), N^*_1(u), \\ldots, N^*_K(u):0\\leq u\\leq t\\}\\)\n\n\n\n\n\nCommon feature\n\nDeath most important, followed by some other events"
   },
   {
     "objectID": "intro_comp_endpts.html#traditional-composite-endpoints",
     "href": "intro_comp_endpts.html#traditional-composite-endpoints",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Traditional Composite Endpoints",
     "text": "Traditional Composite Endpoints\n\n\nTime to first event\n\n\\(N_{\\rm TFE}(t) = I\\{N^*_D(t)+\\sum_{k=1}^KN^*_k(t)\\geq 1\\}= I\\{Y(t)\\geq 1\\}\\)\n\n\n\n\n\nWeighted composite event process\n\n\\(N_{\\rm R}(t)=w_DN^*_D(t)+\\sum_{k=1}^Kw_kN^*_k(t)\\)\n\n\n\n\n\nHierarchical composite endpoints (HCE)\n\nDeath &gt; nonfatal MACE &gt; minor symptoms &gt; …\nUse more data, avoid arbitrary specification of weights"
   },
   {
     "objectID": "intro_comp_endpts.html#motivating-examples",
     "href": "intro_comp_endpts.html#motivating-examples",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Motivating Examples",
     "text": "Motivating Examples\n\n\n\n\n\nColon cancer trial\n\nLevamisole + fluorouracil (\\(n=304\\)) vs control (\\(n=315\\))\nRelapse-free survival\n\n258 (89%) deaths ignored\n\n\nHF-ACTION trial\n\nExercise training (\\(n=205\\)) vs usual care (\\(n=221\\))\nHospitalization-free survival\n\n82 (88%) deaths + 707 (69%) hospitalizations ignored"
   },
   {
     "objectID": "intro_comp_endpts.html#hierarchical-composite-endpoints",
     "href": "intro_comp_endpts.html#hierarchical-composite-endpoints",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Hierarchical Composite Endpoints",
     "text": "Hierarchical Composite Endpoints\n\n\nWin ratio\n\nRatio of probability of better / worse outcomes\nInitially two-sample comparison (Pocock et al., 2012)\nExtended to semiparametric regression"
   },
   {
     "objectID": "intro_comp_endpts.html#standard-two-sample",
     "href": "intro_comp_endpts.html#standard-two-sample",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Standard Two-Sample",
     "text": "Standard Two-Sample\n\n\nTwo-sample comparison (Pocock et al., 2012)\n\nData: \\(D_i^{(a)}, T_i^{(a)}, C_i^{(a)}\\): survival, hospitalization, censoring times on \\(i\\)th subject in group \\(a\\) \\((i=1,\\ldots, N_a; a= 1, 0)\\)\nHierarchical composite: Death &gt; hospitalization\nPairwise comparisons \\[\\begin{align}\n\\hat w^{(a, 1-a)}_{ij}&= \\underbrace{I(D_j^{(1-a)}&lt; D_i^{(a)}\\wedge C_i^{(a)}\\wedge C_j^{(1-a)})}_{\\mbox{win on survival}}\\\\\n& + \\underbrace{I(\\min(D_i^{(a)}, D_j^{(1-a)}) &gt; C_i^{(a)}\\wedge C_j^{(1-a)}, T_j^{(1-a)}&lt; T_i^{(a)}\\wedge C_i^{(1)}\\wedge C_j^{(0)})}_{\\mbox{inconclusive on survival, win on hospitalization}}\n\\end{align}\\]\nPrioritized comparison on \\(\\left[0, C_i^{(a)}\\wedge C_j^{(1-a)}\\right]\\)"
   },
   {
     "objectID": "intro_comp_endpts.html#pococks-rule",
     "href": "intro_comp_endpts.html#pococks-rule",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Pocock’s Rule",
     "text": "Pocock’s Rule\n\n\nWin, lose, or tie?"
   },
   {
     "objectID": "intro_comp_endpts.html#calculation-of-win-ratio",
     "href": "intro_comp_endpts.html#calculation-of-win-ratio",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Calculation of Win Ratio",
     "text": "Calculation of Win Ratio\n\n\nTwo-sample statistics\n\nWin (loss) fraction for group \\(a\\) (\\(1-a\\)) \\[\n\\hat w^{(a, 1-a)}=(N_0N_1)^{-1}\\sum_{i=1}^{N_a}\\sum_{j=1}^{N_{1-a}}\\hat w^{(a, 1-a)}_{ij}\\]\nWin ratio statistic \\[\nWR = \\hat w^{(1, 0)} / \\hat w^{(0, 1)}\n\\]\nOther measures\n\nNet benefit (proportion in favor): \\(\\hat w^{(1, 0)} - \\hat w^{(0, 1)}\\)\nWin odds: \\((\\hat w^{(1, 0)} - \\hat w^{(0, 1)} + 1)/ (\\hat w^{(0, 1)} - \\hat w^{(1, 0)} + 1)\\)"
   },
   {
     "objectID": "intro_comp_endpts.html#the-binary-case",
     "href": "intro_comp_endpts.html#the-binary-case",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "The Binary Case",
     "text": "The Binary Case\n\n\nConsider binary \\(Y^{(a)}= 1, 0\\)\n\n\\(\\hat w^{(a, 1-a)}_{ij} = I(Y_i^{(a)}&gt; Y_j^{(1-a)})=Y_i^{(a)}(1-Y_j^{(1-a)})\\)\nWin (loss) fraction \\[\n\\hat w^{(a, 1-a)} = (N_1N_0)^{-1}\\sum_{i=1}^{N_a}\\sum_{j=1}^{N_{1-a}}Y_i^{(a)}(1-Y_j^{(1-a)})\n= \\hat p^{(a)}(1-\\hat p^{(1-a)})\\] where \\(\\hat p^{(a)}= N_a^{-1}\\sum_{i=1}^{N_a} Y_i^{(a)}\\)\nEquivalencies \\[\\begin{align}\n{\\rm Win\\,\\, ratio}&= \\frac{\\hat w^{(1, 0)}}{\\hat w^{(0, 1)}} = \\frac{\\hat p^{(1)}(1-\\hat p^{(0)})}{\\hat p^{(0)}(1-\\hat p^{(1)})} = {\\rm Odds \\,\\, ratio}\\\\\n{\\rm Net \\,\\, benefit}&=\\hat w^{(1, 0)} - \\hat w^{(0, 1)} = \\hat p^{(1)}- \\hat p^{(0)}= {\\rm Risk \\,\\, difference}\n\\end{align}\\]"
   },
   {
     "objectID": "intro_comp_endpts.html#general-data",
     "href": "intro_comp_endpts.html#general-data",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "General Data",
     "text": "General Data\n\n\nOutcome data \\[\\mathcal H^{*{(a)}}(t)=\\left\\{N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \\ldots, N^{*{(a)}}_K(u):0\\leq u\\leq t\\right\\}\\]\n\n\\(N^{*{(a)}}_D(u), N^{*{(a)}}_1(u), \\ldots, N^{*{(a)}}_K(u)\\): counting processes for death and \\(K\\) different types of nonfatal events\n\n\n\n\n\nObserved data \\[\\{\\mathcal H^{*{(a)}}(X^{(a)}), X^{(a)}\\}\\]\n\nLife history observed up to \\(X^{(a)}= D^{(a)}\\wedge C^{(a)}\\)"
   },
   {
     "objectID": "intro_comp_endpts.html#general-rule",
     "href": "intro_comp_endpts.html#general-rule",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "General Rule",
     "text": "General Rule\n\n\nWin function \\[\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t) =I\\left\\{\\mathcal H^{*{(a)}}(t) \\mbox{ is more favorable than } \\mathcal H^{*{(1-a)}}(t)\\right\\}\\]\n\nBasic requirements\n\n(W1) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)\\) is a function only of \\(\\mathcal H^{*{(a)}}(t)\\) and \\(\\mathcal H^{*{(1-a)}}(t)\\)\n(W2) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)+\\mathcal W(\\mathcal H^{*{(1-a)}}, \\mathcal H^{*{(a)}})(t) \\in \\{0, 1\\}\\)\n(W3) \\(\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)=\\mathcal W(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(D^{(a)}\\wedge D^{(1-a)}\\wedge t)\\)\n\nInterpretations\n\n(W1) Consistency of time frame\n(W2) Either win, loss, or tie\n(W3) No change of win-loss status after death (satisfied if death is prioritized)"
   },
   {
     "objectID": "intro_comp_endpts.html#generalized-win-ratio",
     "href": "intro_comp_endpts.html#generalized-win-ratio",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Generalized Win Ratio",
     "text": "Generalized Win Ratio\n\n\nGeneral WR statistics \\[\\begin{equation}\\label{eq:wr:gen_WR}\n    \\hat{\\mathcal E}_n(\\mathcal W)=\\frac{(N_1N_0)^{-1}\\sum_{i=1}^{N_1}\\sum_{j=1}^{N_0}\\mathcal W(\\mathcal H^{*{(1)}}_{i}, \\mathcal H^{*{(0)}}_{j})(X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j})}\n    {(N_1N_0)^{-1}\\sum_{i=1}^{N_1}\\sum_{j=1}^{N_0}\\mathcal W(\\mathcal H^{*{(0)}}_{j}, \\mathcal H^{*{(1)}}_{i})(X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j})}\n    \\end{equation}\\]\n\nWindow of comparison: \\([0, X^{{(1)}}_{i}\\wedge X^{{(0)}}_{j}]\\), by a general \\(\\mathcal W\\)\nStratified win ratio \\[\n\\frac{\\text{Weighted sum of within-stratum wins}}{\\text{Weighted sum of within-stratum losses}}\n\\]"
   },
   {
     "objectID": "intro_comp_endpts.html#pococks-win-ratio",
     "href": "intro_comp_endpts.html#pococks-win-ratio",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Pocock’s Win Ratio",
     "text": "Pocock’s Win Ratio\n\n\nWin function\n\n\\(K\\) nonfatal events hierarchically ranked\n\\(T^{(a)}_k\\): time of first event in \\(N_k^{*{(a)}}(t)\\) \\((k=1,\\ldots, K)\\) \\[\\begin{align}\\label{eq:wr:PWR}\n\\mathcal W_{\\rm P}(\\mathcal H^{*{(a)}}, \\mathcal H^{*{(1-a)}})(t)&=I\\{D^{(1-a)}&lt;D^{(a)}\\wedge t\\}\\notag\\\\\n&\\hspace{2mm}+I\\{D^{(a)}\\wedge D^{(1-a)}&gt;t, T_{1}^{(1-a)}&lt;T_{1}^{(a)}\\wedge t\\}\\notag\\\\\n&\\hspace{2mm}+\\sum_{k=2}^KI\\{\\tilde T_{k-1}^{(a)}\\wedge \\tilde T_{k-1}^{(1-a)}&gt;t, T_{k}^{(1-a)}&lt;T_{k}^{(a)}\\wedge t\\}\n\\end{align}\\]\n\n\\(\\tilde T_{k-1}^{(a)}=D^{(a)}\\wedge T_{1}^{(a)}\\wedge\\cdots\\wedge T_{k-1}^{(a)}\\)\n\n\n\n\n\n\nWin ratio statistic: \\(\\hat{\\mathcal E}_n(\\mathcal W_{\\rm P})\\)"
   },
   {
     "objectID": "intro_comp_endpts.html#taking-recurrent-events",
     "href": "intro_comp_endpts.html#taking-recurrent-events",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Taking Recurrent Events",
     "text": "Taking Recurrent Events\n\n\nRecurrent-event win ratio (RWR)\n\nDeath &gt; number of recurrent events &gt; time to last event"
   },
   {
     "objectID": "intro_comp_endpts.html#time-to-first-event",
     "href": "intro_comp_endpts.html#time-to-first-event",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Time-to-First-Event",
     "text": "Time-to-First-Event\n\n\nCompare on order of first event\n\nWin function \\[\n\\mathcal W_{\\rm TFE}(\\mathcal H^{*{(a)}},\\mathcal H^{*{(1-a)}})(t)=I(\\tilde T^{(1-a)}&lt;\\tilde T^{(a)}\\wedge t)\n\\]\n\n\\(\\tilde T^{(a)}=\\min(D^{(a)}, T_1^{(a)},\\ldots, T_K^{(a)})\\)\n\nAllowable but not desirable"
   },
   {
     "objectID": "intro_comp_endpts.html#regression-framework",
     "href": "intro_comp_endpts.html#regression-framework",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Regression Framework",
     "text": "Regression Framework\n\nMotivation\n\nMeaningful estimand of effect size\nMultiple (quantitative) predictors\n\nModelin target\n\nTwo independent subjects \\((\\mathcal H_i, Z_i)\\) and \\((\\mathcal H_j, Z_j)\\)\n\n\\(E\\{\\mathcal W(\\mathcal H_i,\\mathcal H_j)(t)\\mid Z_i, Z_j\\}\\): Conditional win fraction (probability) for \\(i\\) against \\(j\\) at \\(t\\)\n\\(E\\{\\mathcal W(\\mathcal H_j,\\mathcal H_i)(t)\\mid Z_i, Z_j\\}\\): Conditional win fraction (probability) for \\(j\\) against \\(i\\) at \\(t\\)\n\nCovariate-specific win ratio \\[\\begin{equation}\\label{eq:cov_spec_curtail_wr}\nWR(t; Z_i, Z_j;\\mathcal W):= \\frac{E\\{\\mathcal W(\\mathcal H_i,\\mathcal H_j)(t)\\mid Z_i,Z_j\\}}{E\\{\\mathcal W(\\mathcal H_j,\\mathcal H_i)(t)\\mid Z_i, Z_j\\}}\n\\end{equation}\\]\nModel it against \\(Z_i\\) and \\(Z_j\\) to study covariate effect on WR"
   },
   {
     "objectID": "intro_comp_endpts.html#model-specification",
     "href": "intro_comp_endpts.html#model-specification",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Model Specification",
     "text": "Model Specification\n\nProportional win-fractions (PW) model \\[\\begin{equation}\\label{eq:wr_reg}\nWR(t\\mid Z_i, Z_j;\\mathcal W)=\\exp\\left\\{\\beta^{\\rm T}\\left(Z_i- Z_j\\right)\\right\\}\n\\end{equation}\\]\n\nPW: covariate-specific win/loss fractions proportional over time\n\nWR constant over time\n\n\\(\\beta\\): log-win ratio associated with unit increases in covariates (regardless of follow-up time)\nSemiparametric model\n\nParametric covariate-specific WRs\nNonparametric in other aspects (baseline event rates, etc.)\n\nDenote model by PW\\((\\mathcal W)\\)\n\nStresses model’s dependency on \\(\\mathcal W\\) chosen"
   },
   {
     "objectID": "intro_comp_endpts.html#special-cases",
     "href": "intro_comp_endpts.html#special-cases",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Special Cases",
     "text": "Special Cases\n\nPocock’s two-sample WR\n\n\\(Z = 1, 0\\)\n\\(\\exp(\\beta)\\): WR comparing group \\(z=1\\) with group \\(0\\)\n\nCox PH model\n\nPW\\((\\mathcal W_{\\rm TFE})\\) \\(\\Leftrightarrow\\) Cox PH model on time to first event"
   },
   {
     "objectID": "intro_comp_endpts.html#estimation",
     "href": "intro_comp_endpts.html#estimation",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Estimation",
     "text": "Estimation\n\nConstruction of estimating function\n\nObserved win process \\(\\delta_{ij}(t)=\\mathcal W(\\mathcal H_i,\\mathcal H_j)(X_i\\wedge X_j\\wedge t)\\)\nDeterminancy (win or loss): \\(R_{ij}(t)=\\delta_{ij}(t)+\\delta_{ji}(t)\\)\nMean-zero residual \\[\\begin{equation}\\label{eq:wr:resid}\nM_{ij}(t\\mid Z_i, Z_j;\\beta)=\\underbrace{\\delta_{ij}(t)}_{\\rm observed\\,\\,win} -\n\\underbrace{R_{ij}(t)\\frac{\\exp\\left\\{\\beta^{\\rm T}\\left( Z_i- Z_j\\right)\\right\\}}{\n1+\\exp\\left\\{\\beta^{\\rm T}\\left(Z_i- Z_j\\right)\\right\\}}}_{\\rm model-based\\,\\, prediction}\n\\end{equation}\\]\nEstimating equation \\[\\begin{equation}\\label{eq:wr:ee}\n\\Ut\\int_0^\\infty (Z_i - Z_j) h(t; Z_i, Z_j)\\dd M_{ij}(t \\mid Z_i, Z_j;\\beta)=0\n\\end{equation}\\]\n\nWeight function \\(h(t; Z_i, Z_j)\\equiv 1\\)"
   },
   {
     "objectID": "intro_comp_endpts.html#checking-proportionality",
     "href": "intro_comp_endpts.html#checking-proportionality",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Checking Proportionality",
     "text": "Checking Proportionality\n\nCumulative residuals\n\nRescaled \\(\\hat U_n(t)=\\Ut(Z_i - Z_j)\\underbrace{M_{ij}(t \\mid Z_i, Z_j;\\hat\\beta)}_{\\rm observed\\,\\, minus\\,\\, model-based\\,\\,wins\\,\\, by\\,\\, t}\\)"
   },
   {
     "objectID": "intro_comp_endpts.html#software-wrpwreg-i",
     "href": "intro_comp_endpts.html#software-wrpwreg-i",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Software: WR::pwreg() (I)",
     "text": "Software: WR::pwreg() (I)\n\nInput data format\n\nstatus = 1 for death, 2 for nonfatal events, 0 for censoring\n\n\n\nlibrary(WR)\n#&gt; Loading required package: survival\nhead(non_ischemic)\n#&gt;   ID time status trt_ab age sex Black.vs.White Other.vs.White   bmi\n#&gt; 1  1  221      2      0  62   1              0              0 25.18\n#&gt; 2  1  383      0      0  62   1              0              0 25.18\n#&gt; 3  2   23      2      0  75   1              1              0 22.96\n#&gt; 4  2 1400      0      0  75   1              1              0 22.96\n#&gt; ..."
   },
   {
     "objectID": "intro_comp_endpts.html#software-wrpwreg-ii",
     "href": "intro_comp_endpts.html#software-wrpwreg-ii",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Software: WR::pwreg() (II)",
     "text": "Software: WR::pwreg() (II)\n\nBasic syntax for PW\\((\\mathcal W_{\\rm P})\\)\n\nID: subject identifier\nZ: covariate matrix; strata: possible stratifier (categorical)\n\n\n\n\n# fit PW model (death &gt; nonfatal event)\nobj &lt;- pwreg(ID, time, status, Z, strata = NULL)\n\n\n\nOutput: an object of class pwreg\n\nobj$beta: \\(\\hat\\beta\\)\nobj$Var: \\(\\hat\\var(\\hat\\beta)\\)\nprint(obj) to summarize regression results"
   },
   {
     "objectID": "intro_comp_endpts.html#software-wrscore.proc",
     "href": "intro_comp_endpts.html#software-wrscore.proc",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Software: WR::score.proc()",
     "text": "Software: WR::score.proc()\n\nChecking proportionality\n\nobj: a pwreg object\n\n\n\n\n# fit PW model (death &gt; nonfatal event)\nscore.obj &lt;- score.proc(obj)\n\n\n\nOutput: an object of class score.proc\n\nscore.obj$t: \\(t\\)\nscore.obj$score: a matrix with rescaled residual process for each covariate per row\nplot(score.obj, k): plot the rescaled residuals for \\(k\\)th covariate"
   },
   {
     "objectID": "intro_comp_endpts.html#hf-action-data",
     "href": "intro_comp_endpts.html#hf-action-data",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "HF-ACTION: Data",
     "text": "HF-ACTION: Data\n\nAnother subset of HF-ACTION\n\nPopulation: \\(n=451\\) non-ischemic patients followed over median length of 31.6 months\nEndpoints: death &gt; first hospitalization\nPredictors: training vs usual care, age, sex, race, bmi, LVEF, medications, etc.\n\n\n\nlibrary(WR)\n#&gt; Loading required package: survival\nhead(non_ischemic)\n#&gt;   ID time status trt_ab age sex Black.vs.White Other.vs.White   bmi  ...\n#&gt; 1  1  221      2      0  62   1              0              0 25.18\n#&gt; 2  1  383      0      0  62   1              0              0 25.18\n#&gt; 3  2   23      2      0  75   1              1              0 22.96\n#&gt; 4  2 1400      0      0  75   1              1              0 22.96\n#&gt; ..."
   },
   {
     "objectID": "intro_comp_endpts.html#hf-action-regression-coding",
     "href": "intro_comp_endpts.html#hf-action-regression-coding",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "HF-ACTION: Regression Coding",
     "text": "HF-ACTION: Regression Coding\n\nSet up PW\\((\\mathcal W_{\\rm P})\\)\n\n\n# extract variables and covariate matrix\nID &lt;- non_ischemic[,\"ID\"]\ntime &lt;- non_ischemic[,\"time\"]\nstatus &lt;- non_ischemic[,\"status\"]\nZ &lt;- as.matrix(non_ischemic[, 4:(3+p)], nr, p)\n# pass the parameters into the function\npwreg.obj &lt;- pwreg(ID, time, status, Z)\n# print out results\nprint(pwreg.obj)"
   },
   {
     "objectID": "intro_comp_endpts.html#hf-action-regression-results",
     "href": "intro_comp_endpts.html#hf-action-regression-results",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "HF-ACTION: Regression Results",
     "text": "HF-ACTION: Regression Results\n\nSummary results\n\nTraining \\(\\exp(0.191) - 1= 21\\%\\) more likely to get favorable outcome than UC\nRace differences substantial and significant\nLVEF: 1% increases win likelihood by \\(\\exp(0.021) = 1.02\\) (\\(p\\)-value 0.013)\n\n\n\n#&gt; Estimates for Regression parameters:\n#&gt;                     Estimate         se z.value p.value\n#&gt; Training vs Usual  0.1906687  0.1264658  1.5077 0.13164\n#&gt; Age (year)        -0.0128306  0.0057285 -2.2398 0.02510 *\n#&gt; Male vs Female    -0.1552923  0.1294198 -1.1999 0.23017\n#&gt; Black vs White    -0.3026335  0.1461330 -2.0709 0.03836 *\n#&gt; Other vs White    -0.3565390  0.3424360 -1.0412 0.29779\n#&gt; BMI               -0.0181310  0.0097582 -1.8580 0.06316 .\n#&gt; LVEF               0.0214905  0.0086449  2.4859 0.01292 *\n#&gt; ..."
   },
   {
     "objectID": "intro_comp_endpts.html#hf-action-residual-analyses",
     "href": "intro_comp_endpts.html#hf-action-residual-analyses",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "HF-ACTION: Residual Analyses",
     "text": "HF-ACTION: Residual Analyses\n\nChecking proportionality\n\n\nscore.obj &lt;- score.proc(pwreg.obj)\npar(mfrow = c(1, 3)) # plot residual processes for treatment, age, LVEF\nfor(i in c(1, 2, 7)){\n  plot(score.obj, k = i, xlab = \"Time (Days)\")\n}"
   },
   {
     "objectID": "intro_comp_endpts.html#notes",
     "href": "intro_comp_endpts.html#notes",
-    "title": "Applied Survival Analysis",
+    "title": "Survival Analysis in Clinical Trials",
     "section": "Notes",
     "text": "Notes\n\nBefore win ratio\n\nContinuous outcome: Wilcoxon (1945), Mann & Whitney (1947)\nHierarchical endpoints: Finkelstein and Schoenfeld (1999), Buyse (2010)\n\nWin ratio regression\n\nProportionality and multiplicativity \\[\nWR(t\\mid Z_i, Z_j;\\mathcal W)=\\exp\\left\\{\\beta^{\\rm T}\\left(Z_i- Z_j\\right)\\right\\}\n\\]\n\\(\\exp(\\beta)\\): WRs with unit increases in covariates\nWR::pwreg()\n\nHierarchical endpoints\n\nGaining popularity and an active area of research"
   }

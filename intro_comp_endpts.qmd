@@ -1,5 +1,5 @@
 ---
-title: "Applied Survival Analysis"
+title: "Survival Analysis in Clinical Trials"
 subtitle: "Introduction to Composite Endpoints"
 css: style_slides.css
 author:

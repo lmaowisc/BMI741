@@ -252,6 +252,7 @@ Lu Mao
 </section>
 <section id="rationale" class="slide level2">
 <h2>Rationale</h2>
+<div class="fragment">
 <ul>
 <li><strong>With many covariates</strong>
 <ul>
@@ -262,9 +263,11 @@ Lu Mao
 <li><strong>Interpretation</strong>: easier with fewer predictors</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="linear-model-basics" class="slide level2">
 <h2>Linear Model Basics</h2>
+<div class="fragment">
 <ul>
 <li><strong>Set-up</strong> <span class="math display">\[
 Y=\alpha+\beta^\T Z+\epsilon
@@ -281,15 +284,21 @@ Y=\alpha+\beta^\T Z+\epsilon
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="subset-selection" class="slide level2">
 <h2>Subset Selection</h2>
+<div class="fragment">
 <ul>
 <li><strong>Big</strong> <span class="math inline">\(p\)</span> problem
 <ul>
 <li>Large variance (overfit) <span class="math inline">\(\to\)</span> poor prediction</li>
 <li><span class="math inline">\(p&gt;n\)</span>: no fit</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Best-subset selection</strong>
 <ul>
 <li>For each <span class="math inline">\(l\in\{0, 1,\ldots, p\}\)</span>, choose best model with <span class="math inline">\(l\)</span> covariates with least RSS</li>
@@ -302,9 +311,11 @@ Y=\alpha+\beta^\T Z+\epsilon
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="cross-validation" class="slide level2">
 <h2>Cross-Validation</h2>
+<div class="fragment">
 <ul>
 <li><strong>Computing validation error</strong></li>
 </ul>
@@ -313,28 +324,40 @@ Y=\alpha+\beta^\T Z+\epsilon
 <p><img data-src="images/ml_cv.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="subset-selection-limitations" class="slide level2">
 <h2>Subset Selection: Limitations</h2>
+<div class="fragment">
 <ul>
 <li><strong>Best subset</strong>
 <ul>
 <li>Fit all <span class="math inline">\(2^p\)</span> submodels</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Forward/backward stepwise selections</strong>
 <ul>
 <li>Start with null/full model, add/drop most/least significant predictor</li>
 <li>Where to stop <span class="math inline">\(\to\)</span> cross-validation</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Disadvantages</strong>
 <ul>
 <li><strong>Computationally costly</strong></li>
 <li><strong>A discrete process</strong>: covariates are either retained or dropped; may be sub-optimal for prediction</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="penalized-regression-i" class="slide level2">
 <h2>Penalized Regression (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Constrained least-squares</strong>
 <ul>
@@ -342,6 +365,10 @@ Y=\alpha+\beta^\T Z+\epsilon
 \tilde\beta(c)=\arg\min_\beta R_n(\beta), \mbox{ subject to }\sum_{j=1}^p|\beta_j|^q\leq c,
 \end{equation}\]</span></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Equivalent form by Lagrange multiplier</strong>
 <ul>
 <li><span class="math inline">\(L_q\)</span>-penalized regression <span class="math display">\[\begin{equation}\label{eq:vs:penal}
@@ -353,9 +380,11 @@ Y=\alpha+\beta^\T Z+\epsilon
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="penalized-regression-ii" class="slide level2">
 <h2>Penalized Regression (II)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Examples</strong>
 <ul>
@@ -365,9 +394,8 @@ Y=\alpha+\beta^\T Z+\epsilon
 \hat\beta(\lambda)=\left(\sum_{i=1}^n Z_i^{\otimes 2}+\lambda I_p\right)^{-1}\sum_{i=1}^nZ_iY_i
 \end{equation}\]</span></li>
 </ul></li>
-<li><strong>Lasso</strong> <span class="math inline">\((q=1)\)</span>
+<li><strong>Lasso</strong> (<span class="math inline">\(q=1\)</span>; Least absolute shrinkage and selection operator)
 <ul>
-<li>For “least absolute shrinkage and selection operator”</li>
 <li>Sets some <span class="math inline">\(\hat\beta_j\equiv 0\)</span>; sparse solution</li>
 </ul></li>
 <li><strong>Elastic net</strong>
@@ -379,9 +407,11 @@ Y=\alpha+\beta^\T Z+\epsilon
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="l_1-regularized-cox-model" class="slide level2">
 <h2><span class="math inline">\(L_1\)</span>-Regularized Cox Model</h2>
+<div class="fragment">
 <ul>
 <li><strong>What’s with Cox model</strong>
 <ul>
@@ -389,19 +419,23 @@ Y=\alpha+\beta^\T Z+\epsilon
 <li><strong>Computational algorithm</strong></li>
 <li><strong>Definition of error</strong> for cross-validation</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Objective function</strong>: negative log-partial likelihood
 <ul>
 <li>Regularize by <span class="math inline">\(L_1\)</span> penalty <span class="math display">\[\begin{equation}\label{eq:vs:cox_lasso}
 Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 \end{equation}\]</span></li>
-<li><span class="math inline">\(L_1\)</span>-penalized partial-likelihood estimator <span class="math display">\[\begin{equation}\label{eq:vs:optimize}
-\hat\beta(\lambda)=\arg\min_\beta Q_n(\beta;\lambda)
-\end{equation}\]</span></li>
+<li>Soltution: <span class="math inline">\(\hat\beta(\lambda)=\arg\min_\beta Q_n(\beta;\lambda)\)</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="pathwise-solution" class="slide level2">
 <h2>Pathwise Solution</h2>
+<div class="fragment">
 <ul>
 <li><span class="math inline">\(\hat\beta(\lambda)\)</span> as a path of <span class="math inline">\(\lambda\)</span>
 <ul>
@@ -409,15 +443,21 @@ Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 <li><strong>Coordinate descent</strong> at each iteration for <span class="math inline">\(L_1\)</span>-penalized weighted least-squares</li>
 <li>Details in Section 15.1.3 of lecture notes</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><span class="math inline">\(K\)</span>-fold cross-validation to select <span class="math inline">\(\lambda_{\rm opt}\)</span>
 <ul>
 <li>Some <span class="math inline">\(\hat\beta_j(\lambda_{\rm opt})=0\)</span></li>
 <li><strong>Selected variables</strong> <span class="math inline">\(\{Z_{\cdot j}: \hat\beta_j(\lambda_{\rm opt})\neq 0, j=1,\ldots, p\}\)</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="cross-validation-error" class="slide level2">
 <h2>Cross-Validation Error</h2>
+<div class="fragment">
 <ul>
 <li><strong>What is measure of error?</strong>
 <ul>
@@ -427,6 +467,10 @@ Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 <li>Unstable with small validation set (risk set too small)</li>
 </ul></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Partial-likelihood deviance</strong>
 <ul>
 <li>On <span class="math inline">\(j\)</span>th validation set <span class="math display">\[
@@ -438,15 +482,21 @@ Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 <li><span class="math inline">\(\mbox{CV}(\lambda)=k^{-1}\sum_{j=1}^k\mbox{CV}_j(\lambda)\)</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="prediction-error-brier-score" class="slide level2">
 <h2>Prediction Error: Brier Score</h2>
+<div class="fragment">
 <ul>
 <li><strong>Brier score</strong>
 <ul>
 <li><strong>Mean squared error</strong> for predicted vs observed in test set</li>
 <li>Commonly used for <strong>binary outcomes</strong></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Extension to time-to-event endpoint</strong>
 <ul>
 <li>IPCW <span class="math display">\[\begin{align}\label{eq:ml:BS}
@@ -459,9 +509,11 @@ Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="software-glmnetglmnet-i" class="slide level2">
 <h2>Software: <code>glmnet::glmnet()</code> (I)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Basic syntax for regularized Cox model</strong>
 <ul>
@@ -481,9 +533,11 @@ Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 <span id="cb1-6"><a></a>                    <span class="at">alpha =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
 </section>
 <section id="software-glmnetglmnet-ii" class="slide level2">
 <h2>Software: <code>glmnet::glmnet()</code> (II)</h2>
+<div class="fragment">
 <ul>
 <li><strong>Find optimal</strong> <span class="math inline">\(\lambda\)</span></li>
 </ul>
@@ -498,9 +552,11 @@ Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 <span id="cb2-7"><a></a>beta <span class="ot">&lt;-</span> <span class="fu">coef</span>(obj.cv, <span class="at">s =</span> <span class="st">"lambda.min"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
 </section>
 <section id="gbc-an-example" class="slide level2">
 <h2>GBC: An Example</h2>
+<div class="fragment">
 <ul>
 <li><strong>German Breast Cancer (GBC) study</strong>
 <ul>
@@ -518,17 +574,21 @@ Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 <span id="cb3-4"><a></a>train <span class="ot">&lt;-</span> data.CE[ind,]</span>
 <span id="cb3-5"><a></a>test <span class="ot">&lt;-</span> data.CE[<span class="sc">-</span>ind,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
 </section>
 <section id="graphics" class="slide level2">
 <h2>Graphics</h2>
+<div class="fragment">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="images/ml_gbc_path_cv.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="selected-predictors" class="slide level2">
 <h2>Selected Predictors</h2>
+<div class="fragment">
 <ul>
 <li><p><strong>CV results</strong></p>
 <ul>
@@ -551,6 +611,7 @@ Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 <span id="cb4-14"><a></a><span class="co">#&gt; -0.002908887</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
+</div>
 </section></section>
 <section>
 <section id="survival-trees" class="title-slide slide level1 center">
@@ -559,6 +620,7 @@ Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 </section>
 <section id="decision-trees" class="slide level2">
 <h2>Decision Trees</h2>
+<div class="fragment">
 <ul>
 <li><strong>Limitations of regularized Cox model</strong>
 <ul>
@@ -566,15 +628,21 @@ Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 <li>Linearity of covariate effects</li>
 <li>Interactions</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Tree-based classification and regression</strong>
 <ul>
 <li><em>Classification and Regression Trees</em> (CART; Breiman et al., 1984)</li>
 <li>Root node (all sample) <span class="math inline">\(\stackrel{\rm covariates}{\rightarrow}\)</span> split into (more homogeneous) daughter nodes <span class="math inline">\(\stackrel{\rm covariates}{\rightarrow}\)</span> split recursively</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="basic-procedures" class="slide level2">
 <h2>Basic Procedures</h2>
+<div class="fragment">
 <ul>
 <li><strong>Growing the tree</strong>
 <ul>
@@ -584,6 +652,10 @@ B=\{i=1,\ldots, n: Z_{ij}&gt; z\}
 \end{equation}\]</span></li>
 <li>Recursive splitting until terminal nodes sufficiently “pure” in outcome</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Tree-based prediction</strong>
 <ul>
 <li>A new covariate vector <span class="math inline">\(\to\)</span> terminal node it belongs <span class="math inline">\(\to\)</span> predicted outcome
@@ -594,9 +666,11 @@ B=\{i=1,\ldots, n: Z_{ij}&gt; z\}
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="splitting-criterion" class="slide level2">
 <h2>Splitting Criterion</h2>
+<div class="fragment">
 <ul>
 <li><strong>Objective function</strong>
 <ul>
@@ -608,6 +682,10 @@ R(A\mid\mid B)=\hat P(A)\hat{\mathcal G}(A)+\hat P(B)\hat{\mathcal G}(B)
 <li><span class="math inline">\(\hat{\mathcal G}(A)\)</span>, <span class="math inline">\(\hat{\mathcal G}(B)\)</span>: impurity measures within daughter nodes</li>
 </ul></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Impurity measure</strong>
 <ul>
 <li><strong>Categorical</strong> <span class="math inline">\(Y \in\{1,\ldots, K\}\)</span>: Gini index <span class="math inline">\(\pr(Y_i\neq Y_j) = 1-\sum_{k=1}^K \pi_k^2\)</span></li>
@@ -617,23 +695,27 @@ R(A\mid\mid B)=n^{-1}\sum_{i \in A}d_{i}^2 +n^{-1}\sum_{i \in B}d_{i}^2
 \end{equation}\]</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="pruning-the-tree" class="slide level2">
 <h2>Pruning the Tree</h2>
+<div class="fragment">
 <ul>
 <li><strong>Penalize complexity</strong>
 <ul>
 <li>Cut overgrown branches <span class="math inline">\(\to\)</span> prevent overfitting <span class="math inline">\(\to\)</span> generalizability<br>
 </li>
-<li>Minimize <span class="math display">\[\begin{equation}\label{eq:tree:risk}
-R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
-\end{equation}\]</span>
+<li>Minimize <span class="math inline">\(R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|\)</span>
 <ul>
 <li><span class="math inline">\(R(\mathcal T)\)</span>: mean squared (deviance) residuals for terminal nodes of tree <span class="math inline">\(\mathcal T\)</span></li>
 <li><span class="math inline">\(|\mathcal T|\)</span>: number of terminal nodes</li>
 <li><span class="math inline">\(\lambda\geq 0\)</span>: complexity parameter determined by cross-validation</li>
 </ul></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Final tree</strong>
 <ul>
 <li><span class="math inline">\(\mathcal T^{\rm opt} = \arg\min_{\mathcal T}R(\mathcal T;\lambda_{\rm opt})\)</span></li>
@@ -641,9 +723,11 @@ R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
 <li><span class="math inline">\(\hat S(t\mid z)\)</span>: KM estimates in node <span class="math inline">\(\mathcal T^{\rm opt}(z)\)</span></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="bagging-and-random-forests" class="slide level2">
 <h2>Bagging and Random Forests</h2>
+<div class="fragment">
 <ul>
 <li><strong>Bagging</strong>
 <ul>
@@ -658,15 +742,21 @@ R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
 \hat S(t\mid z)=B^{-1}\sum_{b=1}^B \hat S_b(t\mid z)
 \]</span></li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><strong>Random forests</strong>
 <ul>
 <li>Same except only a random subset of covariates are considered at each split</li>
 <li>De-correlate the trees grown on different bootstrapped samples)</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="software-rpartrpart" class="slide level2">
 <h2>Software: <code>rpart::rpart()</code></h2>
+<div class="fragment">
 <ul>
 <li><strong>Basic syntax for growing survival tree</strong>
 <ul>
@@ -687,9 +777,11 @@ R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
 <span id="cb5-10"><a></a>cp.opt <span class="ot">&lt;-</span> CP[<span class="fu">which.min</span>(cptable[, <span class="dv">4</span>])] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
 </section>
 <section id="software-rpartprune" class="slide level2">
 <h2>Software: <code>rpart::prune()</code></h2>
+<div class="fragment">
 <ul>
 <li><strong>Basic syntax for pruning survival tree</strong>
 <ul>
@@ -711,9 +803,11 @@ R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
 <span id="cb6-10"><a></a>treeClust<span class="sc">::</span><span class="fu">rpart.predict.leaves</span>(fit, test) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
 </section>
 <section id="gbc-survival-trees" class="slide level2">
 <h2>GBC: Survival Trees</h2>
+<div class="fragment">
 <ul>
 <li><strong>Same training data</strong>
 <ul>
@@ -736,9 +830,11 @@ R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
 <span id="cb7-13"><a></a><span class="co"># 6  0.01394869      5   0.82946 0.93941 0.048404</span></span>
 <span id="cb7-14"><a></a><span class="co"># 7  0.01055028      9   0.77120 0.97722 0.052133</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
 </section>
 <section id="gbc-final-tree" class="slide level2">
 <h2>GBC: Final Tree</h2>
+<div class="fragment">
 <ul>
 <li><strong>Pruned tree</strong></li>
 </ul>
@@ -747,9 +843,11 @@ R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
 <p><img data-src="images/ml_gbc_tree.png" class="quarto-figure quarto-figure-center" style="width:65.0%"></p>
 </figure>
 </div>
+</div>
 </section>
 <section id="gbc-brier-scores" class="slide level2">
 <h2>GBC: Brier Scores</h2>
+<div class="fragment">
 <ul>
 <li><strong>Brier scores of three models on test data</strong></li>
 </ul>
@@ -757,6 +855,7 @@ R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
 <figure>
 <p><img data-src="images/ml_gbc_test.png" class="quarto-figure quarto-figure-center" style="width:60.0%"></p>
 </figure>
+</div>
 </div>
 </section></section>
 <section>
@@ -778,6 +877,10 @@ R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
 <li>group lasso (Yuan and Lin, 2006)</li>
 <li>adaptive lasso (Zou, 2006)</li>
 <li>smoothly clipped absolute deviations (SCAD; Xie and Huang, 2009)</li>
+</ul></li>
+<li><strong>Elastic net for win ratio</strong>
+<ul>
+<li><a href="https://doi.org/10.1186/s12874-025-02554-w">WRnet</a> (Mao, 2025)</li>
 </ul></li>
 </ul>
 </section>
@@ -814,7 +917,7 @@ R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
 <li><strong>Tidymodels</strong>
 <ul>
 <li><code>censored</code>: a member of <code>tidymodels</code> family</li>
-<li><a href="https://www.tidyverse.org/blog/2021/11/survival-analysis-parsnip-adjacent" class="uri">https://www.tidyverse.org/blog/2021/11/survival-analysis-parsnip-adjacent</a></li>
+<li><a href="https://censored.tidymodels.org/" class="uri">https://censored.tidymodels.org/</a></li>
 </ul></li>
 </ul>
 <div class="big-code">

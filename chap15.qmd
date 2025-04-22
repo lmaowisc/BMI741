@@ -39,14 +39,15 @@ $$
 # Regularized Cox Regression
 
 ## Rationale
-
+:::{.fragment}
 -   **With many covariates**
     -   **Prediction accuracy**: under- vs over-fitting ![](images/ml_overfit.png){fig-align="center" width="70%"}
         -   Too many predictors $\to$ overfitting
     -   **Interpretation**: easier with fewer predictors
+:::
 
 ## Linear Model Basics
-
+:::{.fragment}
 -   **Set-up** $$
     Y=\alpha+\beta^\T Z+\epsilon
     $$
@@ -57,12 +58,15 @@ $$
         \hat\beta_{\rm OLS}=\arg\min_\beta R_n(\beta)=\left(\sum_{i=1}^n Z_i^{\otimes 2}\right)^{-1}\sum_{i=1}^nZ_iY_i
         \end{align*}
         -   $R_n(\beta)=\sum_{i=1}^n(Y_i-\beta^\T Z_i)^2$: residual sum of squares (RSS)
+:::
 
 ## Subset Selection
-
+:::{.fragment}
 -   **Big** $p$ problem
     -   Large variance (overfit) $\to$ poor prediction
     -   $p>n$: no fit
+:::
+:::{.fragment}
 -   **Best-subset selection**
     -   For each $l\in\{0, 1,\ldots, p\}$, choose best model with $l$ covariates with least RSS
     -   $(p+1)$ best models with decreasing RSS (as $l=0,1,\ldots, p$)
@@ -70,95 +74,114 @@ $$
         -   Partition sample into $k$ pieces
         -   Set one piece aside to evaluate RSS of model fit on remaining data
         -   Cycle through all $k$ pieces and average validation errors
+:::
 
 ## Cross-Validation
-
+:::{.fragment}
 -   **Computing validation error**
 
 ![](images/ml_cv.png){fig-align="center" width="70%"}
+:::
 
 ## Subset Selection: Limitations
-
+:::{.fragment}
 -   **Best subset**
     -   Fit all $2^p$ submodels
+:::
+:::{.fragment}
 -   **Forward/backward stepwise selections**
     -   Start with null/full model, add/drop most/least significant predictor
     -   Where to stop $\to$ cross-validation
+:::
+:::{.fragment}
 -   **Disadvantages**
     -   **Computationally costly**
     -   **A discrete process**: covariates are either retained or dropped; may be sub-optimal for prediction
+:::
 
 ## Penalized Regression (I)
-
+:::{.fragment}
 -   **Constrained least-squares**
     -   Restricting $L_q$-norm of $\beta$ reduces effective d.f. \begin{equation}\label{eq:vs:constrained}
         \tilde\beta(c)=\arg\min_\beta R_n(\beta), \mbox{ subject to }\sum_{j=1}^p|\beta_j|^q\leq c,
         \end{equation}
+:::
+:::{.fragment}
 -   **Equivalent form by Lagrange multiplier**
     -   $L_q$-penalized regression \begin{equation}\label{eq:vs:penal}
         \hat\beta(\lambda)=\arg\min_\beta \left\{R_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|^q\right\}
         \end{equation}
         -   $\lambda\geq 0$: tuning parameter controlling degree of regulation, determined by cross-validation
         -   $\hat\beta(0)=\hat\beta_{\rm OLS}$; $\hat\beta(\infty)=0$
+:::
 
 ## Penalized Regression (II)
-
+:::{.fragment}
 -   **Examples**
     -   **Ridge regression** $(q=2)$
         -   Closed-form solution (not sparse; every $\beta_j\neq 0$) \begin{equation}\label{eq:vs:ridge}
             \hat\beta(\lambda)=\left(\sum_{i=1}^n Z_i^{\otimes 2}+\lambda I_p\right)^{-1}\sum_{i=1}^nZ_iY_i
             \end{equation}
-    -   **Lasso** $(q=1)$
-        -   For “least absolute shrinkage and selection operator”
+    -   **Lasso** ($q=1$; Least absolute shrinkage and selection operator)
         -   Sets some $\hat\beta_j\equiv 0$; sparse solution
     -   **Elastic net**
         -   Combines the strengths of ridge regression and lasso \begin{equation}\label{eq:vs:en}
             \hat\beta(\lambda)=\arg\min_\beta \left[R_n(\beta)+\lambda\sum_{j=1}^p\left\{\alpha|\beta_j|+2^{-1}(1-\alpha)\beta_j^2\right\}\right]
             \end{equation}
         -   Handles correlated covariates better than lasso
+:::
 
 ## $L_1$-Regularized Cox Model
-
+:::{.fragment}
 -   **What's with Cox model**
     -   **Objective function** (RSS not computable due to censoring)
     -   **Computational algorithm**
     -   **Definition of error** for cross-validation
+:::
+:::{.fragment}
 -   **Objective function**: negative log-partial likelihood
     -   Regularize by $L_1$ penalty \begin{equation}\label{eq:vs:cox_lasso}
         Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
         \end{equation}
-    -   $L_1$-penalized partial-likelihood estimator \begin{equation}\label{eq:vs:optimize}
-        \hat\beta(\lambda)=\arg\min_\beta Q_n(\beta;\lambda)
-        \end{equation}
+    -   Soltution: $\hat\beta(\lambda)=\arg\min_\beta Q_n(\beta;\lambda)$
+:::
 
 ## Pathwise Solution
-
+:::{.fragment}
 -   $\hat\beta(\lambda)$ as a path of $\lambda$
     -   Iterative $pl_n(\beta)\approx$ weighted sum of squares
     -   **Coordinate descent** at each iteration for $L_1$-penalized weighted least-squares
     -   Details in Section 15.1.3 of lecture notes
+:::
+:::{.fragment}
 -   $K$-fold cross-validation to select $\lambda_{\rm opt}$
     -   Some $\hat\beta_j(\lambda_{\rm opt})=0$
     -   **Selected variables** $\{Z_{\cdot j}: \hat\beta_j(\lambda_{\rm opt})\neq 0, j=1,\ldots, p\}$
+:::
 
 ## Cross-Validation Error
-
+:::{.fragment}
 -   **What is measure of error?**
     -   RSS not applicable due to censoring
     -   Negative partial-likelihood?
         -   Unstable with small validation set (risk set too small)
+:::
+:::{.fragment}
 -   **Partial-likelihood deviance**
     -   On $j$th validation set $$
           \mbox{CV}_j(\lambda)=pl_{n,-j}\{\hat\beta(\lambda)\}-pl_{n}\{\hat\beta(\lambda)\}
           $$
         -   $pl_{n,-j}(\beta)$: log-partial likelihood based on training set
     -   $\mbox{CV}(\lambda)=k^{-1}\sum_{j=1}^k\mbox{CV}_j(\lambda)$
+:::
 
 ## Prediction Error: Brier Score
-
+:::{.fragment}
 -   **Brier score**
     -   **Mean squared error** for predicted vs observed in test set
     -   Commonly used for **binary outcomes**
+:::
+:::{.fragment}
 -   **Extension to time-to-event endpoint**
     -   IPCW \begin{align}\label{eq:ml:BS}
         \hat{BS}(t)&=n^{-1}\sum_{i=1}^n\Bigg[I(X_i\leq t, \delta_i=1)\hat G(X_i)^{-1}\hat S_i(t)^2\notag\\
@@ -166,9 +189,10 @@ $$
         \end{align}
         -   $\hat S_i(t)$: predicted survival function for $i$th subject
         -   $\hat G(t)$: KM estimator for the censoring distribution in test set
+:::
 
 ## Software: `glmnet::glmnet()` (I)
-
+:::{.fragment}
 -   **Basic syntax for regularized Cox model**
     -   **Elastic net** $$
         \hat\beta(\lambda)=\arg\min_\beta \left[-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p\left\{\alpha|\beta_j|+2^{-1}(1-\alpha)\beta_j^2\right\}\right]
@@ -188,9 +212,10 @@ obj.cv <- cv.glmnet(Z, Surv(time, status), family = "cox",
 
 ```
 :::
+:::
 
 ## Software: `glmnet::glmnet()` (II)
-
+:::{.fragment}
 -   **Find optimal** $\lambda$
 
 ::: big-code
@@ -207,9 +232,10 @@ beta <- coef(obj.cv, s = "lambda.min")
 
 ```
 :::
+:::
 
 ## GBC: An Example
-
+:::{.fragment}
 -   **German Breast Cancer (GBC) study**
     -   **Cohort**: 686 breast cancer patients\
     -   **Outcome**: relapse-free survival
@@ -225,13 +251,16 @@ ind <- sample(1:n)[1:400]
 train <- data.CE[ind,]
 test <- data.CE[-ind,]
 ```
+:::
 
 ## Graphics
+:::{.fragment}
 
 ![](images/ml_gbc_path_cv.png){fig-align="center" width="70%"}
+:::
 
 ## Selected Predictors
-
+:::{.fragment}
 -   **CV results**
 
     -   $\log(\lambda_{\rm opt}) = -3.89$
@@ -254,65 +283,76 @@ test <- data.CE[-ind,]
     #>      prog 
     #> -0.002908887
     ```
+:::
 
 # Survival Trees
 
 ## Decision Trees
-
+:::{.fragment}
 -   **Limitations of regularized Cox model**
     -   Proportionality
     -   Linearity of covariate effects
     -   Interactions
+:::
+:::{.fragment}
 -   **Tree-based classification and regression**
     -   *Classification and Regression Trees* (CART; Breiman et al., 1984)
     -   Root node (all sample) $\stackrel{\rm covariates}{\rightarrow}$ split into (more homogeneous) daughter nodes $\stackrel{\rm covariates}{\rightarrow}$ split recursively
+:::
 
 ## Basic Procedures
-
+:::{.fragment}
 -   **Growing the tree**
     -   Starting with root node, search partition criteria $$Z_{\cdot j}\leq z \,\,\,(j=1,\ldots, p; z \in\mathbb R)$$ for one that minimizes "impurity" within daughter nodes \begin{equation}\label{eq:tree:nodes}
         A=\{i=1,\ldots, n: Z_{ij}\leq z\} \mbox{ and } 
         B=\{i=1,\ldots, n: Z_{ij}> z\}
         \end{equation}
     -   Recursive splitting until terminal nodes sufficiently "pure" in outcome
+:::
+:::{.fragment}
 -   **Tree-based prediction**
     -   A new covariate vector $\to$ terminal node it belongs $\to$ predicted outcome
         -   Majority class
         -   empirical mean
         -   Kaplan-Meier estimator
+:::
 
 ## Splitting Criterion
-
+:::{.fragment}
 -   **Objective function**
     -   Choose partition $A|B$ to minimize $$
         R(A\mid\mid B)=\hat P(A)\hat{\mathcal G}(A)+\hat P(B)\hat{\mathcal G}(B)
         $$
         -   $\hat P(A)$, $\hat P(B)$: proportions of observations in daughter nodes
         -   $\hat{\mathcal G}(A)$, $\hat{\mathcal G}(B)$: impurity measures within daughter nodes
+:::
+:::{.fragment}
 -   **Impurity measure**
     -   **Categorical** $Y \in\{1,\ldots, K\}$: Gini index $\pr(Y_i\neq Y_j) = 1-\sum_{k=1}^K \pi_k^2$
     -   **Continuous**: mean squared error
     -   **Survival**: mean squared deviance residuals (Cox model with binary node) \begin{equation}\label{eq:tree:deviance}
         R(A\mid\mid B)=n^{-1}\sum_{i \in A}d_{i}^2 +n^{-1}\sum_{i \in B}d_{i}^2
         \end{equation}
+:::
 
 ## Pruning the Tree
-
+:::{.fragment}
 -   **Penalize complexity**
     -   Cut overgrown branches $\to$ prevent overfitting $\to$ generalizability\
-    -   Minimize \begin{equation}\label{eq:tree:risk}
-        R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|
-        \end{equation}
+    -   Minimize $R(\mathcal T;\lambda)=R(\mathcal T)+\lambda|\mathcal T|$
         -   $R(\mathcal T)$: mean squared (deviance) residuals for terminal nodes of tree $\mathcal T$
         -   $|\mathcal T|$: number of terminal nodes
         -   $\lambda\geq 0$: complexity parameter determined by cross-validation
+:::
+:::{.fragment}
 -   **Final tree**
     -   $\mathcal T^{\rm opt} = \arg\min_{\mathcal T}R(\mathcal T;\lambda_{\rm opt})$
     -   $\mathcal T^{\rm opt}(z)$: terminal node for new covariate vector $z$
     -   $\hat S(t\mid z)$: KM estimates in node $\mathcal T^{\rm opt}(z)$
+:::
 
 ## Bagging and Random Forests
-
+:::{.fragment}
 -   **Bagging**
     -   A single tree $\to$ large variance
     -   Take $B$ bootstrapped samples from training data
@@ -321,12 +361,15 @@ test <- data.CE[-ind,]
     -   **Final prediction** $$
          \hat S(t\mid z)=B^{-1}\sum_{b=1}^B \hat S_b(t\mid z)
          $$
+:::
+:::{.fragment}
 -   **Random forests**
     -   Same except only a random subset of covariates are considered at each split
     -   De-correlate the trees grown on different bootstrapped samples)
+:::
 
 ## Software: `rpart::rpart()`
-
+:::{.fragment}
 -   **Basic syntax for growing survival tree**
     -   `xval = k`: $k$-fold cross-validation; `minbucket`: minimum size of terminal node; `cp`: minimum reduction of impurity measure for a split
 
@@ -347,9 +390,10 @@ cp.opt <- CP[which.min(cptable[, 4])]
 
 ```
 :::
+:::
 
 ## Software: `rpart::prune()`
-
+:::{.fragment}
 -   **Basic syntax for pruning survival tree**
     -   `tree`: `rpart` object for grown tree; `cp`: optimal $\lambda$
     -   `test`: test data frame
@@ -370,9 +414,10 @@ km <- survfit(Surv(time, status) ~ fit$where)
 treeClust::rpart.predict.leaves(fit, test) 
 ```
 :::
+:::
 
 ## GBC: Survival Trees
-
+:::{.fragment}
 -   **Same training data**
     -   $\lambda_{\rm opt}=0.017$; 3 splits (4 terminal nodes)
 
@@ -395,18 +440,22 @@ printcp(obj) # xerror: objective
 # 7  0.01055028      9   0.77120 0.97722 0.052133
 
 ```
+:::
 
 ## GBC: Final Tree
-
+:::{.fragment}
 -   **Pruned tree**
 
 ![](images/ml_gbc_tree.png){fig-align="center" width="65%"}
+:::
+
 
 ## GBC: Brier Scores
-
+:::{.fragment}
 -   **Brier scores of three models on test data**
 
 ![](images/ml_gbc_test.png){fig-align="center" width="60%"}
+:::
 
 # Conclusion
 
@@ -420,6 +469,8 @@ printcp(obj) # xerror: objective
     -   group lasso (Yuan and Lin, 2006)
     -   adaptive lasso (Zou, 2006)
     -   smoothly clipped absolute deviations (SCAD; Xie and Huang, 2009)
+-   **Elastic net for win ratio**
+    -   [WRnet](https://doi.org/10.1186/s12874-025-02554-w) (Mao, 2025)
 
 ## Notes (II)
 
@@ -445,7 +496,7 @@ printcp(obj) # xerror: objective
 
 -   **Tidymodels**
     -   `censored`: a member of `tidymodels` family
-    -   <https://www.tidyverse.org/blog/2021/11/survival-analysis-parsnip-adjacent>
+    -   <https://censored.tidymodels.org/>
 
 ::: big-code
 ```{r}
