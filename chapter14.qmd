@@ -6,121 +6,330 @@ title: "Chapter 14 - Causal Inference in Survival Analysis"
 
 Lecture slides [here](chap14.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-## Base R Code
+$$\newcommand{\Tt}{T^{(1)}}
+\newcommand{\Tc}{T^{(0)}}
+\newcommand{\Ta}{T^{(a)}}
+\newcommand{\Tat}{T^{(\overline a)}}
+\newcommand{\indep}{\perp \!\!\! \perp}
+\newcommand{\dd}{{\rm d}}
+\newcommand{\cc}{{\rm c}}
+\newcommand{\pr}{{\rm pr}}$$
+
+## Chapter Summary
+
+Causal inference in survival analysis extends traditional models of association to estimate the effect of treatment or exposure on time-to-event outcomes under potential confounding. The counterfactual framework defines causal effects through *potential outcomes* and supports valid estimation under assumptions like *consistency*, *exchangeability*, and *positivity*. Causal estimands such as treatment-specific survival curves or hazard ratios can be identified using *inverse probability weighting* (IPW), *standardization*, or *marginal structural models* (MSMs).
+
+### Counterfactual framework
+
+Each subject has potential failure times $\Ta$, $a = 0, 1$, representing the time-to-event under treatment $a$.
+
+-   **Consistency**:
+    $$
+    T = A \Tt + (1 - A) \Tc
+    $$
+    where $T$ is the observed time and $A$ the observed treatment.
+
+-   **Exchangeability**: Treatment is independent of potential outcomes given confounders $W$:
+    $$
+    \Ta \indep A \mid W.
+    $$
+
+-   **Causal estimand**:
+    $$
+    \theta(t) = \pr(\Tt > t) - \pr(\Tc > t)
+    $$
+    (e.g., causal difference in survival probability at time $t$)
+
+Causal diagrams (DAGs) help visualize confounding, mediation, and guide variable selection.
+
+### Estimating causal effects
+
+Two common methods to estimate $S_a(t) = \pr(\Ta > t)$ under conditional exchangeability:
+
+-   **Inverse probability treatment weighting (IPTW)**:
+    $$
+    \hat S_a^{\text{IP}}(t) = \frac{1}{n} \sum_{i=1}^n \frac{I(A_i = a,\; T_i > t)}{\pi_a(W_i)}
+    $$
+    where $\pi_a(W) = \pr(A = a \mid W)$ is the propensity score.
+
+-   **Standardization**:
+    $$
+    \hat S_a^{\text{reg}}(t) = \frac{1}{n} \sum_{i=1}^n \hat S_a(t \mid W_i)
+    $$
+    where $\hat S_a(t \mid W)$ is estimated from a Cox model within $A = a$.
+
+Both methods rely on correctly specified models (treatment or outcome) and assume no unmeasured confounding.
+
+### Censoring adjustment
+
+When failure times are right-censored:
+
+-   **Assumptions**:
+    - $T \indep C \mid A, W$ (general)
+    - $T \indep C \mid A$ (simpler, stronger)
+
+![](images/causal_censor_ass.png){fig-align="center" width="60%"}
+
+-   **IPTW-adjusted Kaplan–Meier estimator**:
+    $$
+    \hat S_a^{\text{IP}}(t) = \prod_{u \le t} \left\{1 - \frac{\sum_i \hat w_{ai}(u)\, \dd N_i(u)}{\sum_i \hat w_{ai}(u)\, I(X_i \ge u)} \right\},
+    $$
+    where $\hat w_{ai}(t) = \big[\hat \pi_a(W_i)\, \hat G_a(t \mid W_i)\big]^{-1}$ and $\hat G_a$ estimates survival from censoring.
+
+-   **Causal Cox model**:
+    $$
+    \lambda_a(t) = \exp(a \beta) \lambda_0(t),
+    $$
+    estimated via a weighted score function.
+
+### Marginal structural models (MSMs)
+
+MSMs estimate causal effects by weighting observed data to mimic a randomized trial.
+
+-   **Point treatment model**:
+    $$
+    \lambda_a(t \mid V) = \exp(\beta a + \gamma^\top V)\lambda_0(t),
+    $$
+    where $V$ is a subset of baseline covariates.
+
+-   **Stabilized weight**:
+    $$
+    w_i^{\text{s}}(t) = \frac{\pi_{A_i}(V_i) G_{A_i}(t \mid V_i)}{\pi_{A_i}(W_i) G_{A_i}(t \mid W_i)}
+    $$
+
+-   **Time-varying treatment**:\
+    Treatment $A(t)$ and confounders $W(t)$ evolve over time. If $W(t)$ is both a confounder and mediator, standard regression fails.
+
+![](images/causal_tm_dag.png){fig-align="center" width="60%"}
+
+-   **Marginal structural Cox model**:
+    $$
+    \lambda_{\overline a}(t \mid V) = \exp\big\{\beta\, a(t) + \gamma^\top V\big\} \lambda_0(t)
+    $$
+
+    - Weighting is done across time using:
+      $$
+      w^{\text{s}}(t) = \prod_{j \le t}
+      \frac{\pr(A_j \mid \overline A_{j-1}, V)}{\pr(A_j \mid \overline A_{j-1}, \overline W_j)}
+      $$
+
+    - Censoring is handled similarly using IPCW.
+
+### Example R code
+
+```{r}
+#| eval: false
+########################################
+# 1. Point treatment: IPTW survival analysis
+########################################
+library(ipw)
+# Estimate propensity score and compute weights
+psmod <- ipwpoint(exposure = A,
+                  denominator = ~ meno + size + grade + prog + estrg,
+                  family = "binomial", link = "logit")
+
+# IPTW-adjusted KM
+library(survival)
+km <- survfit(Surv(time, status) ~ A,
+              weights = psmod$ipw.weights)
+
+########################################
+# 2. Time-varying treatment: stabilized weights
+########################################
+library(ipw)
+iptw <- ipwtm(exposure = trt, family = "binomial",
+              numerator = ~ age + sex,
+              denominator = ~ age + sex + cd4,
+              id = id, type = "all",
+              tstart = tstart, timevar = fuptime)
+
+# Weighted Cox model
+coxph(Surv(tstart, fuptime, status) ~ trt + age + sex +
+      cluster(id), weights = iptw$ipw.weights)
+```
+
+### Conclusion
+
+Causal inference for time-to-event outcomes is built on the counterfactual framework, with assumptions that permit identification of treatment effects despite confounding and censoring. IPTW and standardization estimate marginal effects, while marginal structural models adjust for complex, time-varying confounding. These methods provide rigorous tools for answering causal questions in both observational and randomized survival studies.
+
+## R Code
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 #| eval: false
+###############################################################################
+# Chapter 14 R Code
+#
+# This script reproduces all major numerical results in Chapter 14, including:
+#   1. IPTW analysis (marginal structural models) on the German Breast Cancer
+#      (GBC) data
+#   2. IPTW & IPCW analysis on the HAART dataset (HIV/AIDS study)
+###############################################################################
 
-##################################################################
-# This code generates all numerical results in chapter 14.     ##
-##################################################################
 
-
+#==============================================================================
+# (A) IPTW Analysis for the German Breast Cancer (GBC) Data
+#==============================================================================
 library(survival)
-##############################################
-# GBC study
-#############################################
-#read in the complete data
+library(ipw)
+
+#------------------------------------------------------------------------------
+# 1. Read and Prepare GBC Data
+#------------------------------------------------------------------------------
 gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
 
-#subset to first event data
-#Sort the data by time within each id
-o <- order(gbc$id,gbc$time)
-gbc <- gbc[o,]
-#get the first row for each id
-data.CE <- gbc[!duplicated(gbc$id),]
+# Sort the data by time within each id
+o   <- order(gbc$id, gbc$time)
+gbc <- gbc[o, ]
 
-#set status=1 if status==2 or 1
-data.CE$status <- (data.CE$status>0)+0
+# Keep the first row for each id => first event data
+data.CE <- gbc[!duplicated(gbc$id), ]
+
+# Set status = 1 if status in {1, 2}
+data.CE$status <- as.integer(data.CE$status > 0)
 
 head(data.CE)
 
-
-######################
-# Section 14.2.3
-######################
-
-# create treatment variable A
-# A=1: hormone treatment
-# A=0: non-treatment
+#------------------------------------------------------------------------------
+# 2. Construct Treatment Indicator
+#------------------------------------------------------------------------------
+# A=1: hormone therapy, A=0: no hormone
 data.CE$A <- data.CE$hormone - 1
 
+#------------------------------------------------------------------------------
+# 3. Estimate Propensity Scores via ipwpoint()
+#------------------------------------------------------------------------------
+tmp <- ipwpoint(
+  exposure    = A,
+  family      = "binomial",
+  link        = "logit",
+  denominator = ~ meno + size + factor(grade) + nodes + prog + estrg,
+  data        = data.CE
+)
+
+#------------------------------------------------------------------------------
+# 4. Naive vs. IPTW Kaplan-Meier Estimates
+#------------------------------------------------------------------------------
+# Naive version (unweighted)
+obj.naive <- survfit(Surv(time, status) ~ A, data = data.CE)
+
+# IPTW version (using tmp$ipw.weights)
+obj.iptw  <- survfit(
+  Surv(time, status) ~ A,
+  weights = tmp$ipw.weights,
+  data    = data.CE
+)
+
+#------------------------------------------------------------------------------
+# 5. Marginal Structural Cox Model (IPTW)
+#------------------------------------------------------------------------------
+obj_cox_iptw <- coxph(
+  Surv(time, status) ~ A,
+  weights = tmp$ipw.weights,
+  data    = data.CE
+)
+obj_cox_naive <- coxph(
+  Surv(time, status) ~ A,
+  data = data.CE
+)
+
+# Print summaries for comparison
+obj_cox_iptw
+obj_cox_naive
+
+#------------------------------------------------------------------------------
+# 6. Plot Naive vs. IPTW-Adjusted Kaplan-Meier Curves
+#------------------------------------------------------------------------------
+plot(
+  obj.naive,
+  xlim  = c(0, 80),
+  lwd   = 2,
+  frame = FALSE,
+  lty   = c(2, 1),
+  xlab  = "Time (months)",
+  ylab  = "Relapse-free survival probabilities",
+  cex.lab  = 1.5,
+  cex.axis = 1.5
+)
+lines(
+  obj.iptw,
+  col     = 'red',
+  lty     = c(2, 1),
+  cex.lab = 1.5,
+  cex.axis= 1.5
+)
+
+legend(
+  1, 0.3,
+  lty = c(2:1, 2:1),
+  col = rep(c("black", "red"), each = 2),
+  legend = c(
+    "No Hormone (naive)",
+    "Hormone (naive)",
+    "No Hormone (IPTW)",
+    "Hormone (IPTW)"
+  ),
+  lwd = 2, cex = 1.5
+)
 
 
-# Load the ipw package for propensity score calculation
-library(ipw)
-
-# compute propensity score for A against
-# menopausal status, tumor size, grade, nodes,
-# progesterone and estrogen receptor levels
-tmp <- ipwpoint(exposure=A,family="binomial",link="logit",
-              denominator=~ meno+size+factor(grade)+nodes+
-                  prog+estrg, data=data.CE)
-
-# naive version (unweighted)
-obj.naive <- survfit(Surv(time,status)~A,data=data.CE)
-# IPTW version (weighted by temp$ipw.weights computed from the
-#   ipwpoint() function)
-obj <- survfit(Surv(time,status) ~ A,weights = tmp$ipw.weights, data = data.CE)
-
-
-# IPTW Cox model (essentially a marginal structural Cox model)
-coxph(Surv(time,status)~A,weights=tmp$ipw.weights,data=data.CE)
-
-coxph(Surv(time,status)~A,data=data.CE)
-
-
-#########################################################
-# Figure 15.3 Naive and IPTW-adjusted Kaplan--Meier 
-# curves for the German Breast Cancer study by treatment
-#########################################################
-plot(obj.naive, xlim=c(0,80),lwd=2,frame=F, lty=c(2,1),
-     xlab="Time (months)",ylab="Relaspe-free survival probabilities",
-     cex.lab=1.5,cex.axis=1.5)
-
-lines(obj,col='red',lty=c(2,1), cex.lab=1.5,cex.axis=1.5)
-legend(1,0.3,lty=c(2:1,2:1), col=rep(c("black","red"),each=2),
-       c("No Hormone (naive)","Hormone (naive)",
-         "No Hormone (IPTW)","Hormone (IPTW)"),
-       lwd=2,cex=1.5)
-
-
-
-################################
-# Section 14.3.3 HIV/AIDS study 
-################################
-
-# need the ipw package
+#==============================================================================
+# (B) IPTW & IPCW Analysis of the HAART Data (HIV/AIDS Study)
+#==============================================================================
+# The "haartdat" dataset is included with {ipw}
 data("haartdat")
 colnames(haartdat)[8] <- "cd4"
 
 head(haartdat)
 
+#------------------------------------------------------------------------------
+# 1. Compute IPTW and IPCW Weights with ipwtm()
+#------------------------------------------------------------------------------
+# (A) IPTW weights for time-varying treatment "haartind"
+iptw <- ipwtm(
+  exposure = haartind,
+  family   = "survival",
+  numerator   = ~ sex + age,
+  denominator = ~ cd4 + sex + age,
+  id       = patient,
+  tstart   = tstart,
+  timevar  = fuptime,
+  type     = "first",
+  data     = haartdat
+)
 
+# (B) IPCW weights for dropout (censoring)
+ipcw <- ipwtm(
+  exposure = dropout,
+  family   = "survival",
+  numerator   = ~ sex + age,
+  denominator = ~ cd4 + sex + age,
+  id       = patient,
+  tstart   = tstart,
+  timevar  = fuptime,
+  type     = "first",
+  data     = haartdat
+)
 
-# Compute the IPTW weights
-iptw <- ipwtm(exposure = haartind, family = "survival",
-          numerator = ~ sex + age, denominator = ~ cd4 + sex + age,
-          id = patient, tstart = tstart, timevar = fuptime, type = "first",
-          data = haartdat)
+#------------------------------------------------------------------------------
+# 2. Marginal Structural Cox Model (IPTW * IPCW)
+#------------------------------------------------------------------------------
+msm_fit <- coxph(
+  Surv(tstart, fuptime, event) ~ haartind + sex + age + cluster(patient),
+  data    = haartdat,
+  weights = iptw$ipw.weights * ipcw$ipw.weights
+)
+summary(msm_fit)
 
-# Compute the IPCW weights
-ipcw <- ipwtm(exposure = dropout, family = "survival",
-              numerator = ~ sex + age, denominator = ~ cd4 + sex + age,
-              id = patient, tstart = tstart, timevar = fuptime, type = "first",
-              data = haartdat)
+#------------------------------------------------------------------------------
+# 3. Naive Cox Model (Ignoring Weights)
+#------------------------------------------------------------------------------
+naive_fit <- coxph(
+  Surv(tstart, fuptime, event) ~ haartind + sex + age + cluster(patient),
+  data = haartdat
+)
+summary(naive_fit)
 
-# Fit IPTW/IPCW marginal structural Cox model
-obj <- coxph(Surv(tstart, fuptime, event) ~ haartind + sex + age+ 
-               cluster(patient), data = haartdat, 
-             weights = iptw$ipw.weights*ipcw$ipw.weights)
-summary(obj)
-
-
-# Naive Cox model with time-varying treatment
-obj_naive <- coxph(Surv(tstart, fuptime, event) ~ haartind + sex + age+ 
-               cluster(patient), data = haartdat)
-summary(obj_naive)
 ```
+

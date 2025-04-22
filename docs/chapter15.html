@@ -222,15 +222,101 @@ window.Quarto = {
  <span class="menu-text">Chapter 2 - Mathematical Foundations</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 3 - Nonparametric Estimation and Testing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4 - Cox Proportional Hazards Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 5 - Other Non- and Semi-parametric Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 6 - Sample Size Determination and Study Design</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 7 - Left Truncation and Interval Censoring</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Part II - Complex Outcomes</span></span>
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part II - Complex Outcomes</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 8 - Multivariate Failure Times</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 9 - Recurrent Events</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 10 - Competing and Semi-Competing Risks</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 11 - Joint Analysis of Longitudinal and Survival Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 12 - Multistate Modeling of Life History</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 13 - Composite Endpoints</span></a>
+  </div>
+</li>
+      </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Part III - Special Topics</span></span>
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part III - Special Topics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 14 - Causal Inference in Survival Analysis</span></a>
+  </div>
+</li>
+      </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <span class="sidebar-item-text sidebar-link text-start">
@@ -480,21 +566,21 @@ window.Quarto = {
 <span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a><span class="co"># Conduct 10-fold cross-validation (xval = 10),</span></span>
 <span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a><span class="co"># with minimum terminal node size 2 (minbucket = 2)</span></span>
-<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> hormone<span class="sc">+</span>meno<span class="sc">+</span>size<span class="sc">+</span>grade<span class="sc">+</span>nodes<span class="sc">+</span> </span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno <span class="sc">+</span> size <span class="sc">+</span> grade <span class="sc">+</span> nodes <span class="sc">+</span> </span>
 <span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>              prog<span class="sc">+</span>estrg<span class="sc">+</span>age,</span>
 <span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>             <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">xval =</span> <span class="dv">10</span>, <span class="at">minbucket =</span> <span class="dv">2</span>, <span class="at">cp=</span><span class="dv">0</span>),</span>
 <span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> train)</span>
 <span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(obj)</span>
 <span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a><span class="co">#             CP nsplit rel.error  xerror   xstd</span></span>
-<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a><span class="co"># 1  0.07556835      0   1.00000 1.00411 0.046231</span></span>
-<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a><span class="co"># 2  0.03720019      1   0.92443 0.96817 0.047281</span></span>
-<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a><span class="co"># 3  0.02661914      2   0.88723 0.95124 0.046567</span></span>
-<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a><span class="co"># 4  0.01716925      3   0.86061 0.92745 0.046606</span></span>
-<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a><span class="co"># 5  0.01398306      4   0.84344 0.92976 0.047514</span></span>
-<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a><span class="co"># 6  0.01394869      5   0.82946 0.93941 0.048404</span></span>
-<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a><span class="co"># 7  0.01055028      9   0.77120 0.97722 0.052133</span></span>
-<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a><span class="co"># 8  0.01053135     10   0.76065 1.00140 0.054295</span></span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             CP nsplit rel.error  xerror   xstd</span></span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  0.07556835      0   1.00000 1.00411 0.046231</span></span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  0.03720019      1   0.92443 0.96817 0.047281</span></span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  0.02661914      2   0.88723 0.95124 0.046567</span></span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  0.01716925      3   0.86061 0.92745 0.046606</span></span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  0.01398306      4   0.84344 0.92976 0.047514</span></span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  0.01394869      5   0.82946 0.93941 0.048404</span></span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  0.01055028      9   0.77120 0.97722 0.052133</span></span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  0.01053135     10   0.76065 1.00140 0.054295</span></span>
 <span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(obj)</span></span>
 <span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a></span>
@@ -587,6 +673,7 @@ window.Quarto = {
 <span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a>       <span class="fu">c</span>(<span class="st">"Survival Tree"</span>,<span class="st">"Cox-lasso"</span>,<span class="st">"Cox-full"</span>),<span class="at">cex=</span><span class="fl">1.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+
 
 
 </section>

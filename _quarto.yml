@@ -41,7 +41,7 @@ website:
           - chapter13.qmd
       - section: "Part III - Special Topics" 
         contents:
-          # - chapter14.qmd
+          - chapter14.qmd
           # - chapter15.qmd
       - section: "Miscellaneous"
         contents:
