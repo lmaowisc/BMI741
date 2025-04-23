@@ -4985,7 +4985,7 @@
     "href": "chap14.html#hw6-due-april-30",
     "title": "Applied Survival Analysis",
     "section": "HW6 (Due April 30)",
-    "text": "HW6 (Due April 30)\n\nProblem 12.10\n\nData in Files &gt;&gt; Data &gt;&gt; Bone Marrow Transplant KM\nYou may need to restructure the dataset for multistate analysis\n\nProblem 13.13\nProblem 14.10\n(Extra credit) Problem 14.9"
+    "text": "HW6 (Due April 30)\n\nProblem 12.10\n\nData in Files &gt;&gt; Data &gt;&gt; Bone Marrow Transplant KM\nYou may need to restructure the dataset for multistate analysis\n\nProblem 13.13\nProblem 14.10\n\nNote: Endpoint is the univariate time to first event\n\n(Extra credit) Problem 14.9"
   },
   {
     "objectID": "chap14.html#weighted-partial-likelihood-score-2",

@@ -727,4 +727,5 @@ What happens if you adjust for CD4 cell count as a time-varying *covariate*?
     -   You may need to restructure the dataset for multistate analysis
 -   Problem 13.13
 -   Problem 14.10
+    -   Note: Endpoint is the univariate time to first event
 -   (Extra credit) Problem 14.9
