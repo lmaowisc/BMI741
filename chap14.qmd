@@ -722,7 +722,9 @@ What happens if you adjust for CD4 cell count as a time-varying *covariate*?
 
 ## HW6 (Due April 30)
 
--   Problem 12.11
+-   Problem 12.10
+    -   Data in Files >> Data >> Bone Marrow Transplant KM
+    -   You may need to restructure the dataset for multistate analysis
 -   Problem 13.13
 -   Problem 14.10
 -   (Extra credit) Problem 14.9

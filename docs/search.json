@@ -4662,8 +4662,8 @@
     "objectID": "chap14.html#outline",
     "href": "chap14.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "",
-    "text": "The counterfactual framework\nInverse weighting and standardization\nEstimating causal survival curves\nMarginal structural models with time-varying treatment/confounding\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\def\\a{{(a)}} \\def\\b{{(1-a)}} \\def\\t{{(1)}} \\def\\c{{(0)}} \\def\\d{{\\rm d}} \\def\\T{{\\rm T}}\n\\]"
+    "section": "Outline",
+    "text": "Outline\n\n\nThe counterfactual framework\nInverse weighting and standardization\nEstimating causal survival curves\nMarginal structural models with time-varying treatment/confounding\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\def\\a{{(a)}} \\def\\b{{(1-a)}} \\def\\t{{(1)}} \\def\\c{{(0)}} \\def\\d{{\\rm d}} \\def\\T{{\\rm T}}\n\\]"
   },
   {
     "objectID": "chap14.html#association-vs-causation",
@@ -4943,7 +4943,7 @@
     "href": "chap14.html#inference",
     "title": "Applied Survival Analysis",
     "section": "Inference",
-    "text": "Inference\n\n\nResults\n\nHAART initiation reduces the mortality risk by \\(1 – 0.382 = 61.8\\%\\)\nCox model without adjusting for CD4 confounding \\(\\to\\) only \\(46.1\\%\\) reduction\n\nPatients who initiate HAART tend to have poor prognosis\n\n\n\n\nsummary(obj)\n#&gt;              coef exp(coef) se(coef) robust se      z Pr(&gt;|z|)    \n#&gt; haartind -0.96171   0.38224  0.43017   0.45148 -2.130 0.033160 *  \n#&gt; sex       0.09761   1.10253  0.43770   0.45351  0.215 0.829592    \n#&gt; age       0.06400   1.06609  0.01414   0.01678  3.815 0.000136 ***\n\n\n\n\n\n\n\nExercise\n\n\n\nWhat happens if you adjust for CD4 cell count as a time-varying covariate?"
+    "text": "Inference\n\n\nResults\n\nHAART initiation reduces the mortality risk by \\(1 – 0.382 = 61.8\\%\\)\nCox model without adjusting for CD4 confounding \\(\\to\\) only \\(46.1\\%\\) reduction\n\nPatients who initiate HAART tend to have poor prognosis\n\n\n\n\nsummary(obj)\n#&gt;              coef exp(coef) se(coef) robust se      z Pr(&gt;|z|)    \n#&gt; haartind -0.96171   0.38224  0.43017   0.45148 -2.130 0.033160 *  \n#&gt; sex       0.09761   1.10253  0.43770   0.45351  0.215 0.829592    \n#&gt; age       0.06400   1.06609  0.01414   0.01678  3.815 0.000136 ***\n\n\n\n\n\n\n\nExercise\n\n\nWhat happens if you adjust for CD4 cell count as a time-varying covariate?"
   },
   {
     "objectID": "chap14.html#notes-i",
@@ -4985,7 +4985,7 @@
     "href": "chap14.html#hw6-due-april-30",
     "title": "Applied Survival Analysis",
     "section": "HW6 (Due April 30)",
-    "text": "HW6 (Due April 30)\n\nProblem 12.11\nProblem 13.13\nProblem 14.10\n(Extra credit) Problem 14.9"
+    "text": "HW6 (Due April 30)\n\nProblem 12.10\n\nData in Files &gt;&gt; Data &gt;&gt; Bone Marrow Transplant KM\nYou may need to restructure the dataset for multistate analysis\n\nProblem 13.13\nProblem 14.10\n(Extra credit) Problem 14.9"
   },
   {
     "objectID": "chap14.html#weighted-partial-likelihood-score-2",
