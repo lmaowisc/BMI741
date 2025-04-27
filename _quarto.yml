@@ -42,11 +42,10 @@ website:
       - section: "Part III - Special Topics" 
         contents:
           - chapter14.qmd
-          # - chapter15.qmd
+          - chapter15.qmd
       - section: "Miscellaneous"
         contents:
-          # - rmtif.qmd
-          # - wa_estimands.qmd
+          # - ce/index.qmd
        
         
 format:
