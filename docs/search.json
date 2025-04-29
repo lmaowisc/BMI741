@@ -5492,5 +5492,166 @@
       "Part III - Special Topics",
       "Chapter 15 - Machine Learning in Survival Analysis"
     ]
+  },
+  {
+    "objectID": "quiz4.html",
+    "href": "quiz4.html",
+    "title": "Quiz 4: Multistate Models",
+    "section": "",
+    "text": "You have 10 minutes to complete this quiz.\nAnswer all questions concisely.\nShow all work clearly where calculations are required."
+  },
+  {
+    "objectID": "quiz4.html#instructions",
+    "href": "quiz4.html#instructions",
+    "title": "Quiz 4: Multistate Models",
+    "section": "",
+    "text": "You have 10 minutes to complete this quiz.\nAnswer all questions concisely.\nShow all work clearly where calculations are required."
+  },
+  {
+    "objectID": "quiz4.html#question-multistate-model-for-liver-disease-progression-5-points",
+    "href": "quiz4.html#question-multistate-model-for-liver-disease-progression-5-points",
+    "title": "Quiz 4: Multistate Models",
+    "section": "Question: Multistate Model for Liver Disease Progression (5 points)",
+    "text": "Question: Multistate Model for Liver Disease Progression (5 points)\nIn a study of patients with chronic liver disease, individuals are initially diagnosed with compensated cirrhosis, meaning that their liver function is impaired but they have not yet developed major symptoms. Over time, some patients experience disease progression and develop decompensated cirrhosis, characterized by clinical events such as ascites, variceal bleeding, or hepatic encephalopathy. At any point, patients may become eligible for a liver transplant, either directly from the compensated stage or after decompensation. Finally, patients may die after they develop decompensated cirrhosis — either without ever receiving a transplant, or after undergoing a transplant.\n\n(a) (5 points)\nDraw a multistate diagram showing the four patient states — compensated cirrhosis, decompensated cirrhosis, liver transplant, and death — and all possible transitions among them.\n$$\n$$\n\n\n(b) (5 points)\nAnswer the following questions:\n\nWhich state(s) are absorbing? Briefly explain your reasoning.\n\nWould a Markov or a semi-Markov model be more appropriate for describing the risk of death after liver transplantation? Explain their differences."
+  },
+  {
+    "objectID": "recap.html#outline",
+    "href": "recap.html#outline",
+    "title": "Applied Survival Analysis",
+    "section": "Outline",
+    "text": "Outline\n\nWhat have we learned (and what have we not)?\n\nBackground\nUnivariate event time\nComplex outcomes\nSpecial topics (causal inference and machine learning)\n\nAre learning objectives achieved?\nWhat’s next?\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]"
+  },
+  {
+    "objectID": "recap.html#why-bmi-741",
+    "href": "recap.html#why-bmi-741",
+    "title": "Applied Survival Analysis",
+    "section": "Why BMI-741?",
+    "text": "Why BMI-741?\n\nCensoring\n\nOutcome event does not occur by end of follow-up\n\n\n\n\n\nPartial information (Ch 1)\n\nHandle with care (standard methods biased) \n\n\n\n\nDescriptive analysis (Ch 1)\n\nBaseline characteristics\nEvent rate"
+  },
+  {
+    "objectID": "recap.html#mathematical-notation",
+    "href": "recap.html#mathematical-notation",
+    "title": "Applied Survival Analysis",
+    "section": "Mathematical Notation",
+    "text": "Mathematical Notation\n\nHazard function (instantaneous risk at \\(t\\)) \\[\\lambda(t)=\\pr(t\\leq T&lt;t+\\dd t\\mid T\\geq t)/\\dd t\\]\nCounting process notation \n\n\\(N(t)\\): number of observed (possibly censored) events by \\(t\\)\n\nMean-zero (martingale) residual (Ch 2) \\[\n\\dd M(t) = \\underbrace{\\dd N(t)}_{\\rm observed} - I(X\\geq t)\\underbrace{\\lambda(t)}_{\\rm model-based}\\dd t\n\\]\n\nConstruct estimation procedures\nAssess model fit"
+  },
+  {
+    "objectID": "recap.html#standard-methods",
+    "href": "recap.html#standard-methods",
+    "title": "Applied Survival Analysis",
+    "section": "Standard Methods",
+    "text": "Standard Methods\n\nDiscrete hazards \\(\\dd\\hat\\Lambda(t)=d_j/n_j\\)\n\nCentral to standard, hazard-based methods (Ch 3 & 4) \n\n\n\n\n\n\n\n\n\n\nR-function\n\n\n\n\nKaplan-Meier curve\nsurvival::survfit()\n\n\nLog-rank test\nsurvival::survdiff()\n\n\nCox model\nsurvival::coxph()"
+  },
+  {
+    "objectID": "recap.html#model-diagnostics",
+    "href": "recap.html#model-diagnostics",
+    "title": "Applied Survival Analysis",
+    "section": "Model Diagnostics",
+    "text": "Model Diagnostics\n\nCox model residual analysis (Ch 4)\n\nobj &lt;- coxph(Surv(time, status) ~ covariates)\n\n\n\n\n\n\n\n\n\n\nResidual type\nMain use\nCode\n\n\n\n\nCox-Snell\nOverall fit\nstatus-resid(obj, type = \"martingale\")\n\n\nScheonfeld\nProportionality\ncox.zph(obj)\n\n\nMartingale/Deviance\nCovariate form; link functionl; outliers\nresid(obj, type = c(\"martingale\", \"deviance\"))\n\n\n\n\nSimilar strategies for other Cox-type models\n\nFine-Gray model for competing risks (Ch 8) (R-package crskdiag)"
+  },
+  {
+    "objectID": "recap.html#importance-of-model-checking",
+    "href": "recap.html#importance-of-model-checking",
+    "title": "Applied Survival Analysis",
+    "section": "Importance of Model Checking",
+    "text": "Importance of Model Checking\n\nModel diagnostics are important…"
+  },
+  {
+    "objectID": "recap.html#non-cox-methods",
+    "href": "recap.html#non-cox-methods",
+    "title": "Applied Survival Analysis",
+    "section": "Non-Cox Methods",
+    "text": "Non-Cox Methods\n\nIf Cox model doesn’t fit… (Ch 5)\n\n\n\n\n\n\n\n\n\nEffect size\nSoftware\n\n\n\n\n\\(\\tau\\)-RMST\nDifference/ratio in average life time\nsurvRM2::rmst2()\n\n\nAdditive hazards\nRisk difference\naddhazard::ah()\n\n\nProportional odds\nOdds ratio for early event\ntimereg::prop.odds()\n\n\nAccelerated failure time\nRatio in life time\naftgee::aftgee()"
+  },
+  {
+    "objectID": "recap.html#sample-size-calculation",
+    "href": "recap.html#sample-size-calculation",
+    "title": "Applied Survival Analysis",
+    "section": "Sample Size Calculation",
+    "text": "Sample Size Calculation\n\nInput\n\nType I error \\(\\alpha=0.05\\); Desired power \\(\\gamma = 0.8, 0.9\\)\nAssignment proportion \\(q = E(Z)\\) (e.g., 0.5)\nNuisance parameter (affected by censoring distribution)\n\nLog-rank: \\(\\psi=\\pr(T\\leq C\\mid Z=0)\\) proportion of failure\n\\(\\tau\\)-RMST: \\(\\zeta(\\tau)=\\int_0^\\tau \\left\\{\\int_t^\\tau S_0(t)\\dd t\\right\\}^2\\pi(t)^{-1}\\lambda_0(t)\\dd t\\)\n\nEffect sizes 𝜃: log-hazard ratio; 𝜃(𝜏): difference in 𝜏-RMST\n\nFormula (Ch 6)\n\nR-programs available \\[\n\\mbox{Log-rank}: n= \\frac{(z_{1-\\alpha/2}+z_{\\gamma})^2}{q(1-q)\\psi\\theta^2}\\,\\,\\,\\,\n\\mbox{$\\tau$-RMST}: n= \\frac{\\zeta(\\tau)(z_{1-\\alpha/2}+z_{\\gamma})^2}{q(1-q)\\theta(\\tau)^2}\n\\]"
+  },
+  {
+    "objectID": "recap.html#other-truncationcensoring",
+    "href": "recap.html#other-truncationcensoring",
+    "title": "Applied Survival Analysis",
+    "section": "Other Truncation/Censoring",
+    "text": "Other Truncation/Censoring\n\nLeft truncation (delayed entry; Ch 7)\n\nSurv(start, stop, status): (start, stop) \\(=(T_L, X)\\) \n\n\n\n\n\nInterval censoring (Ch 7)\n\nAsymptomatic event tested at periodic visits\n\nHIV infection; tumor formation\n\nNonparametric MLE (NPMLE)\n\nProportional hazards/odds models\nR-package IntCens"
+  },
+  {
+    "objectID": "recap.html#multiplerecurrent-events",
+    "href": "recap.html#multiplerecurrent-events",
+    "title": "Applied Survival Analysis",
+    "section": "Multiple/Recurrent Events",
+    "text": "Multiple/Recurrent Events\n\nKey feature (Ch 8 & 9)\n\nWithin-subject correlations between multiple events\n\n\n\n\n\n\n\n\n\nFrailty (conditional) models\nMarginal models\n\n\n\n\nInterpretation\nUnit-level hazard\nPopulation-level hazard\n\n\nComputation\nIntensive\nSimple\n\n\nStatistical efficiency\nEfficient (more assumptions)\nLess efficient (fewer assumptions)\n\n\nRobustness\nLess robust (more assumptions)\nRobust (fewer assumptions)\n\n\nAssociation measure\nVariance of frailty term\nNo such measure"
+  },
+  {
+    "objectID": "recap.html#recurrent-events",
+    "href": "recap.html#recurrent-events",
+    "title": "Applied Survival Analysis",
+    "section": "Recurrent Events",
+    "text": "Recurrent Events\n\nR-code and book (Ch 9)\n\n\n\n\n# Multiplicative intensity (Andersen-Gill)\ncoxph(Surv(start, stop, status) ~ covariates)\n\n# Multiplicative intensity with Gamma frailty \ncoxph(Surv(start, stop, status) ~ covariates + \n        frailty(id, distribution = \"gamma\"))\n\n# Proportional rates/means (marginal)\n# (recommended)\ncoxph(Surv(start, stop, status) ~ covariates \n      + cluster(id))"
+  },
+  {
+    "objectID": "recap.html#semi-competing-risks",
+    "href": "recap.html#semi-competing-risks",
+    "title": "Applied Survival Analysis",
+    "section": "(Semi-)Competing Risks",
+    "text": "(Semi-)Competing Risks\n\nCompeting risks (Ch 10)\n\nCause-specific hazards\n\nConditional failure rate of \\(k\\)th cause on survivors\ncoxph(Surv(time, status == k) ~ covariates)\n\nCumulative incidence\n\nMarginal failure probability in whole population under other risks\nGray’s estimator/test cmprk::cuminc(ftime, fstatus, group, strata)\nFine-Gray model cmprk::crr(ftime, fstatus, cov1, failcode = k)\n\n\nRecurrent events in presence of death (Ch 10)\n\nGhosh-Lin methods (R packages mets, reReg, etc.)"
+  },
+  {
+    "objectID": "recap.html#joint-models-with-longitudinal-data",
+    "href": "recap.html#joint-models-with-longitudinal-data",
+    "title": "Applied Survival Analysis",
+    "section": "Joint Models with Longitudinal Data",
+    "text": "Joint Models with Longitudinal Data\n\nTwo-stage joint models (Ch 11)\n\n\n\nLongitudinal sub-model \\[m_i(t)=\\gamma_0+\\gamma^\\T Z_i(t)+b_i^\\T\\tilde Z_i(t)\\]\n\nobj1 &lt;- nlme::lme()\n\nSurvival sub-model\n\n\\(\\pr\\{t\\leq T_i&lt;t+\\dd t\\mid Z_i^*, \\overline m_i(t)\\}=\\exp\\{\\beta^\\T Z_i^*+\\nu m_i(t)\\}\\lambda_0(t)\\dd t\\)\nobj2 &lt;- survival::coxph()\n\nJoining two models\n\nJM::jointModel(obj1, obj2, timeVar)"
+  },
+  {
+    "objectID": "recap.html#multistate-models",
+    "href": "recap.html#multistate-models",
+    "title": "Applied Survival Analysis",
+    "section": "Multistate Models",
+    "text": "Multistate Models\n\nAn approach to complex life history data (Ch 12)\n\n\\(Y(t)\\in \\{0, 1,\\ldots, K\\}\\,\\,\\,\\) \n\n\n\n\nTransition intensity: risk of going to another state given current state and history\nCox-type multiplicative intensity models\n\nMarkov or semi-Markov models for intensity \\(k\\to j\\)\ncoxph(Surv(start, stop, status) ~ covariates, subset = (from==k)&(to==j))"
+  },
+  {
+    "objectID": "recap.html#hierarchical-composite-endpoints",
+    "href": "recap.html#hierarchical-composite-endpoints",
+    "title": "Applied Survival Analysis",
+    "section": "Hierarchical Composite Endpoints",
+    "text": "Hierarchical Composite Endpoints\n\nMotivation\n\nImportance ranking of components\nDeath &gt; hospitalization &gt; minor symptoms\n\nStatistical methods (Ch 13)\n\nRMT-IF: net average time favorable to treatment\n\nModel-free, component-wise decomposable\nrmt::rmtfit()\n\nWin ratio regression\n\nPrioritized comparison between two subjects\nLog-Win/loss modeled as multiplicative function of \\(Z\\) with coeff \\(\\beta\\)\n\\(\\exp(\\beta)\\): WRs with unit increases in covariates\nWR::pwreg()"
+  },
+  {
+    "objectID": "recap.html#causal-inference",
+    "href": "recap.html#causal-inference",
+    "title": "Applied Survival Analysis",
+    "section": "Causal Inference",
+    "text": "Causal Inference\n\n\n\nCounterfactual framework (Ch 14)\n\nPotential outcomes \\(T^{(a)}\\) \\((a = 1, 0)\\)\n\nDirected Acyclic Graph (DAG) \n\nMarginal structural models\n\n\\(T^{(a)}\\) against \\(a\\) and other covariates\n\nInverse probability treatment weighting (IPTW)\nTime-varying treatment/confounding\nR-package: ipw to compute weights"
+  },
+  {
+    "objectID": "recap.html#machine-learning",
+    "href": "recap.html#machine-learning",
+    "title": "Applied Survival Analysis",
+    "section": "Machine Learning",
+    "text": "Machine Learning\n\nRegularized Cox model (Ch 15)\n\nPenalize log-partial likelihood by \\(L_1\\)-norm of \\(\\beta\\)\nSelected variables \\(\\{Z_{\\cdot j}: \\hat\\beta_j(\\lambda_{\\rm opt})\\neq 0, j=1,\\ldots, p\\}\\)\n\nglmnet::glmnet(Z, Surv(time, status), family =  \"cox\", alpha = 1)\n\n\nSurvival trees (Ch 15)\n\nRoot node \\(\\to\\) recursive splitting \\(\\to\\) pruning to prevent overfitting\n\nrpart:: rpart(Surv(time, status) ~ covariates)\n\n\nDeeping learning for survival analysis\n\nTutorial by Löschmann and Smorodina (2020)\n\nhttps://humboldt-wi.github.io/blog/research/information_systems_1920/group2_survivalanalysis"
+  },
+  {
+    "objectID": "recap.html#learning-outcomes",
+    "href": "recap.html#learning-outcomes",
+    "title": "Applied Survival Analysis",
+    "section": "Learning Outcomes",
+    "text": "Learning Outcomes\n\n\n\n\n\n\nOn Syllabus …\n\n\nAfter taking the course, students will be able to\n\nUnderstand the features of censored data and their impact on statistical inference.\nSelect appropriate non- and semi-parametric methods for various data types.\nEvaluate and verify assumptions for estimation and inference.\nApply statistical procedures to solve real-world problems using R (or SAS).\nClearly interpret and present analytical results to address substantive questions."
+  },
+  {
+    "objectID": "recap.html#springer-book",
+    "href": "recap.html#springer-book",
+    "title": "Applied Survival Analysis",
+    "section": "Springer Book",
+    "text": "Springer Book\n\nBook manuscript due to Springer by fall 2025\n\n\n\nCheck back on study site: https://lmaowisc.github.io/BMI741\nI welcome your feedback!"
+  },
+  {
+    "objectID": "recap.html#final-assignment",
+    "href": "recap.html#final-assignment",
+    "title": "Applied Survival Analysis",
+    "section": "Final Assignment",
+    "text": "Final Assignment\n\nPlease take a few minutes to complete course evaluation\n\nDeadline 5/2/2025\n\nTarget response rate: &gt; 90%\n\nYour feedback matters!"
   }
 ]

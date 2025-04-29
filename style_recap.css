@@ -1,0 +1,38 @@
+
+
+.reveal table {
+  font-size: 0.70em;
+}
+
+.title {
+  font-size: 80px !important;
+}
+
+.subtitle {
+  font-size: 50px !important;
+}
+
+
+.quarto-title-author-name {
+  font-size: 35px;
+  font-variant: small-caps
+}
+
+
+.math.inline {
+  font-size: 90%  !important;
+}
+
+
+.MathJax, .MathJax_Display  {
+    font-size: 75%  !important;
+}
+
+code.sourceCode {
+  font-size: 1.06em;
+  /* or try font-size: xx-large; */
+}
+
+.big-code{
+  font-size: 120%  
+}
