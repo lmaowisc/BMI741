@@ -20,10 +20,7 @@ Let $Y_a(t)$ denote the clinical state of a subject in treatment arm $a$ at time
 
 Examples include:
 
--   **Progressive disease (e.g., cancer)**: $Y_a(t) = 0$: remission,
-    $1$: relapse,
-    $2$: metastasis,
-    $3$: death ($K+1 = 3$).
+-   **Progressive disease (e.g., cancer)**: $Y_a(t) = 0$: remission, $1$: relapse, $2$: metastasis, $3$: death ($K+1 = 3$).
 
 -   **Recurrent hospitalizations with death**:\
     $Y_a(t)$ = number of hospitalizations up to $t$ (0 to $K$), with $K+1$ = death.
@@ -34,36 +31,30 @@ The process $Y_a(t)$ is assumed to be *progressive*, i.e., non-decreasing over t
 
 The RMT-IF measures the average duration over which a subject in one group is in a more favorable state than a subject in the other group, over a follow-up window $[0, \tau]$.
 
--   **Definition**:
-    $$
+-   **Definition**: $$
     \theta(\tau) = E\Bigg[ \underbrace{\int_0^\tau I\{ Y_1(t) < Y_0(t)\} \mathrm{d} t}_{\text{Win time } W^{(1, 0)}(\tau)} \Bigg]
                   - E\Bigg[ \underbrace{\int_0^\tau I\{ Y_0(t) < Y_1(t) \} \mathrm{d} t}_{\text{Loss time } W^{(0, 1)}(\tau)}  \Bigg].
     $$
 
 ![](images/rmt_cases.png){fig-align="center" width="80%"}
 
--   **Component-wise decomposition**:
-    $$
+-   **Component-wise decomposition**: $$
     \theta(\tau) = \sum_{k=1}^{K+1} \theta_k(\tau),
-    $$
-    where each $\theta_k(\tau)$ corresponds to a net gain in time prior to entering state $k$.
+    $$ where each $\theta_k(\tau)$ corresponds to a net gain in time prior to entering state $k$.
 
 -   **Estimation**: Uses Kaplan–Meier survival curves for $T_{ak}$ = time to entry into state $k$ or worse.\
+
 -   **Interpretation**: Reduces to RMST when only two states are considered (e.g., survival vs. death).
 
--   **Regression**:
-    $$
+-   **Regression**: $$
     g\{\theta(Z_i, Z_j)(\tau)\} = \beta_\tau^\mathrm{T}(Z_i - Z_j),
-    $$
-    where $\theta(Z_i, Z_j)(\tau)$ is the conditional RMT-IF between covariate profiles $Z_i$ and $Z_j$.
-
+    $$ where $\theta(Z_i, Z_j)(\tau)$ is the conditional RMT-IF between covariate profiles $Z_i$ and $Z_j$.
 
 ### Win Ratio and Proportional Win-Fractions (PW) Model
 
 The *win ratio* compares all possible treatment–control subject pairs, assigning a “win” to the subject in the more favorable state based on a pre-specified hierarchical rule.
 
--   **Basic win ratio**:
-    $$
+-   **Basic win ratio**: $$
     \hat{\text{WR}} = \frac{\text{\# of treatment wins}}{\text{\# of control wins}}.
     $$
 
@@ -71,18 +62,17 @@ The *win ratio* compares all possible treatment–control subject pairs, assigni
     Compares cumulative histories $\mathcal{H}^*(t)$ up to time $t$ for two subjects, assigning 1 for a win and 0 otherwise.
 
 -   **Examples**:
-    - *Pocock win ratio* (PWR): prioritize survival first, then first nonfatal event.
-    - *Recurrent win ratio* (RWR): compare cumulative event counts and recency.
-    - *Time to first event*: inverse of hazard ratio.
-    - *Binary response*: reduces to odds ratio.
+
+    -   *Pocock win ratio* (PWR): prioritize survival first, then first nonfatal event.
+    -   *Recurrent win ratio* (RWR): compare cumulative event counts and recency.
+    -   *Time to first event*: inverse of hazard ratio.
+    -   *Binary response*: reduces to odds ratio.
 
 ![](images/comp_rwr.png){fig-align="center" width="80%"}
 
--   **PW model**:
-    $$
+-   **PW model**: $$
     \text{WR}(t; Z_i, Z_j) = \exp\left\{ \beta^\mathrm{T}(Z_i - Z_j) \right\}.
-    $$
-    This assumes proportional win fractions across time; $\exp(\beta_j)$ gives the win ratio per unit increase in covariate $j$.
+    $$ This assumes proportional win fractions across time; $\exp(\beta_j)$ gives the win ratio per unit increase in covariate $j$.
 
 -   **Inference**:\
     Estimation is performed via U-statistic–based pairwise comparisons and weighted logistic regression. Score processes are used for model checking.
@@ -102,15 +92,16 @@ summary(obj, tau = 4) # Summarize effect sizes at restriction time 4
 plot(obj)        # RMT-IF curve
 bouquet(obj)     # Bouquet plot
 ```
+
 Here:
 
 -   `id`: subject identifier;\
 -   `time`: time to event or censoring;\
 -   `status`: event type indicator
     -   `type = "recurrent"`: `1`: nonfatal event, `2`: death, `0`: censoring;\
-    -   `type = "multistate"`: `k`: a transition to state $k$ 
-      (`K+1` for death, `0` for censoring)
+    -   `type = "multistate"`: `k`: a transition to state $k$ (`K+1` for death, `0` for censoring)
 -   `trt`: treatment group (0 = control, 1 = treatment);\
+
 ```{r}
 #| eval: false
 ########################################
@@ -119,6 +110,7 @@ Here:
 library(WR)
 obj <- pwreg(ID, time, status, Z, strata = NULL)
 ```
+
 Here:
 
 -   `ID`: subject identifier;\
@@ -130,7 +122,6 @@ Here:
 ### Conclusion
 
 RMT-IF and PW models provide robust, interpretable alternatives to traditional time-to-first-event analysis for composite endpoints. They respect the ordering of clinical priorities and utilize full patient histories, including both fatal and nonfatal events. RMT-IF summarizes effects in absolute time units, while PW models yield covariate-adjusted win ratios with a semiparametric interpretation. Together, they offer powerful tools for improving clinical trial analyses of complex outcomes.
-
 
 ## R Code
 
@@ -147,6 +138,92 @@ RMT-IF and PW models provide robust, interpretable alternatives to traditional t
 #   1. RMT-IF analysis of the high-risk subgroup of the HF-ACTION study
 #   2. Additional illustration with the WR package for heart failure data
 ###############################################################################
+library(tidyverse)
+
+# -------------------------------------------------------------------
+# Example: two trajectories up to tau = 24 months
+# States: 0 = remission, 1 = relapse, 2 = death (absorbing)
+# -------------------------------------------------------------------
+tau <- 24
+
+# y-positions for the two groups (rows in the plot)
+ypos <- tibble(group = c("Control", "Treatment"),
+               y     = c(1, 2))
+
+# Follow-up lines: end at death time (Control) or tau (Treatment)
+lines_df <- tibble(
+  group = c("Control", "Treatment"),
+  start = c(0, 0),
+  end   = c(12, 24)  # Control dies at 12; Treatment alive through tau
+) %>%
+  left_join(ypos, by = "group")
+
+# Event times and types (shapes will encode event type)
+events_df <- tribble(
+  ~group,      ~time, ~event,     ~state,
+  "Control",        10, "Relapse",     1,
+  "Control",       12, "Death",       2,
+  "Treatment",     6, "Relapse",     1
+) %>%
+  left_join(ypos, by = "group")
+
+# Win/Loss shading "between events", per patient row
+# Intervals where Treatment is in a more favorable state than Control:
+# [6,10): Trt 0 vs Ctl 1  => Win for Treatment, Loss for Control
+# [12,24]: Trt 1 vs Ctl 2 => Win for Treatment, Loss for Control
+winloss_df <- tribble(
+  ~group,      ~xmin, ~xmax, ~outcome,
+  "Treatment",     6,    10,  "Loss",
+  "Control",       6,    10,  "Win",
+  "Treatment",    12,    24,  "Win",
+  "Control",      12,    24,  "Loss"
+) %>%
+  left_join(ypos, by = "group") %>%
+  mutate(ymin = y - 0.25,
+         ymax = y + 0.25)
+
+# Build plot
+p <- ggplot() +
+  # Shaded win/loss bands per patient row
+  geom_rect(data = winloss_df,
+            aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = outcome),
+            alpha = 0.3, color = NA) +
+  # Patient follow-up lines (terminate at death)
+  geom_segment(data = lines_df,
+               aes(x = start, xend = end, y = y, yend = y),
+               linewidth = 0.6, lineend = "round") +
+  # Event points: relapse vs death (different shapes)
+  geom_point(data = events_df,
+             aes(x = time, y = y, shape = event),
+             size = 3, stroke = 1.1) +
+  # Optional vertical guides at event boundaries
+  geom_vline(xintercept = c(6, 10, 12, tau), linetype = "dotted", linewidth = 0.3) +
+  # Axes and scales
+  scale_x_continuous("Time (months)",
+                     limits = c(0, tau),
+                     breaks = seq(0, tau, by = 6),
+                     expand = expansion(mult = c(0, 0.02))) +
+  scale_y_continuous(NULL, breaks = 1:2, limits = c(0.5, 2.5), 
+                     labels = c(expression(Y[0](t)), expression(Y[1](t)))) +
+  # filled square for nonfatal, dot for death
+  scale_shape_manual(values = c(Relapse = 15, Death = 16)) +  # 16 = filled circle,
+  scale_fill_manual(values = c(Win = "#66BB6A", Loss = "#EF5350")) + # green vs red
+  guides(linetype = "none") +
+  coord_cartesian(clip = "off") +
+  theme_classic(base_size = 11) +
+  theme(
+    legend.position = "top",
+    legend.title = element_blank(),
+    # plot.margin = margin(10, 20, 10, 40),
+    axis.text.y = element_text(size = 10),
+    axis.line.y = element_line(linewidth = 0.8)
+  ) 
+
+p
+
+# If you want to save:
+ggsave("images/comp_rmtif_lp.eps", p, width = 8, height = 3.0, device = cairo_ps)
+ggsave("images/comp_rmtif_lp.png", p, width = 8, height = 3.0, dpi = 300)
 
 
 #==============================================================================

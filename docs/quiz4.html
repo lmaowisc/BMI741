@@ -66,6 +66,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<meta property="og:title" content="Quiz 4: Multistate Models – BMI/STAT 741 Course Study Site">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://lmaowisc.github.io/BMI741/dc.jpg">
+<meta property="og:site_name" content="BMI/STAT 741 Course Study Site">
+<meta name="twitter:title" content="Quiz 4: Multistate Models – BMI/STAT 741 Course Study Site">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://lmaowisc.github.io/BMI741/surv_hex.png">
+<meta name="twitter:creator" content="@lmaowisc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image-height" content="600">
+<meta name="twitter:image-width" content="518">
+</head><body class="nav-sidebar docked nav-fixed">\usepackage{tikz}
+\usetikzlibrary{arrows.meta, automata, positioning}
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -98,20 +111,9 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Quiz 4: Multistate Models – BMI/STAT 741 Course Study Site">
-<meta property="og:description" content="">
-<meta property="og:image" content="https://lmaowisc.github.io/BMI741/dc.jpg">
-<meta property="og:site_name" content="BMI/STAT 741 Course Study Site">
-<meta name="twitter:title" content="Quiz 4: Multistate Models – BMI/STAT 741 Course Study Site">
-<meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://lmaowisc.github.io/BMI741/surv_hex.png">
-<meta name="twitter:creator" content="@lmaowisc">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image-height" content="600">
-<meta name="twitter:image-width" content="518">
-</head>
 
-<body class="nav-sidebar docked nav-fixed">
+
+
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -311,7 +313,7 @@ window.Quarto = {
   <li><a href="#b-5-points" id="toc-b-5-points" class="nav-link" data-scroll-target="#b-5-points">(b) (5 points)</a></li>
   </ul></li>
   </ul>
-</nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="quiz4.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -345,21 +347,22 @@ window.Quarto = {
 </section>
 <section id="question-multistate-model-for-liver-disease-progression-5-points" class="level2">
 <h2 class="anchored" data-anchor-id="question-multistate-model-for-liver-disease-progression-5-points">Question: Multistate Model for Liver Disease Progression (5 points)</h2>
-<p>In a study of patients with chronic liver disease, individuals are initially diagnosed with <strong>compensated cirrhosis</strong>, meaning that their liver function is impaired but they have not yet developed major symptoms. Over time, some patients experience disease progression and develop <strong>decompensated cirrhosis</strong>, characterized by clinical events such as ascites, variceal bleeding, or hepatic encephalopathy. At any point, patients may become eligible for a <strong>liver transplant</strong>, either directly from the compensated stage or after decompensation. Finally, patients may <strong>die</strong> after they develop decompensated cirrhosis — either without ever receiving a transplant, or after undergoing a transplant.</p>
+<p>In a study of patients with chronic liver disease, individuals are initially diagnosed with <strong>compensated cirrhosis</strong>, meaning that their liver function is impaired but they have not yet developed major symptoms. Over time, some patients experience disease progression adnd develop <strong>decompensated cirrhosis</strong>, characterized by clinical events such as ascites, variceal bleeding, or hepatic encephalopathy. At any point, patients may become eligible for a <strong>liver transplant</strong>, either directly from the compensated stage or after decompensation. Finally, patients may <strong>die</strong> after they develop decompensated cirrhosis — either without ever receiving a transplant, or after undergoing a transplant.</p>
 <section id="a-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="a-5-points">(a) (5 points)</h3>
 <p>Draw a multistate diagram showing the four patient states — compensated cirrhosis, decompensated cirrhosis, liver transplant, and death — and all possible transitions among them.</p>
-$$
-<p>$$</p>
 </section>
 <section id="b-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="b-5-points">(b) (5 points)</h3>
 <p>Answer the following questions:</p>
 <ol type="1">
-<li>Which state(s) are absorbing? Briefly explain your reasoning.<br>
-</li>
+<li>Which state(s) are absorbing? Briefly explain your reasoning.</li>
+</ol>
+<p><strong>State 3 (Death)</strong> is absorbing because, once a patient dies, no further transitions can occur.</p>
+<ol start="2" type="1">
 <li>Would a <em>Markov</em> or a <em>semi-Markov</em> model be more appropriate for describing the risk of death <em>after</em> liver transplantation? Explain their differences.</li>
 </ol>
+<p>A <strong>semi-Markov model</strong> is more appropriate for the transition from transplant to death. The risk of death depends on the <strong>time since transplant</strong>, not just the current state.</p>
 
 
 
