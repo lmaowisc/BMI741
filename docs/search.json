@@ -2047,8 +2047,8 @@
     "objectID": "chap5.html#outline",
     "href": "chap5.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "Outline",
-    "text": "Outline\n\n\nRestricted Mean Survival Time (RMST)\nAdditive Hazards (AH) Model\nProportional Odds (PO) Model\nAccelerated Failure Time (AFT) Model\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+    "section": "",
+    "text": "Restricted Mean Survival Time (RMST)\nAdditive Hazards (AH) Model\nProportional Odds (PO) Model\nAccelerated Failure Time (AFT) Model\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   },
   {
     "objectID": "chap5.html#motivation",
@@ -2295,8 +2295,8 @@
     "objectID": "chap6.html#outline",
     "href": "chap6.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "Outline",
-    "text": "Outline\n\n\nSample size for Cox model and RMST\nImpact of study design and censoring\nAn example using pilot study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+    "section": "",
+    "text": "Sample size for Cox model and RMST\nImpact of study design and censoring\nAn example using pilot study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   },
   {
     "objectID": "chap6.html#motivation",
@@ -2445,8 +2445,8 @@
     "objectID": "chap7.html#outline",
     "href": "chap7.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "Outline",
-    "text": "Outline\n\n\nLeft truncation mechanisms\nStandard and general methods for left truncation\nNon- and Semi-parametric methods for Interval censoring\nBangkok Metropolitan Administration HIV Study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+    "section": "",
+    "text": "Left truncation mechanisms\nStandard and general methods for left truncation\nNon- and Semi-parametric methods for Interval censoring\nBangkok Metropolitan Administration HIV Study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   },
   {
     "objectID": "chap7.html#truncation---biased-sampling",
@@ -2523,7 +2523,7 @@
     "href": "chap7.html#standard-methods---cox-model-iv",
     "title": "Applied Survival Analysis",
     "section": "Standard Methods - Cox Model (IV)",
-    "text": "Standard Methods - Cox Model (IV)\n\n\nPrediction of survival rate\n\nIf all subjects enter late, choose late cutoff \\(t_0^*\\)\nConditional survival function \\[\\begin{equation}\n\\hat\\pr(T &gt; t\\mid T\\geq t_0^*, Z) =\n\\exp\\left[-\\left\\{\\hat\\Lambda_0(t)- \\hat\\Lambda_0(t_0^*)\\right\\}\\exp(\\hat\\beta^\\T Z)\\right]\n\\end{equation}\\]\n\n\n\n\n\n\n\n\n\n\nExercise\n\n\nShow that \\[\\pr(T &gt; t\\mid T\\geq t_0^*, Z) =\n\\exp\\left[-\\left\\{\\Lambda_0(t)- \\Lambda_0(t_0^*)\\right\\}\\exp(\\beta^\\T Z)\\right]  \\] for any \\(t&gt;t_0^*\\) under the Cox model."
+    "text": "Standard Methods - Cox Model (IV)\n\n\nPrediction of survival rate\n\nIf all subjects enter late, choose late cutoff \\(t_0^*\\)\nConditional survival function \\[\\begin{equation}\n\\hat\\pr(T &gt; t\\mid T\\geq t_0^*, Z) =\n\\exp\\left[-\\left\\{\\hat\\Lambda_0(t)- \\hat\\Lambda_0(t_0^*)\\right\\}\\exp(\\hat\\beta^\\T Z)\\right]\n\\end{equation}\\]\n\n\n\n\n\n\n\n\n\n\nExercise\n\n\n\nShow that \\[\\pr(T &gt; t\\mid T\\geq t_0^*, Z) =\n\\exp\\left[-\\left\\{\\Lambda_0(t)- \\Lambda_0(t_0^*)\\right\\}\\exp(\\beta^\\T Z)\\right]  \\] for any \\(t&gt;t_0^*\\) under the Cox model."
   },
   {
     "objectID": "chap7.html#general-approach---likelihood",
@@ -2756,8 +2756,8 @@
     "objectID": "chap8.html#outline",
     "href": "chap8.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "Outline",
-    "text": "Outline\n\n\nIntroduction to frailty models\nMultivariate Cox model with shared frailty\nExample: A multi-center lung cancer study\nMarginal models and robust inference\nExample: the diabetic retinopathy study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+    "section": "",
+    "text": "Introduction to frailty models\nMultivariate Cox model with shared frailty\nExample: A multi-center lung cancer study\nMarginal models and robust inference\nExample: the diabetic retinopathy study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   },
   {
     "objectID": "chap8.html#multivariate-failure-times",
@@ -2862,7 +2862,7 @@
     "href": "chap8.html#software-survivalcoxph-ii",
     "title": "Applied Survival Analysis",
     "section": "Software: survival::coxph() (II)",
-    "text": "Software: survival::coxph() (II)\n\n\nScenario 3: Gamma-frailty with different \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\nDifferent failure types enum in unit id with different covariate effects\nComponent specific \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\n\n\n\ncoxph(Surv(time, status) ~ covariates * strata(enum) + \n      frailty(id, distribution = \"gamma\"))\n\n\n\n\n\n\n\n\n\n\nProblem\n\n\nHow to set up a model of the form: \\[\n\\lambda_k(t\\mid Z, \\xi) \\;=\\; \\xi\\exp\\left(\\beta_k^\\T Z_{(1)} + \\gamma^\\T Z_{(2)}\\right) \\eta_{k0}'(t),\n\\] where the effects of \\(Z_{(1)}\\) are component-specific while those of \\(Z_{(2)}\\) are component-invariant?"
+    "text": "Software: survival::coxph() (II)\n\n\nScenario 3: Gamma-frailty with different \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\nDifferent failure types enum in unit id with different covariate effects\nComponent specific \\(\\beta_k\\) and \\(\\eta_{k0}\\)\n\n\n\n\ncoxph(Surv(time, status) ~ covariates * strata(enum) + \n      frailty(id, distribution = \"gamma\"))\n\n\n\n\n\n\n\n\n\n\nProblem\n\n\n\nHow to set up a model of the form: \\[\n\\lambda_k(t\\mid Z, \\xi) \\;=\\; \\xi\\exp\\left(\\beta_k^\\T Z_{(1)} + \\gamma^\\T Z_{(2)}\\right) \\eta_{k0}'(t),\n\\] where the effects of \\(Z_{(1)}\\) are component-specific while those of \\(Z_{(2)}\\) are component-invariant?"
   },
   {
     "objectID": "chap8.html#study-background",
@@ -2904,7 +2904,7 @@
     "href": "chap8.html#estimation-ii",
     "title": "Applied Survival Analysis",
     "section": "Estimation (II)",
-    "text": "Estimation (II)\n\n\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)\n\nSolve \\(U_{n}(\\hat\\beta)=0\\) \\[\\begin{align}\\label{eq:multi:ee_unstra}\nU_{n}(\\beta)&=\\Pn\\sum_{k=1}^K\\int_0^\\infty\\left\\{Z_i-\n\\frac{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)Z_j\\exp(\\beta^\\T Z_j)}{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)\\exp(\\beta^\\T Z_j)}\\right\\}\\times\\dd N_{ki}(t)\n\\end{align}\\]\n\n\n\n\n\n\n\n\n\n\nExercise: Breslow estimator\n\n\nConstruct proper Breslow estimators for the baseline function(s) given \\(\\hat\\beta\\) under:\n\nSame \\(\\beta\\) & free \\(\\Lambda_{k0}\\)\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)"
+    "text": "Estimation (II)\n\n\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)\n\nSolve \\(U_{n}(\\hat\\beta)=0\\) \\[\\begin{align}\\label{eq:multi:ee_unstra}\nU_{n}(\\beta)&=\\Pn\\sum_{k=1}^K\\int_0^\\infty\\left\\{Z_i-\n\\frac{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)Z_j\\exp(\\beta^\\T Z_j)}{\\sum_{k'=1}^K\\sum_{j=1}^nI(X_{k'j}\\geq t)\\exp(\\beta^\\T Z_j)}\\right\\}\\times\\dd N_{ki}(t)\n\\end{align}\\]\n\n\n\n\n\n\n\n\n\n\nExercise: Breslow estimator\n\n\n\nConstruct proper Breslow estimators for the baseline function(s) given \\(\\hat\\beta\\) under:\n\nSame \\(\\beta\\) & free \\(\\Lambda_{k0}\\)\nSame \\(\\beta\\) & \\(\\Lambda_{0}\\)"
   },
   {
     "objectID": "chap8.html#robust-variance-sandwitch-estimator",
@@ -3044,8 +3044,8 @@
     "objectID": "chap9.html#outline",
     "href": "chap9.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "Outline",
-    "text": "Outline\n\n\nIntensity and rate/mean functions\nCox-type models for recurrent events\nAnalysis of the Chronic Granulomatous Disease Study\nMultivariate approaches to recurrent events\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+    "section": "",
+    "text": "Intensity and rate/mean functions\nCox-type models for recurrent events\nAnalysis of the Chronic Granulomatous Disease Study\nMultivariate approaches to recurrent events\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   },
   {
     "objectID": "chap9.html#recurrent-events",
@@ -3634,8 +3634,8 @@
     "objectID": "chap11.html#outline",
     "href": "chap11.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "Outline",
-    "text": "Outline\n\n\nLinear mixed effects models for longitudinal data\nA two-stage joint modeling approach\nExtensions and dynamic prediction\nAnalysis of an anti-retroviral drug trial\nAn example with multiple biomarkers*\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+    "section": "",
+    "text": "Linear mixed effects models for longitudinal data\nA two-stage joint modeling approach\nExtensions and dynamic prediction\nAnalysis of an anti-retroviral drug trial\nAn example with multiple biomarkers*\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   },
   {
     "objectID": "chap11.html#overview",
@@ -4015,8 +4015,8 @@
     "objectID": "chap12.html#outline",
     "href": "chap12.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "Outline",
-    "text": "Outline\n\n\nBasic concepts and examples\nTransition intensity and probability\nCox-type Markov and semi-Markov models\nAnalysis of the German breast cancer study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\]"
+    "section": "",
+    "text": "Basic concepts and examples\nTransition intensity and probability\nCox-type Markov and semi-Markov models\nAnalysis of the German breast cancer study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\]"
   },
   {
     "objectID": "chap12.html#definition-and-concepts",
@@ -4326,8 +4326,8 @@
     "objectID": "chap13.html#outline",
     "href": "chap13.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "Outline",
-    "text": "Outline\n\n\nTraditional vs hierarchical composites\nThe restricted mean time in favor (RMT-IF) of treatment\nWin ratio: two-sample analysis\nSemiparametric regression of win ratio\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]\n$$ \n$$"
+    "section": "",
+    "text": "Traditional vs hierarchical composites\nThe restricted mean time in favor (RMT-IF) of treatment\nWin ratio: two-sample analysis\nSemiparametric regression of win ratio\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]\n$$ \n$$"
   },
   {
     "objectID": "chap13.html#the-composite-approach",
@@ -4672,8 +4672,8 @@
     "objectID": "chap14.html#outline",
     "href": "chap14.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "Outline",
-    "text": "Outline\n\n\nThe counterfactual framework\nInverse weighting and standardization\nEstimating causal survival curves\nMarginal structural models with time-varying treatment/confounding\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\def\\a{{(a)}} \\def\\b{{(1-a)}} \\def\\t{{(1)}} \\def\\c{{(0)}} \\def\\d{{\\rm d}} \\def\\T{{\\rm T}}\n\\]"
+    "section": "",
+    "text": "The counterfactual framework\nInverse weighting and standardization\nEstimating causal survival curves\nMarginal structural models with time-varying treatment/confounding\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\def\\a{{(a)}} \\def\\b{{(1-a)}} \\def\\t{{(1)}} \\def\\c{{(0)}} \\def\\d{{\\rm d}} \\def\\T{{\\rm T}}\n\\]"
   },
   {
     "objectID": "chap14.html#association-vs-causation",
@@ -4953,7 +4953,7 @@
     "href": "chap14.html#inference",
     "title": "Applied Survival Analysis",
     "section": "Inference",
-    "text": "Inference\n\n\nResults\n\nHAART initiation reduces the mortality risk by \\(1 – 0.382 = 61.8\\%\\)\nCox model without adjusting for CD4 confounding \\(\\to\\) only \\(46.1\\%\\) reduction\n\nPatients who initiate HAART tend to have poor prognosis\n\n\n\n\nsummary(obj)\n#&gt;              coef exp(coef) se(coef) robust se      z Pr(&gt;|z|)    \n#&gt; haartind -0.96171   0.38224  0.43017   0.45148 -2.130 0.033160 *  \n#&gt; sex       0.09761   1.10253  0.43770   0.45351  0.215 0.829592    \n#&gt; age       0.06400   1.06609  0.01414   0.01678  3.815 0.000136 ***\n\n\n\n\n\n\n\nExercise\n\n\nWhat happens if you adjust for CD4 cell count as a time-varying covariate?"
+    "text": "Inference\n\n\nResults\n\nHAART initiation reduces the mortality risk by \\(1 – 0.382 = 61.8\\%\\)\nCox model without adjusting for CD4 confounding \\(\\to\\) only \\(46.1\\%\\) reduction\n\nPatients who initiate HAART tend to have poor prognosis\n\n\n\n\nsummary(obj)\n#&gt;              coef exp(coef) se(coef) robust se      z Pr(&gt;|z|)    \n#&gt; haartind -0.96171   0.38224  0.43017   0.45148 -2.130 0.033160 *  \n#&gt; sex       0.09761   1.10253  0.43770   0.45351  0.215 0.829592    \n#&gt; age       0.06400   1.06609  0.01414   0.01678  3.815 0.000136 ***\n\n\n\n\n\n\n\nExercise\n\n\n\nWhat happens if you adjust for CD4 cell count as a time-varying covariate?"
   },
   {
     "objectID": "chap14.html#notes-i",
@@ -5705,5 +5705,33 @@
       "Part I - Univariate Events",
       "Chapter 1 - Introduction"
     ]
+  },
+  {
+    "objectID": "chap6.html",
+    "href": "chap6.html",
+    "title": "Applied Survival Analysis",
+    "section": "",
+    "text": "Sample size for Cox model and RMST\nImpact of study design and censoring\nAn example using pilot study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+  },
+  {
+    "objectID": "chap11.html",
+    "href": "chap11.html",
+    "title": "Applied Survival Analysis",
+    "section": "",
+    "text": "Linear mixed effects models for longitudinal data\nA two-stage joint modeling approach\nExtensions and dynamic prediction\nAnalysis of an anti-retroviral drug trial\nAn example with multiple biomarkers*\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+  },
+  {
+    "objectID": "chap5.html",
+    "href": "chap5.html",
+    "title": "Applied Survival Analysis",
+    "section": "",
+    "text": "Restricted Mean Survival Time (RMST)\nAdditive Hazards (AH) Model\nProportional Odds (PO) Model\nAccelerated Failure Time (AFT) Model\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+  },
+  {
+    "objectID": "chap7.html",
+    "href": "chap7.html",
+    "title": "Applied Survival Analysis",
+    "section": "",
+    "text": "Left truncation mechanisms\nStandard and general methods for left truncation\nNon- and Semi-parametric methods for Interval censoring\nBangkok Metropolitan Administration HIV Study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   }
 ]
