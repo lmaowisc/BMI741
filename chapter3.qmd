@@ -11,43 +11,21 @@ Lecture slides [here](chap3.html){target="_blank"}. (To convert html to pdf, pre
 
 ## Chapter Summary
 
-Conditioning on the cohort at risk at each observed event time naturally leads 
-to discrete hazard-based approaches for analyzing time-to-event data. These 
-approaches illuminate how nonparametric estimators, such as the Kaplan–Meier 
-curve, and group-comparison tests, such as the log-rank statistic, arise directly 
-from examining discrete hazards over the course of a study.
+Conditioning on the cohort at risk at each observed event time naturally leads to discrete hazard-based approaches for analyzing time-to-event data. These approaches illuminate how nonparametric estimators, such as the Kaplan–Meier curve, and group-comparison tests, such as the log-rank statistic, arise directly from examining discrete hazards over the course of a study.
 
 ### The discrete hazard
 
-A discrete hazard captures the probability of an event happening exactly at a 
-specific observed time, given that the subject remains event-free up to that 
-instant. Let $d_j$ be the number of events at time $t_j$ and $n_j$ the size of 
-the at-risk cohort immediately before $t_j$. Then the discrete hazard at $t_j$ 
-is often estimated by
-$$
+A discrete hazard captures the probability of an event happening exactly at a specific observed time, given that the subject remains event-free up to that instant. Let $d_j$ be the number of events at time $t_j$ and $n_j$ the size of the at-risk cohort immediately before $t_j$. Then the discrete hazard at $t_j$ is often estimated by $$
 \hat\lambda(t_j) 
 = 
 \frac{d_j}{n_j}.
-$$
-As event times become dense in larger samples, the sum of these discrete hazards 
-approximate the cumulative hazard. This perspective incorporates censoring by 
-reducing $n_j$ each time individuals drop out or experience the event. The 
-discrete hazard thus defines a step-by-step mechanism for survival analysis, 
-tying observed failures at each $t_j$ to the relevant risk set.
+$$ As event times become dense in larger samples, the sum of these discrete hazards approximate the cumulative hazard. This perspective incorporates censoring by reducing $n_j$ each time individuals drop out or experience the event. The discrete hazard thus defines a step-by-step mechanism for survival analysis, tying observed failures at each $t_j$ to the relevant risk set.
 
-Working with a discrete hazard emphasizes the fact that each observed event time 
-carries information about the underlying risk. By updating $n_j$ dynamically, 
-these methods properly weight the observed data for unbiased inference under 
-independent censoring. In practical studies where event times are not necessarily 
-continuous, such discrete formulations provide an elegant way to handle censored 
-observations and can be generalized to more complex sampling and trial designs.
+Working with a discrete hazard emphasizes the fact that each observed event time carries information about the underlying risk. By updating $n_j$ dynamically, these methods properly weight the observed data for unbiased inference under independent censoring. In practical studies where event times are not necessarily continuous, such discrete formulations provide an elegant way to handle censored observations and can be generalized to more complex sampling and trial designs.
 
 ### The Kaplan–Meier estimator
 
-From discrete hazards, the Kaplan–Meier estimator emerges as a product-limit 
-construction. If $\hat\lambda(t_j)$ denotes the discrete hazard at $t_j$, the 
-survival function is estimated by
-$$
+From discrete hazards, the Kaplan–Meier estimator emerges as a product-limit construction. If $\hat\lambda(t_j)$ denotes the discrete hazard at $t_j$, the survival function is estimated by $$
 \hat S(t) 
 = 
 \prod_{t_j \le t}
@@ -55,69 +33,27 @@ $$
 = 
 \prod_{t_j \le t}
   \Bigl(1 - \frac{d_j}{n_j}\Bigr).
-$$
-Each factor $1 - d_j / n_j$ represents the proportion of subjects who 
-“survive” past $t_j$, given that $n_j$ remain at risk immediately before $t_j$. 
-Because $n_j$ is updated to exclude prior failures and censored observations, 
-the estimator remains consistent even when censoring occurs at arbitrary times. 
-At large sample sizes, $\hat S(t)$ converges in probability to the true 
-$S(t)$, making it a cornerstone of nonparametric survival analysis.
+$$ Each factor $1 - d_j / n_j$ represents the proportion of subjects who “survive” past $t_j$, given that $n_j$ remain at risk immediately before $t_j$. Because $n_j$ is updated to exclude prior failures and censored observations, the estimator remains consistent even when censoring occurs at arbitrary times. At large sample sizes, $\hat S(t)$ converges in probability to the true $S(t)$, making it a cornerstone of nonparametric survival analysis.
 
-Beyond plotting the full curve, summary measures like the median survival time 
-emerge by identifying $t$ such that $\hat S(t)$ falls to 0.5. This approach can 
-easily extend to other percentiles or even partial survival probabilities at 
-fixed times of interest. The stepwise nature of the Kaplan–Meier curve also 
-offers straightforward visualization, indicating event occurrences at each jump 
-and seamlessly accounting for censoring up to those points.
+Beyond plotting the full curve, summary measures like the median survival time emerge by identifying $t$ such that $\hat S(t)$ falls to 0.5. This approach can easily extend to other percentiles or even partial survival probabilities at fixed times of interest. The stepwise nature of the Kaplan–Meier curve also offers straightforward visualization, indicating event occurrences at each jump and seamlessly accounting for censoring up to those points.
 
 ### The log-rank test
 
-Groups often require formal comparison to assess whether one experiences 
-faster or slower rates of failure than another. The log-rank test constructs 
-a weighted difference in group-specific event counts over time. Let $d_{1j}$ 
-and $n_{1j}$ denote the observed failures and risk set in group 1 at time $t_j$, 
-with $d_j$ and $n_j$ as the totals across all groups. The log-rank statistic 
-sums
-$$
+Groups often require formal comparison to assess whether one experiences faster or slower rates of failure than another. The log-rank test constructs a weighted difference in group-specific event counts over time. Let $d_{1j}$ and $n_{1j}$ denote the observed failures and risk set in group 1 at time $t_j$, with $d_j$ and $n_j$ as the totals across all groups. The log-rank statistic sums $$
 d_{1j} - d_j \frac{n_{1j}}{n_j}
-$$
-over $t_j$. Under a null hypothesis of no group difference, the fraction 
-$n_{1j}/n_j$ should capture group 1’s expected share of failures, so repeated 
-departures from that share indicate differing survival experiences. In large 
-samples, this statistic often approximates a chi-square distribution, allowing 
-standard significance testing. The log-rank test has strong power under 
-proportional hazards, where one group’s hazard is a constant multiple of the 
-other’s. Nonetheless, real data may violate strict proportionality, motivating 
-alternative weighting schemes or more flexible tests.
+$$ over $t_j$. Under a null hypothesis of no group difference, the fraction $n_{1j}/n_j$ should capture group 1’s expected share of failures, so repeated departures from that share indicate differing survival experiences. In large samples, this statistic often approximates a chi-square distribution, allowing standard significance testing. The log-rank test has strong power under proportional hazards, where one group’s hazard is a constant multiple of the other’s. Nonetheless, real data may violate strict proportionality, motivating alternative weighting schemes or more flexible tests.
 
 ### Extensions of the log-rank test
 
-Weighted log-rank variants highlight different parts of the follow-up period. 
-When early effects dominate, decreasing weights place emphasis on initial 
-events. For delayed effects, increasing weights spotlight later intervals. A 
-“max-combo test” addresses uncertainty about the exact timing of effects by 
-calculating multiple weighted statistics and taking their maximum, adjusting 
-for correlation to preserve correct Type I error. This approach captures a 
-broad array of hazard patterns, albeit with more complex null distributions. 
-Stratification extends the log-rank framework further by partitioning subjects 
-into strata defined by confounders (e.g., menopausal status). Within each 
-stratum, the test proceeds as usual, and these stratum-level statistics combine 
-into a single global test. This adjustment effectively controls for measured 
-covariates that could otherwise bias group comparisons.
+Weighted log-rank variants highlight different parts of the follow-up period. When early effects dominate, decreasing weights place emphasis on initial events. For delayed effects, increasing weights spotlight later intervals. A “max-combo test” addresses uncertainty about the exact timing of effects by calculating multiple weighted statistics and taking their maximum, adjusting for correlation to preserve correct Type I error. This approach captures a broad array of hazard patterns, albeit with more complex null distributions. Stratification extends the log-rank framework further by partitioning subjects into strata defined by confounders (e.g., menopausal status). Within each stratum, the test proceeds as usual, and these stratum-level statistics combine into a single global test. This adjustment effectively controls for measured covariates that could otherwise bias group comparisons.
 
-### Statistical properties via martingale 
+### Statistical properties via martingale
 
-Beyond heuristic arguments, martingale theory provides rigorous 
-large-sample derivations for Kaplan--Meier estimator and log-rank tests. 
-This is because the estimators and test statstics can be written
-as stochastic integrals of martingales,
-which simplify the computation of variances and covariances.
-
+Beyond heuristic arguments, martingale theory provides rigorous large-sample derivations for Kaplan--Meier estimator and log-rank tests. This is because the estimators and test statstics can be written as stochastic integrals of martingales, which simplify the computation of variances and covariances.
 
 ### Software use
 
-Nonparametric survival estimates and log-rank tests are easily performed in  R
- via the `survival` package. The `survfit` function fits Kaplan–Meier curves from a time-to-event variable and an event indicator, while the `survdiff` function calculates log-rank tests (and variations such as stratified or weighted log-rank). Many standard analyses can therefore be completed with just a few lines of code, shown below:
+Nonparametric survival estimates and log-rank tests are easily performed in R via the `survival` package. The `survfit` function fits Kaplan–Meier curves from a time-to-event variable and an event indicator, while the `survdiff` function calculates log-rank tests (and variations such as stratified or weighted log-rank). Many standard analyses can therefore be completed with just a few lines of code, shown below:
 
 ```{r}
 library(survival)
@@ -132,7 +68,6 @@ summary(km_fit)
 lr_test <- survdiff(Surv(time, status) ~ group, data = mydata)
 lr_test
 ```
-
 
 Additional utilities are available for generating publication-ready tables and plots. The `gtsummary` package, for instance, provides a `tbl_survfit()` function that creates neatly formatted tables of survival estimates by group or stratum, including confidence intervals and median times. The `ggsurvfit` package extends `ggplot2` to produce enhanced Kaplan–Meier graphs with at-risk tables, confidence interval shading, and optional log-rank $p$-values annotated on the plot:
 
@@ -150,20 +85,12 @@ ggsurvfit(km_fit) +
   add_risktable()
 
 ```
+
 These higher-level functions streamline the presentation of nonparametric survival analyses, ensuring that both the numeric results and the visual displays are clear and publication-ready.
 
 ### Conclusion
 
-Discrete hazard constructs offer a flexible pathway to nonparametric survival 
-estimation and testing. By updating risk sets at each event time, they integrate 
-censoring into hazard estimators, leading to the Kaplan–Meier 
-survival curve. For group comparisons, the log-rank test accumulates deviations 
-in observed vs. expected failures across time, capturing hazard differences in 
-a simple chi-square framework. Weighted extensions and max-combo designs handle 
-a variety of hazard patterns and timing effects, while stratification addresses 
-possible confounders. Underlying it all, martingale theory justifies the 
-asymptotic properties of the estimators and tests, ensuring their validity and robustness
-in large samples.
+Discrete hazard constructs offer a flexible pathway to nonparametric survival estimation and testing. By updating risk sets at each event time, they integrate censoring into hazard estimators, leading to the Kaplan–Meier survival curve. For group comparisons, the log-rank test accumulates deviations in observed vs. expected failures across time, capturing hazard differences in a simple chi-square framework. Weighted extensions and max-combo designs handle a variety of hazard patterns and timing effects, while stratification addresses possible confounders. Underlying it all, martingale theory justifies the asymptotic properties of the estimators and tests, ensuring their validity and robustness in large samples.
 
 ## R Code
 
@@ -216,6 +143,80 @@ rats.rx <- rats[rats$rx == 1, ]
 time   <- rats.rx$time
 status <- rats.rx$status
 
+rats_sub <- rats.rx[order(time),] |> 
+  as_tibble() |> 
+  filter(row_number() <= 12) 
+
+fig_rats_sub_line <- rats_sub |> 
+  ggplot(aes(x = time, y = 1)) +
+  # Horizontal line with right arrow at end
+  geom_segment(x = 0, xend = 70, y = 1, yend = 1,
+               arrow = arrow(length = unit(0.2, "cm"), ends = "last", type = "open"),
+               size = 0.5) +
+  # Points for events and censored observations
+  # c(23, 19) for censoring and event 
+  geom_point(aes(shape = factor(status)), size = 3, fill = "white") +
+  scale_shape_manual(values = c(23, 19), labels = c("Censoring", "Tumor development")) +
+  scale_x_continuous(limits= c(0, max(rats_sub$time)), breaks = c(0, unique(rats_sub$time)), 
+                     expand = expansion(c(0, 0.05))) +
+  labs(x = "Time (days)", y = "All") +
+  # ylim(0.9, 1.1) +
+  theme_classic() +
+  theme(
+    axis.line = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y  = element_blank(),
+    # y-axis title flip 90 degrees
+    axis.title.y = element_text(angle = 0, vjust = 0.5),
+    # Add margin above x-axis title
+    axis.title.x = element_text(margin = margin(t = 15)),
+    legend.position  = "none"
+    # legend.title     = element_blank(),
+    # legend.text = element_text(size = 11)
+  )
+
+
+
+fig_rats_sub_swim <- rats_sub |> 
+  mutate(
+    id = row_number()
+  ) |> 
+  ggplot(aes(x = time, y = reorder(id, time))) +
+  geom_linerange(aes(xmin = 0, xmax = time)) +
+  geom_point(aes(shape = factor(status)), size = 3, fill = "white") +
+  geom_vline(xintercept = 0, linewidth = 1) +
+  theme_minimal() +
+  scale_y_discrete(name = "Rats") +
+  scale_x_continuous(name = "Time (days)", breaks = seq(0, 100, by = 20), 
+                     expand = expansion(c(0, 0.05))) +
+  scale_shape_manual(values = c(23, 19), labels = c("Censoring", "Tumor development")) +
+  theme(
+    legend.position = "top",
+    legend.title = element_blank(),
+    axis.text.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.text = element_text(size = 11)
+    
+  )
+  
+# stack the two plots
+# collect legend from one plot only
+library(patchwork)
+fig3_2 <-  fig_rats_sub_swim / fig_rats_sub_line +
+  plot_layout(heights = c(0.8, 0.2))
+
+
+fig3_2
+
+ggsave("images/km_rats.png", fig3_2, width = 8, height = 4)
+ggsave("images/km_rats.eps", fig3_2, width = 8, height = 4)
+
+
+
+
 #------------------------------------------------------------------------------
 # 3. Extract unique sorted event times (for status == 1)
 #------------------------------------------------------------------------------
@@ -250,7 +251,7 @@ results <- cbind(ts, ds, ns, dL, L)
 round(results, 3)
 
 #------------------------------------------------------------------------------
-# 5. Plot the estimated cumulative hazard function
+# 5a. Plot the estimated cumulative hazard function
 #------------------------------------------------------------------------------
 par(mfrow = c(1, 1))
 plot(
@@ -267,6 +268,29 @@ plot(
   main = ""
 )
 
+#------------------------------------------------------------------------------
+# 5b. Plot the estimated cumulative hazard function - ggplot version
+#------------------------------------------------------------------------------
+library(ggplot2)
+# extend last value to create step function
+df_NA <- data.frame(
+  time   = c(0, ts),
+  cumhaz = c(0, L)
+) |> 
+  add_row(time = 115, cumhaz = tail(L, 1))
+
+ggplot(df_NA, aes(x = time, y = cumhaz)) +
+  geom_step(size = 0.8) +
+  labs(
+    x = "Time (days)", 
+    y = "Cumulative hazard function"
+  ) +
+  # xlim(0, 120) +
+  # ylim(0, 0.4) +
+  theme_minimal() 
+
+ggsave("images/km_rat_NA.png", width = 8, height = 3.5)
+ggsave("images/km_rat_NA.eps", device = cairo_ps, width = 8, height = 3.5)
 
 #==============================================================================
 # (B) Kaplan–Meier Estimates for the Rat Study (Figure 3.4, Table 3.3)
@@ -306,22 +330,41 @@ round(results2, 3)
 obj <- survfit(Surv(time, status) ~ 1, data = rats.rx, conf.type = "log-log")
 summary(obj)
 
-# Plot Kaplan–Meier curve via base R
+# Use broom::tidy to extract results
+library(broom)
+tidy_obj <- tidy(obj)
+tidy_obj 
+#> # A tibble: 38 × 8
+#>     time n.risk n.event n.censor estimate std.error conf.high conf.low
+#>    <dbl>  <dbl>   <dbl>    <dbl>    <dbl>     <dbl>     <dbl>    <dbl>
+#>  1    23    100       0        1    1        0              1    1    
+#>  2    34     99       1        0    0.990    0.0102         1    0.970
+#>  3    39     98       1        0    0.980    0.0144         1    0.952
+#>  ...
+
+# Save Kaplan--Meier curve to EPS using base R
+postscript("images/km_rat_KM.eps",
+           width = 8, height = 5,
+           horizontal = FALSE, onefile = FALSE)
+
 plot(
-  obj, 
-  ylim       = c(0, 1), 
-  xlim       = c(0, 100), 
-  lwd        = 2, 
+  obj,
+  ylim       = c(0, 1),
+  xlim       = c(0, 100),
+  lwd        = 2,
   frame.plot = FALSE,
   xlab       = "Time (days)",
-  ylab       = "Tumor-free probabilities"
+  ylab       = "Tumor-free probabilities",
+  cex.axis = 0.8
 )
 
 legend(
   1, 0.2,
-  c("Kaplan–Meier curve", "95% Confidence limits"),
+  c("Kaplan--Meier curve", "95% Confidence limits"),
   lty = 1:2, lwd = 2
 )
+
+dev.off()
 
 
 #==============================================================================
@@ -340,7 +383,18 @@ tbl_time <- tbl_survfit(
   times        = seq(40, 100, by = 20),
   label_header = "{time} days"
 )
+
 tbl_time
+
+# Summaries including 90% and 80% percentiles
+tbl_perc <- tbl_survfit(
+  x             = obj,
+  label_header = "{100 * prob}% quantile",
+  probs   = c(0.1, 0.2)
+)
+
+tbl_perc
+
 
 #------------------------------------------------------------------------------
 # 2. Example of plotting via ggsurvfit
@@ -562,4 +616,3 @@ survdiff(Surv(time, status) ~ hormone + strata(meno), data = data.CE)
 survdiff(Surv(time, status) ~ hormone, data = data.CE)
 
 ```
-
