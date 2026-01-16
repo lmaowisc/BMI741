@@ -2,8 +2,20 @@
 title: "Welcome to BMI/STAT 741"
 ---
 
-This site will post additional study materials for BMI/STAT 741 in Spring 2025. These include slides, extra data/code examples or mathematical results.
+<table style="border-collapse: collapse; width: 100%;">
+  <tr>
+    <td style="border: none; vertical-align: top; padding-right: 1em;">
+      This site will post additional study materials for
+      <strong>BMI/STAT 741</strong> in <strong>Spring 2026</strong>.
+      These include lecture slides, supplementary data and code examples,
+      as well as additional mathematical results.
+      
+      Please refer to the updated syllabus for the course schedule and other
+important information.
+    </td>
+    <td style="border: none; vertical-align: top; text-align: right;">
+      <img src="images/surv_hex.png" width="108" />
+    </td>
+  </tr>
+</table>
 
-Please check updated [syllabus](about.html) for course schedule and other information.
-
-![](images/wordcloud.png)

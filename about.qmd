@@ -4,92 +4,64 @@ title: "Syllabus"
 
 ### Overview
 
-This course surveys modern statistical methods for analyzing **censored**
-time-to-event data arising in clinical, epidemiological, sociological, and
-engineering studies. We emphasize intuitive explanations of statistical
-theory—such as counting-process martingales—to address real-world problems
-and develop practical problem-solving skills. The course combines
-methodological exposition with extensive case studies, primarily drawn
-from the health sciences. Sample R and SAS code will be provided throughout.
+This course surveys modern statistical methods for analyzing **censored** time-to-event data arising in clinical, epidemiological, sociological, and engineering studies. We emphasize intuitive explanations of statistical theory, such as counting-process martingales, to address real-world problems and develop practical problem-solving skills. The course combines methodological exposition with extensive case studies, primarily drawn from the health sciences. Sample R and SAS code will be provided throughout.
 
-The primary focus is on the **application** of statistical methods to data
-analysis and study design, with careful attention to interpretation and
-assumptions.
+The primary focus is on the **application** of statistical methods to data analysis and study design, with careful attention to interpretation and assumptions.
 
 ### Course Structure
 
-The course consists of three parts. The first part covers methods for
-univariate event times, including the Kaplan–Meier estimator, log-rank
-tests, and the Cox proportional hazards model. The second part extends
-these ideas to more complex outcomes, such as recurrent events,
-multivariate events, (semi-)competing risks, joint modeling of survival
-and longitudinal data, multistate processes, and composite endpoints.
-The third part introduces selected modern topics, including causal
-inference and machine learning for censored data.
+The course consists of three parts. The first part covers methods for univariate event times, including the Kaplan–Meier estimator, log-rank tests, and the Cox proportional hazards model. The second part extends these ideas to more complex outcomes, such as recurrent events, multivariate events, (semi-)competing risks, joint modeling of survival and longitudinal data, multistate processes, and composite endpoints. The third part introduces selected modern topics, including causal inference and machine learning for censored data.
 
 ### Learning Outcomes
 
 By the end of the course, students will be able to
 
-- Understand the defining features of censored data and their implications
-  for statistical inference
-- Select appropriate nonparametric and semiparametric methods for different
-  types of time-to-event data
-- Evaluate and assess modeling assumptions for estimation and inference
-- Apply statistical procedures to real-world problems using R (or SAS)
-- Clearly interpret and communicate analytical results in response to
-  substantive scientific questions
+-   Understand the defining features of censored data and their implications for statistical inference
+-   Select appropriate nonparametric and semiparametric methods for different types of time-to-event data
+-   Evaluate and assess modeling assumptions for estimation and inference
+-   Apply statistical procedures to real-world problems using R (or SAS)
+-   Clearly interpret and communicate analytical results in response to substantive scientific questions
 
 ### Prerequisites
 
-Students should have foundational knowledge of random variables,
-expectation, variance, and maximum likelihood estimation, as well as
-introductory coursework in hypothesis testing (e.g., *t*-tests and ANOVA)
-and (generalized) linear regression models. Prior experience with R or SAS
-is helpful but not required.
+Students should have foundational knowledge of random variables, expectation, variance, and maximum likelihood estimation, as well as introductory coursework in hypothesis testing (e.g., *t*-tests and ANOVA) and (generalized) linear regression models. Prior experience with R or SAS is helpful but not required.
 
 ### Time and Location
 
 **MW 2:35–3:45pm; Health Sciences Learning Center (HSLC) – Room 2158**
 
-
 ### Instructors
 
 #### Main Instructor
 
-**Lu Mao, PhD**  
-<https://lmaowisc.github.io>  
-WARF 207A, 610 Walnut St  
-Madison, WI 53726  
-Email lmao@biostat.wisc.edu  
-Phone 608-263-5674  
-Office hours T&Th 3–4pm, or by appointment  
+**Lu Mao, PhD**\
+<https://lmaowisc.github.io>\
+WARF 207A, 610 Walnut St\
+Madison, WI 53726\
+Email lmao\@biostat.wisc.edu\
+Phone 608-263-5674\
+Office hours T&Th 3–4pm, or by appointment\
 Zoom link provided on Canvas
 
 #### Teaching Assistant
 
-**Heeyeong Jung**  
-Email hjung96@wisc.edu  
-Office hours TBD, or by appointment  
+**Heeyeong Jung**\
+Email hjung96\@wisc.edu\
+Office hours TBD, or by appointment\
 Zoom link provided on Canvas
 
 ### Readings
 
-- **Required**  
-  *Applied Survival Analysis: From Univariate to Complex Time-to-Event
-  Outcomes* (posted on Canvas by chapter)
+-   **Required**\
+    *Applied Survival Analysis: From Univariate to Complex Time-to-Event Outcomes* (posted on Canvas by chapter)
 
-- *Methodological focus*  
-  Kalbfleisch JD, Prentice RL (2002). *The Statistical Analysis of Failure
-  Time Data*, 2nd ed. John Wiley & Sons
+-   *Methodological focus*\
+    Kalbfleisch JD, Prentice RL (2002). *The Statistical Analysis of Failure Time Data*, 2nd ed. John Wiley & Sons
 
-- *Applied focus*  
-  Klein JP, Moeschberger ML (2003). *Survival Analysis: Techniques for
-  Censored and Truncated Data*, 2nd ed. Springer
+-   *Applied focus*\
+    Klein JP, Moeschberger ML (2003). *Survival Analysis: Techniques for Censored and Truncated Data*, 2nd ed. Springer
 
-- *Theoretical depth* 
-  Fleming TR, Harrington DP (1991). *Counting Processes and Survival
-  Analysis*. John Wiley & Sons
+-   *Theoretical depth* Fleming TR, Harrington DP (1991). *Counting Processes and Survival Analysis*. John Wiley & Sons
 
 ### Course Schedule
 
@@ -103,7 +75,7 @@ Zoom link provided on Canvas
 #### Part I: Univariate Events
 
 | Date | Topic                                                      | Notes     |
-|------|------------------------------------------------------------|-----------|
+|------------|------------------------------------------------|------------|
 | 1/26 | Introduction                                               | Chapter 1 |
 | 1/28 | Mathematical Foundations                                   | Chapter 2 |
 | 2/2  | Nonparametric Estimation of the Survival Curve             | Chapter 3 |
@@ -119,7 +91,7 @@ Zoom link provided on Canvas
 #### Part II: Complex Outcomes
 
 | Date | Topic                                                      | Notes      |
-|------|------------------------------------------------------------|------------|
+|------------|------------------------------------------------|------------|
 | 3/4  | Multivariate Events – Conditional (Frailty) Models         | Chapter 8  |
 | 3/9  | Multivariate Event Times – Marginal Models                 | Chapter 8  |
 | 3/11 | Recurrent Events                                           | Chapter 9  |
@@ -132,25 +104,24 @@ Zoom link provided on Canvas
 
 #### Part III: Special Topics
 
-| Date | Topic                                                             | Notes      |
-|------|-------------------------------------------------------------------|------------|
-| 4/13 | Causal Inference with Censored Data – IPTW and Standardization     | Chapter 14 |
-| 4/15 | Causal Inference with Censored Data – Marginal Structural Models   | Chapter 14 |
-| 4/20 | Machine Learning with Censored Data – Regularized Cox Models       | Chapter 15 |
-| 4/22 | Machine Learning with Censored Data – Tree-based methods           | Chapter 15 |
-| 4/27 | Guest lecture                                                      |            |
-| 4/29 | Course recap                                                       |            |
+| Date | Topic | Notes |
+|------------|-------------------------------------------------|------------|
+| 4/13 | Causal Inference with Censored Data – IPTW and Standardization | Chapter 14 |
+| 4/15 | Causal Inference with Censored Data – Marginal Structural Models | Chapter 14 |
+| 4/20 | Machine Learning with Censored Data – Regularized Cox Models | Chapter 15 |
+| 4/22 | Machine Learning with Censored Data – Tree-based methods | Chapter 15 |
+| 4/27 | Guest lecture |  |
+| 4/29 | Course recap |  |
 
 ### Homework and Exams
 
-- Homework assigned on a biweekly basis
-- In-class quizzes
-- Final data analysis project
+-   Homework assigned on a biweekly basis
+-   In-class quizzes
+-   Final data analysis project
 
 ### Grading
 
-- **30%** Attendance and in-class quizzes  
-- **30%** Homework  
-- **20%** Midterm
-- **20%** Final project
-
+-   **30%** Attendance and in-class quizzes\
+-   **30%** Homework\
+-   **20%** Midterm
+-   **20%** Final project
