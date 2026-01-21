@@ -211,8 +211,8 @@ fig3_2 <-  fig_rats_sub_swim / fig_rats_sub_line +
 
 fig3_2
 
-ggsave("images/km_rats.png", fig3_2, width = 8, height = 4)
-ggsave("images/km_rats.eps", fig3_2, width = 8, height = 4)
+# ggsave("images/km_rats.png", fig3_2, width = 8, height = 4)
+# ggsave("images/km_rats.eps", fig3_2, width = 8, height = 4)
 
 
 
@@ -289,8 +289,8 @@ ggplot(df_NA, aes(x = time, y = cumhaz)) +
   # ylim(0, 0.4) +
   theme_minimal() 
 
-ggsave("images/km_rat_NA.png", width = 8, height = 3.5)
-ggsave("images/km_rat_NA.eps", device = cairo_ps, width = 8, height = 3.5)
+# ggsave("images/km_rat_NA.png", width = 8, height = 3.5)
+# ggsave("images/km_rat_NA.eps", device = cairo_ps, width = 8, height = 3.5)
 
 #==============================================================================
 # (B) Kaplan–Meier Estimates for the Rat Study (Figure 3.4, Table 3.3)
@@ -343,9 +343,9 @@ tidy_obj
 #>  ...
 
 # Save Kaplan--Meier curve to EPS using base R
-postscript("images/km_rat_KM.eps",
-           width = 8, height = 5,
-           horizontal = FALSE, onefile = FALSE)
+# postscript("images/km_rat_KM.eps",
+#            width = 8, height = 5,
+#            horizontal = FALSE, onefile = FALSE)
 
 plot(
   obj,
@@ -364,7 +364,7 @@ legend(
   lty = 1:2, lwd = 2
 )
 
-dev.off()
+# dev.off()
 
 
 #==============================================================================
@@ -411,8 +411,8 @@ ggsurvfit(ggplot_obj) +
   labs(x = "Time (days)", y = "Tumor-free probabilities") +
   theme_minimal()
 
-ggsave("images//rats_KM_gg.png", width = 7.5, height = 4)
-ggsave("images//rats_KM_gg.eps", device = cairo_ps, width = 7.5, height = 4)
+# ggsave("images//rats_KM_gg.png", width = 7.5, height = 4)
+# ggsave("images//rats_KM_gg.eps", device = cairo_ps, width = 7.5, height = 4)
 
 
 #==============================================================================
@@ -452,22 +452,29 @@ obj3 <- survfit2(Surv(time, status) ~ rx, data = rats)
 
 ggsurvfit(obj3, linetype_aes = TRUE, linewidth = 1) +
   add_pvalue(caption = "Log-rank {p.value}") +
-  add_risktable(risktable_stats = "n.risk") +
+  add_risktable(
+    risktable_stats = "n.risk",
+    theme = list(                  # Format risk table
+      theme_risktable_default(),
+      scale_y_discrete(labels = c("Drug", "Control"))
+    )            
+    ) +
   labs(x = "Time (days)", y = "Tumor-free probabilities") +
   scale_linetype_manual(values = c(2, 1), labels = c("Control", "Drug")) +
   scale_color_discrete(labels = c("Control", "Drug")) +
+  scale_x_continuous(breaks = seq(0, 100, by = 20)) +
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2), expand = c(0, 0)) +
   theme_classic() +
   theme(
     legend.position   = "top",
     legend.key.width  = unit(1, "cm"),
-    panel.grid.major.y= element_line(),
+    panel.grid.major.y= element_line(color = "gray90"),
     legend.text       = element_text(size = 10),
     plot.caption      = element_text(size = 10)
   )
 
-ggsave("images//rats_KM_gg2.png", width = 7, height = 5)
-ggsave("images//rats_KM_gg2.eps", device = cairo_ps, width = 7, height = 5)
+ggsave("images//rats_KM_gg2.png", width = 7, height = 4.5)
+ggsave("images//rats_KM_gg2.eps", device = cairo_ps, width = 7, height = 4.5)
 
 
 #==============================================================================
@@ -606,8 +613,8 @@ fig_meno <- wrap_plots(ggsurvfit_build(pre_fig), ggsurvfit_build(post_fig), ncol
 wrap_plots(ggsurvfit_build(all_fig), plot_spacer(), fig_meno, ncol = 1) +
   plot_layout(heights = c(1, 0.02, 1))
 
-ggsave("images//gbc_KM_gg.png", width = 8, height = 9)
-ggsave("images//gbc_KM_gg.eps", width = 8, height = 9)
+# ggsave("images//gbc_KM_gg.png", width = 8, height = 9)
+# ggsave("images//gbc_KM_gg.eps", width = 8, height = 9)
 
 #------------------------------------------------------------------------------
 # 3. Stratified log-rank test (menopausal status) and unstratified log-rank
