@@ -5733,5 +5733,12 @@
     "title": "Applied Survival Analysis",
     "section": "",
     "text": "Left truncation mechanisms\nStandard and general methods for left truncation\nNon- and Semi-parametric methods for Interval censoring\nBangkok Metropolitan Administration HIV Study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+  },
+  {
+    "objectID": "chap1.html#hw1-due-feb-4",
+    "href": "chap1.html#hw1-due-feb-4",
+    "title": "Applied Survival Analysis",
+    "section": "HW1 (Due Feb 4)",
+    "text": "HW1 (Due Feb 4)\n\nChoose one\n\nProblem 1.2 (Recommended for PhD in Stats/BDS)\nProblem 1.3\n\nProblem 1.9 (Attach you annotated code)\n(Extra credit) Problem 1.5"
   }
 ]
