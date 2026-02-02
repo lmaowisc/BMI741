@@ -776,16 +776,16 @@ survdiff(Surv(time, status) ~ hormone + strata(meno),
     -   `ggsurvfit::ggsurvfit()`\
 :::
 
-## HW2 (Due Feb 19)
+<!-- ## HW2 (Due Feb 18) -->
 
--   Choose one
+<!-- -   Choose one -->
 
-    -   Problem 3.2
-    -   Problem 3.3
+<!--     -   Problem 3.2 -->
+<!--     -   Problem 3.3 -->
 
--   Problem 3.19
+<!-- -   Problem 3.19 -->
 
--   (Extra credit) Choose one
+<!-- -   (Extra credit) Choose one -->
 
-    -   Problem 3.15
-    -   Problems 3.17 and 3.18
+<!--     -   Problem 3.15 -->
+<!--     -   Problems 3.17 and 3.18 -->
