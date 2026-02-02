@@ -286,7 +286,7 @@ Denominator is called person-year (or person-time) of follow-up.
 -   Importance of descriptive analysis
     -   Event rate $\to$ attention to denominator
 
-## HW1 (Due Feb 4)
+## HW1 (Due Feb 11)
 
 -   Choose one
     -   Problem 1.2 (Recommended for PhD in Stats/BDS)

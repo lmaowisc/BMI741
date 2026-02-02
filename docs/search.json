@@ -1148,8 +1148,8 @@
     "objectID": "chap3.html#outline",
     "href": "chap3.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "",
-    "text": "Nelsen–Aalen estimator of cumulative hazard\n\nKaplan–Meier estimator of survival function\n\nLog-rank test and variations\n\nAnalysis of the German Breast Cancer study\n\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\]"
+    "section": "Outline",
+    "text": "Outline\n\n\nNelsen–Aalen estimator of cumulative hazard\n\nKaplan–Meier estimator of survival function\n\nLog-rank test and variations\n\nAnalysis of the German Breast Cancer study\n\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\]"
   },
   {
     "objectID": "chap3.html#nonparametric-approach",
@@ -1240,7 +1240,7 @@
     "href": "chap3.html#kaplanmeier-estimator-variance-i",
     "title": "Applied Survival Analysis",
     "section": "Kaplan–Meier Estimator: Variance (I)",
-    "text": "Kaplan–Meier Estimator: Variance (I)\n\n\n\\(\\var\\{\\hat S(t)\\}\\)?\n\nLog-transform: product \\(\\to\\) sum \\[\n\\log\\hat S(t)=\\sum_{j:t_j\\leq t}\\log(1-d_j/n_j)\n\\]\nDelta method\\(^*\\) \\[\n\\hat\\var\\{\\hat S(t)\\}=\\hat S(t)^2\\hat\\var\\{\\log\\hat S(t)\\},\n\\]\n\n\n\n\n\n\n\n\n\n\nDelta Method\n\n\n\nIf approximately \\(S_n \\sim N(\\mu, \\sigma^2)\\), then approximately \\(g(S_n) \\sim N\\left\\{g(\\mu), \\dot g(\\mu)^2\\sigma^2\\right\\}\\), where \\(\\dot g(\\mu)=\\dd g(\\mu)/\\dd\\mu\\)."
+    "text": "Kaplan–Meier Estimator: Variance (I)\n\n\n\\(\\var\\{\\hat S(t)\\}\\)?\n\nLog-transform: product \\(\\to\\) sum \\[\n\\log\\hat S(t)=\\sum_{j:t_j\\leq t}\\log(1-d_j/n_j)\n\\]\nDelta method\\(^*\\) \\[\n\\hat\\var\\{\\hat S(t)\\}=\\hat S(t)^2\\hat\\var\\{\\log\\hat S(t)\\},\n\\]\n\n\n\n\n\n\n\n\n\n\nDelta Method\n\n\nIf approximately \\(S_n \\sim N(\\mu, \\sigma^2)\\), then approximately \\(g(S_n) \\sim N\\left\\{g(\\mu), \\dot g(\\mu)^2\\sigma^2\\right\\}\\), where \\(\\dot g(\\mu)=\\dd g(\\mu)/\\dd\\mu\\)."
   },
   {
     "objectID": "chap3.html#kaplanmeier-estimator-variance-ii",
@@ -1289,7 +1289,7 @@
     "href": "chap3.html#example-rat-carcinogen-study-vi",
     "title": "Applied Survival Analysis",
     "section": "Example: Rat Carcinogen Study (VI)",
-    "text": "Example: Rat Carcinogen Study (VI)\n\n\nData frame: rats.rx\n\nCheck with Table 3.3\n\n\n\n\n\nlibrary(survival)\nrats &lt;- read.table(\"Data//Rat Tumorigenicity Study//rats.txt\",header=T)\n\n#subset to treatment arm\nrats.rx &lt;- rats[rats$rx==1,]\n\n\nobj &lt;- survfit(Surv(time, status) ~ 1, data = rats.rx, \n               conf.type = \"log-log\")\nsummary(obj)\n# Call: survfit(formula = Surv(time, status) ~ 1, data = rats.rx, \n#               conf.type = \"log-log\")\n# \n# time n.risk n.event survival std.err lower 95% CI upper 95% CI\n#   34     99       1    0.990  0.0100        0.930        0.999\n#   39     98       1    0.980  0.0141        0.922        0.995\n#   45     97       1    0.970  0.0172        0.909        0.990\n#   67     89       1    0.959  0.0202        0.894        0.984\n#   70     86       1    0.948  0.0228        0.879        0.978\n#   ..."
+    "text": "Example: Rat Carcinogen Study (VI)\n\n\nData frame: rats.rx\n\nCheck with Table 3.3\n\n\n\n\n\nobj &lt;- survfit(Surv(time, status) ~ 1, data = rats.rx, \n               conf.type = \"log-log\")\nsummary(obj)\n# Call: survfit(formula = Surv(time, status) ~ 1, data = rats.rx, \n#               conf.type = \"log-log\")\n# \n# time n.risk n.event survival std.err lower 95% CI upper 95% CI\n#   34     99       1    0.990  0.0100        0.930        0.999\n#   39     98       1    0.980  0.0141        0.922        0.995\n#   45     97       1    0.970  0.0172        0.909        0.990\n#   67     89       1    0.959  0.0202        0.894        0.984\n#   70     86       1    0.948  0.0228        0.879        0.978\n#   ..."
   },
   {
     "objectID": "chap3.html#example-rat-carcinogen-study-vii",
