@@ -212,9 +212,8 @@ df$prog  <- df$prog / 100
 df$estrg <- df$estrg / 100
 
 obj <- coxph(
-  Surv(time, status) ~ hormone + meno + age + size + grade + prog + estrg,
-  data = df
-)
+  Surv(time, status) ~ hormone + meno + age + size + grade + nodes 
+                        + prog + estrg, data = df)
 
 # beta estimates
 obj$coefficients
@@ -224,6 +223,54 @@ obj$var
 
 # Summarize results
 summary(obj)
+#> Call:
+#> coxph(formula = Surv(time, status) ~ hormone + meno + age + size + 
+#>     grade + nodes + prog + estrg, data = df)
+#> 
+#>   n= 686, number of events= 299 
+#> 
+#>               coef exp(coef)  se(coef)      z Pr(>|z|)    
+#> hormone2 -0.346278  0.707316  0.129075 -2.683 0.007301 ** 
+#> meno2     0.258445  1.294915  0.183476  1.409 0.158954    
+#> age      -0.009459  0.990585  0.009301 -1.017 0.309126    
+#> size      0.007796  1.007827  0.003939  1.979 0.047794 *  
+#> grade2    0.636112  1.889121  0.249202  2.553 0.010693 *  
+#> grade3    0.779654  2.180718  0.268480  2.904 0.003685 ** 
+#> nodes     0.048789  1.049998  0.007447  6.551  5.7e-11 ***
+#> prog     -0.221724  0.801137  0.057353 -3.866 0.000111 ***
+#> estrg     0.019731  1.019927  0.045037  0.438 0.661307    
+#> ---
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#> 
+#>          exp(coef) exp(-coef) lower .95 upper .95
+#> hormone2    0.7073     1.4138    0.5492    0.9109
+#> meno2       1.2949     0.7723    0.9038    1.8553
+#> age         0.9906     1.0095    0.9727    1.0088
+#> size        1.0078     0.9922    1.0001    1.0156
+#> grade2      1.8891     0.5293    1.1591    3.0788
+#> grade3      2.1807     0.4586    1.2885    3.6909
+#> nodes       1.0500     0.9524    1.0348    1.0654
+#> prog        0.8011     1.2482    0.7160    0.8964
+#> estrg       1.0199     0.9805    0.9338    1.1140
+#> 
+#> Concordance= 0.692  (se = 0.015)
+#> Likelihood ratio test= 104.8  on 9 df,   p=<2e-16
+#> Wald test            = 114.8  on 9 df,   p=<2e-16
+#> Score (logrank) test = 120.7  on 9 df,   p=<2e-16
+
+
+
+# Tidy regression results as a data frame
+library(broom)
+
+tidy_df <- tidy(
+  obj,
+  exponentiate = TRUE,
+  conf.int = TRUE
+)
+
+tidy_df
+
 
 # Wald test on tumor grade (H_0: beta_grade2 = beta_grade3 = 0)
 beta_q  <- obj$coefficients[5:6]
@@ -257,7 +304,7 @@ plot(
 library(gtsummary)
 
 obj <- coxph(
-  Surv(time, status) ~ hormone + meno + age + size + grade + prog + estrg,
+  Surv(time, status) ~ hormone + meno + age + size + grade + nodes + prog + estrg,
   data = df
 )
 
@@ -270,6 +317,7 @@ tbl <- tbl_regression(
     age     = "Age (years)",
     size    = "Tumor size (mm)",
     grade   = "Tumor grade (1-3)",
+    nodes   = "Number of positive lymph nodes",
     prog    = "Progesterone (fmol/mg)",
     estrg   = "Estrogen  (fmol/mg)"
   )

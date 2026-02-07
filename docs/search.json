@@ -1415,7 +1415,7 @@
     "href": "chap3.html#notes",
     "title": "Applied Survival Analysis",
     "section": "Notes",
-    "text": "Notes\n\n\nKaplan and Meier (1958)\n\n60k + citations by Feb 2025\nMost cited statistical paper of all time\n\n\n\n\n\nDerivation of log-rank\n\nMantel–Haenszel (1959) analysis of \\(2\\times 2\\) contingency tables stratified by \\(t_j\\)\n\n\n\n\n\nOther tests\n\nGehan npsm::gehan.test()\nMax-combo nph::logrank.maxtest() (maximum over multiple weighting schemes)"
+    "text": "Notes\n\n\nKaplan and Meier (1958)\n\n60k + citations by Feb 2026\nMost cited statistical paper of all time\n\n\n\n\n\nDerivation of log-rank\n\nMantel–Haenszel (1959) analysis of \\(2\\times 2\\) contingency tables stratified by \\(t_j\\)\n\n\n\n\n\nOther tests\n\nGehan npsm::gehan.test()\nMax-combo nph::logrank.maxtest() (maximum over multiple weighting schemes)"
   },
   {
     "objectID": "chap3.html#summary-i",
@@ -5740,5 +5740,12 @@
     "title": "Applied Survival Analysis",
     "section": "HW1 (Due Feb 4)",
     "text": "HW1 (Due Feb 4)\n\nChoose one\n\nProblem 1.2 (Recommended for PhD in Stats/BDS)\nProblem 1.3\n\nProblem 1.9 (Attach you annotated code)\n(Extra credit) Problem 1.5"
+  },
+  {
+    "objectID": "chap3.html#hw2-due-feb-18",
+    "href": "chap3.html#hw2-due-feb-18",
+    "title": "Applied Survival Analysis",
+    "section": "HW2 (Due Feb 18)",
+    "text": "HW2 (Due Feb 18)\n\nChoose one\n\nProblem 3.4\nProblem 3.5\n\nProblem 3.23\n(Extra credit) Choose one\n\nProblem 3.19\nProblems 3.21 and 3.22"
   }
 ]

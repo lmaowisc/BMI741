@@ -206,13 +206,13 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\dd}{{\rm d}}$$ $$\newcommand{\pr}{{\
         $$
 :::
 
-:::: fragment
+::: fragment
 ::: callout-note
 ## Delta Method
 
 If approximately $S_n \sim N(\mu, \sigma^2)$, then approximately $g(S_n) \sim N\left\{g(\mu), \dot g(\mu)^2\sigma^2\right\}$, where $\dot g(\mu)=\dd g(\mu)/\dd\mu$.
 :::
-::::
+:::
 
 ## Kaplan--Meier Estimator: Variance (II)
 
@@ -275,7 +275,7 @@ If approximately $S_n \sim N(\mu, \sigma^2)$, then approximately $g(S_n) \sim N\
 
 ## Software: `survival::survfit()` (I)
 
-:::: fragment
+::: fragment
 -   **Basic syntax** for fitting KM curve
 
 ::: big-code
@@ -288,7 +288,7 @@ obj <- survfit(Surv(time, status) ~ 1, data = df,
                conf.type = "log-log")
 ```
 :::
-::::
+:::
 
 ::: incremental
 -   **Input**
@@ -579,7 +579,7 @@ legend(1, 0.2, c("Kaplan-Meier curve", "95% Confidence limits"),
 
 ## Software: `survival::survdiff()`
 
-:::: fragment
+::: fragment
 -   **Basic syntax** for log-rank test
 
 ::: big-code
@@ -591,7 +591,7 @@ legend(1, 0.2, c("Kaplan-Meier curve", "95% Confidence limits"),
 survdiff(Surv(time, status) ~ group + strata(str_var), rho)
 ```
 :::
-::::
+:::
 
 ::: fragment
 -   **Input**
@@ -731,7 +731,7 @@ survdiff(Surv(time, status) ~ hormone + strata(meno),
 
 ::: fragment
 -   **Kaplan and Meier (1958)**
-    -   60k + citations by Feb 2025
+    -   60k + citations by Feb 2026
     -   Most cited statistical paper of all time
 :::
 
@@ -776,16 +776,12 @@ survdiff(Surv(time, status) ~ hormone + strata(meno),
     -   `ggsurvfit::ggsurvfit()`\
 :::
 
-<!-- ## HW2 (Due Feb 18) -->
+## HW2 (Due Feb 18)
 
-<!-- -   Choose one -->
-
-<!--     -   Problem 3.2 -->
-<!--     -   Problem 3.3 -->
-
-<!-- -   Problem 3.19 -->
-
-<!-- -   (Extra credit) Choose one -->
-
-<!--     -   Problem 3.15 -->
-<!--     -   Problems 3.17 and 3.18 -->
+-   Choose one
+    -   Problem 3.4
+    -   Problem 3.5
+-   Problem 3.23
+-   (Extra credit) Choose one
+    -   Problem 3.19
+    -   Problems 3.21 and 3.22
