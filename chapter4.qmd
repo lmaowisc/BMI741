@@ -381,16 +381,17 @@ sch <- cox.zph(obj)
 sch$table  # p-values for each covariate and the global test
 
 # Base R plots
-par(mar = c(4, 4, 2, 2), mfrow = c(4, 2))
+par(mar = c(4, 4.2, 2, 2), mfrow = c(4, 2))
+op <- par(cex.axis = 1.3)
 plot(
-  sch, 
-  xlab    = "Time (months)", 
-  lwd     = 2, 
-  cex.lab = 1.2, 
-  cex.axis= 1.2,
-  ylab    = c("Hormone", "Menopause", "Age", "Tumor size",
-              "Tumor grade", "Progesterone", "Estrogen")
+  sch,
+  xlab     = "Time (months)",
+  ylab     = c("Hormone", "Menopause", "Age", "Tumor size",
+               "Tumor grade", "# of nodes", "Progesterone", "Estrogen"),
+  lwd      = 2,
+  cex.lab = 1.4
 )
+par(op)
 
 # survminer version
 ggcoxzph(sch)
@@ -399,7 +400,7 @@ ggcoxzph(sch)
 # 3. Re-fit with stratification by tumor grade
 #------------------------------------------------------------------------------
 obj_stra <- coxph(
-  Surv(time, status) ~ hormone + meno + age + size + prog + estrg + strata(grade),
+  Surv(time, status) ~ hormone + meno + age + size + nodes + prog + estrg + strata(grade),
   data = df
 )
 
@@ -410,14 +411,14 @@ round(sch_stra$table, 4)
 ggcoxzph(sch_stra)
 
 # Residual plots for stratified model
-par(mfrow = c(3, 2))
+par(mfrow = c(4, 2))
 plot(
   sch_stra, 
   xlab     = "Time (months)",
   lwd      = 2,
-  cex.lab  = 1.2,
-  cex.axis = 1.2,
-  ylab     = c("Hormone", "Menopause", "Age", "Tumor size",
+  cex.lab  = 1.5,
+  cex.axis = 1.5,
+  ylab     = c("Hormone", "Menopause", "Age", "Tumor size", "# of nodes", 
                "Progesterone", "Estrogen")
 )
 
@@ -428,7 +429,8 @@ mart_resid <- resid(obj_stra, type = "martingale")
 dev_resid  <- resid(obj_stra, type = "deviance")
 
 # Plot martingale residuals vs. quantitative covariates
-par(mfrow = c(2, 2))
+par(mar = c(5.1, 4.1, 4.1, 2.1))
+par(mfrow = c(3, 2))
 
 # Age
 plot(
@@ -436,8 +438,9 @@ plot(
   xlab = "Age (years)", 
   ylab = "Martingale residuals",
   main = "Age", 
-  cex.lab = 1.2, 
-  cex.axis= 1.2
+  cex.main = 1.5,
+  cex.lab = 1.5, 
+  cex.axis= 1.5
 )
 lines(lowess(df$age, mart_resid), lwd = 2)
 abline(0, 0, lty = 3, lwd = 2)
@@ -448,10 +451,37 @@ plot(
   xlab = "Tumor size (mm)", 
   ylab = "Martingale residuals",
   main = "Tumor size", 
-  cex.lab = 1.2, 
-  cex.axis= 1.2
+  cex.main = 1.5,
+  cex.lab = 1.5, 
+  cex.axis= 1.5
 )
 lines(lowess(df$size, mart_resid), lwd = 2)
+abline(0, 0, lty = 3, lwd = 2)
+
+# Number of positive lymph nodes
+plot(
+  df$nodes, mart_resid,
+  xlab = "Number of positive lymph nodes", 
+  ylab = "Martingale residuals",
+  main = "Number of positive lymph nodes", 
+    cex.main = 1.5,
+  cex.lab = 1.5, 
+  cex.axis= 1.5
+)
+lines(lowess(df$nodes, mart_resid), lwd = 2)
+abline(0, 0, lty = 3, lwd = 2)
+
+# Log-transform number of positive lymph nodes and re-plot
+plot(
+  log(df$nodes), mart_resid,
+  xlab = "Log(Number of positive lymph nodes)", 
+  ylab = "Martingale residuals",
+  main = "Log(Number of positive lymph nodes)", 
+    cex.main = 1.5,
+  cex.lab = 1.5, 
+  cex.axis= 1.5
+)
+lines(lowess(log(df$nodes), mart_resid), lwd = 2)
 abline(0, 0, lty = 3, lwd = 2)
 
 # Progesterone
@@ -460,8 +490,9 @@ plot(
   xlab = "Progesterone receptor (100 fmol/mg)",
   ylab = "Martingale Residuals",
   main = "Progesterone",
-  cex.lab = 1.2, 
-  cex.axis= 1.2
+  cex.main = 1.5,
+  cex.lab = 1.5, 
+  cex.axis= 1.5
 )
 lines(lowess(df$prog, mart_resid), lwd = 2)
 abline(0, 0, lty = 3, lwd = 2)
@@ -472,20 +503,24 @@ plot(
   xlab = "Estrogen receptor (100 fmol/mg)",
   ylab = "Martingale Residuals",
   main = "Estrogen",
-  cex.lab = 1.2, 
-  cex.axis= 1.2
+    cex.main = 1.5,
+  cex.lab = 1.5, 
+  cex.axis= 1.5
 )
 lines(lowess(df$estrg, mart_resid), lwd = 2)
 abline(0, 0, lty = 3, lwd = 2)
 
+
+
 #------------------------------------------------------------------------------
-# 5. Addressing non-linear age effect
+# 5. Addressing non-linear age and nodes effects
 #------------------------------------------------------------------------------
 df$agec <- (df$age <= 40) + 2 * (df$age > 40 & df$age <= 60) + 3 * (df$age > 60)
 df$agec <- factor(df$agec)
+df$log_nodes <- log(df$nodes)
 
 obj_stra_final <- coxph(
-  Surv(time, status) ~ hormone + meno + agec + size + prog + estrg + strata(grade),
+  Surv(time, status) ~ hormone + meno + agec + size + log_nodes + prog + estrg + strata(grade),
   data = df
 )
 
@@ -501,6 +536,7 @@ tbl_final <- tbl_regression(
     meno    = "Menopause",
     agec    = "Age group",
     size    = "Tumor size (mm)",
+    log_nodes   = "Log-number of positive lymph nodes",
     prog    = "Progesterone (100 fmol/mg)",
     estrg   = "Estrogen  (100 fmol/mg)"
   )
@@ -541,7 +577,7 @@ tibble(
 ) %>%
   ggplot(aes(x = age_group, y = HR)) +
   geom_point(size = 3) +
-  geom_errorbar(aes(ymin = HR_low, ymax = HR_up), width = 0.2, linewidth = 0.8) +
+  geom_errorbar(aes(ymin = HR_low, ymax = HR_up), width = 0.1, linewidth = 0.8) +
   geom_line(group = 1, linetype = "dashed", linewidth = 0.8) +
   xlab("Age group (years)") +
   ylab("Hazard ratio") +
@@ -553,8 +589,8 @@ tibble(
   ) +
   theme(axis.text = element_text(size = 10))
 
-ggsave("images/cox_nonlinear_age.png", width = 7.5, height = 4)
-ggsave("images/cox_nonlinear_age.eps", width = 7.5, height = 4)
+ggsave("images/cox_nonlinear_age.png", width = 7.5, height = 3.5)
+ggsave("images/cox_nonlinear_age.eps", width = 7.5, height = 3.5)
 
 #==============================================================================
 # (C) Illustration with Time-Varying Covariates 

@@ -1538,8 +1538,8 @@
     "objectID": "chap4.html#outline",
     "href": "chap4.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "",
-    "text": "Model specification\nPartial-likelihood estimation and inference\nResidual analysis and goodness-of-fit\nTime-dependent covariates\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+    "section": "Outline",
+    "text": "Outline\n\n\nModel specification\nPartial-likelihood estimation and inference\nResidual analysis and goodness-of-fit\nTime-dependent covariates\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   },
   {
     "objectID": "chap4.html#regression-modeling",
@@ -1637,7 +1637,7 @@
     "href": "chap4.html#predicting-survival",
     "title": "Applied Survival Analysis",
     "section": "Predicting Survival",
-    "text": "Predicting Survival\n\n\nModel-based survival function for given \\(z\\) \\[\nS(t\\mid z;\\beta,\\Lambda_0)=\\exp\\left\\{-\\exp(\\beta^\\T z)\\Lambda_0(t)\\right\\}\n\\]\n\nPlug in parameter estimates \\[S(t\\mid z;\\hat\\beta,\\hat\\Lambda_0)\\]\n\n\n\n\n\n\n\n\nExercise: Conditional survival\n\n\n\nA patient with covariate value \\(z\\) is censored at time \\(c\\). Use the fit model to predict his/her future survival probabilities."
+    "text": "Predicting Survival\n\n\nModel-based survival function for given \\(z\\) \\[\nS(t\\mid z;\\beta,\\Lambda_0)=\\exp\\left\\{-\\exp(\\beta^\\T z)\\Lambda_0(t)\\right\\}\n\\]\n\nPlug in parameter estimates \\[S(t\\mid z;\\hat\\beta,\\hat\\Lambda_0)\\]\n\n\n\n\n\n\n\n\nExercise: Conditional survival\n\n\nA patient with covariate value \\(z\\) is censored at time \\(c\\). Use the fit model to predict his/her future survival probabilities."
   },
   {
     "objectID": "chap4.html#stratified-model",
@@ -1707,7 +1707,7 @@
     "href": "chap4.html#example-german-breast-cancer-vi",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (VI)",
-    "text": "Example: German Breast Cancer (VI)\n\n\nBaseline \\(\\hat\\Lambda_0(t)\\)\n\n\n#--- Breslow estimates of baseline function ------------------\nLambda0 &lt;- basehaz(obj, centered = FALSE)\n# Plot the baseline hazard function\nplot(stepfun(Lambda0$time, c(0, Lambda0$hazard)), do.points = FALSE, \n     cex.axis = 0.9, lwd = 2, frame.plot = FALSE, xlim = c(0, 100),\n     ylim = c(0, 0.8), xlab = \"Time (months)\", \n     ylab = \"Baseline cumulative hazard\", main = \"\")\n\n\n\n\n\n\n\n\n\nExercise: Survival prediction\n\n\n\nPredict survival function for arbitrary \\(z\\).\n\nUse obj$coefficients (\\(\\hat\\beta\\)) and Lambda0 (\\(\\hat\\Lambda_0(t)\\))\nUse survfit(obj, newdata)"
+    "text": "Example: German Breast Cancer (VI)\n\n\nBaseline \\(\\hat\\Lambda_0(t)\\)\n\n\n#--- Breslow estimates of baseline function ------------------\nLambda0 &lt;- basehaz(obj, centered = FALSE)\n# Plot the baseline hazard function\nplot(stepfun(Lambda0$time, c(0, Lambda0$hazard)), do.points = FALSE, \n     cex.axis = 0.9, lwd = 2, frame.plot = FALSE, xlim = c(0, 100),\n     ylim = c(0, 0.8), xlab = \"Time (months)\", \n     ylab = \"Baseline cumulative hazard\", main = \"\")\n\n\n\n\n\n\n\n\n\nExercise: Survival prediction\n\n\nPredict survival function for arbitrary \\(z\\).\n\nUse obj$coefficients (\\(\\hat\\beta\\)) and Lambda0 (\\(\\hat\\Lambda_0(t)\\))\nUse survfit(obj, newdata)"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-vii",
