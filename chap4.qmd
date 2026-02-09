@@ -1155,3 +1155,4 @@ obj <- coxph(Surv(start, stop, event) ~ covariates)
 <!-- -   Problems 4.15 and 4.21 -->
 <!-- -   Extra credit: Problem 4.22 -->
 
+

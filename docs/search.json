@@ -1952,7 +1952,7 @@
     "href": "chap4.html#example-german-breast-cancer-xvii",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (XVII)",
-    "text": "Example: German Breast Cancer (XVII)\n\n\nCategorize age\n\nAge differences masked by inappropriate linear form (\\(p\\)-value 0.348)"
+    "text": "Example: German Breast Cancer (XVII)\n\n\nCategorize age\n\nAge differences masked by inappropriate linear form (\\(p\\)-value 0.309)"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-xviii",
