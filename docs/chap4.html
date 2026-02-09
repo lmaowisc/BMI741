@@ -749,7 +749,7 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 <span id="cb6-10"><a></a></span>
 <span id="cb6-11"><a></a><span class="co">#--- Model fitting ------------------</span></span>
 <span id="cb6-12"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status)<span class="sc">~</span> hormone <span class="sc">+</span> meno <span class="sc">+</span> age <span class="sc">+</span> size <span class="sc">+</span> grade</span>
-<span id="cb6-13"><a></a>           <span class="sc">+</span> prog <span class="sc">+</span> estrg, <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-13"><a></a>           <span class="sc">+</span> nodes <span class="sc">+</span> prog <span class="sc">+</span> estrg, <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -759,23 +759,24 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 <ul>
 <li><p><strong>Summary results</strong></p>
 <ul>
-<li>Hormone-treated women 70.1% times as likely to relapse/die as untreated</li>
+<li>Hormone-treated women 70.7% times as likely to relapse/die as untreated</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co">#--- Summary results ------------------</span></span>
 <span id="cb7-2"><a></a><span class="fu">summary</span>(obj)</span>
-<span id="cb7-3"><a></a><span class="co">#   n= 686, number of events= 299 </span></span>
-<span id="cb7-4"><a></a><span class="co">#                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    </span></span>
-<span id="cb7-5"><a></a><span class="co"># hormone2 -0.3552391  0.7010058  0.1292278 -2.749  0.00598 ** </span></span>
-<span id="cb7-6"><a></a><span class="co"># meno2     0.2683165  1.3077610  0.1840516  1.458  0.14489    </span></span>
-<span id="cb7-7"><a></a><span class="co"># age      -0.0087937  0.9912449  0.0093783 -0.938  0.34842    </span></span>
-<span id="cb7-8"><a></a><span class="co"># size      0.0153213  1.0154392  0.0036538  4.193 2.75e-05 ***</span></span>
-<span id="cb7-9"><a></a><span class="co"># grade2    0.7078888  2.0297017  0.2485544  2.848  0.00440 ** </span></span>
-<span id="cb7-10"><a></a><span class="co"># grade3    0.8171706  2.2640847  0.2689544  3.038  0.00238 ** </span></span>
-<span id="cb7-11"><a></a><span class="co"># prog     -0.0022942  0.9977084  0.0005775 -3.972 7.12e-05 ***</span></span>
-<span id="cb7-12"><a></a><span class="co"># estrg     0.0001788  1.0001789  0.0004686  0.382  0.70274    </span></span>
-<span id="cb7-13"><a></a><span class="co"># ---</span></span>
-<span id="cb7-14"><a></a><span class="co"># Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a></a><span class="co">#&gt;   n= 686, number of events= 299 </span></span>
+<span id="cb7-4"><a></a><span class="co">#&gt;               coef exp(coef)  se(coef)      z Pr(&gt;|z|)    </span></span>
+<span id="cb7-5"><a></a><span class="co">#&gt; hormone2 -0.346278  0.707316  0.129075 -2.683 0.007301 ** </span></span>
+<span id="cb7-6"><a></a><span class="co">#&gt; meno2     0.258445  1.294915  0.183476  1.409 0.158954    </span></span>
+<span id="cb7-7"><a></a><span class="co">#&gt; age      -0.009459  0.990585  0.009301 -1.017 0.309126    </span></span>
+<span id="cb7-8"><a></a><span class="co">#&gt; size      0.007796  1.007827  0.003939  1.979 0.047794 *  </span></span>
+<span id="cb7-9"><a></a><span class="co">#&gt; grade2    0.636112  1.889121  0.249202  2.553 0.010693 *  </span></span>
+<span id="cb7-10"><a></a><span class="co">#&gt; grade3    0.779654  2.180718  0.268480  2.904 0.003685 ** </span></span>
+<span id="cb7-11"><a></a><span class="co">#&gt; nodes     0.048789  1.049998  0.007447  6.551  5.7e-11 ***</span></span>
+<span id="cb7-12"><a></a><span class="co">#&gt; prog     -0.221724  0.801137  0.057353 -3.866 0.000111 ***</span></span>
+<span id="cb7-13"><a></a><span class="co">#&gt; estrg     0.019731  1.019927  0.045037  0.438 0.661307    </span></span>
+<span id="cb7-14"><a></a><span class="co">#&gt; ---</span></span>
+<span id="cb7-15"><a></a><span class="co">#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
 </div>
@@ -797,11 +798,11 @@ S(t\mid z;\beta,\Lambda_0)=\exp\left\{-\exp(\beta^\T z)\Lambda_0(t)\right\}
 <span id="cb8-5"><a></a><span class="co">#chisq statistic with 2 d.f.</span></span>
 <span id="cb8-6"><a></a>chisq2 <span class="ot">&lt;-</span> <span class="fu">t</span>(beta_q) <span class="sc">%*%</span> <span class="fu">solve</span>(Sigma_q) <span class="sc">%*%</span> beta_q</span>
 <span id="cb8-7"><a></a>chisq2</span>
-<span id="cb8-8"><a></a><span class="co"># [1,] 9.428787</span></span>
+<span id="cb8-8"><a></a><span class="co"># [1,] 8.440412</span></span>
 <span id="cb8-9"><a></a><span class="co">#p-value</span></span>
 <span id="cb8-10"><a></a>pval <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(chisq2, <span class="dv">2</span>)</span>
 <span id="cb8-11"><a></a>pval</span>
-<span id="cb8-12"><a></a><span class="co"># [1,] 0.008965302</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-12"><a></a><span class="co"># [1,] 0.01469562</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
 </div>
@@ -1200,30 +1201,43 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <h2>Example: German Breast Cancer (XV)</h2>
 <div class="fragment">
 <ul>
-<li><strong>Categorize age</strong>
-<ul>
-<li>More events in younger women than accounted for by linear age</li>
-<li>Refit model with <code>agec=1</code>: <span class="math inline">\(\leq 40\)</span> yrs; <code>agec=2</code>: <span class="math inline">\((40, 60]\)</span> yrs; <code>agec=3</code>: <span class="math inline">\(&gt; 60\)</span> yrs</li>
-</ul></li>
+<li><strong>Covariate form - Martingale (deviance) residuals</strong></li>
 </ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="7-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a><span class="co"># Call:</span></span>
-<span id="cb19-2"><a></a><span class="co"># coxph(formula = Surv(time, status) ~ hormone + meno + agec + </span></span>
-<span id="cb19-3"><a></a><span class="co">#     size + prog + estrg + strata(grade), data = df)</span></span>
-<span id="cb19-4"><a></a><span class="co">#                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    </span></span>
-<span id="cb19-5"><a></a><span class="co"># hormone2 -0.3788600  0.6846415  0.1294642 -2.926  0.00343 ** </span></span>
-<span id="cb19-6"><a></a><span class="co"># meno2     0.2804119  1.3236749  0.1567576  1.789  0.07364 .  </span></span>
-<span id="cb19-7"><a></a><span class="co"># agec2    -0.5315678  0.5876829  0.1984112 -2.679  0.00738 ** </span></span>
-<span id="cb19-8"><a></a><span class="co"># agec3    -0.4965589  0.6086214  0.2497403 -1.988  0.04678 *  </span></span>
-<span id="cb19-9"><a></a><span class="co"># size      0.0164114  1.0165468  0.0036964  4.440 9.00e-06 ***</span></span>
-<span id="cb19-10"><a></a><span class="co"># prog     -0.0022708  0.9977318  0.0005812 -3.907 9.36e-05 ***</span></span>
-<span id="cb19-11"><a></a><span class="co"># estrg     0.0001254  1.0001254  0.0004718  0.266  0.79041    </span></span>
-<span id="cb19-12"><a></a><span class="co"># ---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cox_gbc_nodes.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
+</figure>
 </div>
 </div>
 </section>
 <section id="example-german-breast-cancer-xvi" class="slide level2">
 <h2>Example: German Breast Cancer (XVI)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Transformations</strong>
+<ul>
+<li>Categorize age: <code>agec=1</code>: <span class="math inline">\(\leq 40\)</span> yrs; <code>agec=2</code>: <span class="math inline">\((40, 60]\)</span> yrs; <code>agec=3</code>: <span class="math inline">\(&gt; 60\)</span> yrs</li>
+<li>Log-transform nodes: <code>log_nodes = log(nodes)</code></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="7-8|10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a><span class="co"># Call:</span></span>
+<span id="cb19-2"><a></a><span class="co"># coxph(formula = Surv(time, status) ~ hormone + meno + agec + </span></span>
+<span id="cb19-3"><a></a><span class="co">#     size + log_nodes+ prog + estrg + strata(grade), data = df)</span></span>
+<span id="cb19-4"><a></a><span class="co">#                coef exp(coef)  se(coef)      z Pr(&gt;|z|)    </span></span>
+<span id="cb19-5"><a></a><span class="co"># hormone2  -0.402106  0.668910  0.128995 -3.117  0.00183 ** </span></span>
+<span id="cb19-6"><a></a><span class="co"># meno2      0.247223  1.280465  0.156266  1.582  0.11363    </span></span>
+<span id="cb19-7"><a></a><span class="co"># agec2     -0.499979  0.606544  0.197677 -2.529  0.01143 *  </span></span>
+<span id="cb19-8"><a></a><span class="co"># agec3     -0.497538  0.608026  0.249509 -1.994  0.04614 *  </span></span>
+<span id="cb19-9"><a></a><span class="co"># size       0.006665  1.006688  0.003956  1.685  0.09205 .  </span></span>
+<span id="cb19-10"><a></a><span class="co"># log_nodes  0.477734  1.612417  0.066199  7.217 5.33e-13 ***</span></span>
+<span id="cb19-11"><a></a><span class="co"># prog      -0.229536  0.794902  0.057190 -4.014 5.98e-05 ***</span></span>
+<span id="cb19-12"><a></a><span class="co"># estrg      0.030350  1.030816  0.046469  0.653  0.51367  </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="example-german-breast-cancer-xvii" class="slide level2">
+<h2>Example: German Breast Cancer (XVII)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Categorize age</strong>
@@ -1233,32 +1247,8 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/cox_gbc_age_cat.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
+<p><img data-src="images/cox_nonlinear_age.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
 </figure>
-</div>
-</div>
-</section>
-<section id="example-german-breast-cancer-xvii" class="slide level2">
-<h2>Example: German Breast Cancer (XVII)</h2>
-<div class="fragment">
-<ul>
-<li><strong>Tabulate final model</strong></li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="1-2|3|4-12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a><span class="co"># Tabulate final model results</span></span>
-<span id="cb20-2"><a></a>tbl_final <span class="ot">&lt;-</span> <span class="fu">tbl_regression</span>(</span>
-<span id="cb20-3"><a></a>  obj_stra_final, <span class="co"># coxph object for final model</span></span>
-<span id="cb20-4"><a></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb20-5"><a></a>    <span class="at">hormone =</span> <span class="st">"Hormone"</span>, </span>
-<span id="cb20-6"><a></a>    <span class="at">meno    =</span> <span class="st">"Menopause"</span>,</span>
-<span id="cb20-7"><a></a>    <span class="at">agec    =</span> <span class="st">"Age group"</span>,</span>
-<span id="cb20-8"><a></a>    <span class="at">size    =</span> <span class="st">"Tumor size (mm)"</span>,</span>
-<span id="cb20-9"><a></a>    <span class="at">prog    =</span> <span class="st">"Progesterone (100 fmol/mg)"</span>,</span>
-<span id="cb20-10"><a></a>    <span class="at">estrg   =</span> <span class="st">"Estrogen  (100 fmol/mg)"</span></span>
-<span id="cb20-11"><a></a>  )</span>
-<span id="cb20-12"><a></a>)</span>
-<span id="cb20-13"><a></a></span>
-<span id="cb20-14"><a></a>tbl_final</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -1266,11 +1256,35 @@ M_i(X_i; \hat\beta,\hat\Lambda_0)&amp;=N_i(X_i)-\int_0^{X_i} I(X_i\geq t)\exp(\h
 <h2>Example: German Breast Cancer (XVIII)</h2>
 <div class="fragment">
 <ul>
+<li><strong>Tabulate final model</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="1-2|3|4-12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a><span class="co"># Tabulate final model results</span></span>
+<span id="cb20-2"><a></a>tbl_final <span class="ot">&lt;-</span> <span class="fu">tbl_regression</span>(</span>
+<span id="cb20-3"><a></a>  obj_stra_final, </span>
+<span id="cb20-4"><a></a>  <span class="at">exponentiate =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb20-5"><a></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb20-6"><a></a>    <span class="at">hormone =</span> <span class="st">"Hormone"</span>, </span>
+<span id="cb20-7"><a></a>    <span class="at">meno    =</span> <span class="st">"Menopause"</span>,</span>
+<span id="cb20-8"><a></a>    <span class="at">agec    =</span> <span class="st">"Age group"</span>,</span>
+<span id="cb20-9"><a></a>    <span class="at">size    =</span> <span class="st">"Tumor size (mm)"</span>,</span>
+<span id="cb20-10"><a></a>    <span class="at">log_nodes   =</span> <span class="st">"Log-number of positive lymph nodes"</span>,</span>
+<span id="cb20-11"><a></a>    <span class="at">prog    =</span> <span class="st">"Progesterone (100 fmol/mg)"</span>,</span>
+<span id="cb20-12"><a></a>    <span class="at">estrg   =</span> <span class="st">"Estrogen  (100 fmol/mg)"</span></span>
+<span id="cb20-13"><a></a>  )</span>
+<span id="cb20-14"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="example-german-breast-cancer-xix" class="slide level2">
+<h2>Example: German Breast Cancer (XIX)</h2>
+<div class="fragment">
+<ul>
 <li><strong>Final model</strong></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/cox_gbc_final.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
+<p><img data-src="images/cox_gbc_final.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
 </figure>
 </div>
 </div>

@@ -420,7 +420,7 @@ head(df)
 
 #--- Model fitting ------------------
 obj <- coxph(Surv(time, status)~ hormone + meno + age + size + grade
-           + prog + estrg, data = df)
+           + nodes + prog + estrg, data = df)
 
 ```
 :::
@@ -430,7 +430,7 @@ obj <- coxph(Surv(time, status)~ hormone + meno + age + size + grade
 ::: fragment
 -   **Summary results**
 
-    -   Hormone-treated women 70.1% times as likely to relapse/die as untreated
+    -   Hormone-treated women 70.7% times as likely to relapse/die as untreated
 
     ```{r}
     #| eval: false
@@ -438,18 +438,19 @@ obj <- coxph(Surv(time, status)~ hormone + meno + age + size + grade
 
     #--- Summary results ------------------
     summary(obj)
-    #   n= 686, number of events= 299 
-    #                coef  exp(coef)   se(coef)      z Pr(>|z|)    
-    # hormone2 -0.3552391  0.7010058  0.1292278 -2.749  0.00598 ** 
-    # meno2     0.2683165  1.3077610  0.1840516  1.458  0.14489    
-    # age      -0.0087937  0.9912449  0.0093783 -0.938  0.34842    
-    # size      0.0153213  1.0154392  0.0036538  4.193 2.75e-05 ***
-    # grade2    0.7078888  2.0297017  0.2485544  2.848  0.00440 ** 
-    # grade3    0.8171706  2.2640847  0.2689544  3.038  0.00238 ** 
-    # prog     -0.0022942  0.9977084  0.0005775 -3.972 7.12e-05 ***
-    # estrg     0.0001788  1.0001789  0.0004686  0.382  0.70274    
-    # ---
-    # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#>   n= 686, number of events= 299 
+#>               coef exp(coef)  se(coef)      z Pr(>|z|)    
+#> hormone2 -0.346278  0.707316  0.129075 -2.683 0.007301 ** 
+#> meno2     0.258445  1.294915  0.183476  1.409 0.158954    
+#> age      -0.009459  0.990585  0.009301 -1.017 0.309126    
+#> size      0.007796  1.007827  0.003939  1.979 0.047794 *  
+#> grade2    0.636112  1.889121  0.249202  2.553 0.010693 *  
+#> grade3    0.779654  2.180718  0.268480  2.904 0.003685 ** 
+#> nodes     0.048789  1.049998  0.007447  6.551  5.7e-11 ***
+#> prog     -0.221724  0.801137  0.057353 -3.866 0.000111 ***
+#> estrg     0.019731  1.019927  0.045037  0.438 0.661307    
+#> ---
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
     ```
 :::
 
@@ -472,11 +473,11 @@ obj <- coxph(Surv(time, status)~ hormone + meno + age + size + grade
     #chisq statistic with 2 d.f.
     chisq2 <- t(beta_q) %*% solve(Sigma_q) %*% beta_q
     chisq2
-    # [1,] 9.428787
+    # [1,] 8.440412
     #p-value
     pval <- 1 - pchisq(chisq2, 2)
     pval
-    # [1,] 0.008965302
+    # [1,] 0.01469562
     ```
 :::
 
@@ -802,42 +803,52 @@ abline(0, 0, lty = 3, lwd = 2) # add a reference line
 ![](images/cox_gbc_age.png){fig-align="center" width="60%"}
 :::
 
+
 ## Example: German Breast Cancer (XV)
 
 ::: fragment
--   **Categorize age**
-    -   More events in younger women than accounted for by linear age
-    -   Refit model with `agec=1`: $\leq 40$ yrs; `agec=2`: $(40, 60]$ yrs; `agec=3`: $> 60$ yrs
+-   **Covariate form - Martingale (deviance) residuals**
 
-```{r}
-#| eval: false
-#| echo: true
-#| code-line-numbers: 7-8
-# Call:
-# coxph(formula = Surv(time, status) ~ hormone + meno + agec + 
-#     size + prog + estrg + strata(grade), data = df)
-#                coef  exp(coef)   se(coef)      z Pr(>|z|)    
-# hormone2 -0.3788600  0.6846415  0.1294642 -2.926  0.00343 ** 
-# meno2     0.2804119  1.3236749  0.1567576  1.789  0.07364 .  
-# agec2    -0.5315678  0.5876829  0.1984112 -2.679  0.00738 ** 
-# agec3    -0.4965589  0.6086214  0.2497403 -1.988  0.04678 *  
-# size      0.0164114  1.0165468  0.0036964  4.440 9.00e-06 ***
-# prog     -0.0022708  0.9977318  0.0005812 -3.907 9.36e-05 ***
-# estrg     0.0001254  1.0001254  0.0004718  0.266  0.79041    
-# ---
-```
+![](images/cox_gbc_nodes.png){fig-align="center" width="80%"}
 :::
+
 
 ## Example: German Breast Cancer (XVI)
 
 ::: fragment
--   **Categorize age**
-    -   Age differences masked by inappropriate linear form ($p$-value 0.348)
+-   **Transformations**
+    -   Categorize age: `agec=1`: $\leq 40$ yrs; `agec=2`: $(40, 60]$ yrs; `agec=3`: $> 60$ yrs
+    -   Log-transform nodes: `log_nodes = log(nodes)`
 
-![](images/cox_gbc_age_cat.png){fig-align="center" width="70%"}
+```{r}
+#| eval: false
+#| echo: true
+#| code-line-numbers: 7-8|10
+# Call:
+# coxph(formula = Surv(time, status) ~ hormone + meno + agec + 
+#     size + log_nodes+ prog + estrg + strata(grade), data = df)
+#                coef exp(coef)  se(coef)      z Pr(>|z|)    
+# hormone2  -0.402106  0.668910  0.128995 -3.117  0.00183 ** 
+# meno2      0.247223  1.280465  0.156266  1.582  0.11363    
+# agec2     -0.499979  0.606544  0.197677 -2.529  0.01143 *  
+# agec3     -0.497538  0.608026  0.249509 -1.994  0.04614 *  
+# size       0.006665  1.006688  0.003956  1.685  0.09205 .  
+# log_nodes  0.477734  1.612417  0.066199  7.217 5.33e-13 ***
+# prog      -0.229536  0.794902  0.057190 -4.014 5.98e-05 ***
+# estrg      0.030350  1.030816  0.046469  0.653  0.51367  
+```
 :::
 
 ## Example: German Breast Cancer (XVII)
+
+::: fragment
+-   **Categorize age**
+    -   Age differences masked by inappropriate linear form ($p$-value 0.309)
+
+![](images/cox_nonlinear_age.png){fig-align="center" width="70%"}
+:::
+
+## Example: German Breast Cancer (XVIII)
 
 ::: fragment
 -   **Tabulate final model**
@@ -848,27 +859,27 @@ abline(0, 0, lty = 3, lwd = 2) # add a reference line
 #| code-line-numbers: 1-2|3|4-12
 # Tabulate final model results
 tbl_final <- tbl_regression(
-  obj_stra_final, # coxph object for final model
+  obj_stra_final, 
+  exponentiate = TRUE,
   label = list(
     hormone = "Hormone", 
     meno    = "Menopause",
     agec    = "Age group",
     size    = "Tumor size (mm)",
+    log_nodes   = "Log-number of positive lymph nodes",
     prog    = "Progesterone (100 fmol/mg)",
     estrg   = "Estrogen  (100 fmol/mg)"
   )
 )
-
-tbl_final
 ```
 :::
 
-## Example: German Breast Cancer (XVIII)
+## Example: German Breast Cancer (XIX)
 
 ::: fragment
 -   **Final model**
 
-![](images/cox_gbc_final.png){fig-align="center" width="70%"}
+![](images/cox_gbc_final.png){fig-align="center" width="75%"}
 :::
 
 # Time-Dependent Covariates

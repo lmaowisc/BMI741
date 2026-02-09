@@ -1679,14 +1679,14 @@
     "href": "chap4.html#example-german-breast-cancer-ii",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (II)",
-    "text": "Example: German Breast Cancer (II)\n\n\nModel fitting\n\n\n#--- Data frame ---------------------\nhead(df)\n#   id      time status hormone age meno size grade nodes prog estrg\n# 1  1 43.836066      1       1  38    1   18     3     5  141   105\n# 3  2 46.557377      1       1  52    1   20     1     1   78    14\n# 5  3 41.934426      1       1  47    1   30     2     1  422    89\n# 7  4  4.852459      0       1  40    1   24     1     3   25    11\n# 8  5 61.081967      0       2  64    2   19     2     1   19     9\n# 9  6 63.377049      0       2  49    2   56     1     3  356    64\n\n#--- Model fitting ------------------\nobj &lt;- coxph(Surv(time, status)~ hormone + meno + age + size + grade\n           + prog + estrg, data = df)"
+    "text": "Example: German Breast Cancer (II)\n\n\nModel fitting\n\n\n#--- Data frame ---------------------\nhead(df)\n#   id      time status hormone age meno size grade nodes prog estrg\n# 1  1 43.836066      1       1  38    1   18     3     5  141   105\n# 3  2 46.557377      1       1  52    1   20     1     1   78    14\n# 5  3 41.934426      1       1  47    1   30     2     1  422    89\n# 7  4  4.852459      0       1  40    1   24     1     3   25    11\n# 8  5 61.081967      0       2  64    2   19     2     1   19     9\n# 9  6 63.377049      0       2  49    2   56     1     3  356    64\n\n#--- Model fitting ------------------\nobj &lt;- coxph(Surv(time, status)~ hormone + meno + age + size + grade\n           + nodes + prog + estrg, data = df)"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-iii",
     "href": "chap4.html#example-german-breast-cancer-iii",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (III)",
-    "text": "Example: German Breast Cancer (III)\n\n\nSummary results\n\nHormone-treated women 70.1% times as likely to relapse/die as untreated\n\n\n#--- Summary results ------------------\nsummary(obj)\n#   n= 686, number of events= 299 \n#                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    \n# hormone2 -0.3552391  0.7010058  0.1292278 -2.749  0.00598 ** \n# meno2     0.2683165  1.3077610  0.1840516  1.458  0.14489    \n# age      -0.0087937  0.9912449  0.0093783 -0.938  0.34842    \n# size      0.0153213  1.0154392  0.0036538  4.193 2.75e-05 ***\n# grade2    0.7078888  2.0297017  0.2485544  2.848  0.00440 ** \n# grade3    0.8171706  2.2640847  0.2689544  3.038  0.00238 ** \n# prog     -0.0022942  0.9977084  0.0005775 -3.972 7.12e-05 ***\n# estrg     0.0001788  1.0001789  0.0004686  0.382  0.70274    \n# ---\n# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1"
+    "text": "Example: German Breast Cancer (III)\n\n\nSummary results\n\nHormone-treated women 70.7% times as likely to relapse/die as untreated\n\n\n#--- Summary results ------------------\nsummary(obj)\n#&gt;   n= 686, number of events= 299 \n#&gt;               coef exp(coef)  se(coef)      z Pr(&gt;|z|)    \n#&gt; hormone2 -0.346278  0.707316  0.129075 -2.683 0.007301 ** \n#&gt; meno2     0.258445  1.294915  0.183476  1.409 0.158954    \n#&gt; age      -0.009459  0.990585  0.009301 -1.017 0.309126    \n#&gt; size      0.007796  1.007827  0.003939  1.979 0.047794 *  \n#&gt; grade2    0.636112  1.889121  0.249202  2.553 0.010693 *  \n#&gt; grade3    0.779654  2.180718  0.268480  2.904 0.003685 ** \n#&gt; nodes     0.048789  1.049998  0.007447  6.551  5.7e-11 ***\n#&gt; prog     -0.221724  0.801137  0.057353 -3.866 0.000111 ***\n#&gt; estrg     0.019731  1.019927  0.045037  0.438 0.661307    \n#&gt; ---\n#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-iv",
@@ -1700,7 +1700,7 @@
     "href": "chap4.html#example-german-breast-cancer-v",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (V)",
-    "text": "Example: German Breast Cancer (V)\n\n\nTumor grade?\n\nJoint test on grade2 and grade3\n\\(\\chi_2^2=9.4\\), \\(p=0.009\\)\n\n\n#--- Wald test on tumor grade ------------------\n# H_0: beta_5=beta_6=0\nbeta_q &lt;- obj$coefficients[5:6]\nSigma_q &lt;- obj$var[5:6,5:6]\n#chisq statistic with 2 d.f.\nchisq2 &lt;- t(beta_q) %*% solve(Sigma_q) %*% beta_q\nchisq2\n# [1,] 9.428787\n#p-value\npval &lt;- 1 - pchisq(chisq2, 2)\npval\n# [1,] 0.008965302"
+    "text": "Example: German Breast Cancer (V)\n\n\nTumor grade?\n\nJoint test on grade2 and grade3\n\\(\\chi_2^2=9.4\\), \\(p=0.009\\)\n\n\n#--- Wald test on tumor grade ------------------\n# H_0: beta_5=beta_6=0\nbeta_q &lt;- obj$coefficients[5:6]\nSigma_q &lt;- obj$var[5:6,5:6]\n#chisq statistic with 2 d.f.\nchisq2 &lt;- t(beta_q) %*% solve(Sigma_q) %*% beta_q\nchisq2\n# [1,] 8.440412\n#p-value\npval &lt;- 1 - pchisq(chisq2, 2)\npval\n# [1,] 0.01469562"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-vi",
@@ -1833,14 +1833,14 @@
     "href": "chap4.html#example-german-breast-cancer-xv",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (XV)",
-    "text": "Example: German Breast Cancer (XV)\n\n\nCategorize age\n\nMore events in younger women than accounted for by linear age\nRefit model with agec=1: \\(\\leq 40\\) yrs; agec=2: \\((40, 60]\\) yrs; agec=3: \\(&gt; 60\\) yrs\n\n\n\n# Call:\n# coxph(formula = Surv(time, status) ~ hormone + meno + agec + \n#     size + prog + estrg + strata(grade), data = df)\n#                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    \n# hormone2 -0.3788600  0.6846415  0.1294642 -2.926  0.00343 ** \n# meno2     0.2804119  1.3236749  0.1567576  1.789  0.07364 .  \n# agec2    -0.5315678  0.5876829  0.1984112 -2.679  0.00738 ** \n# agec3    -0.4965589  0.6086214  0.2497403 -1.988  0.04678 *  \n# size      0.0164114  1.0165468  0.0036964  4.440 9.00e-06 ***\n# prog     -0.0022708  0.9977318  0.0005812 -3.907 9.36e-05 ***\n# estrg     0.0001254  1.0001254  0.0004718  0.266  0.79041    \n# ---"
+    "text": "Example: German Breast Cancer (XV)\n\n\nCovariate form - Martingale (deviance) residuals"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-xvi",
     "href": "chap4.html#example-german-breast-cancer-xvi",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (XVI)",
-    "text": "Example: German Breast Cancer (XVI)\n\n\nCategorize age\n\nAge differences masked by inappropriate linear form (\\(p\\)-value 0.348)"
+    "text": "Example: German Breast Cancer (XVI)\n\n\nTransformations\n\nCategorize age: agec=1: \\(\\leq 40\\) yrs; agec=2: \\((40, 60]\\) yrs; agec=3: \\(&gt; 60\\) yrs\nLog-transform nodes: log_nodes = log(nodes)\n\n\n\n# Call:\n# coxph(formula = Surv(time, status) ~ hormone + meno + agec + \n#     size + log_nodes+ prog + estrg + strata(grade), data = df)\n#                coef exp(coef)  se(coef)      z Pr(&gt;|z|)    \n# hormone2  -0.402106  0.668910  0.128995 -3.117  0.00183 ** \n# meno2      0.247223  1.280465  0.156266  1.582  0.11363    \n# agec2     -0.499979  0.606544  0.197677 -2.529  0.01143 *  \n# agec3     -0.497538  0.608026  0.249509 -1.994  0.04614 *  \n# size       0.006665  1.006688  0.003956  1.685  0.09205 .  \n# log_nodes  0.477734  1.612417  0.066199  7.217 5.33e-13 ***\n# prog      -0.229536  0.794902  0.057190 -4.014 5.98e-05 ***\n# estrg      0.030350  1.030816  0.046469  0.653  0.51367"
   },
   {
     "objectID": "chap4.html#internal-vs-external-covariates",
@@ -1952,14 +1952,14 @@
     "href": "chap4.html#example-german-breast-cancer-xvii",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (XVII)",
-    "text": "Example: German Breast Cancer (XVII)\n\n\nTabulate final model\n\n\n# Tabulate final model results\ntbl_final &lt;- tbl_regression(\n  obj_stra_final, # coxph object for final model\n  label = list(\n    hormone = \"Hormone\", \n    meno    = \"Menopause\",\n    agec    = \"Age group\",\n    size    = \"Tumor size (mm)\",\n    prog    = \"Progesterone (100 fmol/mg)\",\n    estrg   = \"Estrogen  (100 fmol/mg)\"\n  )\n)\n\ntbl_final"
+    "text": "Example: German Breast Cancer (XVII)\n\n\nCategorize age\n\nAge differences masked by inappropriate linear form (\\(p\\)-value 0.348)"
   },
   {
     "objectID": "chap4.html#example-german-breast-cancer-xviii",
     "href": "chap4.html#example-german-breast-cancer-xviii",
     "title": "Applied Survival Analysis",
     "section": "Example: German Breast Cancer (XVIII)",
-    "text": "Example: German Breast Cancer (XVIII)\n\n\nFinal model"
+    "text": "Example: German Breast Cancer (XVIII)\n\n\nTabulate final model\n\n\n# Tabulate final model results\ntbl_final &lt;- tbl_regression(\n  obj_stra_final, \n  exponentiate = TRUE,\n  label = list(\n    hormone = \"Hormone\", \n    meno    = \"Menopause\",\n    agec    = \"Age group\",\n    size    = \"Tumor size (mm)\",\n    log_nodes   = \"Log-number of positive lymph nodes\",\n    prog    = \"Progesterone (100 fmol/mg)\",\n    estrg   = \"Estrogen  (100 fmol/mg)\"\n  )\n)"
   },
   {
     "objectID": "chap4.html#software-survivalcoxph-v",
@@ -5747,5 +5747,12 @@
     "title": "Applied Survival Analysis",
     "section": "HW2 (Due Feb 18)",
     "text": "HW2 (Due Feb 18)\n\nChoose one\n\nProblem 3.4\nProblem 3.5\n\nProblem 3.23\n(Extra credit) Choose one\n\nProblem 3.19\nProblems 3.21 and 3.22"
+  },
+  {
+    "objectID": "chap4.html#example-german-breast-cancer-xix",
+    "href": "chap4.html#example-german-breast-cancer-xix",
+    "title": "Applied Survival Analysis",
+    "section": "Example: German Breast Cancer (XIX)",
+    "text": "Example: German Breast Cancer (XIX)\n\n\nFinal model"
   }
 ]
