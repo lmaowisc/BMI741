@@ -102,260 +102,232 @@ Discrete hazard constructs offer a flexible pathway to nonparametric survival es
 ###############################################################################
 # Chapter 3 R Code
 #
-# This script reproduces all major numerical results in Chapter 3, including:
-#  1. The Nelson–Aalen estimator (Figures 3.3, Table 3.2)
-#  2. Kaplan–Meier (KM) analysis (Figure 3.4, Table 3.3, Table 3.5, Table 3.6)
+# This script reproduces major numerical results in Chapter 3, including
+#  1. The Nelson–Aalen estimator
+#  2. Kaplan–Meier (KM) analysis
 #  3. Log-rank tests for the rat study and the GBC study
-#  4. Additional code for generating Figures 3.7 and 3.9
+#  4. Additional code for generating selected plots used in the chapter
 ###############################################################################
 
+# =============================================================================
+# Setup
+# =============================================================================
+library(survival)   # Core survival analysis (Surv, survfit, survdiff)
+library(tidyverse) # Data manipulation and ggplot2-based graphics
+library(patchwork) # Combine multiple ggplot2 plots
+library(broom)     # Tidy extraction of model outputs
+library(gtsummary) # Formatted survival summaries and tables
+library(ggsurvfit) # ggplot2-based KM plots with risk tables
+library(ggsci)     # Scientific journal color palettes
 
-#==============================================================================
-# (A) Nelson–Aalen Estimator for the Rat Study (Figures 3.3, Table 3.2)
-#==============================================================================
-library(survival)
-library(tidyverse)
-
+# =============================================================================
+# (A) Nelson–Aalen Estimator for the Rat Study
+# =============================================================================
 # The 'rats' dataset records times to tumor or censoring in rats receiving a drug
-# vs. control. Each row corresponds to one rat, with variables:
+# vs control. Each row corresponds to one rat, with variables:
 #   litter:  Litter ID, from 1 to 100 (3 rats per litter)
 #   rx:      Treatment (1 = drug, 0 = control)
 #   time:    Time to tumor or last follow-up
 #   status:  Event status (1 = tumor, 0 = censored)
 #   sex:     'male' or 'female'
 #
-# N. Mantel, N. R. Bohidar, and J. L. Ciminera. 
-# "Mantel-Haenszel analyses of litter-matched time-to-response data, with 
-#  modifications for recovery of interlitter information." 
-#  Cancer Research, 37:3863-3868, 1977.
+# Data source:
+#   N. Mantel, N. R. Bohidar, and J. L. Ciminera.
+#   "Mantel-Haenszel analyses of litter-matched time-to-response data, with
+#    modifications for recovery of interlitter information."
+#   Cancer Research, 37:3863-3868, 1977.
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # 1. Read and inspect the dataset
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 rats <- read.table("Data//Rat Tumorigenicity Study//rats.txt", header = TRUE)
 head(rats)
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # 2. Subset to the treatment group (rx == 1)
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 rats.rx <- rats[rats$rx == 1, ]
 
 time   <- rats.rx$time
 status <- rats.rx$status
 
-rats_sub <- rats.rx[order(time),] |> 
-  as_tibble() |> 
-  filter(row_number() <= 12) 
+# -----------------------------------------------------------------------------
+# 2a. A small illustrative subset for plotting follow-up patterns
+# -----------------------------------------------------------------------------
+rats_sub <- rats.rx[order(time), ] |>
+  as_tibble() |>
+  filter(row_number() <= 12)
 
-fig_rats_sub_line <- rats_sub |> 
+# Follow-up as a single horizontal timeline with event/censor marks
+fig_rats_sub_line <- rats_sub |>
   ggplot(aes(x = time, y = 1)) +
-  # Horizontal line with right arrow at end
-  geom_segment(x = 0, xend = 70, y = 1, yend = 1,
-               arrow = arrow(length = unit(0.2, "cm"), ends = "last", type = "open"),
-               size = 0.5) +
-  # Points for events and censored observations
-  # c(23, 19) for censoring and event 
+  geom_segment(
+    x = 0, xend = 70, y = 1, yend = 1,
+    arrow = arrow(length = unit(0.2, "cm"), ends = "last", type = "open"),
+    size = 0.5
+  ) +
+  # Use different point shapes for censoring vs event
   geom_point(aes(shape = factor(status)), size = 3, fill = "white") +
   scale_shape_manual(values = c(23, 19), labels = c("Censoring", "Tumor development")) +
-  scale_x_continuous(limits= c(0, max(rats_sub$time)), breaks = c(0, unique(rats_sub$time)), 
-                     expand = expansion(c(0, 0.05))) +
+  scale_x_continuous(
+    limits = c(0, max(rats_sub$time)),
+    breaks = c(0, unique(rats_sub$time)),
+    expand = expansion(c(0, 0.05))
+  ) +
   labs(x = "Time (days)", y = "All") +
-  # ylim(0.9, 1.1) +
   theme_classic() +
   theme(
-    axis.line = element_blank(),
-    axis.ticks.y = element_blank(),
-    axis.ticks.x = element_blank(),
-    axis.text.y  = element_blank(),
-    # y-axis title flip 90 degrees
-    axis.title.y = element_text(angle = 0, vjust = 0.5),
-    # Add margin above x-axis title
-    axis.title.x = element_text(margin = margin(t = 15)),
-    legend.position  = "none"
-    # legend.title     = element_blank(),
-    # legend.text = element_text(size = 11)
+    axis.line     = element_blank(),
+    axis.ticks.y  = element_blank(),
+    axis.ticks.x  = element_blank(),
+    axis.text.y   = element_blank(),
+    axis.title.y  = element_text(angle = 0, vjust = 0.5),
+    axis.title.x  = element_text(margin = margin(t = 15)),
+    legend.position = "none"
   )
 
-
-
-fig_rats_sub_swim <- rats_sub |> 
-  mutate(
-    id = row_number()
-  ) |> 
+# Swim-lane view of the same subset
+fig_rats_sub_swim <- rats_sub |>
+  mutate(id = row_number()) |>
   ggplot(aes(x = time, y = reorder(id, time))) +
   geom_linerange(aes(xmin = 0, xmax = time)) +
   geom_point(aes(shape = factor(status)), size = 3, fill = "white") +
   geom_vline(xintercept = 0, linewidth = 1) +
   theme_minimal() +
   scale_y_discrete(name = "Rats") +
-  scale_x_continuous(name = "Time (days)", breaks = seq(0, 100, by = 20), 
-                     expand = expansion(c(0, 0.05))) +
+  scale_x_continuous(
+    name = "Time (days)",
+    breaks = seq(0, 100, by = 20),
+    expand = expansion(c(0, 0.05))
+  ) +
   scale_shape_manual(values = c(23, 19), labels = c("Censoring", "Tumor development")) +
   theme(
-    legend.position = "top",
-    legend.title = element_blank(),
-    axis.text.y = element_blank(),
-    axis.title.x = element_blank(),
-    axis.ticks.y = element_blank(),
-    panel.grid.major.y = element_blank(),
-    legend.text = element_text(size = 11)
-    
+    legend.position   = "top",
+    legend.title      = element_blank(),
+    axis.text.y       = element_blank(),
+    axis.title.x      = element_blank(),
+    axis.ticks.y      = element_blank(),
+    panel.grid.major.y= element_blank(),
+    legend.text       = element_text(size = 11)
   )
-  
-# stack the two plots
-# collect legend from one plot only
-library(patchwork)
-fig3_2 <-  fig_rats_sub_swim / fig_rats_sub_line +
+
+# Stack the two plots (legend is shown in the swim plot)
+fig_rats_followup <- fig_rats_sub_swim / fig_rats_sub_line +
   plot_layout(heights = c(0.8, 0.2))
 
+fig_rats_followup
 
-fig3_2
-
-# ggsave("images/km_rats.png", fig3_2, width = 8, height = 4)
-# ggsave("images/km_rats.eps", fig3_2, width = 8, height = 4)
-
-
-
-
-#------------------------------------------------------------------------------
-# 3. Extract unique sorted event times (for status == 1)
-#------------------------------------------------------------------------------
-ts <- unique(sort(time[status == 1])) 
+# -----------------------------------------------------------------------------
+# 3. Extract unique sorted event times (status == 1) within the treatment group
+# -----------------------------------------------------------------------------
+ts <- unique(sort(time[status == 1]))
 m  <- length(ts)
 ts
 
-# Count number of failures at each event time
+# Number of failures at each event time (named vector)
 ds <- table(time[status == 1])
 
-# Prepare vectors for risk set sizes, the dLambda increments, and cumulative Lambda
-ns <- rep(NA, m)   # Number at risk
-dL <- rep(NA, m)   # Incremental hazard
-L  <- rep(NA, m)   # Cumulative hazard
+# Prepare vectors for risk set sizes, hazard increments, and cumulative hazard
+ns <- rep(NA_real_, m)  # number at risk
+dL <- rep(NA_real_, m)  # hazard increment dLambda
+L  <- rep(NA_real_, m)  # cumulative hazard Lambda
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # 4. Compute Nelson–Aalen estimates
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 for (j in seq_len(m)) {
-  # (a) Risk set: subjects still under observation at ts[j]
+  # Risk set size at ts[j]: subjects still under observation at ts[j]
   ns[j] <- sum(time >= ts[j])
-  
-  # (b) Increment for the Nelson–Aalen: dLambda = d_j / n_j
+
+  # Nelson–Aalen increment: dLambda = d_j / n_j
   dL[j] <- ds[j] / ns[j]
-  
-  # (c) Cumulative hazard: sum of all increments up to j
+
+  # Cumulative hazard up to ts[j]
   L[j] <- sum(dL[1:j])
 }
 
-# Combine into a table for display
-results <- cbind(ts, ds, ns, dL, L)
-round(results, 3)
+# A compact display table of intermediate quantities
+results_NA <- cbind(ts, ds, ns, dL, L)
+round(results_NA, 3)
 
-#------------------------------------------------------------------------------
-# 5a. Plot the estimated cumulative hazard function
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 5a. Plot cumulative hazard using base R step function
+# -----------------------------------------------------------------------------
 par(mfrow = c(1, 1))
 plot(
-  stepfun(ts, c(0, L)), 
-  do.points  = FALSE, 
-  ylim       = c(0, 0.4), 
-  xlim       = c(0, 120), 
-  lwd        = 2, 
+  stepfun(ts, c(0, L)),
+  do.points  = FALSE,
+  ylim       = c(0, 0.4),
+  xlim       = c(0, 120),
+  lwd        = 2,
   frame.plot = FALSE,
   xlab       = "Time (days)",
   ylab       = "Cumulative hazard function",
-  cex.lab    = 1.5, 
+  cex.lab    = 1.5,
   cex.axis   = 1.5,
-  main = ""
+  main       = ""
 )
 
-#------------------------------------------------------------------------------
-# 5b. Plot the estimated cumulative hazard function - ggplot version
-#------------------------------------------------------------------------------
-library(ggplot2)
-# extend last value to create step function
+# -----------------------------------------------------------------------------
+# 5b. Plot cumulative hazard using ggplot2
+# -----------------------------------------------------------------------------
 df_NA <- data.frame(
   time   = c(0, ts),
   cumhaz = c(0, L)
-) |> 
+) |>
   add_row(time = 115, cumhaz = tail(L, 1))
 
 ggplot(df_NA, aes(x = time, y = cumhaz)) +
   geom_step(size = 0.8) +
-  labs(
-    x = "Time (days)", 
-    y = "Cumulative hazard function"
-  ) +
-  # xlim(0, 120) +
-  # ylim(0, 0.4) +
-  theme_minimal() 
+  labs(x = "Time (days)", y = "Cumulative hazard function") +
+  theme_minimal()
 
-# ggsave("images/km_rat_NA.png", width = 8, height = 3.5)
-# ggsave("images/km_rat_NA.eps", device = cairo_ps, width = 8, height = 3.5)
+# =============================================================================
+# (B) Kaplan–Meier Estimates for the Rat Study
+# =============================================================================
+# The hazard increments dL = d_j / n_j computed above imply the KM recursion:
+#   S(t_j) = S(t_{j-1}) * (1 - d_j / n_j)
+# Greenwood's formula provides an approximate SE.
 
-#==============================================================================
-# (B) Kaplan–Meier Estimates for the Rat Study (Figure 3.4, Table 3.3)
-#==============================================================================
-# The 'dL' vector above is used for calculating incremental survival probabilities:
-#   S_{j} = S_{j-1} * (1 - d_j / n_j)
-# Greenwood's formula provides approximate variance.
+# -----------------------------------------------------------------------------
+# 1. Define incremental survival and Greenwood components
+# -----------------------------------------------------------------------------
+csurv     <- 1 - dL                         # 1 - d_j/n_j
+var.csurv <- ds / (ns * (ns - ds))          # d_j / [n_j*(n_j - d_j)]
 
-#------------------------------------------------------------------------------
-# 1. Define incremental survival and variance components
-#------------------------------------------------------------------------------
-csurv        <- 1 - dL               # 1 - (d_j / n_j)
-var.csurv    <- ds / (ns * (ns - ds))  # Greenwood piece: d_j / [n_j*(n_j - d_j)]
+KMsurv <- rep(NA_real_, m)
+se     <- rep(NA_real_, m)
 
-# KM estimates at each event time
-KMsurv <- rep(NA, m)
-se     <- rep(NA, m)
-
-#------------------------------------------------------------------------------
-# 2. Compute step-by-step Kaplan–Meier survival and Greenwood SE
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. Compute KM survival and Greenwood SE
+# -----------------------------------------------------------------------------
 for (j in seq_len(m)) {
-  # Multiply all previous (1 - d_i/n_i)
   KMsurv[j] <- prod(csurv[1:j])
-  
-  # Greenwood's formula for variance
-  se[j] <- KMsurv[j] * sqrt(sum(var.csurv[1:j]))
+  se[j]     <- KMsurv[j] * sqrt(sum(var.csurv[1:j]))
 }
 
-# Create a summary table
-results2 <- cbind(ts, ds, ns, csurv, KMsurv, se)
-round(results2, 3)
+results_KM <- cbind(ts, ds, ns, csurv, KMsurv, se)
+round(results_KM, 3)
 
-#------------------------------------------------------------------------------
-# 3. Compare to survfit() from the survival package
-#------------------------------------------------------------------------------
-obj <- survfit(Surv(time, status) ~ 1, data = rats.rx, conf.type = "log-log")
-summary(obj)
+# -----------------------------------------------------------------------------
+# 3. Compare with survfit() from survival
+# -----------------------------------------------------------------------------
+obj_km_1 <- survfit(Surv(time, status) ~ 1, data = rats.rx, conf.type = "log-log")
+summary(obj_km_1)
 
-# Use broom::tidy to extract results
-library(broom)
-tidy_obj <- tidy(obj)
-tidy_obj 
-#> # A tibble: 38 × 8
-#>     time n.risk n.event n.censor estimate std.error conf.high conf.low
-#>    <dbl>  <dbl>   <dbl>    <dbl>    <dbl>     <dbl>     <dbl>    <dbl>
-#>  1    23    100       0        1    1        0              1    1    
-#>  2    34     99       1        0    0.990    0.0102         1    0.970
-#>  3    39     98       1        0    0.980    0.0144         1    0.952
-#>  ...
+tidy_obj <- broom::tidy(obj_km_1)
+tidy_obj
 
-# Save Kaplan--Meier curve to EPS using base R
-# postscript("images/km_rat_KM.eps",
-#            width = 8, height = 5,
-#            horizontal = FALSE, onefile = FALSE)
-
+# Plot KM curve with base R (and the default CI style from survfit)
 plot(
-  obj,
+  obj_km_1,
   ylim       = c(0, 1),
   xlim       = c(0, 100),
   lwd        = 2,
   frame.plot = FALSE,
   xlab       = "Time (days)",
   ylab       = "Tumor-free probabilities",
-  cex.axis = 0.8
+  cex.axis   = 0.8
 )
 
 legend(
@@ -364,46 +336,33 @@ legend(
   lty = 1:2, lwd = 2
 )
 
-# dev.off()
+# =============================================================================
+# (C) Summaries at Specific Times (KM) and Tidy Tables
+# =============================================================================
+# gtsummary::tbl_survfit() provides formatted summaries at specified time points.
 
+obj_km_1_simple <- survfit(Surv(time, status) ~ 1, data = rats.rx)
 
-#==============================================================================
-# (C) Summaries at Specific Times and Enhanced Tables (Table 3.4)
-#==============================================================================
-library(gtsummary)
-
-#------------------------------------------------------------------------------
-# 1. Single-group KM model
-#------------------------------------------------------------------------------
-obj <- survfit(Surv(time, status) ~ 1, data = rats.rx)
-
-# Summaries at specific time points (40, 60, 80, 100 days)
+# Survival estimates at specified times
 tbl_time <- tbl_survfit(
-  x            = obj,
+  x            = obj_km_1_simple,
   times        = seq(40, 100, by = 20),
   label_header = "{time} days"
 )
-
 tbl_time
 
-# Summaries including 90% and 80% percentiles
+# Selected quantiles (e.g., 90% and 80%)
 tbl_perc <- tbl_survfit(
-  x             = obj,
+  x            = obj_km_1_simple,
   label_header = "{100 * prob}% quantile",
-  probs   = c(0.1, 0.2)
+  probs        = c(0.1, 0.2)
 )
-
 tbl_perc
 
-
-#------------------------------------------------------------------------------
-# 2. Example of plotting via ggsurvfit
-#------------------------------------------------------------------------------
-library(ggsurvfit)
-
-ggplot_obj <- survfit(Surv(time, status) ~ 1, data = rats.rx)
-
-ggsurvfit(ggplot_obj) +
+# -----------------------------------------------------------------------------
+# Example KM plot via ggsurvfit (single group)
+# -----------------------------------------------------------------------------
+ggsurvfit(obj_km_1_simple) +
   add_confidence_interval() +
   add_risktable() +
   scale_x_continuous(breaks = seq(0, 100, by = 20)) +
@@ -411,166 +370,148 @@ ggsurvfit(ggplot_obj) +
   labs(x = "Time (days)", y = "Tumor-free probabilities") +
   theme_minimal()
 
-# ggsave("images//rats_KM_gg.png", width = 7.5, height = 4)
-# ggsave("images//rats_KM_gg.eps", device = cairo_ps, width = 7.5, height = 4)
-
-
-#==============================================================================
-# (D) Log-Rank Test for Rat Study (Comparing Treatment vs. Control)
-#==============================================================================
-# Log-rank test with optional stratification by sex
-#------------------------------------------------------------------------------
+# =============================================================================
+# (D) Log-Rank Test for Rat Study (Treatment vs Control)
+# =============================================================================
 head(rats)
 
-# Basic log-rank test on treatment group difference
+# Stratified log-rank test by sex (rho = 0 gives the standard log-rank test)
 logrank_obj <- survdiff(Surv(time, status) ~ rx + strata(sex), data = rats, rho = 0)
 logrank_obj
 
-# p-value associated with the test
-logrank_obj$pvalue
+# NOTE: survdiff() does not return a p-value field; compute it from the chi-square
+logrank_p <- 1 - pchisq(logrank_obj$chisq, df = length(logrank_obj$n) - 1)
+logrank_p
 
+# -----------------------------------------------------------------------------
+# 1. Two-group KM summaries using gtsummary
+# -----------------------------------------------------------------------------
+obj_km_2 <- survfit(Surv(time, status) ~ rx, data = rats)
 
-#------------------------------------------------------------------------------
-# 1. Tidy tools for a two-group KM
-#------------------------------------------------------------------------------
-obj2 <- survfit(Surv(time, status) ~ rx, data = rats)
-
-# Summaries at time points
 tbl_surv <- tbl_survfit(
-  x            = obj2,
+  x            = obj_km_2,
   times        = seq(40, 100, by = 20),
   label_header = "{time} days",
   label        = list(rx ~ "Treatment")
 )
 tbl_surv
 
-#------------------------------------------------------------------------------
-# 2. KM plot with multiple groups
-#------------------------------------------------------------------------------
-library(ggplot2)
-obj3 <- survfit2(Surv(time, status) ~ rx, data = rats)
+# -----------------------------------------------------------------------------
+# 2. Two-group KM plot with ggsurvfit (includes log-rank p-value annotation)
+# -----------------------------------------------------------------------------
+obj_km_2b <- survfit2(Surv(time, status) ~ rx, data = rats)
 
-ggsurvfit(obj3, linetype_aes = TRUE, linewidth = 1) +
+ggsurvfit(obj_km_2b, linetype_aes = TRUE, linewidth = 1) +
   add_pvalue(caption = "Log-rank {p.value}") +
   add_risktable(
     risktable_stats = "n.risk",
-    theme = list(                  # Format risk table
+    theme = list(
       theme_risktable_default(),
       scale_y_discrete(labels = c("Drug", "Control"))
-    )            
-    ) +
+    )
+  ) +
   labs(x = "Time (days)", y = "Tumor-free probabilities") +
   scale_linetype_manual(values = c(2, 1), labels = c("Control", "Drug")) +
   scale_color_discrete(labels = c("Control", "Drug")) +
   scale_x_continuous(breaks = seq(0, 100, by = 20)) +
-  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2), expand = c(0, 0)) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    breaks = seq(0, 1, by = 0.2),
+    expand = c(0, 0)
+  ) +
   theme_classic() +
   theme(
-    legend.position   = "top",
-    legend.key.width  = unit(1, "cm"),
-    panel.grid.major.y= element_line(color = "gray90"),
-    legend.text       = element_text(size = 10),
-    plot.caption      = element_text(size = 10)
+    legend.position    = "top",
+    legend.key.width   = unit(1, "cm"),
+    panel.grid.major.y = element_line(color = "gray90"),
+    legend.text        = element_text(size = 10),
+    plot.caption       = element_text(size = 10)
   )
 
-ggsave("images//rats_KM_gg2.png", width = 7, height = 4.5)
-ggsave("images//rats_KM_gg2.eps", device = cairo_ps, width = 7, height = 4.5)
+# Optional export (commented to avoid side effects)
+# ggsave("images//rats_KM_gg2.png", width = 7, height = 4.5)
+# ggsave("images//rats_KM_gg2.eps", device = cairo_ps, width = 7, height = 4.5)
 
+# =============================================================================
+# (E) German Breast Cancer (GBC) Study: KM and Log-Rank
+# =============================================================================
+# The full dataset contains multiple event types; here we focus on first-event times.
 
-#==============================================================================
-# (E) German Breast Cancer (GBC) Study for Figures 3.7, 3.9
-#==============================================================================
-# Detailed data contains multiple events, but we focus on first-event times.
-#------------------------------------------------------------------------------
 gbc <- read.table("Data//German Breast Cancer Study//gbc.txt", header = TRUE)
 
 # Sort by subject id, then time
 o <- order(gbc$id, gbc$time)
-gbc <- gbc[o,]
+gbc <- gbc[o, ]
 
-# Keep only first row per subject => first event
+# Keep only the first record per subject (first event / first censoring)
 data.CE <- gbc[!duplicated(gbc$id), ]
 
-# Convert status>0 to 1 if it is either relapse or death
+# Collapse status into 0/1 (event vs censoring)
 data.CE$status <- ifelse(data.CE$status > 0, 1, 0)
 
-
-#------------------------------------------------------------------------------
-# 1. KM curves by hormone group, possibly stratified by menopausal status
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 1. Base R KM curves by hormone, overall and stratified by menopausal status
+# -----------------------------------------------------------------------------
 par(mfrow = c(1, 3))
 
-# (a) Overall
+# Overall
 km_overall <- survfit(Surv(time, status) ~ hormone, data = data.CE)
 plot(
-  km_overall, 
-  xlim  = c(0, 80), 
-  lwd   = 2, 
-  frame = FALSE, 
-  lty   = c(2, 1),
-  xlab  = "Time (months)",
-  ylab  = "Relapse-free survival probabilities",
-  main  = "Overall",
-  cex.lab = 1.5, cex.axis = 1.5, cex.main = 1.5
+  km_overall,
+  xlim     = c(0, 80),
+  lwd      = 2,
+  frame    = FALSE,
+  lty      = c(2, 1),
+  xlab     = "Time (months)",
+  ylab     = "Relapse-free survival probabilities",
+  main     = "Overall",
+  cex.lab  = 1.5,
+  cex.axis = 1.5,
+  cex.main = 1.5
 )
-legend(
-  1, 0.2, 
-  lty = 2:1, c("No Hormone", "Hormone"), 
-  lwd = 2, cex = 1.5
-)
+legend(1, 0.2, lty = 2:1, c("No Hormone", "Hormone"), lwd = 2, cex = 1.5)
 
-# (b) Pre-menopausal (meno == 1)
+# Pre-menopausal (meno == 1)
 km_pre <- survfit(Surv(time, status) ~ hormone, data = data.CE[data.CE$meno == 1, ])
 plot(
-  km_pre, 
-  xlim  = c(0, 80), 
-  lwd   = 2, 
-  frame = FALSE,
-  lty   = c(2, 1),
-  xlab  = "Time (months)",
-  ylab  = "Relapse-free survival probabilities",
-  main  = "Pre-Menopausal",
-  cex.lab = 1.5, cex.axis = 1.5, cex.main = 1.5
+  km_pre,
+  xlim     = c(0, 80),
+  lwd      = 2,
+  frame    = FALSE,
+  lty      = c(2, 1),
+  xlab     = "Time (months)",
+  ylab     = "Relapse-free survival probabilities",
+  main     = "Pre-Menopausal",
+  cex.lab  = 1.5,
+  cex.axis = 1.5,
+  cex.main = 1.5
 )
-legend(
-  1, 0.2, 
-  lty = 2:1, c("No Hormone", "Hormone"), 
-  lwd = 2, cex = 1.5
-)
+legend(1, 0.2, lty = 2:1, c("No Hormone", "Hormone"), lwd = 2, cex = 1.5)
 
-# (c) Post-menopausal (meno == 2)
+# Post-menopausal (meno == 2)
 km_post <- survfit(Surv(time, status) ~ hormone, data = data.CE[data.CE$meno == 2, ])
 plot(
-  km_post, 
-  xlim  = c(0, 80), 
-  lwd   = 2, 
-  frame = FALSE,
-  lty   = c(2, 1),
-  xlab  = "Time (months)",
-  ylab  = "Relapse-free survival probabilities",
-  main  = "Post-Menopausal",
-  cex.lab = 1.5, cex.axis = 1.5, cex.main = 1.5
+  km_post,
+  xlim     = c(0, 80),
+  lwd      = 2,
+  frame    = FALSE,
+  lty      = c(2, 1),
+  xlab     = "Time (months)",
+  ylab     = "Relapse-free survival probabilities",
+  main     = "Post-Menopausal",
+  cex.lab  = 1.5,
+  cex.axis = 1.5,
+  cex.main = 1.5
 )
-legend(
-  1, 0.2,
-  lty = 2:1, c("No Hormone", "Hormone"),
-  lwd = 2, cex = 1.5
-)
+legend(1, 0.2, lty = 2:1, c("No Hormone", "Hormone"), lwd = 2, cex = 1.5)
 
-
-#------------------------------------------------------------------------------
-# 2. ggplot2 version (3.9) via ggsurvfit, patchwork
-#------------------------------------------------------------------------------
-library(patchwork) # For combining plots
-library(ggsci) # For the JAMA color style
-library(ggsurvfit)
-
-# (a) Subset survival fits
+# -----------------------------------------------------------------------------
+# 2. ggsurvfit version: three panels (overall, pre-, post-menopausal)
+# -----------------------------------------------------------------------------
 pre_obj2  <- survfit2(Surv(time, status) ~ hormone, data = data.CE |> filter(meno == 1))
 post_obj2 <- survfit2(Surv(time, status) ~ hormone, data = data.CE |> filter(meno == 2))
 all_obj2  <- survfit2(Surv(time, status) ~ hormone, data = data.CE)
 
-# (b) Helper function to produce KM plot
 plot_gbc_KM <- function(obj, title = NULL) {
   p <- ggsurvfit(obj, linetype_aes = TRUE, linewidth = 1) +
     add_risktable(
@@ -581,10 +522,10 @@ plot_gbc_KM <- function(obj, title = NULL) {
       )
     ) +
     scale_y_continuous(
-      "Relapse-free survival probabilities", 
-      limits  = c(0, 1),
-      breaks  = seq(0, 1, by = 0.2),
-      expand  = expansion(c(0, 0.005))
+      "Relapse-free survival probabilities",
+      limits = c(0, 1),
+      breaks = seq(0, 1, by = 0.2),
+      expand = expansion(c(0, 0.005))
     ) +
     scale_x_continuous("Time (months)", breaks = seq(0, 84, by = 12)) +
     scale_color_jama(labels = c("No Hormone", "Hormone")) +
@@ -594,32 +535,30 @@ plot_gbc_KM <- function(obj, title = NULL) {
       plot.margin        = margin(0, 0, 0, 0),
       legend.position    = "top",
       legend.key.width   = unit(1, "cm"),
-      panel.grid.major.y = element_line(),
+      panel.grid.major.y = element_line(color = "gray80"),
       legend.text        = element_text(size = 10),
       plot.caption       = element_text(size = 10),
       plot.title         = element_text(size = 12)
     )
+
   if (!is.null(title)) p <- p + ggtitle(title)
   p
 }
 
-# Three panels by menopausal status and overall
 pre_fig  <- plot_gbc_KM(pre_obj2,  "Pre-Menopausal")
 post_fig <- plot_gbc_KM(post_obj2, "Post-Menopausal")
 all_fig  <- plot_gbc_KM(all_obj2,  "Overall")
 
-# Combine with patchwork
 fig_meno <- wrap_plots(ggsurvfit_build(pre_fig), ggsurvfit_build(post_fig), ncol = 2)
+
 wrap_plots(ggsurvfit_build(all_fig), plot_spacer(), fig_meno, ncol = 1) +
   plot_layout(heights = c(1, 0.02, 1))
 
-# ggsave("images//gbc_KM_gg.png", width = 8, height = 9)
-# ggsave("images//gbc_KM_gg.eps", width = 8, height = 9)
-
-#------------------------------------------------------------------------------
-# 3. Stratified log-rank test (menopausal status) and unstratified log-rank
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 3. Log-rank tests: stratified by menopausal status and unstratified
+# -----------------------------------------------------------------------------
 survdiff(Surv(time, status) ~ hormone + strata(meno), data = data.CE)
 survdiff(Surv(time, status) ~ hormone, data = data.CE)
+
 
 ```
