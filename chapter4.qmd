@@ -625,4 +625,66 @@ heart_tbl <- tbl_regression(
 
 heart_tbl
 
+## GBC Cox model with time-varying hormone effect (stratified by tumor grade)
+df$hormone <- as.numeric(df$hormone)
+
+obj_horm_tv <- coxph(
+  Surv(time, status) ~ hormone + tt(hormone) + meno + agec + size 
+            + log_nodes + prog + estrg + strata(grade),
+  data = df,
+  tt = function(x, t, ...) x * t
+)
+
+summary(obj_horm_tv)
+#>                  coef exp(coef)  se(coef)      z Pr(>|z|)    
+#> hormone     -0.459776  0.631425  0.245364 -1.874   0.0610 .  
+#> tt(hormone)  0.002093  1.002095  0.007549  0.277   0.7816    
+#> meno2        0.248076  1.281557  0.156303  1.587   0.1125    
+#> agec2       -0.498373  0.607518  0.197753 -2.520   0.0117 *  
+#> agec3       -0.494745  0.609726  0.249692 -1.981   0.0475 *  
+#> size         0.006650  1.006672  0.003955  1.682   0.0927 .  
+#> log_nodes    0.477858  1.612616  0.066183  7.220 5.19e-13 ***
+#> prog        -0.229851  0.794652  0.057239 -4.016 5.93e-05 ***
+#> estrg        0.030966  1.031451  0.046585  0.665   0.5062    
+#> ---
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# Get c(beta1, beta2) and 2 x 2 variance matrix
+beta12 <- obj_horm_tv$coefficients[1:2]
+Sigma12 <- obj_horm_tv$var[1:2, 1:2]
+# Joint test
+chisq12 <- t(beta12) %*% solve(Sigma12) %*% beta12
+pval12  <- 1 - pchisq(chisq12, 2)
+# [1,] 0.007598889
+
+# Point estimate and std error of (beta1 + beta2 * t)
+t <- seq(0, 84, by = 1)
+log_hr <- beta12[1] + beta12[2] * t
+se_log_hr <- sqrt(Sigma12[1, 1] + 2 * Sigma12[1, 2] * t + Sigma12[2, 2] * t^2)
+
+# Plot HR over time with 95% CI - ggplot
+tibble(
+  time = t,
+  HR   = exp(log_hr),
+  HR_low = exp(log_hr - 1.96 * se_log_hr),
+  HR_up  = exp(log_hr + 1.96 * se_log_hr)
+) %>%
+  ggplot(aes(x = time, y = HR)) +
+  geom_line(linewidth = 1) +
+  geom_hline(yintercept = 1, linetype = "dotted", linewidth = 0.6) +
+  geom_ribbon(aes(ymin = HR_low, ymax = HR_up), alpha = 0.2) +
+  xlab("Time (months)") +
+  ylab("Hazard ratio for hormone effect") +
+  scale_y_log10(
+    labels = scales::label_percent(accuracy = 1)
+  ) +
+  scale_x_continuous(
+    breaks = seq(0, 84, by = 12)
+  ) +
+    theme_minimal() +
+  theme(
+    axis.text = element_text(size = 10)
+  )
+
+ggsave("images/cox_hormone_tv.png", width = 8, height = 3.5)
+ggsave("images/cox_hormone_tv.eps", width = 8, height = 3.5, device = cairo_ps)
 ```
