@@ -500,8 +500,8 @@
     "objectID": "chap1.html#outline",
     "href": "chap1.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "",
-    "text": "Time-to-event data and examples\nCensoring mechanisms and implications\nSummarizing the raw data\n\n\\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\]"
+    "section": "Outline",
+    "text": "Outline\n\nTime-to-event data and examples\nCensoring mechanisms and implications\nSummarizing the raw data\n\n\\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\]"
   },
   {
     "objectID": "chap1.html#what-are-time-to-event-data",
@@ -613,7 +613,7 @@
     "href": "chap1.html#censoring-mechanisms",
     "title": "Applied Survival Analysis",
     "section": "Censoring Mechanisms",
-    "text": "Censoring Mechanisms\n\nTwo mechanisms\n\nStudy termination (administrative censoring)\nLoss to follow-up (LTFU, e.g., withdrawal, death from other causes)\n\n\n\n\n\n\n\n\nCaution about censoring\n\n\n\n\nEvent/censoring time \\(=\\) time from starting point (e.g., randomization) to event/censoring (as opposed to time on the calendar)\nLTFU may not be independent of outcome (e.g., sicker patients withdraw early)\nCollect withdrawal reasons if possible\nCensoring or competing risk? \\(\\leftarrow\\) Domain knowledge"
+    "text": "Censoring Mechanisms\n\nTwo mechanisms\n\nStudy termination (administrative censoring)\nLoss to follow-up (LTFU, e.g., withdrawal, death from other causes)\n\n\n\n\n\n\n\n\nCaution about censoring\n\n\n\nEvent/censoring time \\(=\\) time from starting point (e.g., randomization) to event/censoring (as opposed to time on the calendar)\nLTFU may not be independent of outcome (e.g., sicker patients withdraw early)\nCollect withdrawal reasons if possible\nCensoring or competing risk? \\(\\leftarrow\\) Domain knowledge"
   },
   {
     "objectID": "chap1.html#censoring-mechanisms-illustration",
@@ -662,7 +662,7 @@
     "href": "chap1.html#how-to-calculate-event-rate-i",
     "title": "Applied Survival Analysis",
     "section": "How to Calculate Event Rate (I)",
-    "text": "How to Calculate Event Rate (I)\n\nLength of follow-up is event-specific\n\nIf an event is “non-recurrent”, its occurrence means patient is no longer at risk for it\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nDenominator is called person-year (or person-time) of follow-up."
+    "text": "How to Calculate Event Rate (I)\n\nLength of follow-up is event-specific\n\nIf an event is “non-recurrent”, its occurrence means patient is no longer at risk for it\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\nDenominator is called person-year (or person-time) of follow-up."
   },
   {
     "objectID": "chap1.html#how-to-calculate-event-rate-ii",
@@ -5782,5 +5782,12 @@
     "title": "In-class Quiz — Chapter 3 (Kaplan–Meier in Practice)",
     "section": "Questions",
     "text": "Questions\n\n(a) Construct the risk-set table\n\nList the distinct event times.\nAt each event time, compute:\n\nNumber at risk just before that time.\nNumber of events at that time.\nThe discrete hazard = (events) / (at risk).\n\n\nPresent your work in a table.\n\n\n\n(b) Kaplan–Meier estimates\nUsing the product-limit method:\n\nCompute the Kaplan–Meier estimate at 5 months.\nCompute the Kaplan–Meier estimate at 8 months.\n\nShow each multiplication step clearly.\n\n\n\n(c) Interpretation\nBased on your result in part (b), what percentage of patients remain free of readmission at 8 months?"
+  },
+  {
+    "objectID": "chap4.html#hw3-due-mar-4",
+    "href": "chap4.html#hw3-due-mar-4",
+    "title": "Applied Survival Analysis",
+    "section": "HW3 (Due Mar 4)",
+    "text": "HW3 (Due Mar 4)\n\nProblem 4.8\nProblem 4.15\nProblems 4.17 and 4.23\nExtra credit: Problem 4.24"
   }
 ]

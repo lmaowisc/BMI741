@@ -438,19 +438,19 @@ obj <- coxph(Surv(time, status)~ hormone + meno + age + size + grade
 
     #--- Summary results ------------------
     summary(obj)
-#>   n= 686, number of events= 299 
-#>               coef exp(coef)  se(coef)      z Pr(>|z|)    
-#> hormone2 -0.346278  0.707316  0.129075 -2.683 0.007301 ** 
-#> meno2     0.258445  1.294915  0.183476  1.409 0.158954    
-#> age      -0.009459  0.990585  0.009301 -1.017 0.309126    
-#> size      0.007796  1.007827  0.003939  1.979 0.047794 *  
-#> grade2    0.636112  1.889121  0.249202  2.553 0.010693 *  
-#> grade3    0.779654  2.180718  0.268480  2.904 0.003685 ** 
-#> nodes     0.048789  1.049998  0.007447  6.551  5.7e-11 ***
-#> prog     -0.221724  0.801137  0.057353 -3.866 0.000111 ***
-#> estrg     0.019731  1.019927  0.045037  0.438 0.661307    
-#> ---
-#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+    #>   n= 686, number of events= 299 
+    #>               coef exp(coef)  se(coef)      z Pr(>|z|)    
+    #> hormone2 -0.346278  0.707316  0.129075 -2.683 0.007301 ** 
+    #> meno2     0.258445  1.294915  0.183476  1.409 0.158954    
+    #> age      -0.009459  0.990585  0.009301 -1.017 0.309126    
+    #> size      0.007796  1.007827  0.003939  1.979 0.047794 *  
+    #> grade2    0.636112  1.889121  0.249202  2.553 0.010693 *  
+    #> grade3    0.779654  2.180718  0.268480  2.904 0.003685 ** 
+    #> nodes     0.048789  1.049998  0.007447  6.551  5.7e-11 ***
+    #> prog     -0.221724  0.801137  0.057353 -3.866 0.000111 ***
+    #> estrg     0.019731  1.019927  0.045037  0.438 0.661307    
+    #> ---
+    #> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
     ```
 :::
 
@@ -803,7 +803,6 @@ abline(0, 0, lty = 3, lwd = 2) # add a reference line
 ![](images/cox_gbc_age.png){fig-align="center" width="60%"}
 :::
 
-
 ## Example: German Breast Cancer (XV)
 
 ::: fragment
@@ -811,7 +810,6 @@ abline(0, 0, lty = 3, lwd = 2) # add a reference line
 
 ![](images/cox_gbc_nodes.png){fig-align="center" width="80%"}
 :::
-
 
 ## Example: German Breast Cancer (XVI)
 
@@ -1148,11 +1146,9 @@ obj <- coxph(Surv(start, stop, event) ~ covariates)
     -   Internal vs external
     -   `coxph(Surv(start, stop, event) ~ covariates)`
 
-<!-- ## HW3 (Due Mar 5) -->
+## HW3 (Due Mar 4)
 
-<!-- -   Problem 4.8 -->
-<!-- -   Problem 4.14 -->
-<!-- -   Problems 4.15 and 4.21 -->
-<!-- -   Extra credit: Problem 4.22 -->
-
-
+-   Problem 4.8
+-   Problem 4.15
+-   Problems 4.17 and 4.23
+-   Extra credit: Problem 4.24
