@@ -1101,10 +1101,18 @@ obj <- coxph(Surv(start, stop, event) ~ covariates)
     ```{r}
     #| eval: false
     #| echo: true
-    coxph(Surv(time, status) ~ age + meno + hormone + prog + estrg  
-            + meno:log(time), data = df)
+# Fit a Cox model with time-varying hormone treatment effect
+obj_horm_tv <- coxph(
+  Surv(time, status) ~ hormone + tt(hormone) + meno + agec + size
+                     + log_nodes + prog + estrg + strata(grade),
+  data = df,
+  # Define time transformation: x * t (linear time interaction)
+  tt = function(x, t, ...) x * t
+)
     ```
 :::
+
+## Notes (III)
 
 ::: fragment
 -   **Spline models**

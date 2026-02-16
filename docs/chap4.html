@@ -1582,11 +1582,20 @@ U_n(\beta)=n^{-1}\sum_{i=1}^n\int_0^\infty \left\{Z_i(t)- \frac{\sum_{j=1}^n I(X
 <li>Covariate <span class="math inline">\(\times\)</span> time</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> age <span class="sc">+</span> meno <span class="sc">+</span> hormone <span class="sc">+</span> prog <span class="sc">+</span> estrg  </span>
-<span id="cb24-2"><a></a>        <span class="sc">+</span> meno<span class="sc">:</span><span class="fu">log</span>(time), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a><span class="co"># Fit a Cox model with time-varying hormone treatment effect</span></span>
+<span id="cb24-2"><a></a>obj_horm_tv <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb24-3"><a></a>  <span class="fu">Surv</span>(time, status) <span class="sc">~</span> hormone <span class="sc">+</span> <span class="fu">tt</span>(hormone) <span class="sc">+</span> meno <span class="sc">+</span> agec <span class="sc">+</span> size</span>
+<span id="cb24-4"><a></a>                 <span class="sc">+</span> log_nodes <span class="sc">+</span> prog <span class="sc">+</span> estrg <span class="sc">+</span> <span class="fu">strata</span>(grade),</span>
+<span id="cb24-5"><a></a>  <span class="at">data =</span> df,</span>
+<span id="cb24-6"><a></a>  <span class="co"># Define time transformation: x * t (linear time interaction)</span></span>
+<span id="cb24-7"><a></a>  <span class="at">tt =</span> <span class="cf">function</span>(x, t, ...) x <span class="sc">*</span> t</span>
+<span id="cb24-8"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
 </div>
+</section>
+<section id="notes-iii" class="slide level2">
+<h2>Notes (III)</h2>
 <div class="fragment">
 <ul>
 <li><p><strong>Spline models</strong></p>
