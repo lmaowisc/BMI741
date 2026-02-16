@@ -233,7 +233,7 @@ df$meno    <- factor(df$meno)
 
 # Add a tiny random component to break ties
 set.seed(123)
-df$time.dties <- df$time / 12 + runif(nrow(df), 0, 1e-12)
+df$time.dties <- df$time / 12 + runif(nrow(df), 0, 1e - 12)
 
 # Fit additive hazards model
 obj_ah <- ah(
@@ -244,6 +244,7 @@ obj_ah <- ah(
 
 summary(obj_ah)
 beta <- obj_ah$coef  # estimated regression coefficients
+obj_ah$var  # variance of the regression coefficients
 #------------------------------------------------------------------------------
 # 2. Aalen's Nonparametric Model (aalen) from timereg
 #------------------------------------------------------------------------------
@@ -258,6 +259,7 @@ obj_aalen <- aalen(
 summary(obj_aalen)
 
 Bt <- obj_aalen$cum  # cumulative regression function estimates
+obj_aalen$var.cum # variance of the cumulative regression function estimates
 
 par(mfrow = c(5, 2))
 plot(obj_aalen)
@@ -386,8 +388,8 @@ tibble(
   scale_y_continuous("Baseline cumulative odds", limits = c(0, 1.25)) +
   theme_minimal()
 
-ggsave("images/nonhaz_po_base.png", width = 6, height = 4)
-ggsave("images/nonhaz_po_base.eps", width = 6, height = 4)
+# ggsave("images/nonhaz_po_base.png", width = 6, height = 4)
+# ggsave("images/nonhaz_po_base.eps", width = 6, height = 4)
 
 
 #==============================================================================
