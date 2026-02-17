@@ -528,46 +528,44 @@ Question
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Patient-level summary</span></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">empl =</span> <span class="fu">case_when</span>(</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      empl <span class="sc">==</span> <span class="st">"ft"</span> <span class="sc">~</span> <span class="st">"1.Full-time"</span>,</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>      empl <span class="sc">==</span> <span class="st">"pt"</span> <span class="sc">~</span> <span class="st">"2.Part-time"</span>,</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"3. Other"</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> trt, <span class="co"># by treatment</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">include =</span> <span class="fu">c</span>(age, sex, race, empl, years, level, pa, nosmk), <span class="co"># variables tabulated</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    age <span class="sc">~</span> <span class="st">"Age (years)"</span>,</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    sex <span class="sc">~</span> <span class="st">"Sex"</span>,</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    race <span class="sc">~</span> <span class="st">"Race"</span>,</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    empl <span class="sc">~</span> <span class="st">"Employment status"</span>,</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    years <span class="sc">~</span> <span class="st">"Years of smoking"</span>,</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    level <span class="sc">~</span> <span class="st">"Smoking intensity"</span>,</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    pa <span class="sc">~</span> <span class="st">"Number of prior quit attempts"</span>,</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    nosmk <span class="sc">~</span> <span class="st">"Number of days previously abstinent"</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_overall</span>(<span class="at">last =</span> <span class="cn">TRUE</span>) <span class="co"># add overall column to the *right*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">empl =</span> <span class="fu">factor</span>(empl, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"ft"</span>, <span class="st">"pt"</span>, <span class="st">"other"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Full-time"</span>, <span class="st">"Part-time"</span>, <span class="st">"Other"</span>)),</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">level =</span> <span class="fu">factor</span>(level, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"heavy"</span>, <span class="st">"light"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Heavy"</span>, <span class="st">"Light"</span>)),</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">race =</span> <span class="fu">factor</span>(race, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"hispanic"</span>, <span class="st">"white"</span>, <span class="st">"other"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Black"</span>, <span class="st">"Hispanic"</span>, <span class="st">"White"</span>, <span class="st">"Other"</span>))</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> trt, <span class="co"># by treatment</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">include =</span> <span class="fu">c</span>(age, sex, race, empl, years, level, pa, nosmk), <span class="co"># variables tabulated</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    age <span class="sc">~</span> <span class="st">"Age (years)"</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    sex <span class="sc">~</span> <span class="st">"Sex"</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    race <span class="sc">~</span> <span class="st">"Race"</span>,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    empl <span class="sc">~</span> <span class="st">"Employment status"</span>,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    years <span class="sc">~</span> <span class="st">"Years of smoking"</span>,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    level <span class="sc">~</span> <span class="st">"Smoking intensity"</span>,</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    pa <span class="sc">~</span> <span class="st">"Number of prior quit attempts"</span>,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    nosmk <span class="sc">~</span> <span class="st">"Number of days previously abstinent"</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_overall</span>(<span class="at">last =</span> <span class="cn">TRUE</span>) <span class="co"># add overall column to the *right*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="gesyspfmzs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#gesyspfmzs table {
+<div id="yqfxgvrebz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yqfxgvrebz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#gesyspfmzs thead, #gesyspfmzs tbody, #gesyspfmzs tfoot, #gesyspfmzs tr, #gesyspfmzs td, #gesyspfmzs th {
+#yqfxgvrebz thead, #yqfxgvrebz tbody, #yqfxgvrebz tfoot, #yqfxgvrebz tr, #yqfxgvrebz td, #yqfxgvrebz th {
   border-style: none;
 }
 
-#gesyspfmzs p {
+#yqfxgvrebz p {
   margin: 0;
   padding: 0;
 }
 
-#gesyspfmzs .gt_table {
+#yqfxgvrebz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -593,12 +591,12 @@ Question
   border-left-color: #D3D3D3;
 }
 
-#gesyspfmzs .gt_caption {
+#yqfxgvrebz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#gesyspfmzs .gt_title {
+#yqfxgvrebz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -610,7 +608,7 @@ Question
   border-bottom-width: 0;
 }
 
-#gesyspfmzs .gt_subtitle {
+#yqfxgvrebz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -622,7 +620,7 @@ Question
   border-top-width: 0;
 }
 
-#gesyspfmzs .gt_heading {
+#yqfxgvrebz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -634,13 +632,13 @@ Question
   border-right-color: #D3D3D3;
 }
 
-#gesyspfmzs .gt_bottom_border {
+#yqfxgvrebz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#gesyspfmzs .gt_col_headings {
+#yqfxgvrebz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -655,7 +653,7 @@ Question
   border-right-color: #D3D3D3;
 }
 
-#gesyspfmzs .gt_col_heading {
+#yqfxgvrebz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -675,7 +673,7 @@ Question
   overflow-x: hidden;
 }
 
-#gesyspfmzs .gt_column_spanner_outer {
+#yqfxgvrebz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -687,15 +685,15 @@ Question
   padding-right: 4px;
 }
 
-#gesyspfmzs .gt_column_spanner_outer:first-child {
+#yqfxgvrebz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#gesyspfmzs .gt_column_spanner_outer:last-child {
+#yqfxgvrebz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#gesyspfmzs .gt_column_spanner {
+#yqfxgvrebz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -707,11 +705,11 @@ Question
   width: 100%;
 }
 
-#gesyspfmzs .gt_spanner_row {
+#yqfxgvrebz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#gesyspfmzs .gt_group_heading {
+#yqfxgvrebz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -737,7 +735,7 @@ Question
   text-align: left;
 }
 
-#gesyspfmzs .gt_empty_group_heading {
+#yqfxgvrebz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -752,15 +750,15 @@ Question
   vertical-align: middle;
 }
 
-#gesyspfmzs .gt_from_md > :first-child {
+#yqfxgvrebz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#gesyspfmzs .gt_from_md > :last-child {
+#yqfxgvrebz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#gesyspfmzs .gt_row {
+#yqfxgvrebz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -779,7 +777,7 @@ Question
   overflow-x: hidden;
 }
 
-#gesyspfmzs .gt_stub {
+#yqfxgvrebz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -792,7 +790,7 @@ Question
   padding-right: 5px;
 }
 
-#gesyspfmzs .gt_stub_row_group {
+#yqfxgvrebz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -806,15 +804,15 @@ Question
   vertical-align: top;
 }
 
-#gesyspfmzs .gt_row_group_first td {
+#yqfxgvrebz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#gesyspfmzs .gt_row_group_first th {
+#yqfxgvrebz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#gesyspfmzs .gt_summary_row {
+#yqfxgvrebz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -824,16 +822,16 @@ Question
   padding-right: 5px;
 }
 
-#gesyspfmzs .gt_first_summary_row {
+#yqfxgvrebz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#gesyspfmzs .gt_first_summary_row.thick {
+#yqfxgvrebz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#gesyspfmzs .gt_last_summary_row {
+#yqfxgvrebz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -843,7 +841,7 @@ Question
   border-bottom-color: #D3D3D3;
 }
 
-#gesyspfmzs .gt_grand_summary_row {
+#yqfxgvrebz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -853,7 +851,7 @@ Question
   padding-right: 5px;
 }
 
-#gesyspfmzs .gt_first_grand_summary_row {
+#yqfxgvrebz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -863,7 +861,7 @@ Question
   border-top-color: #D3D3D3;
 }
 
-#gesyspfmzs .gt_last_grand_summary_row_top {
+#yqfxgvrebz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -873,11 +871,11 @@ Question
   border-bottom-color: #D3D3D3;
 }
 
-#gesyspfmzs .gt_striped {
+#yqfxgvrebz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#gesyspfmzs .gt_table_body {
+#yqfxgvrebz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -886,7 +884,7 @@ Question
   border-bottom-color: #D3D3D3;
 }
 
-#gesyspfmzs .gt_footnotes {
+#yqfxgvrebz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -900,7 +898,7 @@ Question
   border-right-color: #D3D3D3;
 }
 
-#gesyspfmzs .gt_footnote {
+#yqfxgvrebz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -909,7 +907,7 @@ Question
   padding-right: 5px;
 }
 
-#gesyspfmzs .gt_sourcenotes {
+#yqfxgvrebz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -923,7 +921,7 @@ Question
   border-right-color: #D3D3D3;
 }
 
-#gesyspfmzs .gt_sourcenote {
+#yqfxgvrebz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -931,63 +929,63 @@ Question
   padding-right: 5px;
 }
 
-#gesyspfmzs .gt_left {
+#yqfxgvrebz .gt_left {
   text-align: left;
 }
 
-#gesyspfmzs .gt_center {
+#yqfxgvrebz .gt_center {
   text-align: center;
 }
 
-#gesyspfmzs .gt_right {
+#yqfxgvrebz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#gesyspfmzs .gt_font_normal {
+#yqfxgvrebz .gt_font_normal {
   font-weight: normal;
 }
 
-#gesyspfmzs .gt_font_bold {
+#yqfxgvrebz .gt_font_bold {
   font-weight: bold;
 }
 
-#gesyspfmzs .gt_font_italic {
+#yqfxgvrebz .gt_font_italic {
   font-style: italic;
 }
 
-#gesyspfmzs .gt_super {
+#yqfxgvrebz .gt_super {
   font-size: 65%;
 }
 
-#gesyspfmzs .gt_footnote_marks {
+#yqfxgvrebz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#gesyspfmzs .gt_asterisk {
+#yqfxgvrebz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#gesyspfmzs .gt_indent_1 {
+#yqfxgvrebz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#gesyspfmzs .gt_indent_2 {
+#yqfxgvrebz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#gesyspfmzs .gt_indent_3 {
+#yqfxgvrebz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#gesyspfmzs .gt_indent_4 {
+#yqfxgvrebz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#gesyspfmzs .gt_indent_5 {
+#yqfxgvrebz .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1045,28 +1043,28 @@ Question
 </td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;black</td>
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Black</td>
 <td class="gt_row gt_center" headers="stat_1">15 (25%)</td>
 <td class="gt_row gt_center" headers="stat_2">23 (36%)</td>
 <td class="gt_row gt_center" headers="stat_0">38 (30%)</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;hispanic</td>
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Hispanic</td>
 <td class="gt_row gt_center" headers="stat_1">4 (6.6%)</td>
 <td class="gt_row gt_center" headers="stat_2">4 (6.3%)</td>
 <td class="gt_row gt_center" headers="stat_0">8 (6.4%)</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;other</td>
-<td class="gt_row gt_center" headers="stat_1">1 (1.6%)</td>
-<td class="gt_row gt_center" headers="stat_2">1 (1.6%)</td>
-<td class="gt_row gt_center" headers="stat_0">2 (1.6%)</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;white</td>
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;White</td>
 <td class="gt_row gt_center" headers="stat_1">41 (67%)</td>
 <td class="gt_row gt_center" headers="stat_2">36 (56%)</td>
 <td class="gt_row gt_center" headers="stat_0">77 (62%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Other</td>
+<td class="gt_row gt_center" headers="stat_1">1 (1.6%)</td>
+<td class="gt_row gt_center" headers="stat_2">1 (1.6%)</td>
+<td class="gt_row gt_center" headers="stat_0">2 (1.6%)</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="label">Employment status</td>
@@ -1078,19 +1076,19 @@ Question
 </td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;1.Full-time</td>
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Full-time</td>
 <td class="gt_row gt_center" headers="stat_1">34 (56%)</td>
 <td class="gt_row gt_center" headers="stat_2">38 (59%)</td>
 <td class="gt_row gt_center" headers="stat_0">72 (58%)</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;2.Part-time</td>
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Part-time</td>
 <td class="gt_row gt_center" headers="stat_1">7 (11%)</td>
 <td class="gt_row gt_center" headers="stat_2">7 (11%)</td>
 <td class="gt_row gt_center" headers="stat_0">14 (11%)</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;3. Other</td>
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Other</td>
 <td class="gt_row gt_center" headers="stat_1">20 (33%)</td>
 <td class="gt_row gt_center" headers="stat_2">19 (30%)</td>
 <td class="gt_row gt_center" headers="stat_0">39 (31%)</td>
@@ -1111,13 +1109,13 @@ Question
 </td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;heavy</td>
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Heavy</td>
 <td class="gt_row gt_center" headers="stat_1">44 (72%)</td>
 <td class="gt_row gt_center" headers="stat_2">45 (70%)</td>
 <td class="gt_row gt_center" headers="stat_0">89 (71%)</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;light</td>
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Light</td>
 <td class="gt_row gt_center" headers="stat_1">17 (28%)</td>
 <td class="gt_row gt_center" headers="stat_2">19 (30%)</td>
 <td class="gt_row gt_center" headers="stat_0">36 (29%)</td>

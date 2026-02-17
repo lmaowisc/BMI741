@@ -163,11 +163,9 @@ df <- read.table("Data//Smoking Cessation Study//smoking.txt")
 # Patient-level summary
 df |> 
   mutate(
-    empl = case_when(
-      empl == "ft" ~ "1.Full-time",
-      empl == "pt" ~ "2.Part-time",
-      TRUE ~ "3. Other"
-    ),
+    empl = factor(empl, levels = c("ft", "pt", "other"), labels = c("Full-time", "Part-time", "Other")),
+    level = factor(level, levels = c("heavy", "light"), labels = c("Heavy", "Light")),
+    race = factor(race, levels = c("black", "hispanic", "white", "other"), labels = c("Black", "Hispanic", "White", "Other"))
   ) |> 
   tbl_summary(
   by = trt, # by treatment
