@@ -180,7 +180,7 @@ df |>
     pa ~ "Number of prior quit attempts",
     nosmk ~ "Number of days previously abstinent"
     )
-  ) |> 
+  )|> 
   add_overall(last = TRUE) # add overall column to the *right*
 ```
 
