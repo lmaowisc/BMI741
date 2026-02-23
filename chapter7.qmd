@@ -6,24 +6,20 @@ title: "Chapter 7 - Left Truncation and Interval Censoring"
 
 Lecture slides [here](chap7.html){target="_blank"}. (To convert html to pdf, press E $\to$ Print $\to$ Destination: Save to pdf)
 
-
 ## Chapter Summary
 
-When subjects enter the study late (thus excluding earlier failures) or when event times are only known to lie in intervals, traditional survival analysis methods must be adapted. *Left truncation* biases sampling toward individuals who have “survived” long enough to enroll. *Interval censoring* arises when event times are only observed through periodic assessments, leading to coarser information about the exact time of occurrence. 
-It is important to properly adjust the risk sets and/or likelihood functions to ensure valid inference.
+When subjects enter the study late (thus excluding earlier failures) or when event times are only known to lie in intervals, traditional survival analysis methods must be adapted. *Left truncation* biases sampling toward individuals who have “survived” long enough to enroll. *Interval censoring* arises when event times are only observed through periodic assessments, leading to coarser information about the exact time of occurrence. It is important to properly adjust the risk sets and/or likelihood functions to ensure valid inference.
 
 ### Left truncation
 
 Left truncation occurs if a subject is enrolled at a later time $T_L$ than the starting point so those who fail prior to $T_L$ are never observed. Common examples include:
 
-- **Retrospective cohorts**, where one must have survived long enough to be identified.
-- **Hospital-based registries**, where patients must be alive/available to visit a center.
+-   **Retrospective cohorts**, where one must have survived long enough to be identified.
+-   **Hospital-based registries**, where patients must be alive/available to visit a center.
 
-To correct for this bias, standard *risk-set* calculations in the Kaplan–Meier, log-rank test, or Cox model are modified:
-$$
+To correct for this bias, standard *risk-set* calculations in the Kaplan–Meier, log-rank test, or Cox model are modified: $$
 n_j \;=\;\sum_{i=1}^{n} I\bigl(T_{Li} \;\le\; t_j \;\le\; X_i\bigr),
-$$
-so that a subject only “enters” the risk set at $T_{Li}$. Likewise, the partial likelihood in the Cox model replaces $I(X_j \ge t)$ with $I(T_{Lj} \le t \le X_j)$ when constructing sums over at-risk individuals. Beyond these hazard-based methods, a more general approach employs a *conditional likelihood* factoring in $T_i > T_{L,i}$:
+$$ so that a subject only “enters” the risk set at $T_{Li}$. Likewise, the partial likelihood in the Cox model replaces $I(X_j \ge t)$ with $I(T_{Lj} \le t \le X_j)$ when constructing sums over at-risk individuals. Beyond these hazard-based methods, a more general approach employs a *conditional likelihood* factoring in $T_i > T_{L,i}$:
 
 $$
 L_n(\theta)
@@ -34,8 +30,7 @@ S\bigl(T_{Li}; \theta\bigr)^{-1}\,
 S\bigl(X_i; \theta\bigr).
 $$
 
-This reflects the fact that each subject is only observed if they survive beyond
-$T_{Li}$. 
+This reflects the fact that each subject is only observed if they survive beyond $T_{Li}$.
 
 ### Interval censoring
 
@@ -54,11 +49,10 @@ $$
 
 Each factor captures the probability that $T_i$ falls strictly between $L_i$ and $R_i$. For purely nonparametric inference, one seeks the *nonparametric MLE (NPMLE)*—often computed via:
 
-- **Turnbull’s EM algorithm**, which treats each actual $T_i$ as missing and iteratively updates estimates of its distribution.  
-- **Iterative convex minorant (ICM)** methods that maximize the log-likelihood subject to a monotonicity constraint on the distribution function or baseline hazard.
+-   **Turnbull’s EM algorithm**, which treats each actual $T_i$ as missing and iteratively updates estimates of its distribution.\
+-   **Iterative convex minorant (ICM)** methods that maximize the log-likelihood subject to a monotonicity constraint on the distribution function or baseline hazard.
 
 Semiparametric models (e.g., Cox, proportional odds) introduce additional complexity because the baseline function is infinite-dimensional, but they can still be estimated via specialized EM or ICM algorithms. Although the baseline function converges slower than $n^{-1/2}$, the finite-dimensional regression coefficients typically remain asymptotically normal under regular conditions.
-
 
 ### Example R commands
 
@@ -225,7 +219,7 @@ surv_fig <- surv_t0 %>%
 
 # Combine number-at-risk and conditional-survival plots
 chan_model <- nrisk_fig + surv_fig +
-  plot_layout(ncol = 2, guides = "collect") &
+  # plot_layout(guides = "collect") +
   theme(legend.position = 'top')
 
 chan_model
@@ -257,7 +251,7 @@ PH_fit <- icsurvfit(
   model = "PH"
 )
 PH_fit
-
+# ?icsurvfit
 #------------------------------------------------------------------------------
 # 3. Construct Table 7.3: Hazard Ratio & 95% CI
 #------------------------------------------------------------------------------
@@ -310,7 +304,6 @@ legend(
 )
 
 ```
-
 
 ## Follow-up Plots
 
@@ -475,7 +468,6 @@ bma_fig
 # ggsave("trunc_bma_fig.eps", bma_fig, width = 8, height = 12, device = cairo_pdf)
 ```
 
-
 ```{r}
 #| echo: false
 #| eval: false
@@ -538,13 +530,12 @@ ggplot() +
   ) +
   theme_minimal() +
   theme(legend.position = "top",
-        legend.key.width = unit(1.5, "cm"),
+        legend.key.width = unit(1.8, "cm"),
         plot.title = element_text(size = 12),
         axis.text.y = element_blank()
   )
 
-ggsave("images/gcm_approx.png", width = 7.5, height = 5)
-ggsave("images/gcm_approx.eps", width = 7.5, height = 5)
+ggsave("images/gcm_approx.png", width = 8, height = 4)
+ggsave("images/gcm_approx.eps", width = 8, height = 4)
 
 ```
-

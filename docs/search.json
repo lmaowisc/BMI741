@@ -2295,8 +2295,8 @@
     "objectID": "chap6.html#outline",
     "href": "chap6.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "",
-    "text": "Sample size for Cox model and RMST\nImpact of study design and censoring\nAn example using pilot study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+    "section": "Outline",
+    "text": "Outline\n\n\nSample size for Cox model and RMST\nImpact of study design and censoring\nAn example using pilot study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   },
   {
     "objectID": "chap6.html#motivation",
@@ -2408,7 +2408,7 @@
     "href": "chap6.html#notes-ii",
     "title": "Applied Survival Analysis",
     "section": "Notes (II)",
-    "text": "Notes (II)\n\nR-package npsurvSS (Yung and Liu, 2020)\n\nVarious tests (e.g., weighted log-rank, RMST, survival probability tests)\nNon-exponential event/ LTFU, non-uniform accrual\n\n\n\n# Set up the two groups\ncontrol &lt;- create_arm(\n              # Parameter set-up for control\n                      )\ntreatment &lt;- create_arm(\n              # Parameter set-up for treatment\n                      )\n# Compute sample size\nsize_two_arm(control, treatment, \n      test = list(list(test=\"weighted logrank\"), # Log-rank test\n                  list(test=\"rmst difference\", milestone=3), # 3y-RMST \n                  list(test=\"rmst difference\", milestone=5)) # 5y-RMST \n              )"
+    "text": "Notes (II)\n\nR-package npsurvSS (Yung and Liu, 2020)\n\nVarious tests (e.g., weighted log-rank, RMST, survival probability tests)\nNon-exponential event/ LTFU, non-uniform accrual\n\n\n# Set up the two groups\ncontrol &lt;- create_arm(\n              # Parameter set-up for control\n                      )\ntreatment &lt;- create_arm(\n              # Parameter set-up for treatment\n                      )\n# Compute sample size\nsize_two_arm(control, treatment, \n      test = list(list(test=\"weighted logrank\"), # Log-rank test\n                  list(test=\"rmst difference\", milestone=3), # 3y-RMST \n                  list(test=\"rmst difference\", milestone=5)) # 5y-RMST \n              )"
   },
   {
     "objectID": "chap6.html#summary",
