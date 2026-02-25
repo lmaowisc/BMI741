@@ -140,50 +140,51 @@ Planning a time-to-event study involves balancing the feasibility of enrolling a
 ###############################################################################
 # Chapter 6 R Code
 #
-# This script reproduces all major numerical results in Chapter 6, including:
+# This script reproduces major numerical results in Chapter 6, including
 #   1. Functions for sample size calculations (psi_fun, zeta_fun)
-#   2. Numerical examples from Section 6.2.2
-#   3. Sample size computations for the GBC pilot data
+#   2. Numerical examples for RMST variance components
+#   3. Sample size computations using the GBC pilot data
 ###############################################################################
 
-
-#==============================================================================
+# =============================================================================
 # (A) Functions Needed for Sample Size Calculation
-#==============================================================================
+# =============================================================================
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # 1. psi_fun(lambda0, lambdaL, b, c)
-#    Computes the event proportion psi for Cox model sample size
-#
-#    Inputs:
-#       lambda0 = hazard rate for T
-#       lambdaL = hazard rate for LTFU
-#       b       = length of accrual (years)
-#       c       = additional length of follow-up (years)
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# Computes the proportion of observed failures (psi) under
+#   - exponential event time with hazard lambda0
+#   - exponential loss to follow-up with hazard lambdaL
+#   - uniform accrual over [0, b] and additional follow-up length c
 psi_fun <- function(lambda0, lambdaL, b, c) {
+  # Total hazard for "leaving the risk set" due to event or LTFU
   lambda <- lambda0 + lambdaL
+
+  # Closed-form expression for Pr(T <= C) under the design assumptions
   psi <- lambda0 / lambda * (
     1 - exp(-lambda * c) * (1 - exp(-lambda * b)) / (lambda * b)
   )
+
   return(psi)
 }
 
-
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # 2. zeta_fun(tau, lambda0, lambdaL, b, c)
-#    Computes the variance component for RMST sample size via numerical integral
+# -----------------------------------------------------------------------------
+# Computes the design-dependent variance component (zeta) for RMST
+# sample size calculations via numerical integration.
 #
-#    Inputs:
-#       tau     = restricting time
-#       lambda0 = hazard rate for T
-#       lambdaL = hazard rate for LTFU
-#       b       = length of accrual (years)
-#       c       = additional follow-up (years)
-#------------------------------------------------------------------------------
+# The function uses:
+#   - Gfun(t): survival function for censoring under uniform accrual + admin censoring
+#   - zeta_integrand(t): integrand derived from the large-sample variance of RMST
 
-# Survival function for censoring
+# Censoring survival function G(t) under:
+#   - exponential LTFU with hazard lambdaL
+#   - administrative censoring induced by accrual length b and follow-up c
 Gfun <- function(t, lambdaL, b, c) {
+  # Piecewise form: before admin censoring (t <= c), during admin censoring (c < t < c+b),
+  # and after study end (t >= c+b)
   Gt <- ifelse(
     t <= c,
     exp(-lambdaL * t),
@@ -193,105 +194,114 @@ Gfun <- function(t, lambdaL, b, c) {
       0
     )
   )
+
   return(Gt)
 }
 
-# The integrand for zeta
+# Integrand for zeta(tau): depends on event hazard, censoring survival, and truncation time
 zeta_integrand <- function(t, tau, lambda0, lambdaL, b, c) {
+  # (S(t) - S(tau))^2 / {G(t) * lambda0 * S(t)} under exponential S(t) = exp(-lambda0 t)
   integrand <- (exp(-lambda0 * t) - exp(-lambda0 * tau))^2 *
     exp(lambda0 * t) / (Gfun(t, lambdaL, b, c) * lambda0)
+
   return(integrand)
 }
 
-# Main function using integrate()
+# Main zeta function computed by numerical integration from 0 to tau
 zeta_fun <- function(tau, lambda0, lambdaL, b, c) {
+  # Wrap integrand with fixed parameters so integrate() varies only t
   f <- function(t) {
     zeta_integrand(t, tau, lambda0, lambdaL, b, c)
   }
+
+  # Numerical integral
   zeta <- integrate(f, lower = 0, upper = tau)
+
   return(zeta$value)
 }
 
+# =============================================================================
+# (B) Numerical Results for RMST Variance Component
+# =============================================================================
 
-#==============================================================================
-# (B) Numerical Results in Section 6.2.2
-#==============================================================================
-
-# Evaluate zeta_fun at specific values
+# Evaluate zeta_fun at a specific configuration
 zeta_fun(tau = 5, lambda0 = 0.2, lambdaL = 0.01, b = 2, c = 4)
 
-
-#==============================================================================
+# =============================================================================
 # (C) Sample Size Calculation Example with GBC Data
-#==============================================================================
-library(survival)
+# =============================================================================
+library(survival) # Surv objects for extracting pilot event rates
 
-#------------------------------------------------------------------------------
-# 1. Read GBC Data
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 1. Read GBC data and construct a pilot subgroup
+# -----------------------------------------------------------------------------
 gbc <- read.table("Data//German Breast Cancer Study//gbc.txt")
 
-# Sort the data by time within each id
+# Sort by subject id and time, then keep the first record per subject
 o   <- order(gbc$id, gbc$time)
 gbc <- gbc[o, ]
+df  <- gbc[!duplicated(gbc$id), ]
 
-# Keep the first row for each id
-df <- gbc[!duplicated(gbc$id), ]
-
-# Set status = 1 if status == 1 or 2
+# Collapse event types into a single event indicator
 df$status <- (df$status > 0) + 0
 
-# Subset: post-menopausal (meno==2) & no hormonal treatment (hormone==1)
+# Pilot subgroup: post-menopausal (meno == 2) and no hormone therapy (hormone == 1)
 pilot <- df[df$meno == 2 & df$hormone == 1, ]
-n <- nrow(pilot)  # n = 209, matches Table 1.12 (Chapter 1)
+n <- nrow(pilot)
 
-#------------------------------------------------------------------------------
-# 2. Estimate Baseline Hazard and Setup
-#------------------------------------------------------------------------------
-pilot$time <- pilot$time / 12  # convert months to years
-lambda0 <- sum(pilot$status > 0) / sum(pilot$time)  # ~0.174
+# -----------------------------------------------------------------------------
+# 2. Estimate baseline event hazard and define design parameters
+# -----------------------------------------------------------------------------
+# Convert months to years for design calculations
+pilot$time <- pilot$time / 12
 
-# Accrual (b = 2 years), follow-up (c = 3.5 years)
-lambdaL <- 0.01  # LTFU rate
-b <- 2
-c <- 3.5
+# Exponential MLE for hazard: total events / total follow-up time
+lambda0 <- sum(pilot$status > 0) / sum(pilot$time)
 
-# Compute psi and zeta at tau = 3, 5
-psi <- psi_fun(lambda0, lambdaL, b, c)
+# Design assumptions for accrual and follow-up
+lambdaL <- 0.01  # loss-to-follow-up hazard
+b <- 2           # accrual length (years)
+c <- 3.5         # additional follow-up after accrual ends (years)
+
+# Compute psi (event proportion) and zeta (RMST variance component) at tau = 3 and 5
+psi   <- psi_fun(lambda0, lambdaL, b, c)
 zeta3 <- zeta_fun(tau = 3, lambda0, lambdaL, b, c)
 zeta5 <- zeta_fun(tau = 5, lambda0, lambdaL, b, c)
 
-#------------------------------------------------------------------------------
-# 3. Sample Size Computations for Various Hazard Ratios
-#------------------------------------------------------------------------------
-HR <- seq(0.6, 0.9, by = 0.01)  # hazard ratio range
-lambda1 <- lambda0 * HR
+# -----------------------------------------------------------------------------
+# 3. Sample size computations over a grid of hazard ratios
+# -----------------------------------------------------------------------------
+HR <- seq(0.6, 0.9, by = 0.01)  # hazard ratio grid
+lambda1 <- lambda0 * HR         # treatment hazard under proportional hazards
 
-# Function for difference in RMST (exponential assumption)
+# RMST difference under exponential hazards (treatment - control)
 RMST_diff <- function(tau, lam0, lam1) {
   val <- (1 - exp(-lam1 * tau)) / lam1 - (1 - exp(-lam0 * tau)) / lam0
   return(val)
 }
 
-# For tau = 3 and tau = 5
+# Compute effect sizes (RMST differences) for tau = 3 and tau = 5
 theta3 <- RMST_diff(3, lambda0, lambda1)
 theta5 <- RMST_diff(5, lambda0, lambda1)
 
-# Setup for alpha = 0.05 (two-sided), power = 0.8 or 0.9
+# Set type I error and allocation proportion
 q <- 0.5
-za <- qnorm(0.975)
-gamma_list <- c(0.80, 0.90)
+za <- qnorm(0.975)              # two-sided alpha = 0.05
+gamma_list <- c(0.80, 0.90)      # target powers
 
 par(mfrow = c(1, 2))
 for (i in seq_along(gamma_list)) {
   gamma <- gamma_list[i]
   zg <- qnorm(gamma)
-  
-  # Sample sizes for log-rank, 3-RMST, and 5-RMST
-  ncox    <- (za + zg)^2 / (q * (1 - q) * psi * (log(HR))^2)
-  nRMST3  <- zeta3 * (za + zg)^2 / (q * (1 - q) * theta3^2)
-  nRMST5  <- zeta5 * (za + zg)^2 / (q * (1 - q) * theta5^2)
-  
+
+  # Log-rank sample size under Cox PH (event-driven via psi)
+  ncox <- (za + zg)^2 / (q * (1 - q) * psi * (log(HR))^2)
+
+  # RMST sample sizes using zeta(tau) and RMST difference theta(tau)
+  nRMST3 <- zeta3 * (za + zg)^2 / (q * (1 - q) * theta3^2)
+  nRMST5 <- zeta5 * (za + zg)^2 / (q * (1 - q) * theta5^2)
+
+  # Plot the three curves versus HR
   plot(
     HR, ncox,
     type = "l",
@@ -314,52 +324,54 @@ for (i in seq_along(gamma_list)) {
   )
 }
 
-
-#==============================================================================
+# =============================================================================
 # (D) Demonstration with npsurvSS Package (Yung and Liu, 2020)
-#==============================================================================
-library(npsurvSS)
+# =============================================================================
+library(npsurvSS) # create_arm(), size_two_arm() for design-based power/SS tools
 
-#------------------------------------------------------------------------------
-# 1. Configure Two Arms (Control vs. Treatment)
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 1. Configure two arms (control vs treatment)
+# -----------------------------------------------------------------------------
 lambda0 <- 0.173  # baseline event hazard
-lambdaL <- 0.01   # hazard rate for LTFU
+lambdaL <- 0.01   # loss-to-follow-up hazard
 
+# Control arm design specification
 control <- create_arm(
-  size       = 500,
-  accr_time  = 2,
-  follow_time= 3.5,
-  surv_scale = lambda0,
-  surv_shape = 1,   # default
-  loss_scale = lambdaL,
-  loss_shape = 1
+  size        = 500,
+  accr_time   = 2,
+  follow_time = 3.5,
+  surv_scale  = lambda0,
+  surv_shape  = 1,
+  loss_scale  = lambdaL,
+  loss_shape  = 1
 )
 
+# Treatment arm hazard under HR = 0.8
 lambda1 <- lambda0 * 0.8
 
+# Treatment arm design specification
 treatment <- create_arm(
-  size       = 500,
-  accr_time  = 2,
-  follow_time= 3.5,
-  surv_scale = lambda1,
-  loss_scale = lambdaL
+  size        = 500,
+  accr_time   = 2,
+  follow_time = 3.5,
+  surv_scale  = lambda1,
+  loss_scale  = lambdaL
 )
 
-#------------------------------------------------------------------------------
-# 2. Compare Required Sample Sizes for Several Tests
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. Compare required sample sizes for several tests
+# -----------------------------------------------------------------------------
 size_two_arm(
   control,
   treatment,
   test = list(
-    list(test = "weighted logrank"),               # Log-rank test
-    list(test = "rmst difference", milestone = 3), # RMST at 3 years
-    list(test = "rmst difference", milestone = 5)  # RMST at 5 years
+    list(test = "weighted logrank"),
+    list(test = "rmst difference", milestone = 3),
+    list(test = "rmst difference", milestone = 5)
   )
 )
 
-# Alternatively, power calculations could be done via power_two_arm()
+# Alternative: power calculations could be done via power_two_arm()
 # power_two_arm(control, treatment)
 
 ```

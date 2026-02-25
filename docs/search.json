@@ -2445,8 +2445,8 @@
     "objectID": "chap7.html#outline",
     "href": "chap7.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "",
-    "text": "Left truncation mechanisms\nStandard and general methods for left truncation\nNon- and Semi-parametric methods for Interval censoring\nBangkok Metropolitan Administration HIV Study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+    "section": "Outline",
+    "text": "Outline\n\n\nLeft truncation mechanisms\nStandard and general methods for left truncation\nNon- and Semi-parametric methods for Interval censoring\nBangkok Metropolitan Administration HIV Study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   },
   {
     "objectID": "chap7.html#truncation---biased-sampling",
@@ -2523,7 +2523,7 @@
     "href": "chap7.html#standard-methods---cox-model-iv",
     "title": "Applied Survival Analysis",
     "section": "Standard Methods - Cox Model (IV)",
-    "text": "Standard Methods - Cox Model (IV)\n\n\nPrediction of survival rate\n\nIf all subjects enter late, choose late cutoff \\(t_0^*\\)\nConditional survival function \\[\\begin{equation}\n\\hat\\pr(T &gt; t\\mid T\\geq t_0^*, Z) =\n\\exp\\left[-\\left\\{\\hat\\Lambda_0(t)- \\hat\\Lambda_0(t_0^*)\\right\\}\\exp(\\hat\\beta^\\T Z)\\right]\n\\end{equation}\\]\n\n\n\n\n\n\n\n\n\n\nExercise\n\n\n\nShow that \\[\\pr(T &gt; t\\mid T\\geq t_0^*, Z) =\n\\exp\\left[-\\left\\{\\Lambda_0(t)- \\Lambda_0(t_0^*)\\right\\}\\exp(\\beta^\\T Z)\\right]  \\] for any \\(t&gt;t_0^*\\) under the Cox model."
+    "text": "Standard Methods - Cox Model (IV)\n\n\nPrediction of survival rate\n\nIf all subjects enter late, choose late cutoff \\(t_0^*\\)\nConditional survival function \\[\\begin{equation}\n\\hat\\pr(T &gt; t\\mid T\\geq t_0^*, Z) =\n\\exp\\left[-\\left\\{\\hat\\Lambda_0(t)- \\hat\\Lambda_0(t_0^*)\\right\\}\\exp(\\hat\\beta^\\T Z)\\right]\n\\end{equation}\\]\n\n\n\n\n\n\n\n\n\n\nExercise\n\n\nShow that \\[\\pr(T &gt; t\\mid T\\geq t_0^*, Z) =\n\\exp\\left[-\\left\\{\\Lambda_0(t)- \\Lambda_0(t_0^*)\\right\\}\\exp(\\beta^\\T Z)\\right]  \\] for any \\(t&gt;t_0^*\\) under the Cox model."
   },
   {
     "objectID": "chap7.html#general-approach---likelihood",
