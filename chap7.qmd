@@ -635,13 +635,13 @@ PH_fit
         -   Proportional hazards model
         -   Proportional odds model
 
-<!-- ## HW 4 (Due Mar 18) -->
+## HW 4 (Due Mar 18)
 
-<!-- -   Choose one -->
-<!--     -   Problem 5.1 -->
-<!--     -   Problem 5.2 -->
-<!-- -   Problem 6.5 -->
-<!-- -   Problem 7.14 -->
+-   Choose one
+    -   Problem 5.2
+    -   Problem 5.3
+-   Problem 6.5
+-   Problem 7.15
 
 <!-- ```{r} -->
 <!-- #| eval: false -->
