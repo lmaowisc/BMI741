@@ -99,40 +99,41 @@ Left-truncated designs require rethinking “at-risk” sets to reflect delayed 
 ###############################################################################
 # Chapter 7 R Code
 #
-# This script reproduces all major numerical results in Chapter 7, including:
+# This script reproduces major numerical results in Chapter 7, including
 #   1. Analysis of left-truncated data (Channing House Study)
 #   2. Analysis of interval-censored data (BMA HIV Study)
 ###############################################################################
 
-
-#==============================================================================
+# =============================================================================
 # (A) Channing House Study (Left-Truncated Data)
-#==============================================================================
-library(survival)
-library(tidyverse)
-library(patchwork)
+# =============================================================================
+library(survival)   # Cox regression, left-truncation via Surv(start, stop, event)
+library(tidyverse)  # Data manipulation and ggplot2-based graphics
+library(patchwork)  # Combine ggplot2 plots
 
-#------------------------------------------------------------------------------
-# 1. Read and Inspect the Channing Data
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 1. Read and inspect the Channing House data
+# -----------------------------------------------------------------------------
 channing <- read.table("Data\\Channing House Study\\channing.txt")
 head(channing)
 
-# Convert gender to factor
+# Ensure gender is treated as a categorical variable
 channing$gender <- factor(channing$gender)
 
-#------------------------------------------------------------------------------
-# 2. Cox Model with Left-Truncation
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. Cox model with left truncation (delayed entry)
+# -----------------------------------------------------------------------------
+# Surv(Entry.Age, End.Age, status) specifies start-stop (counting process) data
 obj <- coxph(Surv(Entry.Age, End.Age, status) ~ gender, data = channing)
 summary(obj)
 
-#------------------------------------------------------------------------------
-# 3. Test Proportional Hazards Assumption (Schoenfeld Residuals)
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 3. Proportional hazards check using Schoenfeld residuals
+# -----------------------------------------------------------------------------
 obj_zph <- cox.zph(obj)
 obj_zph
-# Plot the rescaled residuals
+
+# Plot the rescaled Schoenfeld residuals against age (event times)
 plot(
   obj_zph,
   ylab = "Gender",
@@ -140,55 +141,58 @@ plot(
   lwd  = 2
 )
 
-#------------------------------------------------------------------------------
-# 4. Number at Risk by Gender Over Age
-#------------------------------------------------------------------------------
-# Create a function to compute number at risk at each time point
+# -----------------------------------------------------------------------------
+# 4. Number at risk by gender over age
+# -----------------------------------------------------------------------------
+# Grid of ages at which we evaluate the risk set size
 t <- seq(60, 100, by = 1)
 
+# Compute the number at risk at each t[j] for given entry and end ages
 n_risk_t <- function(entry, end) {
   m   <- length(t)
   n_j <- numeric(m)
   for (j in seq_len(m)) {
+    # At risk at age t[j] if entered by then and not yet exited
     n_j[j] <- sum(entry <= t[j] & t[j] <= end)
   }
   return(n_j)
 }
 
-# Compute n at risk by gender
+# Compute n(t) within each gender group
 nrisk <- channing %>%
   group_by(gender) %>%
   reframe(n_j = n_risk_t(Entry.Age, End.Age)) %>%
   add_column(t = rep(t, 2), .before = 1) %>%
   mutate(gender = if_else(gender == 1, "Male", "Female"))
 
-# Plot number at risk
+# Plot number at risk versus age
 nrisk_fig <- nrisk %>%
   ggplot(aes(x = t, y = n_j)) +
   geom_step(aes(linetype = gender)) +
   theme_bw() +
-  labs(
-    x = "Age (years)",
-    y = "Number at risk"
-  ) +
+  labs(x = "Age (years)", y = "Number at risk") +
   theme(
     legend.title    = element_blank(),
     legend.position = "top"
   )
 
-#------------------------------------------------------------------------------
-# 5. Conditional Survival Functions Given Age 70
-#------------------------------------------------------------------------------
-t0        <- 70
-beta      <- obj$coefficients
-Lambda0   <- basehaz(obj, centered = FALSE)
+# -----------------------------------------------------------------------------
+# 5. Conditional survival functions given age 70
+# -----------------------------------------------------------------------------
+# Conditioning age (t0): re-express survival beyond t0 using the Cox model fit
+t0      <- 70
+beta    <- obj$coefficients
+Lambda0 <- basehaz(obj, centered = FALSE)
 
-# Subset baseline hazard for times >= t0
+# Restrict baseline cumulative hazard to ages >= t0
 Lambda0t0 <- Lambda0[Lambda0$time >= t0, ]
-# Re-center the hazard to start at 0 for t >= t0
+
+# Re-center cumulative hazard so that Lambda0t0(t0) = 0
 Lambda0t0$hazard <- Lambda0t0$hazard - Lambda0t0$hazard[1]
 
-# Construct survival curves for "Male" (reference) and "Female"
+# Construct conditional survival curves:
+#   Male: reference group (exp(beta * 0) = 1)
+#   Female: multiplicative hazard exp(beta) relative to Male
 surv_t0 <- Lambda0t0 %>%
   mutate(
     St     = exp(-hazard),
@@ -202,63 +206,63 @@ surv_t0 <- Lambda0t0 %>%
       )
   )
 
-# Plot conditional survival functions
+# Plot conditional survival probabilities beyond t0
 surv_fig <- surv_t0 %>%
   ggplot(aes(x = time, y = St)) +
   geom_step(aes(linetype = gender)) +
   theme_bw() +
-  labs(
-    x = "Age (years)",
-    y = "Conditional survival probabilities"
-  ) +
+  labs(x = "Age (years)", y = "Conditional survival probabilities") +
   theme(
     legend.title    = element_blank(),
     legend.position = "top"
   ) +
   scale_x_continuous(expand = expansion(c(0, 0.05)))
 
-# Combine number-at-risk and conditional-survival plots
+# Combine number-at-risk and conditional survival plots
 chan_model <- nrisk_fig + surv_fig +
-  # plot_layout(guides = "collect") +
-  theme(legend.position = 'top')
+  theme(legend.position = "top")
 
 chan_model
 
-# Uncomment to save the figure:
+# Optional saving (commented out)
 # ggsave("trunc_chan_model.pdf", chan_model, width = 8, height = 4)
 # ggsave("trunc_chan_model.eps", chan_model, width = 8, height = 4)
 
-
-#==============================================================================
+# =============================================================================
 # (B) Bangkok Metropolitan Administration (BMA) HIV Study (Interval-Censored)
-#==============================================================================
-# devtools::install_github("lmaowisc/IntCens")
-library(IntCens)
+# =============================================================================
+library(IntCens)  # icsurvfit() for interval-censored survival regression
 
-#------------------------------------------------------------------------------
-# 1. Read BMA HIV Study Data
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 1. Read the BMA HIV study data
+# -----------------------------------------------------------------------------
 df <- read.table("Data//Bangkok Metropolitan Administration HIV_AIDS Study//bam.txt")
 df
 
-#------------------------------------------------------------------------------
-# 2. Fit Proportional Hazards Model for Interval-Censored Data
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. Fit a proportional hazards model for interval-censored data
+# -----------------------------------------------------------------------------
+# L: left endpoint of the censoring interval
+# R: right endpoint of the censoring interval
+# Z: covariate matrix
 PH_fit <- icsurvfit(
-  L = df$L,       # left endpoint of interval
-  R = df$R,       # right endpoint of interval
-  Z = df[, 3:7],  # covariates
+  L     = df$L,
+  R     = df$R,
+  Z     = df[, 3:7],
   model = "PH"
 )
 PH_fit
-# ?icsurvfit
-#------------------------------------------------------------------------------
-# 3. Construct Table 7.3: Hazard Ratio & 95% CI
-#------------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# 3. Summarize hazard ratios and 95% confidence intervals
+# -----------------------------------------------------------------------------
 beta <- PH_fit$beta
 se   <- sqrt(diag(PH_fit$var))
 
+# Hazard ratios
 c1 <- round(exp(beta), 2)
+
+# 95% CI on the HR scale using normal approximation
 c2 <- paste0(
   "(",
   round(exp(beta - 1.96 * se), 2),
@@ -269,14 +273,15 @@ c2 <- paste0(
 
 noquote(cbind(c1, c2))
 
-#------------------------------------------------------------------------------
-# 4. Predict HIV Sero-Negative Probabilities
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 4. Predict HIV sero-negative probabilities for selected covariate profiles
+# -----------------------------------------------------------------------------
 par(mfrow = c(1, 1))
 
+# Use the sample median age as a representative value
 age.med <- median(df[, "age"])
 
-# Plot for a median-aged male IDU (sex=1) with no needle sharing or drug injection in jail
+# Profile 1: median-aged male IDU with no needle sharing and no jail injection
 plot(
   PH_fit,
   z    = c(age.med, 1, 0, 0, 0),
@@ -288,6 +293,7 @@ plot(
   main = ""
 )
 
+# Profile 2: same profile except history of imprisonment indicator = 1
 plot(
   PH_fit,
   z    = c(age.med, 1, 0, 1, 0),
@@ -298,7 +304,7 @@ plot(
 
 legend(
   "bottomleft",
-  lty = c(2, 1),
+  lty    = c(2, 1),
   legend = c("No history of imprisonment", "History of imprisonment"),
   lwd    = 2
 )
@@ -535,7 +541,7 @@ ggplot() +
         axis.text.y = element_blank()
   )
 
-ggsave("images/gcm_approx.png", width = 8, height = 4)
-ggsave("images/gcm_approx.eps", width = 8, height = 4)
+# ggsave("images/gcm_approx.png", width = 8, height = 4)
+# ggsave("images/gcm_approx.eps", width = 8, height = 4)
 
 ```

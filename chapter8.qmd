@@ -196,13 +196,13 @@ inst_by_sex_fu_plot <- function(df) {
     )
 }
 
-p1 <- inst_by_sex_fu_plot(df |> filter(inst <= 11))
-p2 <- inst_by_sex_fu_plot(df |> filter(inst > 11))
-
+p1 <- inst_by_sex_fu_plot(df |> filter(inst <= 11)) + theme(legend.position = "top")
+p2 <- inst_by_sex_fu_plot(df |> filter(inst > 11)) + theme(legend.position = "top")
+ 
 mul_lung_fu <- p1 + p2 +
-  plot_layout(ncol = 2, guides = "collect") &
-  theme(legend.position = "top")
+  plot_layout(ncol = 2)
 
+mul_lung_fu
 # ggsave("mul_lung_fu.pdf", mul_lung_fu, width = 8, height = 10)
 # ggsave("mul_lung_fu.eps", mul_lung_fu, width = 8, height = 10)
 
