@@ -555,395 +555,422 @@ r\{t \mid \overline{Z}(t)\}
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">###############################################################################</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Chapter 9 R Code</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This script reproduces all major numerical results in Chapter 9, including:</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   1. Andersen-Gill Model for recurrent events (Chronic Granulomatous Disease)</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   2. Frailty model vs. Proportional Means model (Chronic Granulomatous Disease)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This script reproduces major numerical results in Chapter 9, including</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   1. Andersen--Gill model for recurrent events (CGD study)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   2. Frailty model vs proportional means model (CGD study)</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   3. Multivariate approaches (WLW, PWP models)</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   4. Poisson, Negative Binomial, and Zero-Inflated Poisson regressions</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   4. Poisson, negative binomial, and zero-inflated Poisson regressions</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="do">###############################################################################</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># (A) Andersen-Gill/Frailty/LWYY Model for Recurrent Infections (CGD Data)</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Read the Chronic Granulomatous Disease (CGD) Data</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#    in Counting Process Format</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>cgd <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Data</span><span class="sc">\\</span><span class="st">Chronic Granulomatous Disease Study</span><span class="sc">\\</span><span class="st">cgd_counting.txt"</span>)</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cgd)</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Andersen-Gill Model</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>obj_AG <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstart, tstop, status) <span class="sc">~</span> treat <span class="sc">+</span> sex <span class="sc">+</span> age <span class="sc">+</span> inherit <span class="sc">+</span> steroids <span class="sc">+</span> propylac,</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj_AG)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)   <span class="co"># Cox-type recurrent-event models and diagnostics</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># Data manipulation and ggplot2-based graphics</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)  <span class="co"># Formatted regression tables</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)      <span class="co"># Table printing utilities</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)  <span class="co"># Plot combination</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pscl)       <span class="co"># Zero-inflated Poisson regression</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># (A) Andersen--Gill / Frailty / LWYY Models for Recurrent Infections</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Read the Chronic Granulomatous Disease (CGD) data in counting-process form</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>cgd <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Data</span><span class="sc">\\</span><span class="st">Chronic Granulomatous Disease Study</span><span class="sc">\\</span><span class="st">cgd_counting.txt"</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cgd)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Andersen--Gill model</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Surv(tstart, tstop, status) specifies recurrent-event counting-process data</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>obj_AG <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstart, tstop, status) <span class="sc">~</span> treat <span class="sc">+</span> sex <span class="sc">+</span> age <span class="sc">+</span> inherit <span class="sc">+</span> steroids <span class="sc">+</span> propylac,</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Residuals</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="fu">cox.zph</span>(obj_AG)</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="fu">residuals</span>(obj_AG, <span class="at">type =</span> <span class="st">"martingale"</span>, <span class="at">collapse =</span> cgd<span class="sc">$</span>id)</span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Frailty Model</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>obj_frail <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstart, tstop, status) <span class="sc">~</span> treat <span class="sc">+</span> sex <span class="sc">+</span> age <span class="sc">+</span> inherit <span class="sc">+</span> steroids <span class="sc">+</span> propylac <span class="sc">+</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">frailty</span>(id, <span class="at">distribution =</span> <span class="st">"gamma"</span>),</span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd</span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj_frail)</span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Proportional Means Model (LWYY)</span></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>obj_pm <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstart, tstop, status) <span class="sc">~</span> treat <span class="sc">+</span> sex <span class="sc">+</span> age <span class="sc">+</span> inherit <span class="sc">+</span> steroids <span class="sc">+</span> propylac <span class="sc">+</span></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cluster</span>(id),</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd</span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj_pm)</span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Extract Coefficients for Table 9.2</span></span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>coeff_AG    <span class="ot">&lt;-</span> <span class="fu">summary</span>(obj_AG)<span class="sc">$</span>coeff</span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>coeff_frail <span class="ot">&lt;-</span> <span class="fu">summary</span>(obj_frail)<span class="sc">$</span>coeff</span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>coeff_pm    <span class="ot">&lt;-</span> <span class="fu">summary</span>(obj_pm)<span class="sc">$</span>coeff</span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Andersen-Gill</span></span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>c1 <span class="ot">&lt;-</span> coeff_AG[, <span class="dv">1</span>]  <span class="co"># beta</span></span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>c2 <span class="ot">&lt;-</span> coeff_AG[, <span class="dv">3</span>]  <span class="co"># se(beta)</span></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>c3 <span class="ot">&lt;-</span> coeff_AG[, <span class="dv">5</span>]  <span class="co"># p-value</span></span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Frailty</span></span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>c4 <span class="ot">&lt;-</span> coeff_frail[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">1</span>] <span class="co"># beta</span></span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>c5 <span class="ot">&lt;-</span> coeff_frail[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">2</span>] <span class="co"># se(beta)</span></span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>c6 <span class="ot">&lt;-</span> coeff_frail[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">6</span>] <span class="co"># p-value</span></span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Proportional Means</span></span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>c7 <span class="ot">&lt;-</span> coeff_pm[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">1</span>]    <span class="co"># beta</span></span>
-<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>c8 <span class="ot">&lt;-</span> coeff_pm[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">4</span>]    <span class="co"># se(beta)</span></span>
-<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>c9 <span class="ot">&lt;-</span> coeff_pm[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">6</span>]    <span class="co"># p-value</span></span>
-<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a><span class="co"># Print Table 9.1 (beta, se, p-values)</span></span>
-<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a><span class="fu">noquote</span>(<span class="fu">round</span>(<span class="fu">cbind</span>(c1, c2, c3, c4, c5, c6, c7, c8, c9), <span class="dv">3</span>))</span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
-<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a><span class="co"># (B) Figure 9.4: Predicted Mean Functions by Treatment</span></span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
-<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted mean number of infections using Proportional Means model</span></span>
-<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Extract Beta and Baseline Mean Function</span></span>
-<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> obj_pm<span class="sc">$</span>coefficients</span>
-<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>Lt   <span class="ot">&lt;-</span> <span class="fu">basehaz</span>(obj_pm, <span class="at">centered =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>t    <span class="ot">&lt;-</span> Lt<span class="sc">$</span>time</span>
-<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>mu0  <span class="ot">&lt;-</span> Lt<span class="sc">$</span>hazard  <span class="co"># baseline mean function mu0(t)</span></span>
-<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Covariate Profiles</span></span>
-<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="co"># For "female" patient: (sex=0, age=12, inherit=X-linked=1, steroids=1, propylac=1)</span></span>
-<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="co"># Actually from the code: sex=1 means female, so we can check carefully:</span></span>
-<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="co"># code snippet suggests c(0, 12, 1, 1, 1) are the covariates besides treatment, </span></span>
-<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a><span class="co"># so treat=0 or 1 is appended in front.</span></span>
-<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>zf <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">12</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a><span class="co"># For "male" patient: (sex=1, age=12, etc.)</span></span>
-<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>zm <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">12</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Construct Mean Functions</span></span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="co"># female: treat=1 or treat=0</span></span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>mu.f.trt   <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">1</span>, zf) <span class="sc">*</span> beta)) <span class="sc">*</span> mu0</span>
-<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>mu.f.contr <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">0</span>, zf) <span class="sc">*</span> beta)) <span class="sc">*</span> mu0</span>
-<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a><span class="co"># male: treat=1 or treat=0</span></span>
-<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>mu.m.trt   <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">1</span>, zm) <span class="sc">*</span> beta)) <span class="sc">*</span> mu0</span>
-<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>mu.m.contr <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">0</span>, zm) <span class="sc">*</span> beta)) <span class="sc">*</span> mu0</span>
-<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Plot</span></span>
-<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a><span class="co"># Female</span></span>
-<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a>  t <span class="sc">/</span> <span class="fl">30.5</span>, mu.f.trt,</span>
-<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a>  <span class="at">type  =</span> <span class="st">"s"</span>,</span>
-<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim  =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">12</span>),</span>
-<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim  =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">6</span>),</span>
-<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a>  <span class="at">frame.plot =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty   =</span> <span class="dv">1</span>,</span>
-<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a>  <span class="at">main  =</span> <span class="st">"Female"</span>,</span>
-<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab  =</span> <span class="st">"Time (months)"</span>,</span>
-<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab  =</span> <span class="st">"Mean number of infections"</span>,</span>
-<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd   =</span> <span class="dv">2</span></span>
-<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(t <span class="sc">/</span> <span class="fl">30.5</span>, mu.f.contr, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a><span class="co"># Male</span></span>
-<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a>  t <span class="sc">/</span> <span class="fl">30.5</span>, mu.m.trt,</span>
-<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>  <span class="at">type  =</span> <span class="st">"s"</span>,</span>
-<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim  =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">12</span>),</span>
-<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim  =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">6</span>),</span>
-<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">frame.plot =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty   =</span> <span class="dv">1</span>,</span>
-<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>  <span class="at">main  =</span> <span class="st">"Male"</span>,</span>
-<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab  =</span> <span class="st">"Time (months)"</span>,</span>
-<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab  =</span> <span class="st">"Mean number of infections"</span>,</span>
-<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd   =</span> <span class="dv">2</span></span>
-<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(t <span class="sc">/</span> <span class="fl">30.5</span>, mu.m.contr, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
-<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a><span class="co"># (C) Multivariate Approaches (WLW, PWP Models)</span></span>
-<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
-<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>cgd_mul <span class="ot">&lt;-</span> cgd <span class="sc">%&gt;%</span></span>
-<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(id, tstart) <span class="sc">%&gt;%</span></span>
-<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id) <span class="sc">%&gt;%</span></span>
-<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">row_number</span>(),</span>
-<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a>    <span class="at">gtime =</span> tstop <span class="sc">-</span> tstart,</span>
-<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a>    <span class="at">.after =</span> tstop</span>
-<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj_AG)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Proportional hazards check and subject-level martingale residuals</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="fu">cox.zph</span>(obj_AG)</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="fu">residuals</span>(obj_AG, <span class="at">type =</span> <span class="st">"martingale"</span>, <span class="at">collapse =</span> cgd<span class="sc">$</span>id)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Shared-frailty model</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="co"># frailty(id, distribution = "gamma") introduces a subject-specific random effect</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>obj_frail <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstart, tstop, status) <span class="sc">~</span> treat <span class="sc">+</span> sex <span class="sc">+</span> age <span class="sc">+</span> inherit <span class="sc">+</span> steroids <span class="sc">+</span> propylac <span class="sc">+</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">frailty</span>(id, <span class="at">distribution =</span> <span class="st">"gamma"</span>),</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj_frail)</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Proportional means model (LWYY)</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="co"># cluster(id) keeps the Cox mean structure but uses robust variance</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>obj_pm <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstart, tstop, status) <span class="sc">~</span> treat <span class="sc">+</span> sex <span class="sc">+</span> age <span class="sc">+</span> inherit <span class="sc">+</span> steroids <span class="sc">+</span> propylac <span class="sc">+</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cluster</span>(id),</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj_pm)</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Extract coefficients, SEs, and p-values across models</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>coeff_AG    <span class="ot">&lt;-</span> <span class="fu">summary</span>(obj_AG)<span class="sc">$</span>coeff</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>coeff_frail <span class="ot">&lt;-</span> <span class="fu">summary</span>(obj_frail)<span class="sc">$</span>coeff</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>coeff_pm    <span class="ot">&lt;-</span> <span class="fu">summary</span>(obj_pm)<span class="sc">$</span>coeff</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Andersen--Gill model: beta, model-based SE, p-value</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>c1 <span class="ot">&lt;-</span> coeff_AG[, <span class="dv">1</span>]</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>c2 <span class="ot">&lt;-</span> coeff_AG[, <span class="dv">3</span>]</span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>c3 <span class="ot">&lt;-</span> coeff_AG[, <span class="dv">5</span>]</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Frailty model: first 6 rows correspond to regression coefficients</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>c4 <span class="ot">&lt;-</span> coeff_frail[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">1</span>]</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>c5 <span class="ot">&lt;-</span> coeff_frail[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">2</span>]</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>c6 <span class="ot">&lt;-</span> coeff_frail[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">6</span>]</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Proportional means model: beta, robust SE, robust p-value</span></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>c7 <span class="ot">&lt;-</span> coeff_pm[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">1</span>]</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>c8 <span class="ot">&lt;-</span> coeff_pm[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">4</span>]</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>c9 <span class="ot">&lt;-</span> coeff_pm[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">6</span>]</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a><span class="co"># Side-by-side comparison across the three models</span></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="fu">noquote</span>(<span class="fu">round</span>(<span class="fu">cbind</span>(c1, c2, c3, c4, c5, c6, c7, c8, c9), <span class="dv">3</span>))</span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a><span class="co"># (B) Predicted Mean Functions by Treatment</span></span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Extract beta and baseline mean function from the proportional means model</span></span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> obj_pm<span class="sc">$</span>coefficients</span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>Lt   <span class="ot">&lt;-</span> <span class="fu">basehaz</span>(obj_pm, <span class="at">centered =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>t    <span class="ot">&lt;-</span> Lt<span class="sc">$</span>time</span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>mu0  <span class="ot">&lt;-</span> Lt<span class="sc">$</span>hazard  <span class="co"># baseline mean function mu0(t)</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Define covariate profiles</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a><span class="co"># Profiles use the covariates after treatment in the model:</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a><span class="co"># sex, age, inherit, steroids, propylac</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Female profile</span></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>zf <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">12</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Male profile</span></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>zm <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">12</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Construct fitted mean functions for treatment and control</span></span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a><span class="co"># Female: treatment vs control</span></span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>mu.f.trt   <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">1</span>, zf) <span class="sc">*</span> beta)) <span class="sc">*</span> mu0</span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>mu.f.contr <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">0</span>, zf) <span class="sc">*</span> beta)) <span class="sc">*</span> mu0</span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a><span class="co"># Male: treatment vs control</span></span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a>mu.m.trt   <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">1</span>, zm) <span class="sc">*</span> beta)) <span class="sc">*</span> mu0</span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a>mu.m.contr <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(<span class="fu">c</span>(<span class="dv">0</span>, zm) <span class="sc">*</span> beta)) <span class="sc">*</span> mu0</span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Plot fitted mean number of infections</span></span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a><span class="co"># Female</span></span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a>  t <span class="sc">/</span> <span class="fl">30.5</span>, mu.f.trt,</span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>  <span class="at">type       =</span> <span class="st">"s"</span>,</span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim       =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">12</span>),</span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim       =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">6</span>),</span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a>  <span class="at">frame.plot =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty        =</span> <span class="dv">1</span>,</span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>  <span class="at">main       =</span> <span class="st">"Female"</span>,</span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab       =</span> <span class="st">"Time (months)"</span>,</span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab       =</span> <span class="st">"Mean number of infections"</span>,</span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd        =</span> <span class="dv">2</span></span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(t <span class="sc">/</span> <span class="fl">30.5</span>, mu.f.contr, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a><span class="co"># Male</span></span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a>  t <span class="sc">/</span> <span class="fl">30.5</span>, mu.m.trt,</span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a>  <span class="at">type       =</span> <span class="st">"s"</span>,</span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim       =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">12</span>),</span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim       =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">6</span>),</span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a>  <span class="at">frame.plot =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty        =</span> <span class="dv">1</span>,</span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>  <span class="at">main       =</span> <span class="st">"Male"</span>,</span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab       =</span> <span class="st">"Time (months)"</span>,</span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab       =</span> <span class="st">"Mean number of infections"</span>,</span>
+<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd        =</span> <span class="dv">2</span></span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(t <span class="sc">/</span> <span class="fl">30.5</span>, mu.m.contr, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a><span class="co"># (C) Multivariate Approaches (WLW, PWP Models)</span></span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
 <span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. WLW Model</span></span>
-<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>wlw_obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstop, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">*</span> <span class="fu">strata</span>(order),</span>
-<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd_mul <span class="sc">%&gt;%</span> <span class="fu">filter</span>(order <span class="sc">&lt;=</span> <span class="dv">3</span>)</span>
-<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a>wlw_obj0 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstop, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">+</span> <span class="fu">strata</span>(order),</span>
-<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd_mul</span>
-<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Create event-order and gap-time variables</span></span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>cgd_mul <span class="ot">&lt;-</span> cgd <span class="sc">%&gt;%</span></span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(id, tstart) <span class="sc">%&gt;%</span></span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id) <span class="sc">%&gt;%</span></span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">row_number</span>(),     <span class="co"># event order within subject</span></span>
+<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a>    <span class="at">gtime =</span> tstop <span class="sc">-</span> tstart,   <span class="co"># gap time since previous event or study entry</span></span>
+<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a>    <span class="at">.after =</span> tstop</span>
+<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
 <span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. PWP-TT Model</span></span>
-<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a><span class="co">#   (Time since trial entry)</span></span>
-<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a>pwp_tt_obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstart, tstop, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">*</span> <span class="fu">strata</span>(order),</span>
+<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. WLW model</span></span>
+<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a><span class="co"># Uses total time and treats repeated event orders as separate margins</span></span>
+<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a>wlw_obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstop, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">*</span> <span class="fu">strata</span>(order),</span>
 <span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd_mul <span class="sc">%&gt;%</span> <span class="fu">filter</span>(order <span class="sc">&lt;=</span> <span class="dv">3</span>)</span>
 <span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a>pwp_tt_obj0 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstart, tstop, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">+</span> <span class="fu">strata</span>(order),</span>
-<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd_mul</span>
-<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. PWP-GT Model</span></span>
-<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a><span class="co">#   (Gap time between events)</span></span>
-<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a>pwp_gt_obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(gtime, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">*</span> <span class="fu">strata</span>(order),</span>
-<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd_mul <span class="sc">%&gt;%</span> <span class="fu">filter</span>(order <span class="sc">&lt;=</span> <span class="dv">3</span>)</span>
-<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a>pwp_gt_obj0 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(gtime, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">+</span> <span class="fu">strata</span>(order),</span>
-<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd_mul</span>
-<span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-208"><a href="#cb3-208" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Tabulate Treatment Effect HR (95% CI) &amp; p-values</span></span>
-<span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a>trt_hr_mul <span class="ot">&lt;-</span> <span class="cf">function</span>(obj, obj0, p, K, <span class="at">r =</span> <span class="dv">2</span>) {</span>
-<span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a>  <span class="co"># p = # of covariates (including treatment)</span></span>
-<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a>  <span class="co"># K = # of strata (or repeated events)</span></span>
-<span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a>  beta <span class="ot">&lt;-</span> obj<span class="sc">$</span>coefficients</span>
-<span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a>  var  <span class="ot">&lt;-</span> obj<span class="sc">$</span>var</span>
-<span id="cb3-216"><a href="#cb3-216" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-217"><a href="#cb3-217" aria-hidden="true" tabindex="-1"></a>  beta_trt <span class="ot">&lt;-</span> <span class="fu">numeric</span>(p <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb3-218"><a href="#cb3-218" aria-hidden="true" tabindex="-1"></a>  var_trt  <span class="ot">&lt;-</span> <span class="fu">numeric</span>(p <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb3-219"><a href="#cb3-219" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-220"><a href="#cb3-220" aria-hidden="true" tabindex="-1"></a>  <span class="co"># event #1</span></span>
-<span id="cb3-221"><a href="#cb3-221" aria-hidden="true" tabindex="-1"></a>  beta_trt[<span class="dv">1</span>] <span class="ot">&lt;-</span> beta[<span class="dv">1</span>]</span>
-<span id="cb3-222"><a href="#cb3-222" aria-hidden="true" tabindex="-1"></a>  var_trt[<span class="dv">1</span>]  <span class="ot">&lt;-</span> var[<span class="dv">1</span>, <span class="dv">1</span>]</span>
-<span id="cb3-223"><a href="#cb3-223" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-224"><a href="#cb3-224" aria-hidden="true" tabindex="-1"></a>  <span class="co"># subsequent events</span></span>
-<span id="cb3-225"><a href="#cb3-225" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>K) {</span>
-<span id="cb3-226"><a href="#cb3-226" aria-hidden="true" tabindex="-1"></a>    beta_trt[j] <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> beta[p <span class="sc">+</span> j <span class="sc">-</span> <span class="dv">1</span>]</span>
-<span id="cb3-227"><a href="#cb3-227" aria-hidden="true" tabindex="-1"></a>    var_trt[j]  <span class="ot">&lt;-</span> var[<span class="dv">1</span>, <span class="dv">1</span>] <span class="sc">+</span></span>
-<span id="cb3-228"><a href="#cb3-228" aria-hidden="true" tabindex="-1"></a>                   var[p <span class="sc">+</span> j <span class="sc">-</span> <span class="dv">1</span>, p <span class="sc">+</span> j <span class="sc">-</span> <span class="dv">1</span>] <span class="sc">+</span></span>
-<span id="cb3-229"><a href="#cb3-229" aria-hidden="true" tabindex="-1"></a>                   <span class="dv">2</span> <span class="sc">*</span> var[<span class="dv">1</span>, p <span class="sc">+</span> j <span class="sc">-</span> <span class="dv">1</span>]</span>
-<span id="cb3-230"><a href="#cb3-230" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb3-231"><a href="#cb3-231" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-232"><a href="#cb3-232" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Overall</span></span>
-<span id="cb3-233"><a href="#cb3-233" aria-hidden="true" tabindex="-1"></a>  beta_trt[p <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> obj0<span class="sc">$</span>coefficients[<span class="dv">1</span>]</span>
-<span id="cb3-234"><a href="#cb3-234" aria-hidden="true" tabindex="-1"></a>  var_trt[p <span class="sc">+</span> <span class="dv">1</span>]  <span class="ot">&lt;-</span> obj0<span class="sc">$</span>var[<span class="dv">1</span>, <span class="dv">1</span>]</span>
-<span id="cb3-235"><a href="#cb3-235" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-236"><a href="#cb3-236" aria-hidden="true" tabindex="-1"></a>  se_trt <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(var_trt)</span>
-<span id="cb3-237"><a href="#cb3-237" aria-hidden="true" tabindex="-1"></a>  za     <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)</span>
-<span id="cb3-238"><a href="#cb3-238" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-239"><a href="#cb3-239" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
-<span id="cb3-240"><a href="#cb3-240" aria-hidden="true" tabindex="-1"></a>    <span class="at">HR =</span> <span class="fu">str_c</span>(</span>
-<span id="cb3-241"><a href="#cb3-241" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(<span class="fu">exp</span>(beta_trt), r), <span class="st">" ("</span>,</span>
-<span id="cb3-242"><a href="#cb3-242" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(<span class="fu">exp</span>(beta_trt <span class="sc">-</span> za <span class="sc">*</span> se_trt), r), <span class="st">", "</span>,</span>
-<span id="cb3-243"><a href="#cb3-243" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(<span class="fu">exp</span>(beta_trt <span class="sc">+</span> za <span class="sc">*</span> se_trt), r), <span class="st">")"</span></span>
-<span id="cb3-244"><a href="#cb3-244" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb3-245"><a href="#cb3-245" aria-hidden="true" tabindex="-1"></a>    <span class="at">P  =</span> <span class="fu">round</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>((beta_trt <span class="sc">/</span> se_trt)<span class="sc">^</span><span class="dv">2</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">3</span>)</span>
-<span id="cb3-246"><a href="#cb3-246" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-247"><a href="#cb3-247" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-248"><a href="#cb3-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-249"><a href="#cb3-249" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage:</span></span>
-<span id="cb3-250"><a href="#cb3-250" aria-hidden="true" tabindex="-1"></a><span class="co"># For demonstration, we pick the WLW objects:</span></span>
-<span id="cb3-251"><a href="#cb3-251" aria-hidden="true" tabindex="-1"></a><span class="co"># trt_hr_mul(wlw_obj, wlw_obj0, p = 3, K = 3)</span></span>
-<span id="cb3-252"><a href="#cb3-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-253"><a href="#cb3-253" aria-hidden="true" tabindex="-1"></a><span class="co"># Collect relevant data</span></span>
-<span id="cb3-254"><a href="#cb3-254" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> cgd_mul <span class="sc">%&gt;%</span></span>
-<span id="cb3-255"><a href="#cb3-255" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(order <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-256"><a href="#cb3-256" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(treat) <span class="sc">%&gt;%</span></span>
-<span id="cb3-257"><a href="#cb3-257" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
-<span id="cb3-258"><a href="#cb3-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-259"><a href="#cb3-259" aria-hidden="true" tabindex="-1"></a>row_header <span class="ot">&lt;-</span> cgd_mul <span class="sc">%&gt;%</span></span>
-<span id="cb3-260"><a href="#cb3-260" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(status <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-261"><a href="#cb3-261" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(treat, order) <span class="sc">%&gt;%</span></span>
-<span id="cb3-262"><a href="#cb3-262" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(order <span class="sc">&lt;=</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-263"><a href="#cb3-263" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">values_from =</span> n, <span class="at">names_from =</span> treat) <span class="sc">%&gt;%</span></span>
-<span id="cb3-264"><a href="#cb3-264" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">order =</span> <span class="fu">as.character</span>(order)) <span class="sc">%&gt;%</span></span>
-<span id="cb3-265"><a href="#cb3-265" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(</span>
-<span id="cb3-266"><a href="#cb3-266" aria-hidden="true" tabindex="-1"></a>    <span class="at">order   =</span> <span class="st">"All"</span>,</span>
-<span id="cb3-267"><a href="#cb3-267" aria-hidden="true" tabindex="-1"></a>    <span class="at">placebo =</span> cgd_mul <span class="sc">%&gt;%</span> <span class="fu">filter</span>(treat <span class="sc">==</span> <span class="st">"placebo"</span>, status <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">count</span>() <span class="sc">%&gt;%</span> <span class="fu">pull</span>(),</span>
-<span id="cb3-268"><a href="#cb3-268" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">rIFN-g</span><span class="st">`</span><span class="ot">=</span> cgd_mul <span class="sc">%&gt;%</span> <span class="fu">filter</span>(treat <span class="sc">==</span> <span class="st">"rIFN-g"</span>, status <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">count</span>() <span class="sc">%&gt;%</span> <span class="fu">pull</span>()</span>
-<span id="cb3-269"><a href="#cb3-269" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb3-270"><a href="#cb3-270" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb3-271"><a href="#cb3-271" aria-hidden="true" tabindex="-1"></a>    <span class="at">placebo =</span> <span class="fu">str_c</span>(placebo, <span class="st">" ("</span>, <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> placebo <span class="sc">/</span> N[<span class="dv">1</span>], <span class="dv">1</span>), <span class="st">"%)"</span>),</span>
-<span id="cb3-272"><a href="#cb3-272" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">rIFN-g</span><span class="st">`</span><span class="ot">=</span> <span class="fu">str_c</span>(<span class="st">`</span><span class="at">rIFN-g</span><span class="st">`</span>, <span class="st">" ("</span>, <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="st">`</span><span class="at">rIFN-g</span><span class="st">`</span> <span class="sc">/</span> N[<span class="dv">2</span>], <span class="dv">1</span>), <span class="st">"%)"</span>)</span>
-<span id="cb3-273"><a href="#cb3-273" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb3-274"><a href="#cb3-274" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(order, <span class="st">`</span><span class="at">rIFN-g</span><span class="st">`</span>, placebo)</span>
+<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a><span class="co"># Reduced model with common effects across orders</span></span>
+<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a>wlw_obj0 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstop, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">+</span> <span class="fu">strata</span>(order),</span>
+<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd_mul</span>
+<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. PWP-TT model</span></span>
+<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a><span class="co"># Total-time version: risk set for the jth event includes only subjects</span></span>
+<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a><span class="co"># who have experienced the first j - 1 events</span></span>
+<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a>pwp_tt_obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstart, tstop, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">*</span> <span class="fu">strata</span>(order),</span>
+<span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd_mul <span class="sc">%&gt;%</span> <span class="fu">filter</span>(order <span class="sc">&lt;=</span> <span class="dv">3</span>)</span>
+<span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a><span class="co"># Reduced model with common effects across event order</span></span>
+<span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a>pwp_tt_obj0 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(tstart, tstop, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">+</span> <span class="fu">strata</span>(order),</span>
+<span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd_mul</span>
+<span id="cb3-208"><a href="#cb3-208" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. PWP-GT model</span></span>
+<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a><span class="co"># Gap-time version uses time since the previous event</span></span>
+<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a>pwp_gt_obj <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(gtime, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">*</span> <span class="fu">strata</span>(order),</span>
+<span id="cb3-216"><a href="#cb3-216" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd_mul <span class="sc">%&gt;%</span> <span class="fu">filter</span>(order <span class="sc">&lt;=</span> <span class="dv">3</span>)</span>
+<span id="cb3-217"><a href="#cb3-217" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-218"><a href="#cb3-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-219"><a href="#cb3-219" aria-hidden="true" tabindex="-1"></a><span class="co"># Reduced model with common effects across event order</span></span>
+<span id="cb3-220"><a href="#cb3-220" aria-hidden="true" tabindex="-1"></a>pwp_gt_obj0 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb3-221"><a href="#cb3-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(gtime, status) <span class="sc">~</span> (treat <span class="sc">+</span> sex <span class="sc">+</span> age) <span class="sc">+</span> <span class="fu">strata</span>(order),</span>
+<span id="cb3-222"><a href="#cb3-222" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> cgd_mul</span>
+<span id="cb3-223"><a href="#cb3-223" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-224"><a href="#cb3-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-225"><a href="#cb3-225" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-226"><a href="#cb3-226" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Extract treatment HRs, 95% CIs, and p-values by event order</span></span>
+<span id="cb3-227"><a href="#cb3-227" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-228"><a href="#cb3-228" aria-hidden="true" tabindex="-1"></a>trt_hr_mul <span class="ot">&lt;-</span> <span class="cf">function</span>(obj, obj0, p, K, <span class="at">r =</span> <span class="dv">2</span>) {</span>
+<span id="cb3-229"><a href="#cb3-229" aria-hidden="true" tabindex="-1"></a>  <span class="co"># p = number of baseline covariates including treatment</span></span>
+<span id="cb3-230"><a href="#cb3-230" aria-hidden="true" tabindex="-1"></a>  <span class="co"># K = number of event strata displayed</span></span>
+<span id="cb3-231"><a href="#cb3-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-232"><a href="#cb3-232" aria-hidden="true" tabindex="-1"></a>  beta <span class="ot">&lt;-</span> obj<span class="sc">$</span>coefficients</span>
+<span id="cb3-233"><a href="#cb3-233" aria-hidden="true" tabindex="-1"></a>  var  <span class="ot">&lt;-</span> obj<span class="sc">$</span>var</span>
+<span id="cb3-234"><a href="#cb3-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-235"><a href="#cb3-235" aria-hidden="true" tabindex="-1"></a>  beta_trt <span class="ot">&lt;-</span> <span class="fu">numeric</span>(p <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-236"><a href="#cb3-236" aria-hidden="true" tabindex="-1"></a>  var_trt  <span class="ot">&lt;-</span> <span class="fu">numeric</span>(p <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-237"><a href="#cb3-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-238"><a href="#cb3-238" aria-hidden="true" tabindex="-1"></a>  <span class="co"># First event: treatment main effect</span></span>
+<span id="cb3-239"><a href="#cb3-239" aria-hidden="true" tabindex="-1"></a>  beta_trt[<span class="dv">1</span>] <span class="ot">&lt;-</span> beta[<span class="dv">1</span>]</span>
+<span id="cb3-240"><a href="#cb3-240" aria-hidden="true" tabindex="-1"></a>  var_trt[<span class="dv">1</span>]  <span class="ot">&lt;-</span> var[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb3-241"><a href="#cb3-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-242"><a href="#cb3-242" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Events 2,...,K: main effect + interaction with order-specific stratum</span></span>
+<span id="cb3-243"><a href="#cb3-243" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>K) {</span>
+<span id="cb3-244"><a href="#cb3-244" aria-hidden="true" tabindex="-1"></a>    beta_trt[j] <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> beta[p <span class="sc">+</span> j <span class="sc">-</span> <span class="dv">1</span>]</span>
+<span id="cb3-245"><a href="#cb3-245" aria-hidden="true" tabindex="-1"></a>    var_trt[j]  <span class="ot">&lt;-</span> var[<span class="dv">1</span>, <span class="dv">1</span>] <span class="sc">+</span></span>
+<span id="cb3-246"><a href="#cb3-246" aria-hidden="true" tabindex="-1"></a>      var[p <span class="sc">+</span> j <span class="sc">-</span> <span class="dv">1</span>, p <span class="sc">+</span> j <span class="sc">-</span> <span class="dv">1</span>] <span class="sc">+</span></span>
+<span id="cb3-247"><a href="#cb3-247" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span> <span class="sc">*</span> var[<span class="dv">1</span>, p <span class="sc">+</span> j <span class="sc">-</span> <span class="dv">1</span>]</span>
+<span id="cb3-248"><a href="#cb3-248" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-249"><a href="#cb3-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-250"><a href="#cb3-250" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Overall treatment effect from the reduced model</span></span>
+<span id="cb3-251"><a href="#cb3-251" aria-hidden="true" tabindex="-1"></a>  beta_trt[p <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> obj0<span class="sc">$</span>coefficients[<span class="dv">1</span>]</span>
+<span id="cb3-252"><a href="#cb3-252" aria-hidden="true" tabindex="-1"></a>  var_trt[p <span class="sc">+</span> <span class="dv">1</span>]  <span class="ot">&lt;-</span> obj0<span class="sc">$</span>var[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb3-253"><a href="#cb3-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-254"><a href="#cb3-254" aria-hidden="true" tabindex="-1"></a>  se_trt <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(var_trt)</span>
+<span id="cb3-255"><a href="#cb3-255" aria-hidden="true" tabindex="-1"></a>  za     <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)</span>
+<span id="cb3-256"><a href="#cb3-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-257"><a href="#cb3-257" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb3-258"><a href="#cb3-258" aria-hidden="true" tabindex="-1"></a>    <span class="at">HR =</span> <span class="fu">str_c</span>(</span>
+<span id="cb3-259"><a href="#cb3-259" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(<span class="fu">exp</span>(beta_trt), r), <span class="st">" ("</span>,</span>
+<span id="cb3-260"><a href="#cb3-260" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(<span class="fu">exp</span>(beta_trt <span class="sc">-</span> za <span class="sc">*</span> se_trt), r), <span class="st">", "</span>,</span>
+<span id="cb3-261"><a href="#cb3-261" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(<span class="fu">exp</span>(beta_trt <span class="sc">+</span> za <span class="sc">*</span> se_trt), r), <span class="st">")"</span></span>
+<span id="cb3-262"><a href="#cb3-262" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb3-263"><a href="#cb3-263" aria-hidden="true" tabindex="-1"></a>    <span class="at">P =</span> <span class="fu">round</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>((beta_trt <span class="sc">/</span> se_trt)<span class="sc">^</span><span class="dv">2</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">3</span>)</span>
+<span id="cb3-264"><a href="#cb3-264" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-265"><a href="#cb3-265" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-266"><a href="#cb3-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-267"><a href="#cb3-267" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-268"><a href="#cb3-268" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Build summary table across WLW, PWP-TT, and PWP-GT</span></span>
+<span id="cb3-269"><a href="#cb3-269" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-270"><a href="#cb3-270" aria-hidden="true" tabindex="-1"></a><span class="co"># Group sizes by treatment arm</span></span>
+<span id="cb3-271"><a href="#cb3-271" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> cgd_mul <span class="sc">%&gt;%</span></span>
+<span id="cb3-272"><a href="#cb3-272" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(order <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-273"><a href="#cb3-273" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(treat) <span class="sc">%&gt;%</span></span>
+<span id="cb3-274"><a href="#cb3-274" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
 <span id="cb3-275"><a href="#cb3-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-276"><a href="#cb3-276" aria-hidden="true" tabindex="-1"></a><span class="co"># Build table for WLW, PWP-TT, PWP-GT</span></span>
-<span id="cb3-277"><a href="#cb3-277" aria-hidden="true" tabindex="-1"></a>wlw_HR    <span class="ot">&lt;-</span> <span class="fu">trt_hr_mul</span>(wlw_obj,    wlw_obj0,    <span class="dv">3</span>, <span class="dv">3</span>)<span class="sc">$</span>HR</span>
-<span id="cb3-278"><a href="#cb3-278" aria-hidden="true" tabindex="-1"></a>pwpTT_HR  <span class="ot">&lt;-</span> <span class="fu">trt_hr_mul</span>(pwp_tt_obj, pwp_tt_obj0, <span class="dv">3</span>, <span class="dv">3</span>)<span class="sc">$</span>HR</span>
-<span id="cb3-279"><a href="#cb3-279" aria-hidden="true" tabindex="-1"></a>pwpGT_HR  <span class="ot">&lt;-</span> <span class="fu">trt_hr_mul</span>(pwp_gt_obj, pwp_gt_obj0, <span class="dv">3</span>, <span class="dv">3</span>)<span class="sc">$</span>HR</span>
-<span id="cb3-280"><a href="#cb3-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-281"><a href="#cb3-281" aria-hidden="true" tabindex="-1"></a><span class="co"># Create table</span></span>
-<span id="cb3-282"><a href="#cb3-282" aria-hidden="true" tabindex="-1"></a>cgd_tab <span class="ot">&lt;-</span> row_header <span class="sc">%&gt;%</span></span>
-<span id="cb3-283"><a href="#cb3-283" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_column</span>(</span>
-<span id="cb3-284"><a href="#cb3-284" aria-hidden="true" tabindex="-1"></a>    <span class="at">WLW      =</span> wlw_HR,</span>
-<span id="cb3-285"><a href="#cb3-285" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">PWP-TT</span><span class="st">`</span> <span class="ot">=</span> pwpTT_HR,</span>
-<span id="cb3-286"><a href="#cb3-286" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">PWP-GT</span><span class="st">`</span> <span class="ot">=</span> pwpGT_HR</span>
-<span id="cb3-287"><a href="#cb3-287" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-288"><a href="#cb3-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-289"><a href="#cb3-289" aria-hidden="true" tabindex="-1"></a><span class="co"># Print table</span></span>
-<span id="cb3-290"><a href="#cb3-290" aria-hidden="true" tabindex="-1"></a>cgd_tab </span>
-<span id="cb3-291"><a href="#cb3-291" aria-hidden="true" tabindex="-1"></a><span class="co"># Example to create a LaTeX table:</span></span>
-<span id="cb3-292"><a href="#cb3-292" aria-hidden="true" tabindex="-1"></a><span class="co"># cgd_tab %&gt;%</span></span>
-<span id="cb3-293"><a href="#cb3-293" aria-hidden="true" tabindex="-1"></a><span class="co">#   kable("latex")</span></span>
-<span id="cb3-294"><a href="#cb3-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-295"><a href="#cb3-295" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-296"><a href="#cb3-296" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Forest Plot of Treatment Hazard Ratios</span></span>
-<span id="cb3-297"><a href="#cb3-297" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-298"><a href="#cb3-298" aria-hidden="true" tabindex="-1"></a>hr_ci_parse <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb3-299"><a href="#cb3-299" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_regex</span>(</span>
-<span id="cb3-300"><a href="#cb3-300" aria-hidden="true" tabindex="-1"></a>    x,</span>
-<span id="cb3-301"><a href="#cb3-301" aria-hidden="true" tabindex="-1"></a>    <span class="at">patterns =</span> <span class="fu">c</span>(<span class="at">x =</span> <span class="st">".+"</span>, <span class="st">" </span><span class="sc">\\</span><span class="st">("</span>, <span class="at">xmin =</span> <span class="st">".+"</span>, <span class="st">", "</span>, <span class="at">xmax =</span> <span class="st">".+"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">)"</span>)</span>
-<span id="cb3-302"><a href="#cb3-302" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-303"><a href="#cb3-303" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-304"><a href="#cb3-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-305"><a href="#cb3-305" aria-hidden="true" tabindex="-1"></a>cgd_models <span class="ot">&lt;-</span> cgd_tab <span class="sc">%&gt;%</span></span>
-<span id="cb3-306"><a href="#cb3-306" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_regex</span>(</span>
-<span id="cb3-307"><a href="#cb3-307" aria-hidden="true" tabindex="-1"></a>    WLW<span class="sc">:</span><span class="st">`</span><span class="at">PWP-GT</span><span class="st">`</span>,</span>
-<span id="cb3-308"><a href="#cb3-308" aria-hidden="true" tabindex="-1"></a>    <span class="at">patterns  =</span> <span class="fu">c</span>(<span class="at">x =</span> <span class="st">".+"</span>, <span class="st">" </span><span class="sc">\\</span><span class="st">("</span>, <span class="at">xmin =</span> <span class="st">".+"</span>, <span class="st">", "</span>, <span class="at">xmax =</span> <span class="st">".+"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">)"</span>),</span>
-<span id="cb3-309"><a href="#cb3-309" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span></span>
-<span id="cb3-310"><a href="#cb3-310" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb3-311"><a href="#cb3-311" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="sc">!</span><span class="fu">c</span>(order<span class="sc">:</span>placebo), as.numeric)) <span class="sc">%&gt;%</span></span>
-<span id="cb3-312"><a href="#cb3-312" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb3-313"><a href="#cb3-313" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">c</span>(order<span class="sc">:</span>placebo),</span>
-<span id="cb3-314"><a href="#cb3-314" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to  =</span> <span class="fu">c</span>(<span class="st">"Model"</span>, <span class="st">".value"</span>),</span>
-<span id="cb3-315"><a href="#cb3-315" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span></span>
-<span id="cb3-316"><a href="#cb3-316" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-317"><a href="#cb3-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-318"><a href="#cb3-318" aria-hidden="true" tabindex="-1"></a>cgd_models <span class="sc">%&gt;%</span></span>
-<span id="cb3-319"><a href="#cb3-319" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> order)) <span class="sc">+</span></span>
-<span id="cb3-320"><a href="#cb3-320" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> (order <span class="sc">==</span> <span class="st">"All"</span>))) <span class="sc">+</span></span>
-<span id="cb3-321"><a href="#cb3-321" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_linerange</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> xmin, <span class="at">xmax =</span> xmax, <span class="at">linewidth =</span> (order <span class="sc">==</span> <span class="st">"All"</span>))) <span class="sc">+</span></span>
-<span id="cb3-322"><a href="#cb3-322" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb3-323"><a href="#cb3-323" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">fct</span>(Model), <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb3-324"><a href="#cb3-324" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(</span>
-<span id="cb3-325"><a href="#cb3-325" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Infection"</span>,</span>
-<span id="cb3-326"><a href="#cb3-326" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">rev</span>(<span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"All"</span>)),</span>
-<span id="cb3-327"><a href="#cb3-327" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">rev</span>(<span class="fu">c</span>(<span class="st">"1st"</span>, <span class="st">"2nd"</span>, <span class="st">"3rd"</span>, <span class="st">"All"</span>))</span>
-<span id="cb3-328"><a href="#cb3-328" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb3-329"><a href="#cb3-329" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>(<span class="st">"Treatment hazard ratio (95% CI)"</span>) <span class="sc">+</span></span>
-<span id="cb3-330"><a href="#cb3-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="dv">2</span>)) <span class="sc">+</span></span>
-<span id="cb3-331"><a href="#cb3-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_linewidth_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.8</span>)) <span class="sc">+</span></span>
-<span id="cb3-332"><a href="#cb3-332" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb3-333"><a href="#cb3-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb3-334"><a href="#cb3-334" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text        =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
-<span id="cb3-335"><a href="#cb3-335" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title       =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
-<span id="cb3-336"><a href="#cb3-336" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid       =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb3-337"><a href="#cb3-337" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text       =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
-<span id="cb3-338"><a href="#cb3-338" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position  =</span> <span class="st">"none"</span></span>
-<span id="cb3-339"><a href="#cb3-339" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-340"><a href="#cb3-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-341"><a href="#cb3-341" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("rec_cgd_forest.pdf", width = 8, height = 4.5)</span></span>
-<span id="cb3-342"><a href="#cb3-342" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("rec_cgd_forest.eps", width = 8, height = 4.5)</span></span>
-<span id="cb3-343"><a href="#cb3-343" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-344"><a href="#cb3-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-345"><a href="#cb3-345" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
-<span id="cb3-346"><a href="#cb3-346" aria-hidden="true" tabindex="-1"></a><span class="co"># (D) Poisson / Negative Binomial / Zero-Inflated Poisson Regressions</span></span>
-<span id="cb3-347"><a href="#cb3-347" aria-hidden="true" tabindex="-1"></a><span class="co">#==============================================================================</span></span>
-<span id="cb3-348"><a href="#cb3-348" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
-<span id="cb3-349"><a href="#cb3-349" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pscl)</span>
-<span id="cb3-350"><a href="#cb3-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-351"><a href="#cb3-351" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-352"><a href="#cb3-352" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Flatten Data for One-Row-per-Subject</span></span>
-<span id="cb3-353"><a href="#cb3-353" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-354"><a href="#cb3-354" aria-hidden="true" tabindex="-1"></a>df_events <span class="ot">&lt;-</span> cgd <span class="sc">%&gt;%</span></span>
-<span id="cb3-355"><a href="#cb3-355" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id) <span class="sc">%&gt;%</span></span>
-<span id="cb3-356"><a href="#cb3-356" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb3-357"><a href="#cb3-357" aria-hidden="true" tabindex="-1"></a>    <span class="at">count      =</span> <span class="fu">sum</span>(status),   <span class="co"># total # events for subject</span></span>
-<span id="cb3-358"><a href="#cb3-358" aria-hidden="true" tabindex="-1"></a>    <span class="at">follow_up  =</span> <span class="fu">max</span>(tstop)     <span class="co"># maximum 'tstop' is censoring time</span></span>
-<span id="cb3-359"><a href="#cb3-359" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb3-360"><a href="#cb3-360" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(id, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-276"><a href="#cb3-276" aria-hidden="true" tabindex="-1"></a><span class="co"># Event counts by order and treatment arm</span></span>
+<span id="cb3-277"><a href="#cb3-277" aria-hidden="true" tabindex="-1"></a>row_header <span class="ot">&lt;-</span> cgd_mul <span class="sc">%&gt;%</span></span>
+<span id="cb3-278"><a href="#cb3-278" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(status <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-279"><a href="#cb3-279" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(treat, order) <span class="sc">%&gt;%</span></span>
+<span id="cb3-280"><a href="#cb3-280" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(order <span class="sc">&lt;=</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-281"><a href="#cb3-281" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">values_from =</span> n, <span class="at">names_from =</span> treat) <span class="sc">%&gt;%</span></span>
+<span id="cb3-282"><a href="#cb3-282" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">order =</span> <span class="fu">as.character</span>(order)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-283"><a href="#cb3-283" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(</span>
+<span id="cb3-284"><a href="#cb3-284" aria-hidden="true" tabindex="-1"></a>    <span class="at">order    =</span> <span class="st">"All"</span>,</span>
+<span id="cb3-285"><a href="#cb3-285" aria-hidden="true" tabindex="-1"></a>    <span class="at">placebo  =</span> cgd_mul <span class="sc">%&gt;%</span> <span class="fu">filter</span>(treat <span class="sc">==</span> <span class="st">"placebo"</span>, status <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">count</span>() <span class="sc">%&gt;%</span> <span class="fu">pull</span>(),</span>
+<span id="cb3-286"><a href="#cb3-286" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">rIFN-g</span><span class="st">`</span> <span class="ot">=</span> cgd_mul <span class="sc">%&gt;%</span> <span class="fu">filter</span>(treat <span class="sc">==</span> <span class="st">"rIFN-g"</span>, status <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">count</span>() <span class="sc">%&gt;%</span> <span class="fu">pull</span>()</span>
+<span id="cb3-287"><a href="#cb3-287" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-288"><a href="#cb3-288" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-289"><a href="#cb3-289" aria-hidden="true" tabindex="-1"></a>    <span class="at">placebo  =</span> <span class="fu">str_c</span>(placebo, <span class="st">" ("</span>, <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> placebo <span class="sc">/</span> N[<span class="dv">1</span>], <span class="dv">1</span>), <span class="st">"%)"</span>),</span>
+<span id="cb3-290"><a href="#cb3-290" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">rIFN-g</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">str_c</span>(<span class="st">`</span><span class="at">rIFN-g</span><span class="st">`</span>, <span class="st">" ("</span>, <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="st">`</span><span class="at">rIFN-g</span><span class="st">`</span> <span class="sc">/</span> N[<span class="dv">2</span>], <span class="dv">1</span>), <span class="st">"%)"</span>)</span>
+<span id="cb3-291"><a href="#cb3-291" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-292"><a href="#cb3-292" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(order, <span class="st">`</span><span class="at">rIFN-g</span><span class="st">`</span>, placebo)</span>
+<span id="cb3-293"><a href="#cb3-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-294"><a href="#cb3-294" aria-hidden="true" tabindex="-1"></a><span class="co"># Treatment HR columns for the three models</span></span>
+<span id="cb3-295"><a href="#cb3-295" aria-hidden="true" tabindex="-1"></a>wlw_HR   <span class="ot">&lt;-</span> <span class="fu">trt_hr_mul</span>(wlw_obj,    wlw_obj0,    <span class="dv">3</span>, <span class="dv">3</span>)<span class="sc">$</span>HR</span>
+<span id="cb3-296"><a href="#cb3-296" aria-hidden="true" tabindex="-1"></a>pwpTT_HR <span class="ot">&lt;-</span> <span class="fu">trt_hr_mul</span>(pwp_tt_obj, pwp_tt_obj0, <span class="dv">3</span>, <span class="dv">3</span>)<span class="sc">$</span>HR</span>
+<span id="cb3-297"><a href="#cb3-297" aria-hidden="true" tabindex="-1"></a>pwpGT_HR <span class="ot">&lt;-</span> <span class="fu">trt_hr_mul</span>(pwp_gt_obj, pwp_gt_obj0, <span class="dv">3</span>, <span class="dv">3</span>)<span class="sc">$</span>HR</span>
+<span id="cb3-298"><a href="#cb3-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-299"><a href="#cb3-299" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine into a summary table</span></span>
+<span id="cb3-300"><a href="#cb3-300" aria-hidden="true" tabindex="-1"></a>cgd_tab <span class="ot">&lt;-</span> row_header <span class="sc">%&gt;%</span></span>
+<span id="cb3-301"><a href="#cb3-301" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_column</span>(</span>
+<span id="cb3-302"><a href="#cb3-302" aria-hidden="true" tabindex="-1"></a>    <span class="at">WLW      =</span> wlw_HR,</span>
+<span id="cb3-303"><a href="#cb3-303" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">PWP-TT</span><span class="st">`</span> <span class="ot">=</span> pwpTT_HR,</span>
+<span id="cb3-304"><a href="#cb3-304" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">PWP-GT</span><span class="st">`</span> <span class="ot">=</span> pwpGT_HR</span>
+<span id="cb3-305"><a href="#cb3-305" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-306"><a href="#cb3-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-307"><a href="#cb3-307" aria-hidden="true" tabindex="-1"></a>cgd_tab</span>
+<span id="cb3-308"><a href="#cb3-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-309"><a href="#cb3-309" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional LaTeX table export</span></span>
+<span id="cb3-310"><a href="#cb3-310" aria-hidden="true" tabindex="-1"></a><span class="co"># cgd_tab %&gt;%</span></span>
+<span id="cb3-311"><a href="#cb3-311" aria-hidden="true" tabindex="-1"></a><span class="co">#   kable("latex")</span></span>
+<span id="cb3-312"><a href="#cb3-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-313"><a href="#cb3-313" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-314"><a href="#cb3-314" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. Forest plot of treatment hazard ratios</span></span>
+<span id="cb3-315"><a href="#cb3-315" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-316"><a href="#cb3-316" aria-hidden="true" tabindex="-1"></a><span class="co"># Parse strings of the form "x (xmin, xmax)"</span></span>
+<span id="cb3-317"><a href="#cb3-317" aria-hidden="true" tabindex="-1"></a>hr_ci_parse <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb3-318"><a href="#cb3-318" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_regex</span>(</span>
+<span id="cb3-319"><a href="#cb3-319" aria-hidden="true" tabindex="-1"></a>    x,</span>
+<span id="cb3-320"><a href="#cb3-320" aria-hidden="true" tabindex="-1"></a>    <span class="at">patterns =</span> <span class="fu">c</span>(<span class="at">x =</span> <span class="st">".+"</span>, <span class="st">" </span><span class="sc">\\</span><span class="st">("</span>, <span class="at">xmin =</span> <span class="st">".+"</span>, <span class="st">", "</span>, <span class="at">xmax =</span> <span class="st">".+"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">)"</span>)</span>
+<span id="cb3-321"><a href="#cb3-321" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-322"><a href="#cb3-322" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-323"><a href="#cb3-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-324"><a href="#cb3-324" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate HR strings for each model into point estimate and CI bounds</span></span>
+<span id="cb3-325"><a href="#cb3-325" aria-hidden="true" tabindex="-1"></a>cgd_models <span class="ot">&lt;-</span> cgd_tab <span class="sc">%&gt;%</span></span>
+<span id="cb3-326"><a href="#cb3-326" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_regex</span>(</span>
+<span id="cb3-327"><a href="#cb3-327" aria-hidden="true" tabindex="-1"></a>    WLW<span class="sc">:</span><span class="st">`</span><span class="at">PWP-GT</span><span class="st">`</span>,</span>
+<span id="cb3-328"><a href="#cb3-328" aria-hidden="true" tabindex="-1"></a>    <span class="at">patterns  =</span> <span class="fu">c</span>(<span class="at">x =</span> <span class="st">".+"</span>, <span class="st">" </span><span class="sc">\\</span><span class="st">("</span>, <span class="at">xmin =</span> <span class="st">".+"</span>, <span class="st">", "</span>, <span class="at">xmax =</span> <span class="st">".+"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">)"</span>),</span>
+<span id="cb3-329"><a href="#cb3-329" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span></span>
+<span id="cb3-330"><a href="#cb3-330" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-331"><a href="#cb3-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="sc">!</span><span class="fu">c</span>(order<span class="sc">:</span>placebo), as.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-332"><a href="#cb3-332" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb3-333"><a href="#cb3-333" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">c</span>(order<span class="sc">:</span>placebo),</span>
+<span id="cb3-334"><a href="#cb3-334" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"Model"</span>, <span class="st">".value"</span>),</span>
+<span id="cb3-335"><a href="#cb3-335" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span></span>
+<span id="cb3-336"><a href="#cb3-336" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-337"><a href="#cb3-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-338"><a href="#cb3-338" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot event-specific and overall treatment HRs</span></span>
+<span id="cb3-339"><a href="#cb3-339" aria-hidden="true" tabindex="-1"></a>cgd_models <span class="sc">%&gt;%</span></span>
+<span id="cb3-340"><a href="#cb3-340" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> order)) <span class="sc">+</span></span>
+<span id="cb3-341"><a href="#cb3-341" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> (order <span class="sc">==</span> <span class="st">"All"</span>))) <span class="sc">+</span></span>
+<span id="cb3-342"><a href="#cb3-342" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_linerange</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> xmin, <span class="at">xmax =</span> xmax, <span class="at">linewidth =</span> (order <span class="sc">==</span> <span class="st">"All"</span>))) <span class="sc">+</span></span>
+<span id="cb3-343"><a href="#cb3-343" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb3-344"><a href="#cb3-344" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">fct</span>(Model), <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb3-345"><a href="#cb3-345" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(</span>
+<span id="cb3-346"><a href="#cb3-346" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Infection"</span>,</span>
+<span id="cb3-347"><a href="#cb3-347" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">rev</span>(<span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"All"</span>)),</span>
+<span id="cb3-348"><a href="#cb3-348" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">rev</span>(<span class="fu">c</span>(<span class="st">"1st"</span>, <span class="st">"2nd"</span>, <span class="st">"3rd"</span>, <span class="st">"All"</span>))</span>
+<span id="cb3-349"><a href="#cb3-349" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-350"><a href="#cb3-350" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>(<span class="st">"Treatment hazard ratio (95% CI)"</span>) <span class="sc">+</span></span>
+<span id="cb3-351"><a href="#cb3-351" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb3-352"><a href="#cb3-352" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_linewidth_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.8</span>)) <span class="sc">+</span></span>
+<span id="cb3-353"><a href="#cb3-353" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-354"><a href="#cb3-354" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-355"><a href="#cb3-355" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text       =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb3-356"><a href="#cb3-356" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title      =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb3-357"><a href="#cb3-357" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-358"><a href="#cb3-358" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text      =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb3-359"><a href="#cb3-359" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span></span>
+<span id="cb3-360"><a href="#cb3-360" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb3-361"><a href="#cb3-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-362"><a href="#cb3-362" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-363"><a href="#cb3-363" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Poisson Regression</span></span>
-<span id="cb3-364"><a href="#cb3-364" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-365"><a href="#cb3-365" aria-hidden="true" tabindex="-1"></a>ps_obj <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
-<span id="cb3-366"><a href="#cb3-366" aria-hidden="true" tabindex="-1"></a>  count <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> sex <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(follow_up)),</span>
-<span id="cb3-367"><a href="#cb3-367" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">poisson</span>(<span class="at">link =</span> <span class="st">"log"</span>),</span>
-<span id="cb3-368"><a href="#cb3-368" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df_events</span>
-<span id="cb3-369"><a href="#cb3-369" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-370"><a href="#cb3-370" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ps_obj)</span>
-<span id="cb3-371"><a href="#cb3-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-372"><a href="#cb3-372" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-373"><a href="#cb3-373" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Negative Binomial Regression</span></span>
-<span id="cb3-374"><a href="#cb3-374" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-375"><a href="#cb3-375" aria-hidden="true" tabindex="-1"></a>nb_obj <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">glm.nb</span>(</span>
-<span id="cb3-376"><a href="#cb3-376" aria-hidden="true" tabindex="-1"></a>  count <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> sex <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(follow_up)),</span>
-<span id="cb3-377"><a href="#cb3-377" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df_events</span>
-<span id="cb3-378"><a href="#cb3-378" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-379"><a href="#cb3-379" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(nb_obj)</span>
+<span id="cb3-362"><a href="#cb3-362" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional saving</span></span>
+<span id="cb3-363"><a href="#cb3-363" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("rec_cgd_forest.pdf", width = 8, height = 4.5)</span></span>
+<span id="cb3-364"><a href="#cb3-364" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("rec_cgd_forest.eps", width = 8, height = 4.5)</span></span>
+<span id="cb3-365"><a href="#cb3-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-366"><a href="#cb3-366" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
+<span id="cb3-367"><a href="#cb3-367" aria-hidden="true" tabindex="-1"></a><span class="co"># (D) Poisson / Negative Binomial / Zero-Inflated Poisson Regressions</span></span>
+<span id="cb3-368"><a href="#cb3-368" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
+<span id="cb3-369"><a href="#cb3-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-370"><a href="#cb3-370" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-371"><a href="#cb3-371" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Collapse data to one row per subject</span></span>
+<span id="cb3-372"><a href="#cb3-372" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-373"><a href="#cb3-373" aria-hidden="true" tabindex="-1"></a>df_events <span class="ot">&lt;-</span> cgd <span class="sc">%&gt;%</span></span>
+<span id="cb3-374"><a href="#cb3-374" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id) <span class="sc">%&gt;%</span></span>
+<span id="cb3-375"><a href="#cb3-375" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-376"><a href="#cb3-376" aria-hidden="true" tabindex="-1"></a>    <span class="at">count     =</span> <span class="fu">sum</span>(status),  <span class="co"># total number of recurrent events</span></span>
+<span id="cb3-377"><a href="#cb3-377" aria-hidden="true" tabindex="-1"></a>    <span class="at">follow_up =</span> <span class="fu">max</span>(tstop)    <span class="co"># total observed follow-up time</span></span>
+<span id="cb3-378"><a href="#cb3-378" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-379"><a href="#cb3-379" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(id, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-380"><a href="#cb3-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-381"><a href="#cb3-381" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-382"><a href="#cb3-382" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Zero-Inflated Poisson (ZIP) Regression</span></span>
-<span id="cb3-383"><a href="#cb3-383" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------</span></span>
-<span id="cb3-384"><a href="#cb3-384" aria-hidden="true" tabindex="-1"></a>zip_model <span class="ot">&lt;-</span> <span class="fu">zeroinfl</span>(</span>
-<span id="cb3-385"><a href="#cb3-385" aria-hidden="true" tabindex="-1"></a>  count <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> sex <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(follow_up))  <span class="co"># Poisson part</span></span>
-<span id="cb3-386"><a href="#cb3-386" aria-hidden="true" tabindex="-1"></a>    <span class="sc">|</span> treat <span class="sc">+</span> age <span class="sc">+</span> sex,                              <span class="co"># Logistic part</span></span>
-<span id="cb3-387"><a href="#cb3-387" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df_events</span>
-<span id="cb3-388"><a href="#cb3-388" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-389"><a href="#cb3-389" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(zip_model)</span>
+<span id="cb3-381"><a href="#cb3-381" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-382"><a href="#cb3-382" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Poisson regression</span></span>
+<span id="cb3-383"><a href="#cb3-383" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-384"><a href="#cb3-384" aria-hidden="true" tabindex="-1"></a><span class="co"># offset(log(follow_up)) models the event rate per unit follow-up time</span></span>
+<span id="cb3-385"><a href="#cb3-385" aria-hidden="true" tabindex="-1"></a>ps_obj <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb3-386"><a href="#cb3-386" aria-hidden="true" tabindex="-1"></a>  count <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> sex <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(follow_up)),</span>
+<span id="cb3-387"><a href="#cb3-387" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">poisson</span>(<span class="at">link =</span> <span class="st">"log"</span>),</span>
+<span id="cb3-388"><a href="#cb3-388" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df_events</span>
+<span id="cb3-389"><a href="#cb3-389" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb3-390"><a href="#cb3-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-391"><a href="#cb3-391" aria-hidden="true" tabindex="-1"></a>zip_model<span class="sc">$</span>coefficients</span>
-<span id="cb3-392"><a href="#cb3-392" aria-hidden="true" tabindex="-1"></a>zip_model<span class="sc">$</span>vcov</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-391"><a href="#cb3-391" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ps_obj)</span>
+<span id="cb3-392"><a href="#cb3-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-393"><a href="#cb3-393" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-394"><a href="#cb3-394" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Negative binomial regression</span></span>
+<span id="cb3-395"><a href="#cb3-395" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-396"><a href="#cb3-396" aria-hidden="true" tabindex="-1"></a><span class="co"># glm.nb() relaxes the Poisson variance assumption</span></span>
+<span id="cb3-397"><a href="#cb3-397" aria-hidden="true" tabindex="-1"></a>nb_obj <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">glm.nb</span>(</span>
+<span id="cb3-398"><a href="#cb3-398" aria-hidden="true" tabindex="-1"></a>  count <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> sex <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(follow_up)),</span>
+<span id="cb3-399"><a href="#cb3-399" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df_events</span>
+<span id="cb3-400"><a href="#cb3-400" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-401"><a href="#cb3-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-402"><a href="#cb3-402" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(nb_obj)</span>
+<span id="cb3-403"><a href="#cb3-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-404"><a href="#cb3-404" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-405"><a href="#cb3-405" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Zero-inflated Poisson regression</span></span>
+<span id="cb3-406"><a href="#cb3-406" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb3-407"><a href="#cb3-407" aria-hidden="true" tabindex="-1"></a><span class="co"># First formula part: Poisson mean model for counts</span></span>
+<span id="cb3-408"><a href="#cb3-408" aria-hidden="true" tabindex="-1"></a><span class="co"># Second formula part: logistic model for excess zeros</span></span>
+<span id="cb3-409"><a href="#cb3-409" aria-hidden="true" tabindex="-1"></a>zip_model <span class="ot">&lt;-</span> <span class="fu">zeroinfl</span>(</span>
+<span id="cb3-410"><a href="#cb3-410" aria-hidden="true" tabindex="-1"></a>  count <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> sex <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(follow_up))</span>
+<span id="cb3-411"><a href="#cb3-411" aria-hidden="true" tabindex="-1"></a>    <span class="sc">|</span> treat <span class="sc">+</span> age <span class="sc">+</span> sex,</span>
+<span id="cb3-412"><a href="#cb3-412" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df_events</span>
+<span id="cb3-413"><a href="#cb3-413" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-414"><a href="#cb3-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-415"><a href="#cb3-415" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(zip_model)</span>
+<span id="cb3-416"><a href="#cb3-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-417"><a href="#cb3-417" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract coefficient vectors and variance-covariance matrix</span></span>
+<span id="cb3-418"><a href="#cb3-418" aria-hidden="true" tabindex="-1"></a>zip_model<span class="sc">$</span>coefficients</span>
+<span id="cb3-419"><a href="#cb3-419" aria-hidden="true" tabindex="-1"></a>zip_model<span class="sc">$</span>vcov</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 

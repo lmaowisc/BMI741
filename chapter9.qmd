@@ -170,32 +170,34 @@ The choice among these frameworks depends on scientific aims (e.g., dynamic pred
 ###############################################################################
 # Chapter 9 R Code
 #
-# This script reproduces all major numerical results in Chapter 9, including:
-#   1. Andersen-Gill Model for recurrent events (Chronic Granulomatous Disease)
-#   2. Frailty model vs. Proportional Means model (Chronic Granulomatous Disease)
+# This script reproduces major numerical results in Chapter 9, including
+#   1. Andersen--Gill model for recurrent events (CGD study)
+#   2. Frailty model vs proportional means model (CGD study)
 #   3. Multivariate approaches (WLW, PWP models)
-#   4. Poisson, Negative Binomial, and Zero-Inflated Poisson regressions
+#   4. Poisson, negative binomial, and zero-inflated Poisson regressions
 ###############################################################################
 
-library(survival)
-library(tidyverse)
-library(gtsummary)
-library(knitr)
-library(patchwork)
+library(survival)   # Cox-type recurrent-event models and diagnostics
+library(tidyverse)  # Data manipulation and ggplot2-based graphics
+library(gtsummary)  # Formatted regression tables
+library(knitr)      # Table printing utilities
+library(patchwork)  # Plot combination
+library(pscl)       # Zero-inflated Poisson regression
 
-#==============================================================================
-# (A) Andersen-Gill/Frailty/LWYY Model for Recurrent Infections (CGD Data)
-#==============================================================================
-#------------------------------------------------------------------------------
-# 1. Read the Chronic Granulomatous Disease (CGD) Data
-#    in Counting Process Format
-#------------------------------------------------------------------------------
+# =============================================================================
+# (A) Andersen--Gill / Frailty / LWYY Models for Recurrent Infections
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 1. Read the Chronic Granulomatous Disease (CGD) data in counting-process form
+# -----------------------------------------------------------------------------
 cgd <- read.table("Data\\Chronic Granulomatous Disease Study\\cgd_counting.txt")
 head(cgd)
 
-#------------------------------------------------------------------------------
-# 2. Andersen-Gill Model
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. Andersen--Gill model
+# -----------------------------------------------------------------------------
+# Surv(tstart, tstop, status) specifies recurrent-event counting-process data
 obj_AG <- coxph(
   Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids + propylac,
   data = cgd
@@ -203,228 +205,244 @@ obj_AG <- coxph(
 
 summary(obj_AG)
 
-# Residuals
+# Proportional hazards check and subject-level martingale residuals
 cox.zph(obj_AG)
 residuals(obj_AG, type = "martingale", collapse = cgd$id)
 
-#------------------------------------------------------------------------------
-# 3. Frailty Model
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 3. Shared-frailty model
+# -----------------------------------------------------------------------------
+# frailty(id, distribution = "gamma") introduces a subject-specific random effect
 obj_frail <- coxph(
   Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids + propylac +
     frailty(id, distribution = "gamma"),
   data = cgd
 )
+
 summary(obj_frail)
 
-#------------------------------------------------------------------------------
-# 4. Proportional Means Model (LWYY)
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 4. Proportional means model (LWYY)
+# -----------------------------------------------------------------------------
+# cluster(id) keeps the Cox mean structure but uses robust variance
 obj_pm <- coxph(
   Surv(tstart, tstop, status) ~ treat + sex + age + inherit + steroids + propylac +
     cluster(id),
   data = cgd
 )
+
 summary(obj_pm)
 
-#------------------------------------------------------------------------------
-# 5. Extract Coefficients for Table 9.2
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 5. Extract coefficients, SEs, and p-values across models
+# -----------------------------------------------------------------------------
 coeff_AG    <- summary(obj_AG)$coeff
 coeff_frail <- summary(obj_frail)$coeff
 coeff_pm    <- summary(obj_pm)$coeff
 
-# Andersen-Gill
-c1 <- coeff_AG[, 1]  # beta
-c2 <- coeff_AG[, 3]  # se(beta)
-c3 <- coeff_AG[, 5]  # p-value
+# Andersen--Gill model: beta, model-based SE, p-value
+c1 <- coeff_AG[, 1]
+c2 <- coeff_AG[, 3]
+c3 <- coeff_AG[, 5]
 
-# Frailty
-c4 <- coeff_frail[1:6, 1] # beta
-c5 <- coeff_frail[1:6, 2] # se(beta)
-c6 <- coeff_frail[1:6, 6] # p-value
+# Frailty model: first 6 rows correspond to regression coefficients
+c4 <- coeff_frail[1:6, 1]
+c5 <- coeff_frail[1:6, 2]
+c6 <- coeff_frail[1:6, 6]
 
-# Proportional Means
-c7 <- coeff_pm[1:6, 1]    # beta
-c8 <- coeff_pm[1:6, 4]    # se(beta)
-c9 <- coeff_pm[1:6, 6]    # p-value
+# Proportional means model: beta, robust SE, robust p-value
+c7 <- coeff_pm[1:6, 1]
+c8 <- coeff_pm[1:6, 4]
+c9 <- coeff_pm[1:6, 6]
 
-# Print Table 9.1 (beta, se, p-values)
+# Side-by-side comparison across the three models
 noquote(round(cbind(c1, c2, c3, c4, c5, c6, c7, c8, c9), 3))
 
+# =============================================================================
+# (B) Predicted Mean Functions by Treatment
+# =============================================================================
 
-#==============================================================================
-# (B) Figure 9.4: Predicted Mean Functions by Treatment
-#==============================================================================
-# Predicted mean number of infections using Proportional Means model
-#------------------------------------------------------------------------------
-
-# 1. Extract Beta and Baseline Mean Function
+# -----------------------------------------------------------------------------
+# 1. Extract beta and baseline mean function from the proportional means model
+# -----------------------------------------------------------------------------
 beta <- obj_pm$coefficients
 Lt   <- basehaz(obj_pm, centered = FALSE)
 t    <- Lt$time
 mu0  <- Lt$hazard  # baseline mean function mu0(t)
 
-# 2. Covariate Profiles
-# For "female" patient: (sex=0, age=12, inherit=X-linked=1, steroids=1, propylac=1)
-# Actually from the code: sex=1 means female, so we can check carefully:
-# code snippet suggests c(0, 12, 1, 1, 1) are the covariates besides treatment, 
-# so treat=0 or 1 is appended in front.
+# -----------------------------------------------------------------------------
+# 2. Define covariate profiles
+# -----------------------------------------------------------------------------
+# Profiles use the covariates after treatment in the model:
+# sex, age, inherit, steroids, propylac
+
+# Female profile
 zf <- c(0, 12, 1, 1, 1)
 
-# For "male" patient: (sex=1, age=12, etc.)
+# Male profile
 zm <- c(1, 12, 1, 1, 1)
 
-# 3. Construct Mean Functions
-# female: treat=1 or treat=0
+# -----------------------------------------------------------------------------
+# 3. Construct fitted mean functions for treatment and control
+# -----------------------------------------------------------------------------
+# Female: treatment vs control
 mu.f.trt   <- exp(sum(c(1, zf) * beta)) * mu0
 mu.f.contr <- exp(sum(c(0, zf) * beta)) * mu0
 
-# male: treat=1 or treat=0
+# Male: treatment vs control
 mu.m.trt   <- exp(sum(c(1, zm) * beta)) * mu0
 mu.m.contr <- exp(sum(c(0, zm) * beta)) * mu0
 
-# 4. Plot
+# -----------------------------------------------------------------------------
+# 4. Plot fitted mean number of infections
+# -----------------------------------------------------------------------------
 par(mfrow = c(1, 2))
 
 # Female
 plot(
   t / 30.5, mu.f.trt,
-  type  = "s",
-  xlim  = c(0, 12),
-  ylim  = c(0, 6),
+  type       = "s",
+  xlim       = c(0, 12),
+  ylim       = c(0, 6),
   frame.plot = FALSE,
-  lty   = 1,
-  main  = "Female",
-  xlab  = "Time (months)",
-  ylab  = "Mean number of infections",
-  lwd   = 2
+  lty        = 1,
+  main       = "Female",
+  xlab       = "Time (months)",
+  ylab       = "Mean number of infections",
+  lwd        = 2
 )
 lines(t / 30.5, mu.f.contr, lty = 3, lwd = 2)
 
 # Male
 plot(
   t / 30.5, mu.m.trt,
-  type  = "s",
-  xlim  = c(0, 12),
-  ylim  = c(0, 6),
+  type       = "s",
+  xlim       = c(0, 12),
+  ylim       = c(0, 6),
   frame.plot = FALSE,
-  lty   = 1,
-  main  = "Male",
-  xlab  = "Time (months)",
-  ylab  = "Mean number of infections",
-  lwd   = 2
+  lty        = 1,
+  main       = "Male",
+  xlab       = "Time (months)",
+  ylab       = "Mean number of infections",
+  lwd        = 2
 )
 lines(t / 30.5, mu.m.contr, lty = 3, lwd = 2)
 
-
-#==============================================================================
+# =============================================================================
 # (C) Multivariate Approaches (WLW, PWP Models)
-#==============================================================================
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 1. Create event-order and gap-time variables
+# -----------------------------------------------------------------------------
 cgd_mul <- cgd %>%
   arrange(id, tstart) %>%
   group_by(id) %>%
   mutate(
-    order = row_number(),
-    gtime = tstop - tstart,
+    order = row_number(),     # event order within subject
+    gtime = tstop - tstart,   # gap time since previous event or study entry
     .after = tstop
   ) %>%
   ungroup()
 
-
-#------------------------------------------------------------------------------
-# 1. WLW Model
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. WLW model
+# -----------------------------------------------------------------------------
+# Uses total time and treats repeated event orders as separate margins
 wlw_obj <- coxph(
   Surv(tstop, status) ~ (treat + sex + age) * strata(order),
   data = cgd_mul %>% filter(order <= 3)
 )
 
+# Reduced model with common effects across orders
 wlw_obj0 <- coxph(
   Surv(tstop, status) ~ (treat + sex + age) + strata(order),
   data = cgd_mul
 )
 
-#------------------------------------------------------------------------------
-# 2. PWP-TT Model
-#   (Time since trial entry)
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 3. PWP-TT model
+# -----------------------------------------------------------------------------
+# Total-time version: risk set for the jth event includes only subjects
+# who have experienced the first j - 1 events
 pwp_tt_obj <- coxph(
   Surv(tstart, tstop, status) ~ (treat + sex + age) * strata(order),
   data = cgd_mul %>% filter(order <= 3)
 )
 
+# Reduced model with common effects across event order
 pwp_tt_obj0 <- coxph(
   Surv(tstart, tstop, status) ~ (treat + sex + age) + strata(order),
   data = cgd_mul
 )
 
-#------------------------------------------------------------------------------
-# 3. PWP-GT Model
-#   (Gap time between events)
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 4. PWP-GT model
+# -----------------------------------------------------------------------------
+# Gap-time version uses time since the previous event
 pwp_gt_obj <- coxph(
   Surv(gtime, status) ~ (treat + sex + age) * strata(order),
   data = cgd_mul %>% filter(order <= 3)
 )
 
+# Reduced model with common effects across event order
 pwp_gt_obj0 <- coxph(
   Surv(gtime, status) ~ (treat + sex + age) + strata(order),
   data = cgd_mul
 )
 
-#------------------------------------------------------------------------------
-# 4. Tabulate Treatment Effect HR (95% CI) & p-values
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 5. Extract treatment HRs, 95% CIs, and p-values by event order
+# -----------------------------------------------------------------------------
 trt_hr_mul <- function(obj, obj0, p, K, r = 2) {
-  # p = # of covariates (including treatment)
-  # K = # of strata (or repeated events)
-  
+  # p = number of baseline covariates including treatment
+  # K = number of event strata displayed
+
   beta <- obj$coefficients
   var  <- obj$var
-  
+
   beta_trt <- numeric(p + 1)
   var_trt  <- numeric(p + 1)
-  
-  # event #1
+
+  # First event: treatment main effect
   beta_trt[1] <- beta[1]
   var_trt[1]  <- var[1, 1]
-  
-  # subsequent events
+
+  # Events 2,...,K: main effect + interaction with order-specific stratum
   for (j in 2:K) {
     beta_trt[j] <- beta[1] + beta[p + j - 1]
     var_trt[j]  <- var[1, 1] +
-                   var[p + j - 1, p + j - 1] +
-                   2 * var[1, p + j - 1]
+      var[p + j - 1, p + j - 1] +
+      2 * var[1, p + j - 1]
   }
-  
-  # Overall
+
+  # Overall treatment effect from the reduced model
   beta_trt[p + 1] <- obj0$coefficients[1]
   var_trt[p + 1]  <- obj0$var[1, 1]
-  
+
   se_trt <- sqrt(var_trt)
   za     <- qnorm(0.975)
-  
+
   tibble(
     HR = str_c(
       round(exp(beta_trt), r), " (",
       round(exp(beta_trt - za * se_trt), r), ", ",
       round(exp(beta_trt + za * se_trt), r), ")"
     ),
-    P  = round(1 - pchisq((beta_trt / se_trt)^2, df = 1), 3)
+    P = round(1 - pchisq((beta_trt / se_trt)^2, df = 1), 3)
   )
 }
 
-# Example usage:
-# For demonstration, we pick the WLW objects:
-# trt_hr_mul(wlw_obj, wlw_obj0, p = 3, K = 3)
-
-# Collect relevant data
+# -----------------------------------------------------------------------------
+# 6. Build summary table across WLW, PWP-TT, and PWP-GT
+# -----------------------------------------------------------------------------
+# Group sizes by treatment arm
 N <- cgd_mul %>%
   filter(order == 1) %>%
   count(treat) %>%
   pull(n)
 
+# Event counts by order and treatment arm
 row_header <- cgd_mul %>%
   filter(status == 1) %>%
   count(treat, order) %>%
@@ -432,22 +450,22 @@ row_header <- cgd_mul %>%
   pivot_wider(values_from = n, names_from = treat) %>%
   mutate(order = as.character(order)) %>%
   add_row(
-    order   = "All",
-    placebo = cgd_mul %>% filter(treat == "placebo", status == 1) %>% count() %>% pull(),
-    `rIFN-g`= cgd_mul %>% filter(treat == "rIFN-g", status == 1) %>% count() %>% pull()
+    order    = "All",
+    placebo  = cgd_mul %>% filter(treat == "placebo", status == 1) %>% count() %>% pull(),
+    `rIFN-g` = cgd_mul %>% filter(treat == "rIFN-g", status == 1) %>% count() %>% pull()
   ) %>%
   mutate(
-    placebo = str_c(placebo, " (", round(100 * placebo / N[1], 1), "%)"),
-    `rIFN-g`= str_c(`rIFN-g`, " (", round(100 * `rIFN-g` / N[2], 1), "%)")
+    placebo  = str_c(placebo, " (", round(100 * placebo / N[1], 1), "%)"),
+    `rIFN-g` = str_c(`rIFN-g`, " (", round(100 * `rIFN-g` / N[2], 1), "%)")
   ) %>%
   select(order, `rIFN-g`, placebo)
 
-# Build table for WLW, PWP-TT, PWP-GT
-wlw_HR    <- trt_hr_mul(wlw_obj,    wlw_obj0,    3, 3)$HR
-pwpTT_HR  <- trt_hr_mul(pwp_tt_obj, pwp_tt_obj0, 3, 3)$HR
-pwpGT_HR  <- trt_hr_mul(pwp_gt_obj, pwp_gt_obj0, 3, 3)$HR
+# Treatment HR columns for the three models
+wlw_HR   <- trt_hr_mul(wlw_obj,    wlw_obj0,    3, 3)$HR
+pwpTT_HR <- trt_hr_mul(pwp_tt_obj, pwp_tt_obj0, 3, 3)$HR
+pwpGT_HR <- trt_hr_mul(pwp_gt_obj, pwp_gt_obj0, 3, 3)$HR
 
-# Create table
+# Combine into a summary table
 cgd_tab <- row_header %>%
   add_column(
     WLW      = wlw_HR,
@@ -455,15 +473,16 @@ cgd_tab <- row_header %>%
     `PWP-GT` = pwpGT_HR
   )
 
-# Print table
-cgd_tab 
-# Example to create a LaTeX table:
+cgd_tab
+
+# Optional LaTeX table export
 # cgd_tab %>%
 #   kable("latex")
 
-#------------------------------------------------------------------------------
-# 5. Forest Plot of Treatment Hazard Ratios
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 7. Forest plot of treatment hazard ratios
+# -----------------------------------------------------------------------------
+# Parse strings of the form "x (xmin, xmax)"
 hr_ci_parse <- function(x) {
   separate_wider_regex(
     x,
@@ -471,6 +490,7 @@ hr_ci_parse <- function(x) {
   )
 }
 
+# Separate HR strings for each model into point estimate and CI bounds
 cgd_models <- cgd_tab %>%
   separate_wider_regex(
     WLW:`PWP-GT`,
@@ -480,10 +500,11 @@ cgd_models <- cgd_tab %>%
   mutate(across(!c(order:placebo), as.numeric)) %>%
   pivot_longer(
     !c(order:placebo),
-    names_to  = c("Model", ".value"),
+    names_to = c("Model", ".value"),
     names_sep = "_"
   )
 
+# Plot event-specific and overall treatment HRs
 cgd_models %>%
   ggplot(aes(x = x, y = order)) +
   geom_point(aes(size = (order == "All"))) +
@@ -500,63 +521,69 @@ cgd_models %>%
   scale_linewidth_manual(values = c(0.5, 0.8)) +
   theme_minimal() +
   theme(
-    axis.text        = element_text(size = 10),
-    axis.title       = element_text(size = 11),
-    panel.grid       = element_blank(),
-    strip.text       = element_text(size = 11),
-    legend.position  = "none"
+    axis.text       = element_text(size = 10),
+    axis.title      = element_text(size = 11),
+    panel.grid      = element_blank(),
+    strip.text      = element_text(size = 11),
+    legend.position = "none"
   )
 
+# Optional saving
 # ggsave("rec_cgd_forest.pdf", width = 8, height = 4.5)
 # ggsave("rec_cgd_forest.eps", width = 8, height = 4.5)
 
-
-#==============================================================================
+# =============================================================================
 # (D) Poisson / Negative Binomial / Zero-Inflated Poisson Regressions
-#==============================================================================
-library(MASS)
-library(pscl)
+# =============================================================================
 
-#------------------------------------------------------------------------------
-# 1. Flatten Data for One-Row-per-Subject
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 1. Collapse data to one row per subject
+# -----------------------------------------------------------------------------
 df_events <- cgd %>%
   group_by(id) %>%
   mutate(
-    count      = sum(status),   # total # events for subject
-    follow_up  = max(tstop)     # maximum 'tstop' is censoring time
+    count     = sum(status),  # total number of recurrent events
+    follow_up = max(tstop)    # total observed follow-up time
   ) %>%
   distinct(id, .keep_all = TRUE)
 
-#------------------------------------------------------------------------------
-# 2. Poisson Regression
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. Poisson regression
+# -----------------------------------------------------------------------------
+# offset(log(follow_up)) models the event rate per unit follow-up time
 ps_obj <- glm(
   count ~ treat + age + sex + offset(log(follow_up)),
   family = poisson(link = "log"),
   data = df_events
 )
+
 summary(ps_obj)
 
-#------------------------------------------------------------------------------
-# 3. Negative Binomial Regression
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 3. Negative binomial regression
+# -----------------------------------------------------------------------------
+# glm.nb() relaxes the Poisson variance assumption
 nb_obj <- MASS::glm.nb(
   count ~ treat + age + sex + offset(log(follow_up)),
   data = df_events
 )
+
 summary(nb_obj)
 
-#------------------------------------------------------------------------------
-# 4. Zero-Inflated Poisson (ZIP) Regression
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 4. Zero-inflated Poisson regression
+# -----------------------------------------------------------------------------
+# First formula part: Poisson mean model for counts
+# Second formula part: logistic model for excess zeros
 zip_model <- zeroinfl(
-  count ~ treat + age + sex + offset(log(follow_up))  # Poisson part
-    | treat + age + sex,                              # Logistic part
+  count ~ treat + age + sex + offset(log(follow_up))
+    | treat + age + sex,
   data = df_events
 )
+
 summary(zip_model)
 
+# Extract coefficient vectors and variance-covariance matrix
 zip_model$coefficients
 zip_model$vcov
 

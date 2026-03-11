@@ -140,29 +140,32 @@ The choice between these approaches depends on whether *unit-specific* or *popul
 ###############################################################################
 # Chapter 8 R Code
 #
-# This script reproduces all major numerical results in Chapter 8, including:
+# This script reproduces major numerical results in Chapter 8, including
 #   1. Clustered data analysis (NCCTG lung cancer study)
 #   2. Bivariate marginal Cox model (Diabetic Retinopathy Study)
-#   3. Multistate endpoints (TOPCAT trial)
+#   3. Multiple-endpoint analysis (TOPCAT trial)
 ###############################################################################
 
-library(survival)
-library(tidyverse)
-library(patchwork)
+library(survival)   # Cox regression, frailty models, baseline hazards
+library(tidyverse)  # Data manipulation and ggplot2 graphics
+library(patchwork)  # Multi-panel plot assembly
 
-#==============================================================================
+# =============================================================================
 # (A) NCCTG Lung Cancer Study (Clustered Data)
-#==============================================================================
-#------------------------------------------------------------------------------
+# =============================================================================
+
+# -----------------------------------------------------------------------------
 # 1. Read the NCCTG lung cancer data
-#    (clustered by institution)
-#------------------------------------------------------------------------------
+#    Patients are clustered by treating institution (inst)
+# -----------------------------------------------------------------------------
 df <- read.table("Data//NCCTG//lung.txt")
 head(df)
 
-#------------------------------------------------------------------------------
-# 2. Plot Follow-Up by Institution and Sex
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. Plot follow-up by institution and sex
+# -----------------------------------------------------------------------------
+# Each subject is shown by a horizontal follow-up line from 0 to observed time.
+# Point shape distinguishes censoring versus death; color distinguishes sex.
 inst_by_sex_fu_plot <- function(df) {
   df %>%
     ggplot(aes(y = reorder(id, time), x = time, color = factor(2 - sex))) +
@@ -173,9 +176,9 @@ inst_by_sex_fu_plot <- function(df) {
     theme_minimal() +
     scale_x_continuous(
       "Time (months)",
-      limits  = c(0, 36),
-      breaks  = seq(0, 36, by = 12),
-      expand  = c(0, 0.25)
+      limits = c(0, 36),
+      breaks = seq(0, 36, by = 12),
+      expand = c(0, 0.25)
     ) +
     scale_y_discrete("Patients (by institution)") +
     scale_shape_manual(
@@ -184,62 +187,77 @@ inst_by_sex_fu_plot <- function(df) {
     ) +
     scale_color_brewer(
       palette = "Set1",
-      labels  = c("Female", "Male")
+      labels = c("Female", "Male")
     ) +
     theme(
-      strip.background = element_rect(fill = "gray90", color = "gray90"),
-      axis.text.y      = element_blank(),
-      axis.ticks.y     = element_blank(),
-      axis.line.y      = element_blank(),
+      strip.background   = element_rect(fill = "gray90", color = "gray90"),
+      axis.text.y        = element_blank(),
+      axis.ticks.y       = element_blank(),
+      axis.line.y        = element_blank(),
       panel.grid.major.y = element_blank(),
-      legend.title     = element_blank()
+      legend.title       = element_blank()
     )
 }
 
-p1 <- inst_by_sex_fu_plot(df |> filter(inst <= 11)) + theme(legend.position = "top")
-p2 <- inst_by_sex_fu_plot(df |> filter(inst > 11)) + theme(legend.position = "top")
- 
-mul_lung_fu <- p1 + p2 +
-  plot_layout(ncol = 2)
+p1 <- inst_by_sex_fu_plot(df |> filter(inst <= 11)) +
+  theme(legend.position = "top")
+
+p2 <- inst_by_sex_fu_plot(df |> filter(inst > 11)) +
+  theme(legend.position = "top")
+
+mul_lung_fu <- p1 + p2 + plot_layout(ncol = 2)
 
 mul_lung_fu
+
+# Optional saving
 # ggsave("mul_lung_fu.pdf", mul_lung_fu, width = 8, height = 10)
 # ggsave("mul_lung_fu.eps", mul_lung_fu, width = 8, height = 10)
 
-#------------------------------------------------------------------------------
-# 3. Cox Model with Institution-Specific Frailty
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 3. Cox model with institution-specific frailty
+# -----------------------------------------------------------------------------
+# Treat sex as categorical
 df$sex <- factor(df$sex)
 
+# Gamma shared-frailty model:
+# subjects within the same institution share an unobserved frailty term
 obj <- coxph(
   Surv(time, status) ~ age + sex + phec + phkn + ptkn + wl +
     frailty(inst, distribution = "gamma"),
   data = df
 )
-# Alternatively:
+
+# Alternative:
 # obj <- coxph(
 #   Surv(time, status) ~ age + sex + phec + phkn + ptkn + wl +
 #     frailty(inst, distribution = "gaussian"),
 #   data = df
 # )
 
-summary(obj) # model summary
-obj$coefficients # extract beta
-obj$frail # extract log-frailty
+summary(obj)
 
-#------------------------------------------------------------------------------
-# 4. Naive Cox Model (No Frailty)
-#------------------------------------------------------------------------------
+# Estimated regression coefficients beta
+obj$coefficients
+
+# Estimated institution-specific log-frailties
+obj$frail
+
+# -----------------------------------------------------------------------------
+# 4. Naive Cox model without frailty
+# -----------------------------------------------------------------------------
+# This ignores within-institution dependence
 obj_naive <- coxph(
   Surv(time, status) ~ age + sex + phec + phkn + ptkn + wl,
   data = df
 )
 summary(obj_naive)
 
-#------------------------------------------------------------------------------
-# 5. Subject-Specific Survival Curves (Figure 8.2)
-#------------------------------------------------------------------------------
-# Typical patient with median values
+# -----------------------------------------------------------------------------
+# 5. Subject-specific survival curves for representative profiles
+# -----------------------------------------------------------------------------
+# Construct survival curves for typical female and male patients
+# across ECOG values 0, 1, 2, 3
+
 med_age  <- median(df$age, na.rm = TRUE)
 med_phkn <- median(df$phkn, na.rm = TRUE)
 med_ptkn <- median(df$ptkn, na.rm = TRUE)
@@ -251,7 +269,10 @@ eta      <- base_obj$hazard
 t        <- base_obj$time
 
 # Covariate profiles
-# ECOG: 0, 1, 2, 3
+# sex coding in the original data: 1 = male, 2 = female
+# factor(sex) creates a treatment contrast relative to the reference level
+# The vectors below match the order:
+# age, sex, phec, phkn, ptkn, wl
 zf0 <- c(med_age, 1, 0, med_phkn, med_ptkn, med_wl)
 zf1 <- c(med_age, 1, 1, med_phkn, med_ptkn, med_wl)
 zf2 <- c(med_age, 1, 2, med_phkn, med_ptkn, med_wl)
@@ -262,144 +283,155 @@ zm1 <- c(med_age, 0, 1, med_phkn, med_ptkn, med_wl)
 zm2 <- c(med_age, 0, 2, med_phkn, med_ptkn, med_wl)
 zm3 <- c(med_age, 0, 3, med_phkn, med_ptkn, med_wl)
 
-# Base R plots for female
 par(mfrow = c(1, 2))
+
+# Female
 plot(
   t,
   exp(-exp(sum(beta * zf0)) * eta),
-  type = "s",
-  xlim = c(0, 35),
-  ylim = c(0, 1),
-  frame = FALSE,
-  lty   = 1,
-  main  = "Female",
-  xlab  = "Time (months)",
-  ylab  = "Survival probabilities",
-  lwd   = 2,
-  cex.lab = 1.3,
-  cex.axis= 1.3,
-  cex.main= 1.3
+  type     = "s",
+  xlim     = c(0, 35),
+  ylim     = c(0, 1),
+  frame    = FALSE,
+  lty      = 1,
+  main     = "Female",
+  xlab     = "Time (months)",
+  ylab     = "Survival probabilities",
+  lwd      = 2,
+  cex.lab  = 1.3,
+  cex.axis = 1.3,
+  cex.main = 1.3
 )
 lines(t, exp(-exp(sum(beta * zf1)) * eta), lty = 2, lwd = 2)
 lines(t, exp(-exp(sum(beta * zf2)) * eta), lty = 3, lwd = 2)
 lines(t, exp(-exp(sum(beta * zf3)) * eta), lty = 4, lwd = 2)
-legend("topright", lty = 1:4, lwd = 2, cex = 1.2, paste("ECOG", 0:3))
+legend("topright", lty = 1:4, lwd = 2, cex = 1.2, legend = paste("ECOG", 0:3))
 
-# Base R plots for male
+# Male
 plot(
   t,
   exp(-exp(sum(beta * zm0)) * eta),
-  type  = "s",
-  xlim  = c(0, 35),
-  ylim  = c(0, 1),
-  frame = FALSE,
-  lty   = 1,
-  main  = "Male",
-  xlab  = "Time (months)",
-  ylab  = "Survival probabilities",
-  lwd   = 2,
-  cex.lab = 1.3,
-  cex.axis= 1.3,
-  cex.main= 1.3
+  type     = "s",
+  xlim     = c(0, 35),
+  ylim     = c(0, 1),
+  frame    = FALSE,
+  lty      = 1,
+  main     = "Male",
+  xlab     = "Time (months)",
+  ylab     = "Survival probabilities",
+  lwd      = 2,
+  cex.lab  = 1.3,
+  cex.axis = 1.3,
+  cex.main = 1.3
 )
 lines(t, exp(-exp(sum(beta * zm1)) * eta), lty = 2, lwd = 2)
 lines(t, exp(-exp(sum(beta * zm2)) * eta), lty = 3, lwd = 2)
 lines(t, exp(-exp(sum(beta * zm3)) * eta), lty = 4, lwd = 2)
-legend("topright", lty = 1:4, lwd = 2, cex = 1.2, paste("ECOG", 0:3))
+legend("topright", lty = 1:4, lwd = 2, cex = 1.2, legend = paste("ECOG", 0:3))
 
-
-#==============================================================================
+# =============================================================================
 # (B) Diabetic Retinopathy Study (Bivariate Marginal Cox Model)
-#==============================================================================
-#------------------------------------------------------------------------------
-# 1. Read the Data
-#------------------------------------------------------------------------------
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 1. Read the data
+# -----------------------------------------------------------------------------
 df_drs <- read.table("Data//Diabetic Retinopathy Study//drs.txt")
 head(df_drs)
 
-#------------------------------------------------------------------------------
-# 2. Fit Bivariate Marginal Cox Model
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. Fit a bivariate marginal Cox model
+# -----------------------------------------------------------------------------
+# cluster(id) gives robust variance estimation to account for correlation
+# between two eyes from the same subject
 obj_drs <- coxph(
   Surv(time, status) ~ trt + type + trt:type + risk + cluster(id),
   data = df_drs
 )
 summary(obj_drs)
 
-#------------------------------------------------------------------------------
-# 3. Table 8.1: Marginal Cox Model Analysis (Estimates, SE, p-values)
-#------------------------------------------------------------------------------
-coeff  <- summary(obj_drs)$coefficients
-c1     <- coeff[, 1]  # beta estimate
-c2     <- coeff[, 4]  # robust SE
-c3     <- coeff[, 6]  # robust p-value
-c4     <- coeff[, 3]  # naive SE
-c5     <- 1 - pchisq((c1 / c4)^2, 1)  # naive p-value
+# -----------------------------------------------------------------------------
+# 3. Table 8.1: estimates, SEs, and p-values
+# -----------------------------------------------------------------------------
+coeff <- summary(obj_drs)$coefficients
 
-# Output table
+# Regression coefficient estimates
+c1 <- coeff[, 1]
+
+# Robust SEs and p-values (accounting for within-subject correlation)
+c2 <- coeff[, 4]
+c3 <- coeff[, 6]
+
+# Naive SEs and corresponding p-values
+c4 <- coeff[, 3]
+c5 <- 1 - pchisq((c1 / c4)^2, 1)
+
 noquote(round(cbind(c1, c2, c3, c4, c5), 3))
 
-#------------------------------------------------------------------------------
-# 4. Prediction of Vision-Retention Probabilities (Figure 8.4)
-#------------------------------------------------------------------------------
-Lt <- basehaz(obj_drs, centered = FALSE)
-t  <- Lt$time
-L  <- Lt$hazard
+# -----------------------------------------------------------------------------
+# 4. Predicted vision-retention probabilities
+# -----------------------------------------------------------------------------
+# Use Breslow baseline cumulative hazard and plug in selected covariate profiles
+Lt   <- basehaz(obj_drs, centered = FALSE)
+t    <- Lt$time
+L    <- Lt$hazard
 beta <- coeff[, 1]
 
-# Covariate profiles: adult vs. juvenile, control vs. treatment
+# Profiles:
+# trt, type, risk, trt:type
 adult_contr <- exp(-exp(sum(beta * c(0, 0, 10, 0))) * L)
 adult_trt   <- exp(-exp(sum(beta * c(1, 0, 10, 0))) * L)
 juv_contr   <- exp(-exp(sum(beta * c(0, 1, 10, 0))) * L)
 juv_trt     <- exp(-exp(sum(beta * c(1, 1, 10, 1))) * L)
 
 par(mfrow = c(1, 2))
-# Adult
+
+# Adult-onset diabetes
 plot(
   t, adult_contr,
-  type  = "s",
-  xlim  = c(0, 80),
-  ylim  = c(0, 1),
+  type       = "s",
+  xlim       = c(0, 80),
+  ylim       = c(0, 1),
   frame.plot = FALSE,
-  lty   = 3,
-  main  = "Adult",
-  xlab  = "Time (months)",
-  ylab  = "Vision-retention probabilities",
-  lwd   = 2,
-  cex.lab = 1.2,
-  cex.axis= 1.2,
-  cex.main= 1.2
+  lty        = 3,
+  main       = "Adult",
+  xlab       = "Time (months)",
+  ylab       = "Vision-retention probabilities",
+  lwd        = 2,
+  cex.lab    = 1.2,
+  cex.axis   = 1.2,
+  cex.main   = 1.2
 )
 lines(t, adult_trt, lty = 1, lwd = 2)
 
-# Juvenile
+# Juvenile-onset diabetes
 plot(
   t, juv_contr,
-  type  = "s",
-  xlim  = c(0, 80),
-  ylim  = c(0, 1),
-  frame = FALSE,
-  lty   = 3,
-  main  = "Juvenile",
-  xlab  = "Time (months)",
-  ylab  = "Vision-retention probabilities",
-  lwd   = 2,
-  cex.lab = 1.2,
-  cex.axis= 1.2,
-  cex.main= 1.2
+  type     = "s",
+  xlim     = c(0, 80),
+  ylim     = c(0, 1),
+  frame    = FALSE,
+  lty      = 3,
+  main     = "Juvenile",
+  xlab     = "Time (months)",
+  ylab     = "Vision-retention probabilities",
+  lwd      = 2,
+  cex.lab  = 1.2,
+  cex.axis = 1.2,
+  cex.main = 1.2
 )
 lines(t, juv_trt, lty = 1, lwd = 2)
 
-
-#==============================================================================
+# =============================================================================
 # (C) TOPCAT Trial (Multiple Endpoints)
-#==============================================================================
-#------------------------------------------------------------------------------
-# 1. Read and Inspect the Data
-#------------------------------------------------------------------------------
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 1. Read and inspect the data
+# -----------------------------------------------------------------------------
 topcat <- read.table("Data//TOPCAT//topcat.txt")
 
-# Median follow-up
+# Median follow-up across subjects
 topcat %>%
   group_by(id) %>%
   slice_max(time) %>%
@@ -407,28 +439,28 @@ topcat %>%
   ungroup() %>%
   summarize(median(time))
 
-#------------------------------------------------------------------------------
-# 2. Descriptive Analysis
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. Descriptive analysis
+# -----------------------------------------------------------------------------
 tmp <- topcat %>%
   mutate(
     drug   = if_else(drug == "Spiro", "Spironolactone", "Placebo"),
     gender = if_else(gender == "1:Male", "Male", "Female")
   )
 
-# De-duplicate
+# Convert to one row per subject for descriptive summaries
 df_topcat <- tmp %>%
   pivot_wider(
-    id_cols      = id,
-    names_from   = endpoint,
-    values_from  = c(time, status)
+    id_cols    = id,
+    names_from = endpoint,
+    values_from = c(time, status)
   ) %>%
   left_join(
     tmp %>% filter(endpoint == "HF"),
     join_by(id)
   )
 
-# Helper: median (IQR) function
+# Median (IQR) formatter for quantitative variables
 med_iqr <- function(x, r = 1) {
   qt <- quantile(x, na.rm = TRUE)
   paste0(
@@ -438,7 +470,7 @@ med_iqr <- function(x, r = 1) {
   )
 }
 
-# Quantitative variables table
+# Quantitative variables by treatment group
 tab_quant <- df_topcat %>%
   filter(endpoint == "HF") %>%
   group_by(drug) %>%
@@ -453,7 +485,7 @@ tab_quant <- df_topcat %>%
     )
   )
 
-# Helper function for frequency tables
+# Frequency and percentage table for a categorical variable within treatment groups
 freq_pct <- function(df, group, var, r = 1) {
   var_counts <- df %>%
     group_by({{ group }}, {{ var }}) %>%
@@ -461,7 +493,9 @@ freq_pct <- function(df, group, var, r = 1) {
 
   var_counts %>%
     left_join(
-      var_counts %>% group_by({{ group }}) %>% summarize(N = sum(n)),
+      var_counts %>%
+        group_by({{ group }}) %>%
+        summarize(N = sum(n)),
       by = join_by({{ group }})
     ) %>%
     mutate(
@@ -472,7 +506,7 @@ freq_pct <- function(df, group, var, r = 1) {
     rename(name = {{ var }})
 }
 
-# Categorical variables
+# Categorical summaries
 gender <- df_topcat %>%
   freq_pct(drug, gender) %>%
   mutate(name = paste0("Gender - ", name))
@@ -486,13 +520,14 @@ nyha <- df_topcat %>%
   mutate(name = paste0("NYHA - ", name)) %>%
   filter(!is.na(name))
 
-# Helper for binary condition
+# Percentage formatter for binary indicators
 bin_pct <- function(condition, r = 1) {
   n <- sum(condition, na.rm = TRUE)
   N <- length(condition)
   paste0(n, " (", round(100 * n / N, r), "%)")
 }
 
+# Binary covariates and endpoint indicators
 tabin <- df_topcat %>%
   group_by(drug) %>%
   summarize(
@@ -504,20 +539,20 @@ tabin <- df_topcat %>%
   pivot_wider(values_from = value, names_from = drug) %>%
   mutate(
     name = case_when(
-      name == "smoke"       ~ "Smoker",
-      name == "chf_hosp"    ~ "CHF",
-      name == "copd"        ~ "COPD",
-      name == "asthma"      ~ "Asthma",
-      name == "dm"          ~ "Diabetes",
-      name == "htn"         ~ "Hypertension",
-      name == "cabg"        ~ "Coronary surgery",
-      name == "status_HF"   ~ "HF",
-      name == "status_MI"   ~ "MI",
+      name == "smoke"         ~ "Smoker",
+      name == "chf_hosp"      ~ "CHF",
+      name == "copd"          ~ "COPD",
+      name == "asthma"        ~ "Asthma",
+      name == "dm"            ~ "Diabetes",
+      name == "htn"           ~ "Hypertension",
+      name == "cabg"          ~ "Coronary surgery",
+      name == "status_HF"     ~ "HF",
+      name == "status_MI"     ~ "MI",
       name == "status_Stroke" ~ "Stroke"
     )
   )
 
-# Event rates (per person-year)
+# Event rates per person-year by endpoint and treatment group
 event_rates <- df_topcat %>%
   group_by(drug) %>%
   summarize(
@@ -528,11 +563,11 @@ event_rates <- df_topcat %>%
   pivot_longer(!drug, values_to = "value", names_to = "name") %>%
   pivot_wider(values_from = value, names_from = drug) %>%
   mutate(
-    Placebo         = as.character(round(Placebo, 4)),
-    Spironolactone  = as.character(round(Spironolactone, 4))
+    Placebo        = as.character(round(Placebo, 4)),
+    Spironolactone = as.character(round(Spironolactone, 4))
   )
 
-# Combine tables
+# Combine into a Table 1-style summary
 tabone <- bind_rows(
   tab_quant[1, ],
   gender,
@@ -543,18 +578,20 @@ tabone <- bind_rows(
   event_rates
 )
 
-# Add N to group names
+# Add group sizes to column labels
 colnames(tabone) <- c(
   " ",
   paste0(colnames(tabone)[2:3], " (N=", table(df_topcat$drug), ")")
 )
 
-# Print table (example with knitr::kable)
+# Display table
 knitr::kable(tabone)
 
-#------------------------------------------------------------------------------
-# 3. Cox Model for Multiple Endpoints (Scenario 3)
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 3. Cox model for multiple endpoints (Scenario 3)
+# -----------------------------------------------------------------------------
+# endpoint-specific baselines are handled via strata(endpoint)
+# cluster(id) gives robust variance for within-subject correlation
 obj_topcat <- coxph(
   Surv(time, status) ~
     (drug + age + gender + nyha + bmi + smoke + chf_hosp +
@@ -562,13 +599,15 @@ obj_topcat <- coxph(
     strata(endpoint) + cluster(id),
   data = topcat
 )
+
 summary(obj_topcat)
 obj_topcat$coefficients
 
-#------------------------------------------------------------------------------
-# 4. Component-Specific HRs, 95% CIs, p-values
-#------------------------------------------------------------------------------
-p     <- 12  # number of covariates
+# -----------------------------------------------------------------------------
+# 4. Component-specific hazard ratios, confidence intervals, and p-values
+# -----------------------------------------------------------------------------
+# There are p = 12 baseline covariate effects, followed by endpoint interactions
+p     <- 12
 beta  <- obj_topcat$coefficients
 Sigma <- obj_topcat$var
 
@@ -579,23 +618,22 @@ varMI   <- numeric(p)
 betaStr <- numeric(p)
 varStr  <- numeric(p)
 
-# Fill in HF, MI, Stroke
 for (j in seq_len(p)) {
-  # HF
+  # HF: reference endpoint
   betaHF[j] <- beta[j]
   varHF[j]  <- Sigma[j, j]
 
-  # MI (add interaction terms)
+  # MI: main effect + MI interaction
   betaMI[j] <- beta[j] + beta[p + 2 * j - 1]
   varMI[j]  <- Sigma[j, j] +
-               Sigma[p + 2 * j - 1, p + 2 * j - 1] +
-               2 * Sigma[j, p + 2 * j - 1]
+    Sigma[p + 2 * j - 1, p + 2 * j - 1] +
+    2 * Sigma[j, p + 2 * j - 1]
 
-  # Stroke
+  # Stroke: main effect + Stroke interaction
   betaStr[j] <- beta[j] + beta[p + 2 * j]
   varStr[j]  <- Sigma[j, j] +
-               Sigma[p + 2 * j, p + 2 * j] +
-               2 * Sigma[j, p + 2 * j]
+    Sigma[p + 2 * j, p + 2 * j] +
+    2 * Sigma[j, p + 2 * j]
 }
 
 za <- qnorm(0.975)
@@ -617,7 +655,8 @@ hr_p <- function(b, v) {
 df_res <- tibble(
   variable = c(
     "Spironolactone", "Age (years)", "Female", "NYHA 3-4", "BMI",
-    "Smoke", "CHF", "COPD", "Asthma", "Diabetes", "Hypertension", "Coronary surgery"
+    "Smoke", "CHF", "COPD", "Asthma", "Diabetes", "Hypertension",
+    "Coronary surgery"
   ),
   HF       = hr_ci(betaHF, varHF),
   HF_p     = hr_p(betaHF, varHF),
@@ -627,18 +666,19 @@ df_res <- tibble(
   Stroke_p = hr_p(betaStr, varStr)
 )
 
-# Print out table
 df_res
 
-#------------------------------------------------------------------------------
-# 5. Joint Test of Spironolactone Effect on HF & Stroke
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 5. Joint test of spironolactone effect on HF and Stroke
+# -----------------------------------------------------------------------------
+# beta[1] is the HF main effect for drug
+# beta[14] is the Stroke interaction for drug
 beta_q  <- beta[c(1, 14)]
 Sigma_q <- Sigma[c(1, 14), c(1, 14)]
 
-chisq2  <- t(beta_q) %*% solve(Sigma_q) %*% beta_q
-pval    <- 1 - pchisq(chisq2, 2)
+chisq2 <- t(beta_q) %*% solve(Sigma_q) %*% beta_q
+pval   <- 1 - pchisq(chisq2, 2)
 
-# pval is the p-value for the joint test
+pval
 
 ```
