@@ -15,18 +15,15 @@ When longitudinal biomarkers are repeatedly measured alongside a time-to-event o
 The data consist of repeated measurements $Y_{ij}$ over time $t_{ij}$ $(j=1,\ldots, n_i)$ and a survival outcome $T_i$ subject to right censoring.
 
 -   **Linear mixed-effects (LME) model**\
-    For continuous biomarkers, we assume:
-    $$
+    For continuous biomarkers, we assume: $$
     Y_{ij} = \gamma_0 + \gamma^\mathrm{T} Z_{ij} + b_i^\mathrm{T} \tilde{Z}_{ij} + \epsilon_{ij},
-    $$
-    where $b_i \sim \mathcal{N}(0, \Sigma_b)$ are subject-specific random effects and $\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$ are measurement errors.
+    $$ where $b_i \sim \mathcal{N}(0, \Sigma_b)$ are subject-specific random effects and $\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$ are measurement errors.
 
     -   *Interpretation*: $\gamma$ are population-level effects; $b_i$ captures individual-specific deviation.
     -   *Estimation*: Maximum likelihood via EM algorithm with $b_i$ as missing data.
 
 -   **Cox model with latent trajectory**\
-    The survival process is linked to the "true" biomarker trajectory $m_i(t)$:
-    $$
+    The survival process is linked to the "true" biomarker trajectory $m_i(t)$: $$
     \Pr(t \le T_i < t + \mathrm{d}t \mid Z_i^*, \overline{m}_i(t)) 
     = \lambda_0(t) \exp\left(\beta^\mathrm{T} Z_i^* + \nu m_i(t)\right) \mathrm{d}t.
     $$
@@ -37,48 +34,39 @@ The data consist of repeated measurements $Y_{ij}$ over time $t_{ij}$ $(j=1,\ldo
 ### Extensions
 
 -   **Effect modification**\
-    Interaction of $m_i(t)$ with treatment or baseline factors:
-    $$
+    Interaction of $m_i(t)$ with treatment or baseline factors: $$
     \exp\left\{\nu m_i(t) + \tilde{\nu}^\mathrm{T} \tilde{Z}_i^* m_i(t)\right\}.
     $$
 
 -   **Lagged or cumulative effects**\
-    Replace $m_i(t)$ with lagged or average values, e.g.,
-    $$
+    Replace $m_i(t)$ with lagged or average values, e.g., $$
     \overline{m}_i(t - \tau_0, t) = \frac{1}{\tau_0} \int_{t - \tau_0}^t m_i(u) \, \mathrm{d}u.
     $$
 
 -   **Rate of change as predictor**\
-    Include derivative $m_i'(t)$ in the hazard model:
-    $$
+    Include derivative $m_i'(t)$ in the hazard model: $$
     \exp\left\{\nu_0 m_i(t) + \nu_1 m_i'(t)\right\}.
     $$
 
 -   **Non-continuous outcomes**\
-    Use generalized linear mixed models (GLMMs):
-    $$
+    Use generalized linear mixed models (GLMMs): $$
     g\left[E\{Y_i(t) \mid Z_i(t), b_i\}\right] = \gamma_0 + \gamma^\mathrm{T} Z_i(t) + b_i^\mathrm{T} \tilde{Z}_i(t).
     $$
 
 -   **Multivariate extensions**\
-    For multiple biomarkers and/or multiple events:
-    $$
+    For multiple biomarkers and/or multiple events: $$
     \Pr(t \le T_{ik} < t + \mathrm{d}t \mid \xi_i, \overline{m}_i(t)) 
     = \xi_i \lambda_{0k}(t) \exp\left(\beta_k^\mathrm{T} Z_i^* + \nu_k^\mathrm{T} m_i(t)\right) \mathrm{d}t.
     $$
 
 ### Dynamic prediction
 
-
-
 Joint models enable real-time prediction of survival probability or biomarker levels:
 
--   **Survival probability**:
-    $$
+-   **Survival probability**: $$
     \mathcal{S}_i(t \mid u) = \Pr(T_i > t \mid T_i > u, \overline{Y}_i(u)).
     $$
--   **Future biomarker level**:
-    $$
+-   **Future biomarker level**: $$
     \mathcal{M}_i(t \mid u) = E[Y_i(t) \mid T_i > u, \overline{Y}_i(u)].
     $$
 
@@ -275,6 +263,8 @@ coef   <- obj_joint$coefficients   # Coefficients from model
 coef$D                             # Covariance matrix of random effects
 beta   <- c(coef$gammas, coef$alpha)  # Survival-related parameters
 gamma  <- coef$betas                  # Longitudinal parameters
+
+# ranef(obj_joint)  # Extract random effects
 
 hmat <- obj_joint$Hessian
 Var  <- solve(hmat)          # Inverse Hessian => approximate variance matrix
@@ -543,8 +533,8 @@ fForms <- list(
 obj_valve <- jm(
   surv_mod,
   list(ef_mod, grad_mod, lvmi_mod),
-  time_var        = "obsyear",
-  functional_forms= fForms
+  time_var        = "obsyear",   # specify time variable for longitudinal models
+  functional_forms= fForms       # specify functional forms of biomarkers in survival model
 )
 summary(obj_valve)
 
@@ -595,9 +585,9 @@ df_res <- tibble(
     "Valve size", "LVEF grade (1–3)", "History of surgery", "CABG",
     "ACE inhibitor", "High cholesterol", "Emergency grade (1–3)"
   ),
-  EF_OR = est_ci(gamma_ef50_est, gamma_ef50_se, r = 2, exponentiate = TRUE),
-  Grad  = est_ci(gamma_grad_est, gamma_grad_se, r = 2, exponentiate = FALSE),
-  LVMI  = est_ci(gamma_lvmi_est, gamma_lvmi_se, r = 2, exponentiate = FALSE)
+  EF_OR = est_ci(gamma_ef50_est, gamma_ef50_se, r = 1, exponentiate = TRUE),
+  Grad  = est_ci(gamma_grad_est, gamma_grad_se, r = 1, exponentiate = FALSE),
+  LVMI  = est_ci(gamma_lvmi_est, gamma_lvmi_se, r = 1, exponentiate = FALSE)
 )
 df_res
 
@@ -704,5 +694,3 @@ pred_surv %>%
   )
 
 ```
-
-
