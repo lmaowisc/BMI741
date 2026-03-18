@@ -263,7 +263,7 @@ $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\r
     -   **Sub-distribution hazard**: all, including those who have failed from other causes
 :::
 
-## Software: `cmprk::cuminc()`
+## Software: `cmprsk::cuminc()`
 
 :::: fragment
 -   **Basic syntax for Gray's estimator & test**
@@ -286,7 +286,7 @@ obj <- cuminc(ftime, fstatus, group, strata, rho = 0)
         -   `time`: $t$; `est`: $\hat F_k(t)$; `var`: $\hat\var\{\hat F_k(t)\}$
 ::::
 
-## Software: `cmprk::crr()` (I)
+## Software: `cmprsk::crr()` (I)
 
 :::: fragment
 -   **Basic syntax for Fine-Gray model**
@@ -310,7 +310,7 @@ obj <- crr(ftime, fstatus, cov1, failcode = k)
     -   `obj$uftime`: $t$; `obj$bfitj`: $\dd\hat\Lambda_{k0}(t)$
 :::
 
-## Software: `cmprk::crr()` (II)
+## Software: `cmprsk::crr()` (II)
 
 ::: fragment
 -   **Prediction of CIF by Fine-Gray model**
@@ -343,7 +343,7 @@ obj_pred <- cbind(time, cif)
 
 ::: fragment
 -   **Tidy competing risks analysis**
-    -   Wraps around `cmprk` functions
+    -   Wraps around `cmprsk` functions
     -   Formula-based interface $+$ Tidy output
     -   Integrated with `ggsurvfit` and `gtsummary`
 -   **Main functions**

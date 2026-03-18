@@ -3508,7 +3508,7 @@
     "href": "chap10.html#software-tidycmprk-package-i",
     "title": "Applied Survival Analysis",
     "section": "Software: tidycmprk Package (I)",
-    "text": "Software: tidycmprk Package (I)\n\n\nTidy competing risks analysis\n\nWraps around cmprk functions\nFormula-based interface \\(+\\) Tidy output\nIntegrated with ggsurvfit and gtsummary\n\nMain functions\n\nNonparametric analysis\n\ntidycmprsk::cuminc(): model fitting\ntidycmprsk::tbl_cuminc(): tabulation of CIF estimates\nggsurvfit::ggcuminc(): plotting of CIF estimates\n\nFine-Gray regression\n\ntidycmprsk::crr(): model fitting\ngtsummary::tbl_regression(): regression table"
+    "text": "Software: tidycmprk Package (I)\n\n\nTidy competing risks analysis\n\nWraps around cmprsk functions\nFormula-based interface \\(+\\) Tidy output\nIntegrated with ggsurvfit and gtsummary\n\nMain functions\n\nNonparametric analysis\n\ntidycmprsk::cuminc(): model fitting\ntidycmprsk::tbl_cuminc(): tabulation of CIF estimates\nggsurvfit::ggcuminc(): plotting of CIF estimates\n\nFine-Gray regression\n\ntidycmprsk::crr(): model fitting\ngtsummary::tbl_regression(): regression table"
   },
   {
     "objectID": "chap10.html#software-tidycmprk-package-ii",
@@ -5831,5 +5831,26 @@
     "title": "Applied Survival Analysis",
     "section": "HW 4 (Due Mar 18)",
     "text": "HW 4 (Due Mar 18)\n\nChoose one\n\nProblem 5.2\nProblem 5.3\n\nProblem 6.5\nProblem 7.15"
+  },
+  {
+    "objectID": "chap10.html#software-cmprskcuminc",
+    "href": "chap10.html#software-cmprskcuminc",
+    "title": "Applied Survival Analysis",
+    "section": "Software: cmprsk::cuminc()",
+    "text": "Software: cmprsk::cuminc()\n\n\nBasic syntax for Gray’s estimator & test\n\n\n\nobj &lt;- cuminc(ftime, fstatus, group, strata, rho = 0)\n\n\n\nInput\n\n(ftime, fstatus): \\((X, \\delta)\\)\ngroup: group variable (optional); strata: strata variable (optional)\nrho: \\(\\rho\\) in weight \\(W_k(t)=\\{1 - \\hat F_k(t)\\}^\\rho\\) (HF \\(G^\\rho\\) family)\n\nOutput: a list\n\nobj$Tests: tests results on each risk\nobj$\"a k\": CIF estimates for \\(k\\)th risk in group \\(a\\)\n\ntime: \\(t\\); est: \\(\\hat F_k(t)\\); var: \\(\\hat\\var\\{\\hat F_k(t)\\}\\)"
+  },
+  {
+    "objectID": "chap10.html#software-cmprskcrr-i",
+    "href": "chap10.html#software-cmprskcrr-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: cmprsk::crr() (I)",
+    "text": "Software: cmprsk::crr() (I)\n\n\nBasic syntax for Fine-Gray model\n\n\n\nobj &lt;- crr(ftime, fstatus, cov1, failcode = k)\n\n\n\nInput\n\n(ftime, fstatus): \\((X, \\delta)\\); cov1: \\(Z\\)\nfailcode = k: models \\(k\\)th risk\n\n\n\n\n\nOutput: a list of class crr\n\nobj$coef: \\(\\hat\\beta_k\\); obj$var: \\(\\hat\\var(\\hat\\beta_k)\\)\nobj$uftime: \\(t\\); obj$bfitj: \\(\\dd\\hat\\Lambda_{k0}(t)\\)"
+  },
+  {
+    "objectID": "chap10.html#software-cmprskcrr-ii",
+    "href": "chap10.html#software-cmprskcrr-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: cmprsk::crr() (II)",
+    "text": "Software: cmprsk::crr() (II)\n\n\nPrediction of CIF by Fine-Gray model\n\nobj: a crr object for fit model\nz: new covariate data\n\n\n\n\n\n\n# --- Method 1: use predict.crr() \nobj_pred &lt;- predict(obj, z)\n\n# --- Method 2: manual calculation\nbeta &lt;- obj$coef\nLambda &lt;- cumsum(obj$bfitj)\ntime &lt;- obj$uftime\n## Calculate CIF based on FG model\ncif &lt;- 1- exp(- exp(sum(beta * z)) * Lambda)\n## Same as obj_pred from Method 1\nobj_pred &lt;- cbind(time, cif)"
   }
 ]
