@@ -3634,8 +3634,8 @@
     "objectID": "chap11.html#outline",
     "href": "chap11.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "",
-    "text": "Linear mixed effects models for longitudinal data\nA two-stage joint modeling approach\nExtensions and dynamic prediction\nAnalysis of an anti-retroviral drug trial\nAn example with multiple biomarkers*\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
+    "section": "Outline",
+    "text": "Outline\n\n\nLinear mixed effects models for longitudinal data\nA two-stage joint modeling approach\nExtensions and dynamic prediction\nAnalysis of an anti-retroviral drug trial\nAn example with multiple biomarkers*\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\]"
   },
   {
     "objectID": "chap11.html#overview",
@@ -3691,14 +3691,14 @@
     "href": "chap11.html#survival-sub-model",
     "title": "Applied Survival Analysis",
     "section": "Survival Sub-Model",
-    "text": "Survival Sub-Model\n\n\nModel specification \\[\\begin{equation}\\label{eq:longit:survival_sub}\n\\pr\\{t\\leq T_i&lt;t+\\dd t\\mid Z_i^*, \\overline m_i(t)\\}=\\exp\\{\\beta^\\T Z_i^*+\\nu m_i(t)\\}\\lambda_0(t)\\dd t\n\\end{equation}\\]\n\n\\(T_i\\): survival endpoint\n\\(\\overline m_i(t)=\\{m_i(u):0\\leq u\\leq t\\}\\): biomarker history\n\\(Z_i^*\\): baseline covariates to be adjusted for in survival model\n\\(\\nu\\): log-hazard ratio with one unit increase in current biomarker\n\n\n\n\n\nEstimation\n\n\\(E\\)-step: conditional expectation of the \\(b_i\\) (numerical integration)\n\\(M\\)-step: (weighted) least squares \\(+\\) partial-likelihood score"
+    "text": "Survival Sub-Model\n\n\nModel specification \\[\\begin{equation}\\label{eq:longit:survival_sub}\n\\pr\\{t\\leq T_i&lt;t+\\dd t\\mid T_i \\geq t, Z_i^*, \\overline m_i(t)\\}=\\exp\\{\\beta^\\T Z_i^*+\\nu m_i(t)\\}\\lambda_0(t)\\dd t\n\\end{equation}\\]\n\n\\(T_i\\): survival endpoint\n\\(\\overline m_i(t)=\\{m_i(u):0\\leq u\\leq t\\}\\): biomarker history\n\\(Z_i^*\\): baseline covariates to be adjusted for in survival model\n\\(\\nu\\): log-hazard ratio with one unit increase in current biomarker\n\n\n\n\n\nEstimation\n\n\\(E\\)-step: conditional expectation of the \\(b_i\\) (numerical integration)\n\\(M\\)-step: (weighted) least squares \\(+\\) partial-likelihood score"
   },
   {
     "objectID": "chap11.html#interaction-and-trend-effect",
     "href": "chap11.html#interaction-and-trend-effect",
     "title": "Applied Survival Analysis",
     "section": "Interaction and Trend Effect",
-    "text": "Interaction and Trend Effect\n\n\nBiomarker effect by baseline group\n\nBiomarker \\(\\times\\) baseline interaction \\[\n\\pr(t\\leq T_i&lt;t+\\dd t\\mid Z_i^*, \\overline m_i(t))=\\exp\\big\\{\\beta^\\T Z_i^*+\\nu m_i(t)+ \\tilde\\nu^\\T Z_i^*m_i(t)\\big\\}\\lambda_0(t)\\dd t\n\\]\n\n\n\n\n\nEffect of biomarker trend (change rate)\n\nLongitudinal sub-model \\[\\begin{equation}\\label{eq:longit:longit_sub_slope}\nm_i(t)=\\gamma_0+\\gamma^\\T Z_i+\\eta t+b_{i0}+b_{i1}t,\n\\end{equation}\\]\nSurvival sub-model \\[\\begin{equation}\\label{eq:longit:survival_sub_rand}\n\\pr(t\\leq T_i&lt;t+\\dd t\\mid Z_i, b_i)=\\exp\\{\\beta^\\T Z_i+\\nu_0b_{i0}+\\nu_1b_{i1}\\}\\lambda_0(t)\\dd t.\n\\end{equation}\\]\n\\(\\nu_1\\):log-hazard ratio by unit increase in biomarker change rate"
+    "text": "Interaction and Trend Effect\n\n\nBiomarker effect by baseline group\n\nBiomarker \\(\\times\\) baseline interaction \\[\n\\pr(t\\leq T_i&lt;t+\\dd t\\mid T_i \\geq t, Z_i^*, \\overline m_i(t))=\\exp\\big\\{\\beta^\\T Z_i^*+\\nu m_i(t)+ \\tilde\\nu^\\T Z_i^*m_i(t)\\big\\}\\lambda_0(t)\\dd t\n\\]\n\n\n\n\n\nEffect of biomarker trend (change rate)\n\nLongitudinal sub-model \\[\\begin{equation}\\label{eq:longit:longit_sub_slope}\nm_i(t)=\\gamma_0+\\gamma^\\T Z_i+\\eta t+b_{i0}+b_{i1}t,\n\\end{equation}\\]\nSurvival sub-model \\[\\begin{equation}\\label{eq:longit:survival_sub_rand}\n\\pr(t\\leq T_i&lt;t+\\dd t\\mid T_i \\geq t, Z_i, b_i)=\\exp\\{\\beta^\\T Z_i+\\nu_0b_{i0}+\\nu_1b_{i1}\\}\\lambda_0(t)\\dd t.\n\\end{equation}\\]\n\\(\\nu_1\\):log-hazard ratio by unit increase in biomarker change rate"
   },
   {
     "objectID": "chap11.html#glme-models",
@@ -3796,14 +3796,14 @@
     "href": "chap11.html#summary-ii",
     "title": "Applied Survival Analysis",
     "section": "Summary (II)",
-    "text": "Summary (II)\n\nExtensions (Rizopoulos, 2012)\n\nBiomarker \\(\\times\\) baseline interactions\nChange rate \\(\\to\\) survival\nGLME GLMM\nMultivariate failure times (competing risks, recurrent events)\nDynamic predictions\nJMbayes2 package for Bayesian approach\n\n\n\nobj &lt;- jm(surv_sub, list(longit_sub1, longit_sub2), \n          time_var = \"obstime\",\n          functional_forms = fForms)"
+    "text": "Summary (II)\n\nExtensions (Rizopoulos, 2012)\n\nBiomarker \\(\\times\\) baseline interactions\nChange rate \\(\\to\\) survival\nGLME GLMM\nMultivariate failure times (competing risks, recurrent events)\nDynamic predictions\nJMbayes2 package for Bayesian approach\n\n\nobj &lt;- jm(surv_sub, list(longit_sub1, longit_sub2), \n          time_var = \"obstime\",\n          functional_forms = fForms)"
   },
   {
     "objectID": "chap11.html#multivariate-models",
     "href": "chap11.html#multivariate-models",
     "title": "Applied Survival Analysis",
     "section": "Multivariate Models",
-    "text": "Multivariate Models\n\n\nMultple biomarkers\n\nLongitudinal sub-models \\[\nm_{ik}(t)=\\gamma_{0k}+\\gamma_k^\\T Z_i(t)+b_{ik}^\\T\\tilde Z_i(t), \\quad k =1,\\ldots, K\n\\]\nSurvival sub-model \\[\n\\pr\\{t\\leq T_i&lt;t+\\dd t\\mid Z_i^*, \\overline m_{i1}(t), \\ldots, \\overline m_{iK}(t)\\}=\\exp\\left\\{\\beta^\\T Z_i^*+\\sum_k\\nu_k m_{ik}(t)\\right\\}\\lambda_0(t)\\dd t\n\\]\n\n\n\n\n\nMultple events\n\nShared-fraity sub-models \\[\\begin{equation}\\label{eq:longit:survival_sub_mult}\n\\pr\\{t\\leq T_{ik}&lt;t+\\dd t\\mid \\xi_i, Z_i^*, \\overline m_i(t)\\}=\\xi_i\\exp\\{\\beta_k^\\T Z_i^*+\\nu_k m_i(t)\\}\\lambda_{0k}(t)\\dd t\n\\end{equation}\\]"
+    "text": "Multivariate Models\n\n\nMultple biomarkers\n\nLongitudinal sub-models \\[\nm_{ik}(t)=\\gamma_{0k}+\\gamma_k^\\T Z_i(t)+b_{ik}^\\T\\tilde Z_i(t), \\quad k =1,\\ldots, K\n\\]\nSurvival sub-model \\[\n\\pr\\{t\\leq T_i&lt;t+\\dd t\\mid T_i \\geq t, Z_i^*, \\overline m_{i1}(t), \\ldots, \\overline m_{iK}(t)\\}=\\exp\\left\\{\\beta^\\T Z_i^*+\\sum_k\\nu_k m_{ik}(t)\\right\\}\\lambda_0(t)\\dd t\n\\]\n\n\n\n\n\nMultple events\n\nShared-fraity sub-models \\[\\begin{equation}\\label{eq:longit:survival_sub_mult}\n\\pr\\{t\\leq T_{ik}&lt;t+\\dd t\\mid T_i \\geq t, \\xi_i, Z_i^*, \\overline m_i(t)\\}=\\xi_i\\exp\\{\\beta_k^\\T Z_i^*+\\nu_k m_i(t)\\}\\lambda_{0k}(t)\\dd t\n\\end{equation}\\]"
   },
   {
     "objectID": "chap11.html#software-jmbayes2-package",
