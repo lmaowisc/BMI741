@@ -925,28 +925,49 @@ P_k(t) = \pr\{Y(t) = k\} = \sum_{l=0}^K \underbrace{\pr\{Y(0) = l\}}_{\text{Init
 </div>
 </div>
 </section>
-<section id="multiplicative-intensity-models" class="slide level2">
-<h2>Multiplicative Intensity Models</h2>
+<section id="multiplicative-intensity-models-i" class="slide level2">
+<h2>Multiplicative Intensity Models (I)</h2>
 <div class="fragment">
 <ul>
 <li><strong>Three (semi-Markov) models</strong></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># B(t): time spent in current state</span></span>
-<span id="cb4-2"><a></a>gbc_ms<span class="sc">$</span>Bt <span class="ot">&lt;-</span> gbc_ms<span class="sc">$</span>stop <span class="sc">-</span> gbc_ms<span class="sc">$</span>start</span>
-<span id="cb4-3"><a></a></span>
-<span id="cb4-4"><a></a><span class="do">### 0-&gt;1: remission to relapse ----------------------------------------</span></span>
-<span id="cb4-5"><a></a>obj01 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno</span>
-<span id="cb4-6"><a></a>            <span class="sc">+</span> agec <span class="sc">+</span> size <span class="sc">+</span> prog <span class="sc">+</span> estrg <span class="sc">+</span> <span class="fu">strata</span>(grade), <span class="at">data =</span> gbc_ms,</span>
-<span id="cb4-7"><a></a>            <span class="at">subset =</span> ((from<span class="sc">==</span><span class="dv">0</span>) <span class="sc">&amp;</span> (to <span class="sc">==</span> <span class="dv">1</span>)))</span>
-<span id="cb4-8"><a></a><span class="do">### 0-&gt;2: remission to death ------------------------------------------</span></span>
-<span id="cb4-9"><a></a>obj02 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno</span>
-<span id="cb4-10"><a></a>            <span class="sc">+</span> size <span class="sc">+</span> prog <span class="sc">+</span> estrg <span class="sc">+</span> <span class="fu">strata</span>(grade), <span class="at">data =</span> gbc_ms,</span>
-<span id="cb4-11"><a></a>            <span class="at">subset =</span> ((from <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">&amp;</span> (to <span class="sc">==</span> <span class="dv">2</span>)))</span>
-<span id="cb4-12"><a></a><span class="do">### 1-&gt;2: relapse to death --------------------------------------------</span></span>
-<span id="cb4-13"><a></a>obj12 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(start, stop, status) <span class="sc">~</span> Bt <span class="sc">+</span> hormone <span class="sc">+</span> meno</span>
-<span id="cb4-14"><a></a>            <span class="sc">+</span> agec <span class="sc">+</span> size <span class="sc">+</span> prog <span class="sc">+</span> estrg <span class="sc">+</span> <span class="fu">strata</span>(grade), <span class="at">data =</span> gbc_ms,</span>
-<span id="cb4-15"><a></a>            <span class="at">subset =</span> ((from <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">&amp;</span> (to <span class="sc">==</span> <span class="dv">2</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># 1. Transition 0 -&gt; 1: remission to relapse</span></span>
+<span id="cb4-2"><a></a>obj01 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb4-3"><a></a>  <span class="fu">Surv</span>(start, stop, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno <span class="sc">+</span> agec <span class="sc">+</span> size <span class="sc">+</span> nodes <span class="sc">+</span> prog <span class="sc">+</span> </span>
+<span id="cb4-4"><a></a>    estrg <span class="sc">+</span> <span class="fu">strata</span>(grade),</span>
+<span id="cb4-5"><a></a>  <span class="at">data   =</span> gbc_ms,</span>
+<span id="cb4-6"><a></a>  <span class="at">subset =</span> (from <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> to <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb4-7"><a></a>)</span>
+<span id="cb4-8"><a></a></span>
+<span id="cb4-9"><a></a><span class="co"># 2. Transition 0 -&gt; 2: remission to death</span></span>
+<span id="cb4-10"><a></a>obj02 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb4-11"><a></a>  <span class="fu">Surv</span>(start, stop, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno <span class="sc">+</span> size <span class="sc">+</span> nodes <span class="sc">+</span> prog <span class="sc">+</span> estrg <span class="sc">+</span></span>
+<span id="cb4-12"><a></a>    <span class="fu">strata</span>(grade),</span>
+<span id="cb4-13"><a></a>  <span class="at">data   =</span> gbc_ms,</span>
+<span id="cb4-14"><a></a>  <span class="at">subset =</span> (from <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> to <span class="sc">==</span> <span class="dv">2</span>)</span>
+<span id="cb4-15"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="multiplicative-intensity-models-ii" class="slide level2">
+<h2>Multiplicative Intensity Models (II)</h2>
+<div class="fragment">
+<ul>
+<li><strong>Three (semi-Markov) models</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="co"># 3. Transition 1 -&gt; 2: relapse to death</span></span>
+<span id="cb5-2"><a></a><span class="co"># tt(start) is used to represent time spent in the current state</span></span>
+<span id="cb5-3"><a></a>obj12 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb5-4"><a></a>  <span class="fu">Surv</span>(start, stop, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno <span class="sc">+</span> agec <span class="sc">+</span> size <span class="sc">+</span> nodes <span class="sc">+</span> prog <span class="sc">+</span> </span>
+<span id="cb5-5"><a></a>    estrg <span class="sc">+</span> <span class="fu">strata</span>(grade) <span class="sc">+</span> <span class="fu">tt</span>(start),</span>
+<span id="cb5-6"><a></a>  <span class="at">data   =</span> gbc_ms,</span>
+<span id="cb5-7"><a></a>  <span class="at">subset =</span> (from <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> to <span class="sc">==</span> <span class="dv">2</span>),</span>
+<span id="cb5-8"><a></a>  <span class="at">tt     =</span> <span class="cf">function</span>(x, t, ...) {</span>
+<span id="cb5-9"><a></a>    t <span class="sc">-</span> x</span>
+<span id="cb5-10"><a></a>  }</span>
+<span id="cb5-11"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -956,7 +977,7 @@ P_k(t) = \pr\{Y(t) = k\} = \sum_{l=0}^K \underbrace{\pr\{Y(0) = l\}}_{\text{Init
 <ul>
 <li><strong>Regression table</strong>
 <ul>
-<li><strong>Hormonal therapy</strong> beneficial on relapse (31.5% risk reduction; <span class="math inline">\(p\)</span>-value 0.003)</li>
+<li><strong>Hormonal therapy</strong> beneficial on relapse (32.2% risk reduction; <span class="math inline">\(p\)</span>-value 0.005)</li>
 </ul></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
@@ -972,8 +993,8 @@ P_k(t) = \pr\{Y(t) = k\} = \sum_{l=0}^K \underbrace{\pr\{Y(0) = l\}}_{\text{Init
 <ul>
 <li><strong>Regression table</strong>
 <ul>
-<li><strong>Hormonal therapy</strong> no effect on progression from relapse to death</li>
-<li><strong>One month away from relapse</strong> patient is at 10.7% less risk of mortality</li>
+<li><strong>Hormonal therapy</strong> no significant effect on progression from relapse to death</li>
+<li><strong>One month away from relapse</strong> patient is at 1.7% higher risk of mortality (non-significant)</li>
 </ul></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
@@ -1029,8 +1050,8 @@ P_k(t) = \pr\{Y(t) = k\} = \sum_{l=0}^K \underbrace{\pr\{Y(0) = l\}}_{\text{Init
 </ul></li>
 </ul>
 </section>
-<section id="hw5-due-april-16" class="slide level2">
-<h2>HW5 (Due April 16)</h2>
+<section id="hw5-due-april-15" class="slide level2">
+<h2>HW5 (Due April 15)</h2>
 <ul>
 <li>Problem 8.18</li>
 <li>Choose one

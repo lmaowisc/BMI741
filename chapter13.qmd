@@ -155,7 +155,7 @@ library(rmt)
 data("hfaction")
 
 data <- hfaction
-
+ 
 #------------------------------------------------------------------------------
 # 2. Basic Data Summary
 #------------------------------------------------------------------------------
@@ -188,6 +188,10 @@ data.TFE <- data[!duplicated(data$patid), ]
 
 # Create data for overall mortality (status==2 or 0)
 data_death <- data[data$status == 2 | data$status == 0, ]
+
+# Fit KM curves by trt_ab
+obj.TFE <- survfit(Surv(time, status > 0) ~ trt_ab, data = data.TFE)
+obj.death <- survfit(Surv(time, status == 2) ~ trt_ab, data = data_death)
 
 # RMST analysis for hospitalization-free survival & overall survival, up to ~4 years
 rmst_tfe   <- rmst2(data.TFE$time,   data.TFE$status > 0,   data.TFE$trt_ab, tau = 3.97)

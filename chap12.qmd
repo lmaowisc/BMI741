@@ -517,7 +517,7 @@ obj <- coxph(Surv(start, stop, status) ~ covariates,
 ![](images/ms_gbc_ms.png){fig-align="center" width="75%"}
 :::
 
-## Multiplicative Intensity Models
+## Multiplicative Intensity Models (I)
 
 ::: fragment
 -   **Three (semi-Markov) models**
@@ -525,21 +525,46 @@ obj <- coxph(Surv(start, stop, status) ~ covariates,
 ```{r}
 #| eval: false
 #| echo: true
-# B(t): time spent in current state
-gbc_ms$Bt <- gbc_ms$stop - gbc_ms$start
+# 1. Transition 0 -> 1: remission to relapse
+obj01 <- coxph(
+  Surv(start, stop, status) ~ hormone + meno + agec + size + nodes + prog + 
+    estrg + strata(grade),
+  data   = gbc_ms,
+  subset = (from == 0 & to == 1)
+)
 
-### 0->1: remission to relapse ----------------------------------------
-obj01 <- coxph(Surv(start, stop, status) ~ hormone + meno
-            + agec + size + prog + estrg + strata(grade), data = gbc_ms,
-            subset = ((from==0) & (to == 1)))
-### 0->2: remission to death ------------------------------------------
-obj02 <- coxph(Surv(start, stop, status) ~ hormone + meno
-            + size + prog + estrg + strata(grade), data = gbc_ms,
-            subset = ((from == 0) & (to == 2)))
-### 1->2: relapse to death --------------------------------------------
-obj12 <- coxph(Surv(start, stop, status) ~ Bt + hormone + meno
-            + agec + size + prog + estrg + strata(grade), data = gbc_ms,
-            subset = ((from == 1) & (to == 2)))
+# 2. Transition 0 -> 2: remission to death
+obj02 <- coxph(
+  Surv(start, stop, status) ~ hormone + meno + size + nodes + prog + estrg +
+    strata(grade),
+  data   = gbc_ms,
+  subset = (from == 0 & to == 2)
+)
+
+
+```
+:::
+
+
+## Multiplicative Intensity Models (II)
+::: fragment
+-   **Three (semi-Markov) models**
+
+```{r}
+#| eval: false
+#| echo: true
+
+# 3. Transition 1 -> 2: relapse to death
+# tt(start) is used to represent time spent in the current state
+obj12 <- coxph(
+  Surv(start, stop, status) ~ hormone + meno + agec + size + nodes + prog + 
+    estrg + strata(grade) + tt(start),
+  data   = gbc_ms,
+  subset = (from == 1 & to == 2),
+  tt     = function(x, t, ...) {
+    t - x
+  }
+)
 
 ```
 :::
@@ -548,7 +573,7 @@ obj12 <- coxph(Surv(start, stop, status) ~ Bt + hormone + meno
 
 ::: fragment
 -   **Regression table**
-    -   **Hormonal therapy** beneficial on relapse (31.5% risk reduction; $p$-value 0.003)
+    -   **Hormonal therapy** beneficial on relapse (32.2% risk reduction; $p$-value 0.005)
 
 ![](images/ms_gbc_reg1.png){fig-align="center" width="70%"}
 :::
@@ -557,8 +582,8 @@ obj12 <- coxph(Surv(start, stop, status) ~ Bt + hormone + meno
 
 ::: fragment
 -   **Regression table**
-    -   **Hormonal therapy** no effect on progression from relapse to death
-    -   **One month away from relapse** patient is at 10.7% less risk of mortality
+    -   **Hormonal therapy** no significant effect on progression from relapse to death
+    -   **One month away from relapse** patient is at 1.7% higher risk of mortality (non-significant)
 
 ![](images/ms_gbc_reg2.png){fig-align="center" width="70%"}
 :::

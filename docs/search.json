@@ -4184,21 +4184,21 @@
     "href": "chap12.html#multiplicative-intensity-models",
     "title": "Applied Survival Analysis",
     "section": "Multiplicative Intensity Models",
-    "text": "Multiplicative Intensity Models\n\n\nThree (semi-Markov) models\n\n\n# B(t): time spent in current state\ngbc_ms$Bt &lt;- gbc_ms$stop - gbc_ms$start\n\n### 0-&gt;1: remission to relapse ----------------------------------------\nobj01 &lt;- coxph(Surv(start, stop, status) ~ hormone + meno\n            + agec + size + prog + estrg + strata(grade), data = gbc_ms,\n            subset = ((from==0) & (to == 1)))\n### 0-&gt;2: remission to death ------------------------------------------\nobj02 &lt;- coxph(Surv(start, stop, status) ~ hormone + meno\n            + size + prog + estrg + strata(grade), data = gbc_ms,\n            subset = ((from == 0) & (to == 2)))\n### 1-&gt;2: relapse to death --------------------------------------------\nobj12 &lt;- coxph(Surv(start, stop, status) ~ Bt + hormone + meno\n            + agec + size + prog + estrg + strata(grade), data = gbc_ms,\n            subset = ((from == 1) & (to == 2)))"
+    "text": "Multiplicative Intensity Models\n\n\nThree (semi-Markov) models\n\n\n# -----------------------------------------------------------------------------\n# 1. Transition 0 -&gt; 1: remission to relapse\n# -----------------------------------------------------------------------------\nobj01 &lt;- coxph(\n  Surv(start, stop, status) ~ hormone + meno + agec + size + nodes + prog + estrg +\n    strata(grade),\n  data   = gbc_ms,\n  subset = (from == 0 & to == 1)\n)\n# -----------------------------------------------------------------------------\n# 2. Transition 0 -&gt; 2: remission to death\n# -----------------------------------------------------------------------------\nobj02 &lt;- coxph(\n  Surv(start, stop, status) ~ hormone + meno + size + nodes + prog + estrg +\n    strata(grade),\n  data   = gbc_ms,\n  subset = (from == 0 & to == 2)\n)\n\n# -----------------------------------------------------------------------------\n# 3. Transition 1 -&gt; 2: relapse to death\n# -----------------------------------------------------------------------------\n# tt(start) is used to represent time spent in the current state\nobj12 &lt;- coxph(\n  Surv(start, stop, status) ~ hormone + meno + agec + size + nodes + prog + estrg +\n    strata(grade) + tt(start),\n  data   = gbc_ms,\n  subset = (from == 1 & to == 2),\n  tt     = function(x, t, ...) {\n    t - x\n  }\n)"
   },
   {
     "objectID": "chap12.html#regression-results-i",
     "href": "chap12.html#regression-results-i",
     "title": "Applied Survival Analysis",
     "section": "Regression Results (I)",
-    "text": "Regression Results (I)\n\n\nRegression table\n\nHormonal therapy beneficial on relapse (31.5% risk reduction; \\(p\\)-value 0.003)"
+    "text": "Regression Results (I)\n\n\nRegression table\n\nHormonal therapy beneficial on relapse (32.2% risk reduction; \\(p\\)-value 0.005)"
   },
   {
     "objectID": "chap12.html#regression-results-ii",
     "href": "chap12.html#regression-results-ii",
     "title": "Applied Survival Analysis",
     "section": "Regression Results (II)",
-    "text": "Regression Results (II)\n\n\nRegression table\n\nHormonal therapy no effect on progression from relapse to death\nOne month away from relapse patient is at 10.7% less risk of mortality"
+    "text": "Regression Results (II)\n\n\nRegression table\n\nHormonal therapy no significant effect on progression from relapse to death\nOne month away from relapse patient is at 1.7% higher risk of mortality (non-significant)"
   },
   {
     "objectID": "chap12.html#notes",
@@ -5852,5 +5852,26 @@
     "title": "Applied Survival Analysis",
     "section": "Software: cmprsk::crr() (II)",
     "text": "Software: cmprsk::crr() (II)\n\n\nPrediction of CIF by Fine-Gray model\n\nobj: a crr object for fit model\nz: new covariate data\n\n\n\n\n\n\n# --- Method 1: use predict.crr() \nobj_pred &lt;- predict(obj, z)\n\n# --- Method 2: manual calculation\nbeta &lt;- obj$coef\nLambda &lt;- cumsum(obj$bfitj)\ntime &lt;- obj$uftime\n## Calculate CIF based on FG model\ncif &lt;- 1- exp(- exp(sum(beta * z)) * Lambda)\n## Same as obj_pred from Method 1\nobj_pred &lt;- cbind(time, cif)"
+  },
+  {
+    "objectID": "chap12.html#hw5-due-april-15",
+    "href": "chap12.html#hw5-due-april-15",
+    "title": "Applied Survival Analysis",
+    "section": "HW5 (Due April 15)",
+    "text": "HW5 (Due April 15)\n\nProblem 8.18\nChoose one\n\nProblem 10.6\nProblem 10.15\n\nProblem 11.18 (a) (“Data &gt; Renal Transplants Study”)\n(Extra credit) Problem 11.2"
+  },
+  {
+    "objectID": "chap12.html#multiplicative-intensity-models-i",
+    "href": "chap12.html#multiplicative-intensity-models-i",
+    "title": "Applied Survival Analysis",
+    "section": "Multiplicative Intensity Models (I)",
+    "text": "Multiplicative Intensity Models (I)\n\n\nThree (semi-Markov) models\n\n\n# 1. Transition 0 -&gt; 1: remission to relapse\nobj01 &lt;- coxph(\n  Surv(start, stop, status) ~ hormone + meno + agec + size + nodes + prog + \n    estrg + strata(grade),\n  data   = gbc_ms,\n  subset = (from == 0 & to == 1)\n)\n\n# 2. Transition 0 -&gt; 2: remission to death\nobj02 &lt;- coxph(\n  Surv(start, stop, status) ~ hormone + meno + size + nodes + prog + estrg +\n    strata(grade),\n  data   = gbc_ms,\n  subset = (from == 0 & to == 2)\n)"
+  },
+  {
+    "objectID": "chap12.html#multiplicative-intensity-models-ii",
+    "href": "chap12.html#multiplicative-intensity-models-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Multiplicative Intensity Models (II)",
+    "text": "Multiplicative Intensity Models (II)\n\n\nThree (semi-Markov) models\n\n\n# 3. Transition 1 -&gt; 2: relapse to death\n# tt(start) is used to represent time spent in the current state\nobj12 &lt;- coxph(\n  Surv(start, stop, status) ~ hormone + meno + agec + size + nodes + prog + \n    estrg + strata(grade) + tt(start),\n  data   = gbc_ms,\n  subset = (from == 1 & to == 2),\n  tt     = function(x, t, ...) {\n    t - x\n  }\n)"
   }
 ]

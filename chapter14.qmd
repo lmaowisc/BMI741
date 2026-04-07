@@ -187,7 +187,7 @@ tmp <- ipwpoint(
   exposure    = A,
   family      = "binomial",
   link        = "logit",
-  denominator = ~ meno + size + factor(grade) + nodes + prog + estrg,
+  denominator = ~ age + meno + size + factor(grade) + nodes + prog + estrg,
   data        = df
 )
 
@@ -225,9 +225,9 @@ obj_cox_naive
 # Standardization
 # ----------------------------
 # Fit Cox models with confounders
-obj_cox_w_A1 <- coxph(Surv(time, status) ~ meno + size + grade + prog + estrg,
+obj_cox_w_A1 <- coxph(Surv(time, status) ~ age + meno + size + grade + nodes + prog + estrg,
                      data = df, subset = (A == 1)) # for A = 1
-obj_cox_w_A0 <- coxph(Surv(time, status) ~ meno + size + grade + prog + estrg,
+obj_cox_w_A0 <- coxph(Surv(time, status) ~ age + meno + size + grade + nodes + prog + estrg,
                      data = df, subset = (A == 0)) # for A = 0
 
 # Predict survival curves under A=1 and A=0
@@ -296,8 +296,8 @@ fig_causal_gbc <- ggplot(plot_data, aes(x = time, y = estimate,  linetype = meth
     panel.grid.minor.x = element_blank()
   )
 
-ggsave("images/causal_gbc.png", fig_causal_gbc, width = 8, height = 4.5)
-ggsave("images/causal_gbc.eps", fig_causal_gbc, width = 8, height = 4.5)
+# ggsave("images/causal_gbc.png", fig_causal_gbc, width = 8, height = 4.5)
+# ggsave("images/causal_gbc.eps", fig_causal_gbc, width = 8, height = 4.5)
 
 
 
@@ -401,7 +401,7 @@ tbl <- tbl_merge(
   tab_spanner = c("**MSM**", "**Naive**", "**Time-varying**")
 ) |>
   modify_header(label = "**Covariate**") |>
-  modify_caption("Table 14.1: Comparison of Cox Model Estimates for HAART Data")
+  modify_caption("Table: Comparison of Cox Model Estimates for HAART Data")
 
 tbl
 
