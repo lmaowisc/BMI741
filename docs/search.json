@@ -4855,7 +4855,7 @@
     "href": "chap14.html#fitting-msm",
     "title": "Applied Survival Analysis",
     "section": "Fitting MSM",
-    "text": "Fitting MSM\n\n\nGeneral assumption: \\(T\\indep C\\mid (A, W)\\)\nWeight construction\n\nStandard IPTW-IPCW weights \\[w_i(t)=\\frac{1}{\\pi_{A_i}(W_i)G_{A_i}(t\\mid W_i)}\\]\nStablized IPTW-IPCW weights \\[\\begin{equation}\\label{eq:causal:swights}\nw^{\\rm s}_i(t)=\\frac{\\pi_{A_i}(V_i)G_{A_i}(t\\mid V_i)}{\\pi_{A_i}(W_i)G_{A_i}(t\\mid W_i)},\n\\end{equation}\\]\n\n\\(\\pi_{a}(V)=\\pr(A=a\\mid V)\\) and \\(G_{a}(t\\mid V)=\\pr(C&gt;t\\mid A=a, V)\\)\nSet \\(G_{a}(t\\mid V)=G_{a}(t\\mid W)\\equiv 1\\) if \\(W\\not\\to C\\)"
+    "text": "Fitting MSM\n\n\nGeneral assumption: \\(T\\indep C\\mid (A, W)\\)\nWeight construction\n\nStandard IPTW-IPCW weights \\[w_i(t)=\\frac{1}{\\pi_{A_i}(W_i)G_{A_i}(t\\mid W_i)}\\]\nStablized IPTW-IPCW weights \\[\\begin{equation}\\label{eq:causal:swights}\nw^{\\rm s}_i(t)=\\frac{\\pi_{A_i}(V_i)G_{A_i}(t\\mid V_i)}{\\pi_{A_i}(W_i)G_{A_i}(t\\mid W_i)},\n\\end{equation}\\]\n\n\\(\\pi_{a}(V)=\\pr(A=a\\mid V)\\) and \\(G_{a}(t\\mid V)=\\pr(C\\geq t\\mid A=a, V)\\)\nSet \\(G_{a}(t\\mid V)=G_{a}(t\\mid W)\\equiv 1\\) if \\(W\\not\\to C\\)"
   },
   {
     "objectID": "chap14.html#weighted-partial-likelihood-score",
@@ -4876,7 +4876,7 @@
     "href": "chap14.html#notation-dag",
     "title": "Applied Survival Analysis",
     "section": "Notation & DAG",
-    "text": "Notation & DAG\n\n\nNotation\n\n\\(a(t)\\): hypothetical treatment at \\(t\\); \\(A(t)\\): observed treatment at \\(t\\)\n\\(W(t)\\): possible confounders at \\(t\\)\nDiscretization\n\n\\(0=t_0&lt;t_1&lt;\\cdots&lt;t_m\\): time points\n\\(A_{\\cdot j}=A(t_j)\\) and \\(W_{\\cdot j}=W(t_j)\\)\n\\(\\overline A_{\\cdot j}=\\{A_{\\cdot 0},\\ldots, A_{\\cdot j}\\}\\); \\(\\overline W_{\\cdot j}=\\{W_{\\cdot 0},\\ldots, W_{\\cdot j}\\}\\); \\(V\\subset W_{\\cdot 0}\\): baseline covariates"
+    "text": "Notation & DAG\n\n\nNotation\n\n\\(a(t)\\): hypothetical treatment at \\(t\\); \\(A(t)\\): observed treatment at \\(t\\)\n\\(W(t)\\): possible confounders at \\(t\\)\nDiscrete time points: \\(0=t_0&lt;t_1&lt;\\cdots&lt;t_m\\)\n\n\\(A_{\\cdot j}=A(t_j)\\) and \\(W_{\\cdot j}=W(t_j)\\)\n\\(\\overline A_{\\cdot j}=\\{A_{\\cdot 0},\\ldots, A_{\\cdot j}\\}\\); \\(\\overline W_{\\cdot j}=\\{W_{\\cdot 0},\\ldots, W_{\\cdot j}\\}\\); \\(V\\subset W_{\\cdot 0}\\): baseline covariates"
   },
   {
     "objectID": "chap14.html#msm-for-time-varying-treatment",
@@ -4960,7 +4960,7 @@
     "href": "chap14.html#notes-i",
     "title": "Applied Survival Analysis",
     "section": "Notes (I)",
-    "text": "Notes (I)\n\nCounterfactual framework\n\nCausal inference for statistics, social, and biomedical sciences (Imbens and Rubin, 2015)\n\nPoint/time-varying treatment/confounding\n\nCausal inference: what if (Hernan and Robins, 2024)\n\nhttps://www.hsph.harvard.edu/miguel-hernan/causal-inference-book\n\n\nDirected acyclic graph (DAG) approach\n\nCausality: models, reasoning, and inference (Pearl, 2011)"
+    "text": "Notes (I)\n\nCounterfactual framework\n\nCausal inference for statistics, social, and biomedical sciences (Imbens and Rubin, 2015)\n\nPoint/time-varying treatment/confounding\n\nCausal inference: what if (Hernan and Robins, 2024)\n\nG-methods: MSM, g-formula (standardization), g-estimation (structural nested models)\nhttps://www.hsph.harvard.edu/miguel-hernan/causal-inference-book\n\n\nDirected acyclic graph (DAG) approach\n\nCausality: models, reasoning, and inference (Pearl, 2011)"
   },
   {
     "objectID": "chap14.html#notes-ii",
@@ -5880,5 +5880,12 @@
     "title": "Applied Survival Analysis",
     "section": "Notes (III)",
     "text": "Notes (III)\n\nTexts"
+  },
+  {
+    "objectID": "chap14.html#hw6-due-april-29",
+    "href": "chap14.html#hw6-due-april-29",
+    "title": "Applied Survival Analysis",
+    "section": "HW6 (Due April 29)",
+    "text": "HW6 (Due April 29)\n\nProblem 12.20\n\nData in Files &gt;&gt; Data &gt;&gt; Bone Marrow Transplant KM\nYou may need to restructure the dataset for multistate analysis\n\nProblem 13.20\nProblem 14.19\n\nNote: Endpoint is the univariate time to first event\n\n(Extra credit) Problem 14.13"
   }
 ]

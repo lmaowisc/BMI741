@@ -844,7 +844,7 @@ n^{-1}\sum_{i=1}^n\int_0^\infty\left\{A_i-\frac{\sum_{j=1}^nA_j\hat w_{j}(t) I(X
 w^{\rm s}_i(t)=\frac{\pi_{A_i}(V_i)G_{A_i}(t\mid V_i)}{\pi_{A_i}(W_i)G_{A_i}(t\mid W_i)},
 \end{equation}\]</span>
 <ul>
-<li><span class="math inline">\(\pi_{a}(V)=\pr(A=a\mid V)\)</span> and <span class="math inline">\(G_{a}(t\mid V)=\pr(C&gt;t\mid A=a, V)\)</span></li>
+<li><span class="math inline">\(\pi_{a}(V)=\pr(A=a\mid V)\)</span> and <span class="math inline">\(G_{a}(t\mid V)=\pr(C\geq t\mid A=a, V)\)</span></li>
 <li>Set <span class="math inline">\(G_{a}(t\mid V)=G_{a}(t\mid W)\equiv 1\)</span> if <span class="math inline">\(W\not\to C\)</span></li>
 </ul></li>
 </ul></li>
@@ -898,9 +898,8 @@ w^{\rm s}_i(t)=\frac{\pi_{A_i}(V_i)G_{A_i}(t\mid V_i)}{\pi_{A_i}(W_i)G_{A_i}(t\m
 <ul>
 <li><span class="math inline">\(a(t)\)</span>: hypothetical treatment at <span class="math inline">\(t\)</span>; <span class="math inline">\(A(t)\)</span>: observed treatment at <span class="math inline">\(t\)</span></li>
 <li><span class="math inline">\(W(t)\)</span>: possible confounders at <span class="math inline">\(t\)</span></li>
-<li>Discretization
+<li>Discrete time points: <span class="math inline">\(0=t_0&lt;t_1&lt;\cdots&lt;t_m\)</span>
 <ul>
-<li><span class="math inline">\(0=t_0&lt;t_1&lt;\cdots&lt;t_m\)</span>: time points</li>
 <li><span class="math inline">\(A_{\cdot j}=A(t_j)\)</span> and <span class="math inline">\(W_{\cdot j}=W(t_j)\)</span></li>
 <li><span class="math inline">\(\overline A_{\cdot j}=\{A_{\cdot 0},\ldots, A_{\cdot j}\}\)</span>; <span class="math inline">\(\overline W_{\cdot j}=\{W_{\cdot 0},\ldots, W_{\cdot j}\}\)</span>; <span class="math inline">\(V\subset W_{\cdot 0}\)</span>: baseline covariates</li>
 </ul></li>
@@ -908,7 +907,7 @@ w^{\rm s}_i(t)=\frac{\pi_{A_i}(V_i)G_{A_i}(t\mid V_i)}{\pi_{A_i}(W_i)G_{A_i}(t\m
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/causal_tm_dag.png" class="quarto-figure quarto-figure-center" style="width:50.0%"></p>
+<p><img data-src="images/causal_tm_dag.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
 </figure>
 </div>
 </div>
@@ -1197,6 +1196,7 @@ n^{-1}\sum_{i=1}^n\int_0^\infty\left\{Z_i(t)-\frac{\sum_{j=1}^n\hat w^{\rm s}_j(
 <ul>
 <li>Causal inference: what if (Hernan and Robins, 2024)
 <ul>
+<li>G-methods: MSM, g-formula (standardization), g-estimation (structural nested models)</li>
 <li><a href="https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/">https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book</a></li>
 </ul></li>
 </ul></li>
@@ -1240,19 +1240,27 @@ n^{-1}\sum_{i=1}^n\int_0^\infty\left\{Z_i(t)-\frac{\sum_{j=1}^n\hat w^{\rm s}_j(
 <ul>
 <li><strong>Marginal structural model (MSM)</strong> <span class="math display">\[\begin{equation}
     \lambda_{\overline a}(t\mid V)=\exp\{\beta a(t)+\gamma^{\rm T}V\}
-    \end{equation}\]</span> <img data-src="images/causal_tm_dag.png" class="quarto-figure quarto-figure-center" style="width:50.0%">
+    \end{equation}\]</span> <img data-src="images/causal_tm_dag.png" class="quarto-figure quarto-figure-center" style="width:70.0%">
 <ul>
 <li>IPTW/IPCW computed by <code>ipw::ipwtm()</code> and fed into <code>survival::coxph()</code></li>
 </ul></li>
 </ul>
-<!-- ## HW6 (Due April 29) -->
-<!-- -   Problem 12.10 -->
-<!--     -   Data in Files \>\> Data \>\> Bone Marrow Transplant KM -->
-<!--     -   You may need to restructure the dataset for multistate analysis -->
-<!-- -   Problem 13.13 -->
-<!-- -   Problem 14.10 -->
-<!--     -   Note: Endpoint is the univariate time to first event -->
-<!-- -   (Extra credit) Problem 14.9 -->
+</section>
+<section id="hw6-due-april-29" class="slide level2">
+<h2>HW6 (Due April 29)</h2>
+<ul>
+<li><p>Problem 12.20</p>
+<ul>
+<li><p>Data in Files &gt;&gt; Data &gt;&gt; Bone Marrow Transplant KM</p></li>
+<li><p>You may need to restructure the dataset for multistate analysis</p></li>
+</ul></li>
+<li><p>Problem 13.20</p></li>
+<li><p>Problem 14.19</p>
+<ul>
+<li>Note: Endpoint is the univariate time to first event</li>
+</ul></li>
+<li><p>(Extra credit) Problem 14.13</p></li>
+</ul>
 
 
 </section></section>

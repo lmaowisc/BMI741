@@ -470,7 +470,7 @@ tmp <- ipwpoint(exposure = A, denominator=~ confounders,
     -   **Stablized IPTW-IPCW weights** \begin{equation}\label{eq:causal:swights}
         w^{\rm s}_i(t)=\frac{\pi_{A_i}(V_i)G_{A_i}(t\mid V_i)}{\pi_{A_i}(W_i)G_{A_i}(t\mid W_i)},
         \end{equation}
-        -   $\pi_{a}(V)=\pr(A=a\mid V)$ and $G_{a}(t\mid V)=\pr(C>t\mid A=a, V)$
+        -   $\pi_{a}(V)=\pr(A=a\mid V)$ and $G_{a}(t\mid V)=\pr(C\geq t\mid A=a, V)$
         -   Set $G_{a}(t\mid V)=G_{a}(t\mid W)\equiv 1$ if $W\not\to C$
 :::
 
@@ -506,12 +506,11 @@ tmp <- ipwpoint(exposure = A, denominator=~ confounders,
 -   **Notation**
     -   $a(t)$: hypothetical treatment at $t$; $A(t)$: observed treatment at $t$
     -   $W(t)$: possible confounders at $t$
-    -   Discretization
-        -   $0=t_0<t_1<\cdots<t_m$: time points
+    -   Discrete time points: $0=t_0<t_1<\cdots<t_m$
         -   $A_{\cdot j}=A(t_j)$ and $W_{\cdot j}=W(t_j)$
         -   $\overline A_{\cdot j}=\{A_{\cdot 0},\ldots, A_{\cdot j}\}$; $\overline W_{\cdot j}=\{W_{\cdot 0},\ldots, W_{\cdot j}\}$; $V\subset W_{\cdot 0}$: baseline covariates
 
-![](images/causal_tm_dag.png){fig-align="center" width="50%"}
+![](images/causal_tm_dag.png){fig-align="center" width="70%"}
 :::
 
 ## MSM for Time-Varying Treatment
@@ -747,12 +746,10 @@ What happens if you adjust for CD4 cell count as a time-varying *covariate*?
     -   Causal inference for statistics, social, and biomedical sciences (Imbens and Rubin, 2015)
 -   **Point/time-varying treatment/confounding**
     -   Causal inference: what if (Hernan and Robins, 2024)
+        -   G-methods: MSM, g-formula (standardization), g-estimation (structural nested models)
         -   [https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/)
 -   **Directed acyclic graph (DAG) approach**
     -   Causality: models, reasoning, and inference (Pearl, 2011)
-
-
-
 
 ## Notes (III)
 
@@ -774,15 +771,21 @@ What happens if you adjust for CD4 cell count as a time-varying *covariate*?
 
 -   **Marginal structural model (MSM)** \begin{equation}
         \lambda_{\overline a}(t\mid V)=\exp\{\beta a(t)+\gamma^{\rm T}V\}
-        \end{equation} ![](images/causal_tm_dag.png){fig-align="center" width="50%"}
+        \end{equation} ![](images/causal_tm_dag.png){fig-align="center" width="70%"}
     -   IPTW/IPCW computed by `ipw::ipwtm()` and fed into `survival::coxph()`
 
-<!-- ## HW6 (Due April 29) -->
+## HW6 (Due April 29)
 
-<!-- -   Problem 12.10 -->
-<!--     -   Data in Files \>\> Data \>\> Bone Marrow Transplant KM -->
-<!--     -   You may need to restructure the dataset for multistate analysis -->
-<!-- -   Problem 13.13 -->
-<!-- -   Problem 14.10 -->
-<!--     -   Note: Endpoint is the univariate time to first event -->
-<!-- -   (Extra credit) Problem 14.9 -->
+-   Problem 12.20
+
+    -   Data in Files \>\> Data \>\> Bone Marrow Transplant KM
+
+    -   You may need to restructure the dataset for multistate analysis
+
+-   Problem 13.20
+
+-   Problem 14.19
+
+    -   Note: Endpoint is the univariate time to first event
+
+-   (Extra credit) Problem 14.13
