@@ -135,7 +135,7 @@ BSfun <- function(timepoints, time, status, St, t) {
   BSmat <- matrix(0, nrow = n, ncol = length(timepoints))
 
   # small epsilon for left-limit evaluation
-  eps <- max(1e-8, 1e-8 * max(c(timepoints, time, tc), na.rm = TRUE))
+  eps <- max(1e-8, 1e-8 * max(c(timepoints, time, t), na.rm = TRUE))
 
   for (i in seq_len(n)) {
     S_step_i <- stepfun(t, c(1, St[i, ]))
@@ -257,6 +257,30 @@ Cindex_fun <- function(timepoints = NULL, riskscore, time, status) {
   data.frame(tau = timepoints, C = out)
 }
 
+
+predsurv_cox <- function(fit, newx) {
+  # fit: coxph object
+  # newx: design matrix (n x p)
+
+  # Extract coefficients
+  beta <- coef(fit)
+
+  # Linear predictors
+  eta <- as.vector(newx %*% beta)
+
+  # Baseline cumulative hazard
+  bh <- basehaz(fit, centered = FALSE)
+  t  <- bh$time
+  Lambda0 <- bh$hazard
+
+  # Compute survival: S(t|z) = exp{-Lambda0(t) * exp(eta)}
+  St <- outer(exp(eta), Lambda0, function(e, L) exp(-L * e))
+
+  list(
+    St = St,  # n x m matrix
+    t  = t    # time grid
+  )
+}
 #------------------------------------------------------------------------------
 
 
@@ -458,8 +482,6 @@ lambda.opt
 # [1] 0.02472102
 # Extract the coefficients at lambda.min
 beta.opt   <- coef(obj.cv, s = "lambda.min")
-
-
 
 # Identify which coefficients are non-zero
 beta.selected  <- beta.opt[abs(beta.opt[, 1]) > 0, ]

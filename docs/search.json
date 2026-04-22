@@ -5015,8 +5015,8 @@
     "objectID": "chap15.html#outline",
     "href": "chap15.html#outline",
     "title": "Applied Survival Analysis",
-    "section": "",
-    "text": "Regularized Cox regression models\nNonparametric regression by survival trees\nBuilding prediction models for German Breast Cancer study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]"
+    "section": "Outline",
+    "text": "Outline\n\n\nRegularized Cox regression models\nSurvival trees and random forests\nSurvival surport vector machines\nBuilding prediction models for German Breast Cancer study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]"
   },
   {
     "objectID": "chap15.html#rationale",
@@ -5065,7 +5065,7 @@
     "href": "chap15.html#penalized-regression-ii",
     "title": "Applied Survival Analysis",
     "section": "Penalized Regression (II)",
-    "text": "Penalized Regression (II)\n\n\nExamples\n\nRidge regression \\((q=2)\\)\n\nClosed-form solution (not sparse; every \\(\\beta_j\\neq 0\\)) \\[\\begin{equation}\\label{eq:vs:ridge}\n\\hat\\beta(\\lambda)=\\left(\\sum_{i=1}^n Z_i^{\\otimes 2}+\\lambda I_p\\right)^{-1}\\sum_{i=1}^nZ_iY_i\n\\end{equation}\\]\n\nLasso (\\(q=1\\); Least absolute shrinkage and selection operator)\n\nSets some \\(\\hat\\beta_j\\equiv 0\\); sparse solution\n\nElastic net\n\nCombines the strengths of ridge regression and lasso \\[\\begin{equation}\\label{eq:vs:en}\n\\hat\\beta(\\lambda)=\\arg\\min_\\beta \\left[R_n(\\beta)+\\lambda\\sum_{j=1}^p\\left\\{\\alpha|\\beta_j|+2^{-1}(1-\\alpha)\\beta_j^2\\right\\}\\right]\n\\end{equation}\\]\nHandles correlated covariates better than lasso"
+    "text": "Penalized Regression (II)\n\n\nExamples\n\nRidge regression \\((q=2)\\) \\[\\begin{equation}\\label{eq:vs:ridge}\n    \\hat\\beta(\\lambda)=\\left(\\sum_{i=1}^n Z_i^{\\otimes 2}+\\lambda I_p\\right)^{-1}\\sum_{i=1}^nZ_iY_i\n    \\end{equation}\\]\nLasso (\\(q=1\\); Least absolute shrinkage and selection operator)\n\nSets some \\(\\hat\\beta_j\\equiv 0\\); sparse solution\n\nElastic net \\[\\begin{equation}\\label{eq:vs:en}\n    \\hat\\beta(\\lambda)=\\arg\\min_\\beta \\left[R_n(\\beta)+\\lambda\\sum_{j=1}^p\\left\\{\\alpha|\\beta_j|+2^{-1}(1-\\alpha)\\beta_j^2\\right\\}\\right]\n    \\end{equation}\\]\n\nCombines the strengths of ridge regression and lasso\nHandles correlated covariates better than lasso"
   },
   {
     "objectID": "chap15.html#l_1-regularized-cox-model",
@@ -5079,7 +5079,7 @@
     "href": "chap15.html#pathwise-solution",
     "title": "Applied Survival Analysis",
     "section": "Pathwise Solution",
-    "text": "Pathwise Solution\n\n\n\\(\\hat\\beta(\\lambda)\\) as a path of \\(\\lambda\\)\n\nIterative \\(pl_n(\\beta)\\approx\\) weighted sum of squares\nCoordinate descent at each iteration for \\(L_1\\)-penalized weighted least-squares\nDetails in Section 15.1.3 of lecture notes\n\n\n\n\n\n\\(K\\)-fold cross-validation to select \\(\\lambda_{\\rm opt}\\)\n\nSome \\(\\hat\\beta_j(\\lambda_{\\rm opt})=0\\)\nSelected variables \\(\\{Z_{\\cdot j}: \\hat\\beta_j(\\lambda_{\\rm opt})\\neq 0, j=1,\\ldots, p\\}\\)"
+    "text": "Pathwise Solution\n\n\n\\(\\hat\\beta(\\lambda)\\) as a path of \\(\\lambda\\)\n\nIterative \\(pl_n(\\beta)\\approx\\) weighted sum of squares\nCoordinate descent (Section 15.1.4 of book chapter)\n\n\n\n\n\n\\(K\\)-fold cross-validation to select \\(\\lambda_{\\rm opt}\\)\n\nSome \\(\\hat\\beta_j(\\lambda_{\\rm opt})=0\\)\nSelected variables \\(\\{Z_{\\cdot j}: \\hat\\beta_j(\\lambda_{\\rm opt})\\neq 0, j=1,\\ldots, p\\}\\)"
   },
   {
     "objectID": "chap15.html#cross-validation-error",
@@ -5107,28 +5107,28 @@
     "href": "chap15.html#software-glmnetglmnet-ii",
     "title": "Applied Survival Analysis",
     "section": "Software: glmnet::glmnet() (II)",
-    "text": "Software: glmnet::glmnet() (II)\n\n\nFind optimal \\(\\lambda\\)\n\n\n\n# plot validation error (partial-likelihood deviance)\n# as a function of log-lambda\nplot(obj.cv)\n# the optimal lambda\nobj.cv$lambda.min\n# the beta at optimal lambda\nbeta &lt;- coef(obj.cv, s = \"lambda.min\")"
+    "text": "Software: glmnet::glmnet() (II)\n\n\nFind optimal \\(\\lambda\\)\n\n\n\n# plot validation error (partial-likelihood deviance)\n# as a function of log-lambda\nplot(obj.cv)\n# the optimal lambda\nobj.cv$lambda.min\n# the beta at optimal lambda\nbeta &lt;- coef(obj.cv, s = \"lambda.min\")\n\n\n\nPrediction on test data\n\nbeta: \\(\\hat g(z^*)=\\hat\\beta^\\T z^*\\)\nRefit Cox model using selected predictors to get \\(\\hat S(t\\mid z^*)\\)"
   },
   {
     "objectID": "chap15.html#gbc-an-example",
     "href": "chap15.html#gbc-an-example",
     "title": "Applied Survival Analysis",
     "section": "GBC: An Example",
-    "text": "GBC: An Example\n\n\nGerman Breast Cancer (GBC) study\n\nCohort: 686 breast cancer patients\n\nOutcome: relapse-free survival\nPredictors: age (\\(\\leq\\) 40 vs &gt;40), menopausal status, hormone treatment, tumor grade, tumor size, lymph nodes, estrogen and progesterone receptor levels\nTraining set (\\(n=400\\)) + test set (\\(n=286\\))\n\n\n\n# select training set N=400\nset.seed(1234)\nind &lt;- sample(1:n)[1:400]\ntrain &lt;- data.CE[ind,]\ntest &lt;- data.CE[-ind,]"
+    "text": "GBC: An Example\n\n\nGerman Breast Cancer (GBC) study\n\nCohort: 686 breast cancer patients\n\nOutcome: relapse-free survival\nPredictors: age (\\(\\leq\\) 40 vs &gt;40), menopausal status, hormone treatment, tumor grade, tumor size, lymph nodes, estrogen and progesterone receptor levels\nTraining set (\\(n=400\\)) + test set (\\(n=286\\))\n\n\n\n# select training set N=400\nset.seed(1234)\nind   &lt;- sample(1:n, size = 400)\ntrain &lt;- df[ind, ]\ntest  &lt;- df[-ind, ]"
   },
   {
     "objectID": "chap15.html#graphics",
     "href": "chap15.html#graphics",
     "title": "Applied Survival Analysis",
     "section": "Graphics",
-    "text": "Graphics"
+    "text": "Graphics\n\nPathwise solution and CV curve"
   },
   {
     "objectID": "chap15.html#selected-predictors",
     "href": "chap15.html#selected-predictors",
     "title": "Applied Survival Analysis",
     "section": "Selected Predictors",
-    "text": "Selected Predictors\n\n\nCV results\n\n\\(\\log(\\lambda_{\\rm opt}) = -3.89\\)\n\n\n# the optimal lambda\nobj.cv$lambda.min\nlog(obj.cv$lambda.min)\n#&gt; [1] -3.886169\n# the beta at optimal lambda\nbeta &lt;- coef(obj.cv, s = \"lambda.min\")\n# the non-zero coefficients\nbeta.selected &lt;- beta[abs(beta[,1])&gt;0,]\n# print out the non-zero coefficients\nbeta.selected\n#&gt;      hormone        age40         size        grade        nodes \n#&gt; -0.371809445  0.455421368  0.003448500  0.201404194  0.040170638\n#&gt;      prog \n#&gt; -0.002908887"
+    "text": "Selected Predictors\n\n\nCV results\n\n\\(\\log(\\lambda_{\\rm opt}) = -3.7\\)\n\n\n\n# Identify the optimal lambda \nlambda.opt &lt;- obj.cv$lambda.min\nlambda.opt\n# [1] 0.02472102\n\n# Extract coefficients at lambda.min\nbeta.opt   &lt;- coef(obj.cv, s = \"lambda.min\")\n# Identify which coefficients are non-zero\nbeta.selected  &lt;- beta.opt[abs(beta.opt[, 1]) &gt; 0, ]\nbeta.selected  # show non-zero variables\n#&gt;      hormone        age40         size        grade        nodes         prog \n#&gt; -0.354175646  0.428284913  0.003006433  0.197080456  0.039587219 -0.002741544"
   },
   {
     "objectID": "chap15.html#decision-trees",
@@ -5142,35 +5142,35 @@
     "href": "chap15.html#basic-procedures",
     "title": "Applied Survival Analysis",
     "section": "Basic Procedures",
-    "text": "Basic Procedures\n\n\nGrowing the tree\n\nStarting with root node, search partition criteria \\[Z_{\\cdot j}\\leq z \\,\\,\\,(j=1,\\ldots, p; z \\in\\mathbb R)\\] for one that minimizes “impurity” within daughter nodes \\[\\begin{equation}\\label{eq:tree:nodes}\nA=\\{i=1,\\ldots, n: Z_{ij}\\leq z\\} \\mbox{ and }\nB=\\{i=1,\\ldots, n: Z_{ij}&gt; z\\}\n\\end{equation}\\]\nRecursive splitting until terminal nodes sufficiently “pure” in outcome\n\n\n\n\n\nTree-based prediction\n\nA new covariate vector \\(\\to\\) terminal node it belongs \\(\\to\\) predicted outcome\n\nMajority class\nempirical mean\nKaplan-Meier estimator"
+    "text": "Basic Procedures\n\n\nGrowing the tree\n\nStarting with root node, search splitting criteria \\[Z_{\\cdot j}\\leq z \\,\\,\\,(j=1,\\ldots, p; z \\in\\mathbb R)\\] for one that minimizes “impurity” within daughter nodes \\[\\begin{equation}\\label{eq:tree:nodes}\nA=\\{i=1,\\ldots, n: Z_{ij}\\leq z\\} \\mbox{ and }\nB=\\{i=1,\\ldots, n: Z_{ij}&gt; z\\}\n\\end{equation}\\]\nRecursive splitting until terminal nodes sufficiently “pure” in outcome\n\n\n\n\n\nTree-based prediction\n\nA new covariate vector \\(\\to\\) terminal node it belongs \\(\\to\\) predicted outcome\n\nMajority class\nempirical mean\nKaplan-Meier estimator"
   },
   {
     "objectID": "chap15.html#splitting-criterion",
     "href": "chap15.html#splitting-criterion",
     "title": "Applied Survival Analysis",
     "section": "Splitting Criterion",
-    "text": "Splitting Criterion\n\n\nObjective function\n\nChoose partition \\(A|B\\) to minimize \\[\nR(A\\mid\\mid B)=\\hat P(A)\\hat{\\mathcal G}(A)+\\hat P(B)\\hat{\\mathcal G}(B)\n\\]\n\n\\(\\hat P(A)\\), \\(\\hat P(B)\\): proportions of observations in daughter nodes\n\\(\\hat{\\mathcal G}(A)\\), \\(\\hat{\\mathcal G}(B)\\): impurity measures within daughter nodes\n\n\n\n\n\n\nImpurity measure\n\nCategorical \\(Y \\in\\{1,\\ldots, K\\}\\): Gini index \\(\\pr(Y_i\\neq Y_j) = 1-\\sum_{k=1}^K \\pi_k^2\\)\nContinuous: mean squared error\nSurvival: mean squared deviance residuals (Cox model with binary node) \\[\\begin{equation}\\label{eq:tree:deviance}\nR(A\\mid\\mid B)=n^{-1}\\sum_{i \\in A}d_{i}^2 +n^{-1}\\sum_{i \\in B}d_{i}^2\n\\end{equation}\\]"
+    "text": "Splitting Criterion\n\n\nObjective function\n\nChoose partition \\(A|B\\) to minimize \\[\nR(A\\mid\\mid B)=\\hat P(A)\\hat{\\mathcal G}(A)+\\hat P(B)\\hat{\\mathcal G}(B)\n\\]\n\n\\(\\hat P(A)\\), \\(\\hat P(B)\\): proportions of observations in daughter nodes\n\\(\\hat{\\mathcal G}(A)\\), \\(\\hat{\\mathcal G}(B)\\): impurity measures within daughter nodes\n\n\n\n\n\n\nImpurity measure\n\nCategorical \\(Y \\in\\{1,\\ldots, K\\}\\): Gini index \\(\\pr(Y_i\\neq Y_j)\\)\nContinuous: mean squared error\nSurvival: mean squared deviance residuals (Cox model with binary node) \\[\\begin{equation}\\label{eq:tree:deviance}\nR(A\\mid\\mid B)=n^{-1}\\sum_{i \\in A}d_{i}^2 +n^{-1}\\sum_{i \\in B}d_{i}^2\n\\end{equation}\\]"
   },
   {
     "objectID": "chap15.html#pruning-the-tree",
     "href": "chap15.html#pruning-the-tree",
     "title": "Applied Survival Analysis",
     "section": "Pruning the Tree",
-    "text": "Pruning the Tree\n\n\nPenalize complexity\n\nCut overgrown branches \\(\\to\\) prevent overfitting \\(\\to\\) generalizability\n\nMinimize \\(R(\\mathcal T;\\lambda)=R(\\mathcal T)+\\lambda|\\mathcal T|\\)\n\n\\(R(\\mathcal T)\\): mean squared (deviance) residuals for terminal nodes of tree \\(\\mathcal T\\)\n\\(|\\mathcal T|\\): number of terminal nodes\n\\(\\lambda\\geq 0\\): complexity parameter determined by cross-validation\n\n\n\n\n\n\nFinal tree\n\n\\(\\mathcal T^{\\rm opt} = \\arg\\min_{\\mathcal T}R(\\mathcal T;\\lambda_{\\rm opt})\\)\n\\(\\mathcal T^{\\rm opt}(z)\\): terminal node for new covariate vector \\(z\\)\n\\(\\hat S(t\\mid z)\\): KM estimates in node \\(\\mathcal T^{\\rm opt}(z)\\)"
+    "text": "Pruning the Tree\n\n\nPenalize complexity\n\nCut overgrown branches \\(\\to\\) prevent overfitting \\(\\to\\) generalizability\n\nMinimize \\(R(\\mathcal T;\\lambda)=R(\\mathcal T)+\\lambda|\\mathcal T|\\)\n\n\\(R(\\mathcal T)\\): mean squared (deviance) residuals for terminal nodes of tree \\(\\mathcal T\\)\n\\(|\\mathcal T|\\): number of terminal nodes\n\\(\\lambda\\geq 0\\): cost-complexity parameter determined by cross-validation\n\n\n\n\n\n\nFinal tree\n\n\\(\\mathcal T^{\\rm opt} = \\arg\\min_{\\mathcal T}R(\\mathcal T;\\lambda_{\\rm opt})\\)\n\\(\\mathcal T^{\\rm opt}(z)\\): terminal node for new covariate vector \\(z\\)\n\\(\\hat S(t\\mid z^*)\\): KM estimates in node \\(\\mathcal T^{\\rm opt}(z^*)\\)"
   },
   {
     "objectID": "chap15.html#bagging-and-random-forests",
     "href": "chap15.html#bagging-and-random-forests",
     "title": "Applied Survival Analysis",
     "section": "Bagging and Random Forests",
-    "text": "Bagging and Random Forests\n\n\nBagging\n\nA single tree \\(\\to\\) large variance\nTake \\(B\\) bootstrapped samples from training data\n\n\\(\\mathcal T_b\\): survival tree grown on \\(b\\)th bootstrap sample \\((b=1, \\ldots, B)\\) (without pruning)\n\\(\\hat S_b(t\\mid z)\\): predicted survival function\n\n\nFinal prediction \\[\n\\hat S(t\\mid z)=B^{-1}\\sum_{b=1}^B \\hat S_b(t\\mid z)\n\\]\n\n\n\n\n\nRandom forests\n\nSame except only a random subset of covariates are considered at each split\nDe-correlate the trees grown on different bootstrapped samples)"
+    "text": "Bagging and Random Forests\n\n\nBagging\n\nA single tree \\(\\to\\) large variance\nTake \\(B\\) bootstrapped samples from training data\n\n\\(\\mathcal T_b\\): survival tree grown on \\(b\\)th bootstrap sample \\((b=1, \\ldots, B)\\) (without pruning)\n\\(\\hat S_b(t\\mid z)\\): predicted survival function\n\n\nFinal prediction \\[\n\\hat S(t\\mid z)=B^{-1}\\sum_{b=1}^B \\hat S_b(t\\mid z)\n\\]\n\nRandom forests\n\nSame except only a random subset of covariates are considered at each split\nDe-correlate the trees grown on different bootstrapped samples)"
   },
   {
     "objectID": "chap15.html#software-rpartrpart",
     "href": "chap15.html#software-rpartrpart",
     "title": "Applied Survival Analysis",
     "section": "Software: rpart::rpart()",
-    "text": "Software: rpart::rpart()\n\n\nBasic syntax for growing survival tree\n\nxval = k: \\(k\\)-fold cross-validation; minbucket: minimum size of terminal node; cp: minimum reduction of impurity measure for a split\n\n\n\n\n# grow the tree, with cross-validation\nobj &lt;- rpart(Surv(time, status) ~ covariates, \n    control = rpart.control(xval = 10, minbucket = 2, cp = 0))\n# cross-validation results\ncptable &lt;- obj$cptable\n# complexity parameter (lambda)\nCP &lt;- cptable[, 1] \n# find optimal parameter\n# cptable[, 4]: error function\ncp.opt &lt;- CP[which.min(cptable[, 4])]"
+    "text": "Software: rpart::rpart()\n\n\nBasic syntax for growing survival tree\n\nxval: number of cross-validation folds\nminbucket: minimum number of observations in terminal nodes\ncp: complexity parameter (set to 0 for full tree)\n\n\n\n\n# grow the tree, with cross-validation\nobj &lt;- rpart(Surv(time, status) ~ covariates, \n    control = rpart.control(xval = 10, minbucket = 2, cp = 0))\n# cross-validation results\ncptable &lt;- obj$cptable\n# complexity parameter (lambda)\nCP &lt;- cptable[, 1] \n# find optimal parameter\n# cptable[, 4]: error function\ncp.opt &lt;- CP[which.min(cptable[, 4])]"
   },
   {
     "objectID": "chap15.html#software-rpartprune",
@@ -5887,5 +5887,96 @@
     "title": "Applied Survival Analysis",
     "section": "HW6 (Due April 29)",
     "text": "HW6 (Due April 29)\n\nProblem 12.20\n\nData in Files &gt;&gt; Data &gt;&gt; Bone Marrow Transplant KM\nYou may need to restructure the dataset for multistate analysis\n\nProblem 13.20\nProblem 14.19\n\nNote: Endpoint is the univariate time to first event\n\n(Extra credit) Problem 14.13"
+  },
+  {
+    "objectID": "chap15.html#regularized-cox-models",
+    "href": "chap15.html#regularized-cox-models",
+    "title": "Applied Survival Analysis",
+    "section": "Regularized Cox Models",
+    "text": "Regularized Cox Models\n\n\nUnique features with Cox model\n\nObjective function (RSS not computable due to censoring)\nComputational algorithm\nDefinition of error for cross-validation\n\n\n\n\n\nObjective function: negative log-partial likelihood \\[\\begin{equation}\\label{eq:vs:cox_lasso}\nQ_n(\\beta;\\lambda)\n\\;=\\;\n-\\, pl_n(\\beta)\n\\,+\\,\n\\lambda \\sum_{j=1}^p\n   \\left\\{\n\\alpha\\, |\\beta_j|\n\\,+\\,\n2^{-1} (1-\\alpha)\\beta_j^2\n   \\right\\}.\n\\end{equation}\\]\n\nSolution: \\(\\hat\\beta(\\lambda)=\\arg\\min_\\beta Q_n(\\beta;\\lambda)\\)"
+  },
+  {
+    "objectID": "chap15.html#penalized-regression-iii",
+    "href": "chap15.html#penalized-regression-iii",
+    "title": "Applied Survival Analysis",
+    "section": "Penalized Regression (III)",
+    "text": "Penalized Regression (III)\n\nGeometric intuition"
+  },
+  {
+    "objectID": "chap15.html#training-versus-test-errors",
+    "href": "chap15.html#training-versus-test-errors",
+    "title": "Applied Survival Analysis",
+    "section": "Training versus Test Errors",
+    "text": "Training versus Test Errors\n\nTypical relationship between training and validation errors"
+  },
+  {
+    "objectID": "chap15.html#training-vs-prediction-errors",
+    "href": "chap15.html#training-vs-prediction-errors",
+    "title": "Applied Survival Analysis",
+    "section": "Training vs Prediction Errors",
+    "text": "Training vs Prediction Errors\n\nTypical relationship between training and validation errors"
+  },
+  {
+    "objectID": "chap15.html#testing-model-performance",
+    "href": "chap15.html#testing-model-performance",
+    "title": "Applied Survival Analysis",
+    "section": "Testing Model Performance",
+    "text": "Testing Model Performance\n\nWorkflow"
+  },
+  {
+    "objectID": "chap15.html#evaluation-metrics",
+    "href": "chap15.html#evaluation-metrics",
+    "title": "Applied Survival Analysis",
+    "section": "Evaluation Metrics",
+    "text": "Evaluation Metrics\n\nTest data \\[\n(X_i^*,\\, \\delta_i^*,\\, Z_i^*), \\qquad i = 1,\\ldots, n^*,\n\\]\n\n\\(T^*\\): true event time\n\\(X^* = T^* \\wedge C^*\\), \\(\\delta^* = I(T^* \\le C^*)\\)\n\nPrediction\n\n\\(\\hat g(Z^*)\\): predicted risk score (e.g., linear predictor \\(\\hat\\beta^\\T Z^*\\))\n\\(\\hat S(t\\mid Z^*)\\): predicted survival function"
+  },
+  {
+    "objectID": "chap15.html#model-evaluation",
+    "href": "chap15.html#model-evaluation",
+    "title": "Applied Survival Analysis",
+    "section": "Model Evaluation",
+    "text": "Model Evaluation\n\nTest data \\[\n(X_i^*,\\, \\delta_i^*,\\, Z_i^*), \\qquad i = 1,\\ldots, n^*,\n\\]\n\n\\(T^*\\): true event time\n\\(X^* = T^* \\wedge C^*\\), \\(\\delta^* = I(T^* \\le C^*)\\)\n\nPrediction\n\n\\(\\hat g(Z^*)\\): predicted risk score (e.g., linear predictor \\(\\hat\\beta^\\T Z^*\\))\n\\(\\hat S(t\\mid Z^*)\\): predicted survival function"
+  },
+  {
+    "objectID": "chap15.html#evaluation-metrics---c-index",
+    "href": "chap15.html#evaluation-metrics---c-index",
+    "title": "Applied Survival Analysis",
+    "section": "Evaluation Metrics - C-Index",
+    "text": "Evaluation Metrics - C-Index\n\nC-index: probability of concordance \\[\n\\mathcal C\n\\;=\\;\n\\pr\\{\n\\hat g(Z_i^*) \\,&gt;\\, \\hat g(Z_j^*)\n\\mid\nT_i^* &lt; T_j^*\n\\}\n\\]\nHarrell’s C-statistic\n\nProportion of concordant pairs among comparable pairs \\[\n\\frac{\n\\sum_{i&lt;j}\\sum\n\\delta_i^*\nI\\{\n  \\hat g(Z_i^*) &gt; \\hat g(Z_j^*),\\,\n  X_i^* &lt; X_j^*\\}\n}{\n\\sum_{i&lt;j}\\sum\n\\delta_i^*\nI( X_i^* &lt; X_j^*)\n}\n\\]\n\nUno’s C-statistic\n\nIPCW estimator of probability of concordance by time \\(\\tau\\) \\[\n\\mathcal C_\\tau\n\\;=\\;\n\\pr\\{\n\\hat g(Z_i^*) &gt; \\hat g(Z_j^*)\n\\mid\nT_i^* &lt; T_j^* \\wedge \\tau\n\\}\n\\]"
+  },
+  {
+    "objectID": "chap15.html#evaluation-metrics---auc-brier-score",
+    "href": "chap15.html#evaluation-metrics---auc-brier-score",
+    "title": "Applied Survival Analysis",
+    "section": "Evaluation Metrics - AUC & Brier Score",
+    "text": "Evaluation Metrics - AUC & Brier Score\n\nAUC: area under the time-dependent ROC curve\n\nIPCW estimator of probability of concordance at time \\(t\\) \\[\n  \\text{AUC}(t)\n\\;=\\;\n\\pr\\{\n\\hat g(Z_i^*) &gt; \\hat g(Z_j^*)\n\\mid\nT_i^* \\le t,\\;\nT_j^* &gt; t\\}\n\\]\n\nBrier score\n\nIPCW estimator mean squared error for predicted vs observed \\[\n\\text{BS}(t)\n\\;=\\;\nE\\left[\n\\left\\{\n   I(T_i^* &gt; t) - \\hat S(t \\mid Z_i^*)\n\\right\\}^2\n\\right].\n\\]"
+  },
+  {
+    "objectID": "chap15.html#evaluation-metrics---summary",
+    "href": "chap15.html#evaluation-metrics---summary",
+    "title": "Applied Survival Analysis",
+    "section": "Evaluation Metrics - Summary",
+    "text": "Evaluation Metrics - Summary\n\nSummary of evaluation metrics\n\n\n\n\n\n\n\n\n\n\n\n\n\nMetric\nRange\nFocus\nTime.Dimension\nAffected.by.Censoring\n\n\n\n\nHarrell’s C\n[0, 1]\nDiscrimination\nOverall\nYes\n\n\nUno’s C_tau\n[0, 1]\nDiscrimination\nOverall\nNo\n\n\nTime-dependent AUC(t)\n[0, 1]\nDiscrimination\nDynamic\nNo\n\n\nIntegrated AUC\n[0, ∞)\nDiscrimination\nOverall\nNo\n\n\nBrier score BS(t)\n[0, ∞)\nDiscrimination/Calibration\nDynamic\nNo\n\n\nIntegrated Brier score\n[0, ∞)\nDiscrimination/Calibration\nOverall\nNo"
+  },
+  {
+    "objectID": "chap15.html#an-example",
+    "href": "chap15.html#an-example",
+    "title": "Applied Survival Analysis",
+    "section": "An Example",
+    "text": "An Example\n\nAn illustrative decision tree"
+  },
+  {
+    "objectID": "chap15.html#oblique-vs-axis-aligned-splits",
+    "href": "chap15.html#oblique-vs-axis-aligned-splits",
+    "title": "Applied Survival Analysis",
+    "section": "Oblique vs Axis-Aligned Splits",
+    "text": "Oblique vs Axis-Aligned Splits\n\nSplit on linear combination of covariates (oblique)"
+  },
+  {
+    "objectID": "chap15.html#out-of-bag-oob-samples",
+    "href": "chap15.html#out-of-bag-oob-samples",
+    "title": "Applied Survival Analysis",
+    "section": "Out-of-Bag (OOB) Samples",
+    "text": "Out-of-Bag (OOB) Samples\n\nOOB samples\n\n\\((1-n^{-1})^n\\approx 36.8\\%\\) not included in bootstrap sample for each tree \\(\\mathcal T_b\\)\nUsed to compute predictor error\nMonitor performance as forest grows"
   }
 ]

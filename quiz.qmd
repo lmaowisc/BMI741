@@ -1,0 +1,66 @@
+---
+title: "10-Minute In-Class Quiz 5: Survival Analysis (Chapter 13)"
+format: pdf
+header-includes:
+  - \usepackage{tikz}
+  - \usetikzlibrary{arrows.meta, automata, positioning}
+engine: knitr
+---
+
+## Instructions
+
+- You have **10 minutes** to complete this quiz
+- Answer all questions concisely
+- Show all work clearly where calculations are required
+
+## In-Class Quiz: Win Ratio (10 points)
+
+Consider a randomized study comparing a treatment group (A) and a control group (B). The composite endpoint prioritizes
+
+1. death (more important)
+2. hospitalization (less important)
+
+Each patient is followed for up to 12 months.
+
+### Data
+
+| Patient | Group | Death time | Hosp time |
+|---|---|---:|---:|
+| A1 | A | 10 | 4 |
+| A2 | A | >12 | 6 |
+| A3 | A | >12 | >12 |
+| B1 | B | 8 | 5 |
+| B2 | B | >12 | >12 |
+
+Notes
+
+- `>12` means no event is observed before being censored 12 months
+
+### (a) Pairwise comparisons 
+
+Consider all **six** treatment--control pairs. For each pair, determine the winner (A or B), or a tie, using Pocock's rule:
+
+- compare death times first
+- if death times are uncomparable, compare hospitalization times
+- otherwise, declare a tie
+
+List the result for each pair. It may help to draw follow-up lines for each subject.
+
+- (A1 vs B1):
+- (A1 vs B2):
+- (A2 vs B1):
+- (A2 vs B2):
+- (A3 vs B1):
+- (A3 vs B2):
+
+### (b) Win fractions and win ratio 
+
+Compute
+
+- $\hat w_1$: fraction of wins for treatment
+- $\hat w_0$: fraction of wins for control
+- $\widehat{\mathrm{WR}} = \hat w_1 / \hat w_0$
+
+Interpret the win ratio.
+
+### (c) How would you calculate the win odds and net treatment benefit?
