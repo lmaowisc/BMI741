@@ -5016,7 +5016,7 @@
     "href": "chap15.html#outline",
     "title": "Applied Survival Analysis",
     "section": "Outline",
-    "text": "Outline\n\n\nRegularized Cox regression models\nSurvival trees and random forests\nSurvival surport vector machines\nBuilding prediction models for German Breast Cancer study\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]"
+    "text": "Outline\n\n\nRegularized Cox regression models\nSurvival trees and random forests\nSurvival surport vector machines\nR’s Tidymodels system\n\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]"
   },
   {
     "objectID": "chap15.html#rationale",
@@ -5114,7 +5114,7 @@
     "href": "chap15.html#gbc-an-example",
     "title": "Applied Survival Analysis",
     "section": "GBC: An Example",
-    "text": "GBC: An Example\n\n\nGerman Breast Cancer (GBC) study\n\nCohort: 686 breast cancer patients\n\nOutcome: relapse-free survival\nPredictors: age (\\(\\leq\\) 40 vs &gt;40), menopausal status, hormone treatment, tumor grade, tumor size, lymph nodes, estrogen and progesterone receptor levels\nTraining set (\\(n=400\\)) + test set (\\(n=286\\))\n\n\n\n# select training set N=400\nset.seed(1234)\nind   &lt;- sample(1:n, size = 400)\ntrain &lt;- df[ind, ]\ntest  &lt;- df[-ind, ]"
+    "text": "GBC: An Example\n\n\nGerman Breast Cancer (GBC) study\n\nCohort: 686 breast cancer patients\n\nOutcome: relapse-free survival\nPredictors: age (\\(\\leq\\) 40 vs &gt;40), menopausal status, hormone treatment, tumor grade, tumor size, lymph nodes, estrogen and progesterone receptor levels\nTraining set (\\(n=400\\)) + test set (\\(n^*=286\\))\n\n\n\n# select training set N=400\nset.seed(1234)\nind   &lt;- sample(1:n, size = 400)\ntrain &lt;- df[ind, ]\ntest  &lt;- df[-ind, ]"
   },
   {
     "objectID": "chap15.html#graphics",
@@ -5177,7 +5177,7 @@
     "href": "chap15.html#software-rpartprune",
     "title": "Applied Survival Analysis",
     "section": "Software: rpart::prune()",
-    "text": "Software: rpart::prune()\n\n\nBasic syntax for pruning survival tree\n\ntree: rpart object for grown tree; cp: optimal \\(\\lambda\\)\ntest: test data frame\n\n\n\n\n# prune the tree, with optimal lambda\nfit &lt;- prune(tree = obj, cp = cp.opt)\n# plot the pruned tree structure\nrpart.plot(fit)\n# fit$where: vector of terminal node for training data\n# compute KM estimates by terminal node\nkm &lt;- survfit(Surv(time, status) ~ fit$where)\n## prediction on test data ---------------------------\n# terminal node for test data\ntreeClust::rpart.predict.leaves(fit, test)"
+    "text": "Software: rpart::prune()\n\n\nBasic syntax for pruning survival tree\n\ntree: rpart object for grown tree; cp: optimal \\(\\lambda\\)\ntest: test data frame\n\n\n\n\n# prune the tree, with optimal lambda\nfit &lt;- prune(tree = obj, cp = cp.opt)\n# plot the pruned tree structure\nrpart.plot(fit)\n# fit$where: vector of terminal node for training data\n# compute KM estimates by terminal node\nkm &lt;- survfit(Surv(time, status) ~ fit$where)\n\n## prediction on test data ---------------------------\n# terminal node for test data\ntreeClust::rpart.predict.leaves(fit, test)"
   },
   {
     "objectID": "chap15.html#gbc-survival-trees",
@@ -5219,7 +5219,7 @@
     "href": "chap15.html#notes-iii",
     "title": "Applied Survival Analysis",
     "section": "Notes (III)",
-    "text": "Notes (III)\n\nTidymodels\n\ncensored: a member of tidymodels family\nhttps://censored.tidymodels.org/\n\n\n\n\nlibrary(censored) \n\ndecision_tree() %&gt;% \n  set_engine(\"rpart\") %&gt;% \n  set_mode(\"censored regression\")\n#&gt; Decision Tree Model Specification (censored regression)\n#&gt; \n#&gt; Computational engine: rpart"
+    "text": "Notes (III)\n\nPython’s machine learning systems\n\nscikit-learn: general machine learning library with support for survival analysis through extensions like scikit-survival\nlifelines: library specifically for survival analysis, including Cox models and KM estimators\nxgboost and lightgbm: gradient boosting libraries adaptable for survival analysis using custom loss functions\n\nDeep learning in survival analysis\n\nDeepSurv: a deep learning-based Cox proportional hazards model\nDeepHit: a deep learning model for competing risks survival analysis"
   },
   {
     "objectID": "chap15.html#summary",
@@ -5978,5 +5978,446 @@
     "title": "Applied Survival Analysis",
     "section": "Out-of-Bag (OOB) Samples",
     "text": "Out-of-Bag (OOB) Samples\n\nOOB samples\n\n\\((1-n^{-1})^n\\approx 36.8\\%\\) not included in bootstrap sample for each tree \\(\\mathcal T_b\\)\nUsed to compute predictor error\nMonitor performance as forest grows"
+  },
+  {
+    "objectID": "chap15.html#software-aorsforsf",
+    "href": "chap15.html#software-aorsforsf",
+    "title": "Applied Survival Analysis",
+    "section": "Software: aorsf:orsf()",
+    "text": "Software: aorsf:orsf()\n\nOblique random survival forests\n\nmtry: number of covariates randomly selected at each split\n\n\n\n\nlibrary(aorsf)\n# Fit a basic oblique random survival forest on training data\nset.seed(12345) # for reproducibility\norsf_fit &lt;- orsf(\n  Surv(&lt;time&gt;, &lt;status&gt;) ~ covariates, \n  # Optional arguments:\n      # Forest size\n        n_tree = 500,\n      # Tree size control\n        mtry = ceiling(sqrt(p)),\n         ...\n)"
+  },
+  {
+    "objectID": "chap15.html#software-aorsforsf-i",
+    "href": "chap15.html#software-aorsforsf-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: aorsf:orsf() (I)",
+    "text": "Software: aorsf:orsf() (I)\n\nOblique random survival forests\n\nmtry: number of covariates randomly selected at each split\n\n\n\n\nlibrary(aorsf)\n# Fit a basic oblique random survival forest on training data\nset.seed(12345) # for reproducibility\nfit &lt;- orsf(\n  Surv(&lt;time&gt;, &lt;status&gt;) ~ covariates, \n  # Optional arguments:\n      # Forest size\n        n_tree = 500,\n      # Number of covariates randomly selected at each split\n        mtry = ceiling(sqrt(p)),\n         ...\n)"
+  },
+  {
+    "objectID": "chap15.html#software-aorsforsf-i-1",
+    "href": "chap15.html#software-aorsforsf-i-1",
+    "title": "Applied Survival Analysis",
+    "section": "Software: aorsf:orsf() (I)",
+    "text": "Software: aorsf:orsf() (I)\n\nvariable importance\n\nBased on degradation of OOB prediction accuracy after permuting each feature"
+  },
+  {
+    "objectID": "chap15.html#software-aorsforsf-ii",
+    "href": "chap15.html#software-aorsforsf-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: aorsf:orsf() (II)",
+    "text": "Software: aorsf:orsf() (II)\n\nVariable importance\n\nBased on degradation of OOB prediction accuracy after permuting \\(Z_{\\cdot j}\\)\n\n\n\norsf_vi_permute(fit) # permutation-based variable importance\n\n\nPrediction \n\n\n# Survival prediction on test set\npred_orsf &lt;- predict(\n  fit,                       # fitted orsf object\n  new_data = test,           # test dataset\n  pred_type = \"surv\",        # survival function\n  pred_horizon = 0:60        # evaluation times\n)"
+  },
+  {
+    "objectID": "chap15.html#gbc-fitting-survival-trees",
+    "href": "chap15.html#gbc-fitting-survival-trees",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Fitting Survival Trees",
+    "text": "GBC: Fitting Survival Trees\n\n\nSame training data\n\n\\(\\lambda_{\\rm opt}=0.017\\); 3 splits (4 terminal nodes)\n\n\n\n# Conduct 10-fold cross-validation (xval = 10)\nobj &lt;- rpart(Surv(time, status) ~ hormone + meno + size + grade + nodes + \n              prog + estrg + age,\n             control = rpart.control(xval = 10, minbucket = 2, cp = 0),\n             data = train)\nprintcp(obj) # xerror: objective \n#            CP  nsplit rel.error  xerror   xstd\n# 1  0.07556835      0   1.00000 1.00411 0.046231\n# 2  0.03720019      1   0.92443 0.96817 0.047281\n# 3  0.02661914      2   0.88723 0.95124 0.046567\n# 4  0.01716925      3   0.86061 0.92745 0.046606 # minimizer\n# 5  0.01398306      4   0.84344 0.92976 0.047514\n# 6  0.01394869      5   0.82946 0.93941 0.048404\n# 7  0.01055028      9   0.77120 0.97722 0.052133"
+  },
+  {
+    "objectID": "chap15.html#gbc-survival-tree-cv-result",
+    "href": "chap15.html#gbc-survival-tree-cv-result",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Survival Tree CV Result",
+    "text": "GBC: Survival Tree CV Result\n\nCV results and final tree\n\n\\(\\log(\\lambda_{\\rm opt}) = -4.1\\)"
+  },
+  {
+    "objectID": "chap15.html#gbc-km-curves-by-terminal-node",
+    "href": "chap15.html#gbc-km-curves-by-terminal-node",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: KM Curves by Terminal Node",
+    "text": "GBC: KM Curves by Terminal Node\n\n\nFinal tree"
+  },
+  {
+    "objectID": "chap15.html#gbc-oblique-random-survival-forests",
+    "href": "chap15.html#gbc-oblique-random-survival-forests",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Oblique Random Survival Forests",
+    "text": "GBC: Oblique Random Survival Forests\n\nFitting RSF\n\n\norsf_fit &lt;- orsf(\n  Surv(time, status) ~ hormone + age + meno + size + grade + nodes + prog + estrg,\n      data = train,\n      n_tree = 200,\n      ...\n)"
+  },
+  {
+    "objectID": "chap15.html#gbc-random-survival-forests",
+    "href": "chap15.html#gbc-random-survival-forests",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Random Survival Forests",
+    "text": "GBC: Random Survival Forests\n\nFitting RSF\n\n\norsf_fit &lt;- orsf(\n  Surv(time, status) ~ hormone + age + meno + size + grade + nodes + prog + estrg,\n      data = train,\n      n_tree = 200,\n      ...\n)\n\nprint(orsf_fit) \n#&gt; ---------- Oblique random survival forest\n#&gt;      Linear combinations: Accelerated Cox regression\n#&gt;           N observations: 400\n#&gt;                 N events: 174\n#&gt;                  N trees: 200\n#&gt;       N predictors total: 8\n#&gt;    N predictors per node: 3\n#&gt;  ...\n#&gt; -----------------------------------------"
+  },
+  {
+    "objectID": "chap15.html#gbc-rsf-results",
+    "href": "chap15.html#gbc-rsf-results",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: RSF Results",
+    "text": "GBC: RSF Results\n\nOOB performance and variable importance"
+  },
+  {
+    "objectID": "chap15.html#svm-for-classification",
+    "href": "chap15.html#svm-for-classification",
+    "title": "Applied Survival Analysis",
+    "section": "SVM for Classification",
+    "text": "SVM for Classification\n\nClassification of \\(Y \\in \\{1, -1\\}\\)\n\nLinearly separable case \\[\\begin{equation}\\label{eq:ml:hyperplane}\n\\left\\{\n\\begin{aligned}\n\\beta^\\T Z_i \\,+\\, b &\\,&gt;\\, 0 \\quad \\text{for all } Y_i = 1,\\\\[4pt]\n\\beta^\\T Z_i \\,+\\, b &\\,&lt;\\, 0 \\quad \\text{for all } Y_i = -1.\n\\end{aligned}\n\\right.\n\\end{equation}\\]\nHyperplane \\(\\beta^\\T Z + b = 0\\) separates two classes\nMargin: distance from hyperplane to nearest data point\nSVM: find hyperplane with maximum margin\nWLOS: normalizing coefficients and centering the hyperplane \\[\\begin{equation}\\label{eq:ml:hyperplane_margin}\n\\left\\{\n\\begin{aligned}\n\\beta^\\T Z_i \\,+\\, b &\\,\\ge\\, 1 \\quad \\text{for all } Y_i = 1,\\\\[4pt]\n\\beta^\\T Z_i \\,+\\, b &\\,\\le\\, -1 \\quad \\text{for all } Y_i = -1.\n\\end{aligned}\n\\right.\n\\end{equation}\\]\n\nDistance between hyperplanes: \\(2\\|\\beta\\|^{-1}\\)"
+  },
+  {
+    "objectID": "chap15.html#svm-maximum-margin",
+    "href": "chap15.html#svm-maximum-margin",
+    "title": "Applied Survival Analysis",
+    "section": "SVM: Maximum Margin",
+    "text": "SVM: Maximum Margin\n\nMaximum margin hyperplane\n\nLeft panel: \\[(\\hat\\beta, \\hat b)\n\\;=\\;\n\\arg\\min_{\\beta, b} \\|\\beta\\|^2\n\\quad\\text{subject to}\\quad\nY_i(\\beta^\\T Z_i + b) \\ge 1,\\;\\; i = 1,\\ldots,n\\]"
+  },
+  {
+    "objectID": "chap15.html#svm-linearly-inseparable-case",
+    "href": "chap15.html#svm-linearly-inseparable-case",
+    "title": "Applied Survival Analysis",
+    "section": "SVM: Linearly Inseparable Case",
+    "text": "SVM: Linearly Inseparable Case\n\nSoft margin SVM\n\nRight panel: allow misclassification through slack variables \\(\\zeta_i \\ge 0\\): \\[\\begin{align}\\label{eq:ml:svm_soft_margin}\n(\\hat\\beta, \\hat b)\n\\;=\\;&\n\\arg\\min_{\\beta, b,\\zeta} \\left\\{\\|\\beta\\|^2 \\,+\\, \\lambda\\sum_{i=1}^n\\zeta_i\\right\\}, \\notag\\\\\n&\\text{subject to}\\quad\n\\left\\{\n\\begin{aligned}\n&Y_i(\\beta^\\T Z_i + b) \\,\\ge\\, 1 - \\zeta_i,\\\\[4pt]\n&\\zeta_i \\,\\ge\\, 0,\n\\end{aligned}\n\\right.\n\\qquad i = 1,\\ldots,n\n\\end{align}\\]\n\nSupport vectors: data points with\n\n\\(\\zeta_i &gt; 0\\) (misclassified)\n\\(Y_i(\\hat\\beta^\\T Z_i + \\hat b) = 1\\) (on margin)"
+  },
+  {
+    "objectID": "chap15.html#svm-regression",
+    "href": "chap15.html#svm-regression",
+    "title": "Applied Survival Analysis",
+    "section": "SVM: Regression",
+    "text": "SVM: Regression\n\nSupport vector regression\n\nContinuous \\(Y\\): find hyperplane with \\(\\epsilon\\)-insensitive loss \\[\\begin{equation*}\n(\\hat\\beta, \\hat b)\n\\;=\\;\n\\arg\\min_{\\beta, b} \\|\\beta\\|^2\n\\quad\\text{subject to}\\quad\n|Y_i - (\\beta^\\T Z_i + b)| \\,\\le\\, \\varepsilon,\\;\\; i = 1,\\ldots,n\n\\end{equation*}\\]\nAllow for \\(\\epsilon\\)-insensitive slack variables \\(\\zeta_i^+, \\zeta_i^- \\ge 0\\) \\[\\begin{align}\\label{eq:ml:svm_soft_margin_reg}\n(\\hat\\beta, \\hat b)\n\\;=\\;&\n\\arg\\min_{\\beta, b, \\xi^+, \\xi^-}\n\\left\\{\n\\|\\beta\\|^2 \\,+\\,\n\\lambda\\sum_{i=1}^n(\\xi_i^+ + \\xi_i^-)\n\\right\\}, \\notag\\\\[3pt]\n&\\text{subject to}\\quad\n\\left\\{\n\\begin{aligned}\n&Y_i - (\\beta^\\T Z_i + b) \\,\\le\\, \\varepsilon + \\xi_i^+,\\\\[3pt]\n&(\\beta^\\T Z_i + b) - Y_i \\,\\le\\, \\varepsilon + \\xi_i^-,\\\\[3pt]\n&\\xi_i^+,\\,\\xi_i^- \\,\\ge\\, 0,\n\\end{aligned}\n\\right.\n\\qquad i = 1,\\ldots,n,\n\\end{align}\\]"
+  },
+  {
+    "objectID": "chap15.html#svm-regression-i",
+    "href": "chap15.html#svm-regression-i",
+    "title": "Applied Survival Analysis",
+    "section": "SVM: Regression (I)",
+    "text": "SVM: Regression (I)\n\nSupport vector regression\n\nContinuous \\(Y\\): find hyperplane with \\(\\epsilon\\)-insensitive loss \\[\\begin{equation*}\n(\\hat\\beta, \\hat b)\n\\;=\\;\n\\arg\\min_{\\beta, b} \\|\\beta\\|^2\n\\quad\\text{subject to}\\quad\n|Y_i - (\\beta^\\T Z_i + b)| \\,\\le\\, \\varepsilon,\\;\\; i = 1,\\ldots,n\n\\end{equation*}\\]\nAllow for \\(\\epsilon\\)-insensitive slack variables \\(\\zeta_i^+, \\zeta_i^- \\ge 0\\) \\[\\begin{align}\\label{eq:ml:svm_soft_margin_reg}\n(\\hat\\beta, \\hat b)\n\\;=\\;&\n\\arg\\min_{\\beta, b, \\xi^+, \\xi^-}\n\\left\\{\n\\|\\beta\\|^2 \\,+\\,\n\\lambda\\sum_{i=1}^n(\\xi_i^+ + \\xi_i^-)\n\\right\\}, \\notag\\\\[3pt]\n&\\text{subject to}\\quad\n\\left\\{\n\\begin{aligned}\n&Y_i - (\\beta^\\T Z_i + b) \\,\\le\\, \\varepsilon + \\xi_i^+,\\\\[3pt]\n&(\\beta^\\T Z_i + b) - Y_i \\,\\le\\, \\varepsilon + \\xi_i^-,\\\\[3pt]\n&\\xi_i^+,\\,\\xi_i^- \\,\\ge\\, 0,\n\\end{aligned}\n\\right.\n\\qquad i = 1,\\ldots,n\n\\end{align}\\]"
+  },
+  {
+    "objectID": "chap15.html#svm-regression-ii",
+    "href": "chap15.html#svm-regression-ii",
+    "title": "Applied Survival Analysis",
+    "section": "SVM: Regression (II)",
+    "text": "SVM: Regression (II)\n\nHard versus soft margin"
+  },
+  {
+    "objectID": "chap15.html#survival-svm",
+    "href": "chap15.html#survival-svm",
+    "title": "Applied Survival Analysis",
+    "section": "Survival SVM",
+    "text": "Survival SVM\n\nTwo perspectives\n\nRanking: order classification of comparable pairs \\[\n\\mathcal P \\;=\\; \\{(i, j):\\, \\delta_i = 1,\\, X_i &lt; X_j\\}.\n\\]\nRegression: predict survival time with censored data\n\nRanking SSVM\n\nClassification with soft margin \\[\\begin{align}\\label{eq:ml:svm_soft_margin_surv}\n\\hat\\beta\n\\;=\\;&\n\\arg\\min_{\\beta, \\zeta} \\|\\beta\\|^2 \\,+\\, \\lambda\\sum_{(i, j)\\in\\mathcal P} \\zeta_{ij}, \\notag\\\\\n&\\text{subject to}\\quad\n\\left\\{\n\\begin{aligned}\n&\\beta^\\T (Z_i - Z_j) \\,\\ge\\, 1 - \\zeta_{ij},\\\\[4pt]\n&\\zeta_{ij} \\,\\ge\\, 0,\n\\end{aligned}\n\\right.\n\\qquad (i, j)\\in\\mathcal P\n\\end{align}\\]"
+  },
+  {
+    "objectID": "chap15.html#survival-svm-i",
+    "href": "chap15.html#survival-svm-i",
+    "title": "Applied Survival Analysis",
+    "section": "Survival SVM (I)",
+    "text": "Survival SVM (I)\n\nTwo perspectives\n\nRanking: order classification of comparable pairs \\[\n\\mathcal P \\;=\\; \\{(i, j):\\, \\delta_i = 1,\\, X_i &lt; X_j\\}.\n\\]\nRegression: predict survival time with censored data\n\nRanking SSVM\n\nClassification with soft margin \\[\\begin{align}\\label{eq:ml:svm_soft_margin_surv}\n\\hat\\beta\n\\;=\\;&\n\\arg\\min_{\\beta, \\zeta} \\|\\beta\\|^2 \\,+\\, \\lambda\\sum_{(i, j)\\in\\mathcal P} \\zeta_{ij}, \\notag\\\\\n&\\text{subject to}\\quad\n\\left\\{\n\\begin{aligned}\n&\\beta^\\T (Z_i - Z_j) \\,\\ge\\, 1 - \\zeta_{ij},\\\\[4pt]\n&\\zeta_{ij} \\,\\ge\\, 0,\n\\end{aligned}\n\\right.\n\\qquad (i, j)\\in\\mathcal P\n\\end{align}\\]"
+  },
+  {
+    "objectID": "chap15.html#survival-svm-ii",
+    "href": "chap15.html#survival-svm-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Survival SVM (II)",
+    "text": "Survival SVM (II)\n\nRegression SSVM\n\nCensored observations \\(\\to\\) one-sided penalty \\[\\begin{align}\\label{eq:ml:svm_soft_margin_reg_surv}\n(\\hat\\beta, \\hat b)\n\\;=\\;&\n\\arg\\min_{\\beta, b, \\xi^+, \\xi^-}\n\\left\\{\n\\|\\beta\\|^2 \\,+\\,\n\\lambda\\sum_{i=1}^n(\\xi_i^+ + \\xi_i^-)\n\\right\\}, \\notag\\\\[3pt]\n&\\text{subject to}\\quad\n\\left\\{\n\\begin{aligned}\n&X_i - (\\beta^\\T Z_i + b) \\,\\le\\, \\xi_i^+,\\\\[3pt]\n&\\delta_i\\{\\beta^\\T Z_i + b - X_i\\} \\,\\le\\, \\xi_i^-,\\\\[3pt]\n&\\xi_i^+,\\,\\xi_i^- \\,\\ge\\, 0,\n\\end{aligned}\n\\right.\n\\qquad i = 1,\\ldots,n\n\\end{align}\\]"
+  },
+  {
+    "objectID": "chap15.html#survival-svm-iii",
+    "href": "chap15.html#survival-svm-iii",
+    "title": "Applied Survival Analysis",
+    "section": "Survival SVM (III)",
+    "text": "Survival SVM (III)\n\nHybrid approach\n\nCombines ranking and regression objective functions and penalties \\[\\begin{align}\\label{eq:ml:svm_soft_margin_hybrid_surv}\n(\\hat\\beta, \\hat b)\n\\;=\\;&\n\\arg\\min_{\\beta, b, \\zeta, \\xi^+, \\xi^-}\n\\left\\{\n\\|\\beta\\|^2\n\\,+\\,\n\\mu\\sum_{(i,j)\\in\\mathcal P} \\zeta_{ij}\n\\,+\\,\n\\gamma\\sum_{i=1}^n(\\xi_i^+ + \\xi_i^-)\n\\right\\}, \\notag\\\\[3pt]\n&\\text{subject to}\\quad\n\\left\\{\n\\begin{aligned}\n&\\beta^\\T (Z_i - Z_j) \\,\\ge\\, 1 - \\zeta_{ij},\\\\[2pt]\n&\\zeta_{ij} \\,\\ge\\, 0,\n\\end{aligned}\n\\right.\n\\qquad (i, j)\\in\\mathcal P, \\notag\\\\[4pt]\n&\\quad\\quad\\;\\text{and}\\quad\n\\left\\{\n\\begin{aligned}\n&X_i - (\\beta^\\T Z_i + b) \\,\\le\\, \\xi_i^+,\\\\[3pt]\n&\\delta_i\\{\\beta^\\T Z_i + b - X_i\\} \\,\\le\\, \\xi_i^-,\\\\[3pt]\n&\\xi_i^+,\\,\\xi_i^- \\,\\ge\\, 0,\n\\end{aligned}\n\\right.\n\\qquad i = 1,\\ldots,n.\n\\end{align}\\]"
+  },
+  {
+    "objectID": "chap15.html#the-kernel-trick",
+    "href": "chap15.html#the-kernel-trick",
+    "title": "Applied Survival Analysis",
+    "section": "The Kernel Trick",
+    "text": "The Kernel Trick\n\nNonlinear SVM\n\nMap covariates to high-dimensional space: \\(z\\mapsto \\phi(z)\\)\nUse kernel function \\(K(z, z') = \\langle \\phi(z), \\phi(z')\\rangle\\) to compute inner products\nCommon kernels: linear, polynomial, radial basis function (RBF)"
+  },
+  {
+    "objectID": "chap15.html#software-survivalsvmsurvivalsvm",
+    "href": "chap15.html#software-survivalsvmsurvivalsvm",
+    "title": "Applied Survival Analysis",
+    "section": "Software: survivalsvm::survivalsvm()",
+    "text": "Software: survivalsvm::survivalsvm()\n\nBasic syntax for fitting survival SVM\n\ntype: “ranking”, “regression”, or “hybrid”\nkernel: “linear”, “polynomial”, or “radial”\ngamma.mu: tuning parameters \\(\\gamma\\) and \\(\\mu\\) for hybrid SVM\n\n\n\nlibrary(survivalsvm)\n# Fit a regression SVM with linear kernel\nfit &lt;- survivalsvm(\n  Surv(time, status) ~ covariates, \n  type = \"regression\",\n  kernel = \"linear\",\n  gamma.mu = 1       # may need to be tuned manually\n)"
+  },
+  {
+    "objectID": "chap15.html#software-survivalsvmsurvivalsvm-i",
+    "href": "chap15.html#software-survivalsvmsurvivalsvm-i",
+    "title": "Applied Survival Analysis",
+    "section": "Software: survivalsvm::survivalsvm() (I)",
+    "text": "Software: survivalsvm::survivalsvm() (I)\n\nBasic syntax for fitting survival SVM\n\ntype: “ranking”, “regression”, or “hybrid”\nkernel: “linear”, “polynomial”, or “radial”\ngamma.mu: tuning parameters \\(\\gamma\\) and \\(\\mu\\) for hybrid SVM\n\n\n\nlibrary(survivalsvm)\n# Fit a regression SVM with linear kernel\nfit &lt;- survivalsvm(\n  Surv(time, status) ~ covariates, \n  type = \"regression\",\n  kernel = \"linear\",\n  gamma.mu = 1       # may need to be tuned manually\n)"
+  },
+  {
+    "objectID": "chap15.html#software-survivalsvmsurvivalsvm-ii",
+    "href": "chap15.html#software-survivalsvmsurvivalsvm-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Software: survivalsvm::survivalsvm() (II)",
+    "text": "Software: survivalsvm::survivalsvm() (II)\n\nPredict risk scores\n\n\n# Predict risk scores for test set (&lt;test_scaled&gt;)\npred_svm &lt;- predict(\n  object  = fit,\n  newdata = test\n)\n\n# Extract predicted scores\npred_svm$predicted"
+  },
+  {
+    "objectID": "chap15.html#gbc-fitting-ssvm",
+    "href": "chap15.html#gbc-fitting-ssvm",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Fitting SSVM",
+    "text": "GBC: Fitting SSVM\n\nRegression with linear kernel\n\nFeature importance computed from CV samples"
+  },
+  {
+    "objectID": "chap15.html#gbc-model-evaluations",
+    "href": "chap15.html#gbc-model-evaluations",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Model Evaluations",
+    "text": "GBC: Model Evaluations\n\nPrediction performance on test data (\\(n^*=286\\))"
+  },
+  {
+    "objectID": "chap15.html#gbc-model-evaluations-1",
+    "href": "chap15.html#gbc-model-evaluations-1",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Model Evaluations",
+    "text": "GBC: Model Evaluations\n\nPrediction performance on test data (\\(n^*=286\\))"
+  },
+  {
+    "objectID": "chap15.html#gbc-models-fitted",
+    "href": "chap15.html#gbc-models-fitted",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Models Fitted",
+    "text": "GBC: Models Fitted\n\nModels\n\nFull Cox model with all predictors\n“Inadequate” Cox model excluding prog and nodes\nLasso-regularized Cox model\nSurvival tree\nRandom survival forest\nSurvival SVM"
+  },
+  {
+    "objectID": "chap15.html#gbc-model-evaluations---brier-score",
+    "href": "chap15.html#gbc-model-evaluations---brier-score",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Model Evaluations - Brier Score",
+    "text": "GBC: Model Evaluations - Brier Score\n\nBrier score over time"
+  },
+  {
+    "objectID": "chap15.html#gbc-brier-score",
+    "href": "chap15.html#gbc-brier-score",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Brier Score",
+    "text": "GBC: Brier Score\n\nBrier score over time"
+  },
+  {
+    "objectID": "chap15.html#overview-of-tidymodels-and-censored",
+    "href": "chap15.html#overview-of-tidymodels-and-censored",
+    "title": "Applied Survival Analysis",
+    "section": "Overview of tidymodels and censored",
+    "text": "Overview of tidymodels and censored\n\ntidymodels: a collection of packages for modeling and machine learning in R\n\nProvides a consistent interface for model training, tuning, and evaluation\n\nKey package parsnip\n\nSupports various model types, including regression, classification, and survival analysis\n\ncensored: a parsnip extension package for survival data\n\nImplements parametric, semiparametric, and tree-based survival models"
+  },
+  {
+    "objectID": "chap15.html#data-preparation-and-splitting",
+    "href": "chap15.html#data-preparation-and-splitting",
+    "title": "Applied Survival Analysis",
+    "section": "Data Preparation and Splitting",
+    "text": "Data Preparation and Splitting\n\nCreate a Surv object as response\n\nSurv(time, event)\n\n\n\nlibrary(tidymodels)\nlibrary(censored)\ndf &lt;- df |&gt;  \n  mutate(\n    surv_obj = Surv(time, event), # create Surv object as response variable\n    .keep = \"unused\"              # discard original time and event columns\n  )\n\n\nData splitting\n\ninitial_split(): splits data into training and testing sets\n\n\n\ndf_split &lt;- initial_split(flight_data, prop = 3/4) # default ratio 3:1\ndf_train &lt;- training(df_split) # obtain training set"
+  },
+  {
+    "objectID": "chap15.html#model-specification",
+    "href": "chap15.html#model-specification",
+    "title": "Applied Survival Analysis",
+    "section": "Model Specification",
+    "text": "Model Specification\n\nModel type\n\nsurvival_reg(): parametric AFT models\nproportional_hazards(penalty = tune()): (regularized) Cox PH models\ndecision_tree(cost_complexity = tune()): decision trees\nrand_forest(mtry = tune()): orandom forests\n\nSet engine and mode\n\nset_engine(\"survival\"): for parametric AFT models\nset_engine(\"glmnet\"): for Cox PH models\nset_engine(\"aorsf\"): for blique random forests\nset_mode(\"censored regression\"): for survival models"
+  },
+  {
+    "objectID": "chap15.html#model-specification-i",
+    "href": "chap15.html#model-specification-i",
+    "title": "Applied Survival Analysis",
+    "section": "Model Specification (I)",
+    "text": "Model Specification (I)\n\nModel type\n\nsurvival_reg(): parametric AFT models\nproportional_hazards(penalty = tune()): (regularized) Cox PH models\ndecision_tree(cost_complexity = tune()): decision trees\nrand_forest(mtry = tune()): orandom forests\n\nSet engine and mode\n\nset_engine(\"survival\"): for parametric AFT models\nset_engine(\"glmnet\"): for Cox PH models\nset_engine(\"aorsf\"): for blique random forests\nset_mode(\"censored regression\"): for survival models"
+  },
+  {
+    "objectID": "chap15.html#model-specification-ii",
+    "href": "chap15.html#model-specification-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Model Specification (II)",
+    "text": "Model Specification (II)\n\nExample: regularized Cox model using glmnet\n\n\n# Regularized Cox model \nmodel_spec &lt;- proportional_hazards(penalty = tune()) |&gt;  # tune lambda\n  set_engine(\"glmnet\") |&gt;  # set engine to glmnet\n  set_mode(\"censored regression\") # set mode to censored regression"
+  },
+  {
+    "objectID": "chap15.html#recipe-and-workflow",
+    "href": "chap15.html#recipe-and-workflow",
+    "title": "Applied Survival Analysis",
+    "section": "Recipe and Workflow",
+    "text": "Recipe and Workflow\n\nRecipe: a series of preprocessing steps for the data\n\nrecipe(response ~ ., data = df): specify response and predictors\nstep_mutate(): standardize numeric predictors  \nstep_dummy(): convert categorical variables to dummy variables \n\nWorkflow: combines model specification and recipe\n\nworkflow() |&gt; add_model(model_spec) |&gt; add_recipe(recipe)"
+  },
+  {
+    "objectID": "chap15.html#recipe-and-workflow---example",
+    "href": "chap15.html#recipe-and-workflow---example",
+    "title": "Applied Survival Analysis",
+    "section": "Recipe and Workflow - Example",
+    "text": "Recipe and Workflow - Example\n\nExample: regularized Cox model with data preprocessing steps\n\n\n# Create a recipe\nmodel_recipe &lt;- recipe(surv_obj ~ ., data = df_train) |&gt; # specify formula\n  step_mutate(z1 = z1 / 1000) |&gt;  # standardize z1  \n  # group levels with prop &lt; .02 into \"other\"\n  step_other(z2, z3, threshold = 0.02) |&gt; \n  # convert categorical WWto dummy variables\n  step_dummy(all_nominal_predictors())  \n\n# Create a workflow by combining model and recipe\nmodel_wflow &lt;- workflow() |&gt; \n  add_model(model_spec) |&gt;   # add model specification\n  add_recipe(model_recipe)   # add recipe"
+  },
+  {
+    "objectID": "chap15.html#model-specification---example",
+    "href": "chap15.html#model-specification---example",
+    "title": "Applied Survival Analysis",
+    "section": "Model Specification - Example",
+    "text": "Model Specification - Example\n\nExample: regularized Cox model using glmnet\n\n\n# Regularized Cox model \nmodel_spec &lt;- proportional_hazards(penalty = tune()) |&gt;  # tune lambda\n  set_engine(\"glmnet\") |&gt;  # set engine to glmnet\n  set_mode(\"censored regression\") # set mode to censored regression"
+  },
+  {
+    "objectID": "chap15.html#tune-hyperparameters",
+    "href": "chap15.html#tune-hyperparameters",
+    "title": "Applied Survival Analysis",
+    "section": "Tune Hyperparameters",
+    "text": "Tune Hyperparameters\n\nCross-validation\n\ndf_train_folds &lt;- vfold_cv(df_train, v = k): create k-folds on training data (default 10)\ntune_grid(model_wflow, resamples = df_train_folds): tuning\n\n\n\n# k-fold cross-validation\ndf_train_folds &lt;- vfold_cv(df_train, v = 10) # 10-fold cross-validation\n# Tune hyperparameters\nmodel_res &lt;- tune_grid(\n  model_wflow, \n  resamples = df_train_folds, \n  grid = 10, # number of hyperparameter combinations to try\n  metrics = metric_set(brier_survival, brier_survival_integrated,  \n                       roc_auc_survival, concordance_survival), # specify metrics\n  eval_time = seq(0, 84, by = 12) # evaluation time points\n)"
+  },
+  {
+    "objectID": "chap15.html#finalize-workflow",
+    "href": "chap15.html#finalize-workflow",
+    "title": "Applied Survival Analysis",
+    "section": "Finalize Workflow",
+    "text": "Finalize Workflow\n\nExamine validation results\n\ncollect_metrics(model_res): collect metrics from tuning results\nshow_best(model_res, metric = \"brier_survival_integrated\", n = 5): show top 5 models based on IBS\n\nWorkflow for best model\n\nparam_best &lt;- select_best(model_res, metric = \"brier_survival_integrated\"): select best hyperparameters based on Brier score\nfinal_wl &lt;- finalize_workflow(model_wflow, param_best): finalize workflow with best hyperparameters"
+  },
+  {
+    "objectID": "chap15.html#finalize-workflow---example",
+    "href": "chap15.html#finalize-workflow---example",
+    "title": "Applied Survival Analysis",
+    "section": "Finalize Workflow - Example",
+    "text": "Finalize Workflow - Example\n\nExample: select best hyperparameters based on Brier score and finalize workflow\n\n\n# Extract the best hyperparameters based on Brier score\nparam_best &lt;- select_best(model_res, metric = \"brier_survival_integrated\")\n\n# Finalize the workflow with the best hyperparameters\nfinal_wl &lt;- model_wflow |&gt; finalize_workflow(param_best)"
+  },
+  {
+    "objectID": "chap15.html#fit-final-model",
+    "href": "chap15.html#fit-final-model",
+    "title": "Applied Survival Analysis",
+    "section": "Fit Final Model",
+    "text": "Fit Final Model\n\nFit the finalized workflow\n\nfinal_mod &lt;- last_fit(final_wl, split = df_split): fit the finalized workflow on the testing set\ncollect_metrics(final_mod): collect metrics of final model on test data\n\nMake predictions\n\npredict(final_mod, new_data = new_data, type = \"time\"): predict survival times on new data"
+  },
+  {
+    "objectID": "chap15.html#fit-final-model---example",
+    "href": "chap15.html#fit-final-model---example",
+    "title": "Applied Survival Analysis",
+    "section": "Fit Final Model - Example",
+    "text": "Fit Final Model - Example\n\nExample: fit the finalized workflow on the testing set, evaluate performance, and make predictions on new data\n\n\n# Fit the finalized workflow on the testing set\nfinal_mod &lt;- last_fit(final_wl, split = df_split)\n\n# Collect metrics of final model on test data\ncollect_metrics(final_mod) %&gt;% \n  filter(.metric == \"brier_survival_integrated\")\n\n# Make predictions on new data\nnew_data &lt;- testing(df_split) |&gt;  slice(1:5) # take first 5 rows of test data\npredict(final_mod, new_data = new_data, type = \"time\")"
+  },
+  {
+    "objectID": "chap15.html#gbc-relapse-free-survival",
+    "href": "chap15.html#gbc-relapse-free-survival",
+    "title": "Applied Survival Analysis",
+    "section": "GBC: Relapse-Free Survival",
+    "text": "GBC: Relapse-Free Survival\n\nTime to first event\n\n\nlibrary(tidymodels) # load tidymodels\nlibrary(censored)\ngbc &lt;- read.table(\"Data/German Breast Cancer Study/gbc.txt\", header = TRUE) # Load GBC dataset\ndf &lt;- gbc |&gt;  # calculate time to first event (relapse or death)\n  group_by(id) |&gt; # group by id\n  arrange(time) |&gt; # sort rows by time\n  slice(1) |&gt;      # get the first row within each id\n  ungroup() |&gt; \n  mutate(\n    surv_obj = Surv(time, status), # create the Surv object as response variable\n    .after = id, # keep id column after surv_obj\n    .keep = \"unused\" # discard original time and status columns\n  )"
+  },
+  {
+    "objectID": "chap15.html#data-preparation",
+    "href": "chap15.html#data-preparation",
+    "title": "Applied Survival Analysis",
+    "section": "Data Preparation",
+    "text": "Data Preparation\n\nAnalysis dataset\n\n\nhead(df) # show the first few rows of the dataset\n\n# A tibble: 6 × 10\n     id   surv_obj hormone   age  meno  size grade nodes  prog estrg\n  &lt;int&gt;     &lt;Surv&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;\n1     1 43.836066        1    38     1    18     3     5   141   105\n2     2 46.557377        1    52     1    20     1     1    78    14\n3     3 41.934426        1    47     1    30     2     1   422    89\n4     4  4.852459+       1    40     1    24     1     3    25    11\n5     5 61.081967+       2    64     2    19     2     1    19     9\n6     6 63.377049+       2    49     2    56     1     3   356    64\n\n\n\n# Data splitting\nset.seed(123) # set seed for reproducibility\ngbc_split &lt;- initial_split(df) # split data into training and testing sets\ngbc_split \n\n&lt;Training/Testing/Total&gt;\n&lt;514/172/686&gt;"
+  },
+  {
+    "objectID": "chap15.html#models-to-be-trained",
+    "href": "chap15.html#models-to-be-trained",
+    "title": "Applied Survival Analysis",
+    "section": "Models to be Trained",
+    "text": "Models to be Trained\n\nRegularized Cox model\n\nproportional_hazards(penalty = tune()) (Default: \\(\\alpha = 1\\); lasso)\nTune penalty parameter \\(\\lambda\\)\nUse glmnet engine for fitting\n\nRandom forest\n\nrand_forest(mtry = tune(), min_n = tune())\nTune number of predictors to split on and minimum size of terminal node\nUse aorsf engine for fitting\n\n\n\n# Training data\ngbc_train &lt;- training(gbc_split) # obtain training set"
+  },
+  {
+    "objectID": "chap15.html#common-recipe",
+    "href": "chap15.html#common-recipe",
+    "title": "Applied Survival Analysis",
+    "section": "Common Recipe",
+    "text": "Common Recipe\n\nRecipe for both models   \n\n\ngbc_recipe &lt;- recipe(surv_obj ~ ., data = gbc_train) |&gt; # specify formula\n  step_mutate(\n    grade = factor(grade),\n    age40 = as.numeric(age &gt;= 40), # create a binary variable for age &gt;= 40\n    prog = prog / 100, # rescale prog\n    estrg = estrg / 100 # rescale estrg\n  ) |&gt; \n  step_dummy(grade) |&gt; \n  step_rm(id) # remove id\n# gbc_recipe # print recipe information"
+  },
+  {
+    "objectID": "chap15.html#regularized-cox-model",
+    "href": "chap15.html#regularized-cox-model",
+    "title": "Applied Survival Analysis",
+    "section": "Regularized Cox Model",
+    "text": "Regularized Cox Model\n\nCox model specification and workflow\n\n\n# Regularized Cox model specification\ncox_spec &lt;- proportional_hazards(penalty = tune()) |&gt;  # tune lambda\n  set_engine(\"glmnet\") |&gt;  # set engine to glmnet\n  set_mode(\"censored regression\") # set mode to censored regression\ncox_spec # print model specification\n\nProportional Hazards Model Specification (censored regression)\n\nMain Arguments:\n  penalty = tune()\n\nComputational engine: glmnet \n\n# Create a workflow by combining model and recipe\ncox_wflow &lt;- workflow() |&gt; \n  add_model(cox_spec) |&gt;   # add model specification\n  add_recipe(gbc_recipe)   # add recipe"
+  },
+  {
+    "objectID": "chap15.html#model-tuning",
+    "href": "chap15.html#model-tuning",
+    "title": "Applied Survival Analysis",
+    "section": "Model Tuning",
+    "text": "Model Tuning\n\nCross-validation set-up\n\n\nset.seed(123) # set seed for reproducibility\ngbc_folds &lt;- vfold_cv(gbc_train, v = 10) # 10-fold cross-validation\n# Set evaulation metrics\ngbc_metrics &lt;- metric_set(brier_survival, brier_survival_integrated, \n                          roc_auc_survival, concordance_survival)\ngbc_metrics # evaluation metrics info\n\nA metric set, consisting of:\n- `brier_survival()`, a dynamic survival metric               | direction:\nminimize\n- `brier_survival_integrated()`, a integrated survival metric | direction:\nminimize\n- `roc_auc_survival()`, a dynamic survival metric             | direction:\nmaximize\n- `concordance_survival()`, a static survival metric          | direction:\nmaximize\n\ntime_points &lt;- seq(0, 84, by = 12) # evaluation time points"
+  },
+  {
+    "objectID": "chap15.html#cox-model-tuning",
+    "href": "chap15.html#cox-model-tuning",
+    "title": "Applied Survival Analysis",
+    "section": "Cox Model Tuning",
+    "text": "Cox Model Tuning\n\nTune the regularized Cox model\n\nUse tune_grid() to perform hyperparameter tuning\nEvaluate performance using Brier score and ROC AUC\n\n\n\nset.seed(123) # set seed for reproducibility\n# Tune the regularized Cox model (this will take some time)\ncox_res &lt;- tune_grid(\n  cox_wflow, \n  resamples = gbc_folds, \n  grid = 10, # number of hyperparameter combinations to try\n  metrics = gbc_metrics, # evaluation metrics\n  eval_time = time_points, # evaluation time points\n  control = control_grid(save_workflow = TRUE) # save workflow\n)"
+  },
+  {
+    "objectID": "chap15.html#cox-model-tuning-results",
+    "href": "chap15.html#cox-model-tuning-results",
+    "title": "Applied Survival Analysis",
+    "section": "Cox Model Tuning Results",
+    "text": "Cox Model Tuning Results\n\nPlot IBS as function of \\(\\log\\lambda\\)"
+  },
+  {
+    "objectID": "chap15.html#best-cox-models",
+    "href": "chap15.html#best-cox-models",
+    "title": "Applied Survival Analysis",
+    "section": "Best Cox Models",
+    "text": "Best Cox Models\n\nShow best models\n\nBased on Brier score\n\n\nshow_best(cox_res, metric = \"brier_survival_integrated\", n = 5) # top 5 models\n\n# A tibble: 5 × 8\n   penalty .metric             .estimator .eval_time  mean     n std_err .config\n     &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  \n1 2.92e- 3 brier_survival_int… standard           NA 0.160    10 0.00765 pre0_m…\n2 1.15e-10 brier_survival_int… standard           NA 0.160    10 0.00775 pre0_m…\n3 1.44e- 9 brier_survival_int… standard           NA 0.160    10 0.00775 pre0_m…\n4 1.30e- 8 brier_survival_int… standard           NA 0.160    10 0.00775 pre0_m…\n5 1.17e- 7 brier_survival_int… standard           NA 0.160    10 0.00775 pre0_m…"
+  },
+  {
+    "objectID": "chap15.html#random-forest-model",
+    "href": "chap15.html#random-forest-model",
+    "title": "Applied Survival Analysis",
+    "section": "Random Forest Model",
+    "text": "Random Forest Model\n\nRandom forest specification and workflow\n\n\n# Random forest model specification\nrf_spec &lt;- rand_forest(mtry = tune(), min_n = tune()) |&gt;  # tune mtry and min_n\n  set_engine(\"aorsf\") |&gt;  # set engine to aorsf\n  set_mode(\"censored regression\") # set mode to censored regression\nrf_spec # print model specification\n\nRandom Forest Model Specification (censored regression)\n\nMain Arguments:\n  mtry = tune()\n  min_n = tune()\n\nComputational engine: aorsf \n\n# Create a workflow by combining model and recipe\nrf_wflow &lt;- workflow() |&gt; \n  add_model(rf_spec) |&gt;   # add model specification\n  add_recipe(gbc_recipe)   # add recipe"
+  },
+  {
+    "objectID": "chap15.html#random-forest-tuning",
+    "href": "chap15.html#random-forest-tuning",
+    "title": "Applied Survival Analysis",
+    "section": "Random Forest Tuning",
+    "text": "Random Forest Tuning\n\nTune the random forest model\n\nSimilar to Cox model tuning\n\n\n\nset.seed(123) # set seed for reproducibility\n# Tune the random forest model (this will take some time)\nrf_res &lt;- tune_grid(\n  rf_wflow, \n  resamples = gbc_folds, \n  grid = 10, # number of hyperparameter combinations to try\n  metrics = gbc_metrics, # evaluation metrics\n  eval_time = time_points # evaluation time points\n)"
+  },
+  {
+    "objectID": "chap15.html#random-forest-tuning-results",
+    "href": "chap15.html#random-forest-tuning-results",
+    "title": "Applied Survival Analysis",
+    "section": "Random Forest Tuning Results",
+    "text": "Random Forest Tuning Results\n\nView validation results\n\n\ncollect_metrics(rf_res) |&gt; head()   # collect metrics from tuning results\n\n# A tibble: 6 × 9\n   mtry min_n .metric         .estimator .eval_time   mean     n std_err .config\n  &lt;int&gt; &lt;int&gt; &lt;chr&gt;           &lt;chr&gt;           &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  \n1     1    14 brier_survival  standard            0 0         10 0       pre0_m…\n2     1    14 roc_auc_surviv… standard            0 0.5       10 0       pre0_m…\n3     1    14 brier_survival  standard           12 0.0643    10 0.00748 pre0_m…\n4     1    14 roc_auc_surviv… standard           12 0.838     10 0.0312  pre0_m…\n5     1    14 brier_survival  standard           24 0.165     10 0.0103  pre0_m…\n6     1    14 roc_auc_surviv… standard           24 0.753     10 0.0470  pre0_m…"
+  },
+  {
+    "objectID": "chap15.html#best-random-forest-models",
+    "href": "chap15.html#best-random-forest-models",
+    "title": "Applied Survival Analysis",
+    "section": "Best Random Forest Models",
+    "text": "Best Random Forest Models\n\nShow best models\n\nBased on Brier score\n\n\n\nshow_best(rf_res, metric = \"brier_survival_integrated\", n = 5) # top 5 models\n\n# A tibble: 5 × 9\n   mtry min_n .metric          .estimator .eval_time  mean     n std_err .config\n  &lt;int&gt; &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  \n1     5    35 brier_survival_… standard           NA 0.155    10 0.00775 pre0_m…\n2     8    40 brier_survival_… standard           NA 0.155    10 0.00745 pre0_m…\n3     7    23 brier_survival_… standard           NA 0.155    10 0.00758 pre0_m…\n4    10    27 brier_survival_… standard           NA 0.156    10 0.00731 pre0_m…\n5     4    18 brier_survival_… standard           NA 0.156    10 0.00795 pre0_m…\n\n\n\nConclusion\n\nBest RF model has lower Brier score than best Cox model"
+  },
+  {
+    "objectID": "chap15.html#finalize-and-fit-best-model",
+    "href": "chap15.html#finalize-and-fit-best-model",
+    "title": "Applied Survival Analysis",
+    "section": "Finalize and Fit Best Model",
+    "text": "Finalize and Fit Best Model\n\nFit final RF model\n\n\n# Select best RF hyperparameters (mtry, min_n) based on Brier score\nparam_best &lt;- select_best(rf_res, metric = \"brier_survival_integrated\") \nparam_best # view results\n\n# A tibble: 1 × 3\n   mtry min_n .config         \n  &lt;int&gt; &lt;int&gt; &lt;chr&gt;           \n1     5    35 pre0_mod05_post0\n\nrf_final_wflow &lt;- finalize_workflow(rf_wflow, param_best) # Finalize workflow\n# Fit the finalized workflow on the testing set\nset.seed(123) # set seed for reproducibility\nfinal_rf_fit &lt;- last_fit(\n  rf_final_wflow, \n  split = gbc_split, # use the original split\n  metrics = gbc_metrics, # evaluation metrics\n  eval_time = time_points # evaluation time points\n)"
+  },
+  {
+    "objectID": "chap15.html#test-performance-i",
+    "href": "chap15.html#test-performance-i",
+    "title": "Applied Survival Analysis",
+    "section": "Test Performance (I)",
+    "text": "Test Performance (I)\n\nCollect metrics on test data\n\n\ncollect_metrics(final_rf_fit) |&gt; # collect overall performance metrics\n  filter(.metric %in% c(\"concordance_survival\", \"brier_survival_integrated\")) \n\n# A tibble: 2 × 5\n  .metric                   .estimator .eval_time .estimate .config        \n  &lt;chr&gt;                     &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;          \n1 brier_survival_integrated standard           NA     0.235 pre0_mod0_post0\n2 concordance_survival      standard           NA     0.655 pre0_mod0_post0\n\n# Extract test ROC AUC over time\nroc_test &lt;- collect_metrics(final_rf_fit) |&gt;  \n  filter(.metric == \"roc_auc_survival\") |&gt;  # filter for ROC AUC\n  rename(mean = .estimate) # rename mean column"
+  },
+  {
+    "objectID": "chap15.html#test-performance-ii",
+    "href": "chap15.html#test-performance-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Test Performance (II)",
+    "text": "Test Performance (II)\n\nPlot test ROC AUC over time"
+  },
+  {
+    "objectID": "chap15.html#prediction-by-final-rf-model",
+    "href": "chap15.html#prediction-by-final-rf-model",
+    "title": "Applied Survival Analysis",
+    "section": "Prediction by Final RF Model",
+    "text": "Prediction by Final RF Model\n\nExtract the fitted workflow\n\nUse extract_workflow() to get the final model\n\n\n\ngbc_rf &lt;- extract_workflow(final_rf_fit) # extract the fitted workflow\n# Predict on new data\ngbc_5 &lt;- testing(gbc_split) |&gt;  slice(1:5) # take first 5 rows of test data\npredict(gbc_rf, new_data = gbc_5, type = \"time\") # predict survival times\n\n# A tibble: 5 × 1\n  .pred_time\n       &lt;dbl&gt;\n1       48.2\n2       66.4\n3       66.2\n4       36.6\n5       49.7"
+  },
+  {
+    "objectID": "chap15.html#survival-tree-exercise",
+    "href": "chap15.html#survival-tree-exercise",
+    "title": "Applied Survival Analysis",
+    "section": "Survival Tree Exercise",
+    "text": "Survival Tree Exercise\n\nTask: fit a survival tree model to the GBC data\n\nUse decision_tree() with set_engine(\"rpart\")\nTune complexity parameter cost_complexity using tune()\nUse the same recipe as for Cox and RF models\nEvaluate performance using Brier score and ROC AUC"
+  },
+  {
+    "objectID": "chap15.html#summary-i",
+    "href": "chap15.html#summary-i",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (I)",
+    "text": "Summary (I)\n\nRegularized Cox model\n\nElastic net \\[\nQ_n(\\beta;\\lambda) = \\ell_n(\\beta) - \\lambda\\left\\{\\alpha\\|\\beta\\|_1 + (1-\\alpha)\\|\\beta\\|_2^2/2\\right\\}\n\\]\n\nglmnet::glmnet(Z, Surv(time, status), family =  “cox”, alpha = 1)\n\n\nSurvival trees\n\nRoot node \\(\\to\\) recursive partitioning based on similarity in outcome \\(\\to\\) pruning to prevent overfitting\n\nrpart:: rpart(Surv(time, status) ~ covariates)"
+  },
+  {
+    "objectID": "chap15.html#summary-ii",
+    "href": "chap15.html#summary-ii",
+    "title": "Applied Survival Analysis",
+    "section": "Summary (II)",
+    "text": "Summary (II)\n\nRandom survival forests\n\nEnsemble of survival trees with random feature selection and bootstrap\n\naorsf:: aorsf(Surv(time, status) ~ covariates, n_tree = 200)\n\n\nSurvival SVM\n\nExtension of SVM for survival data using ranking or regression approaches\n\nR’s tidymodels system\n\nA consistent interface for model training, tuning, and evaluation\ncensored package extends parsnip for survival models"
   }
 ]

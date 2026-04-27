@@ -30,7 +30,7 @@ include-in-header:
 
 4.  Survival surport vector machines
 
-3.  Building prediction models for German Breast Cancer study
+5.  R's Tidymodels system
 :::
 
 $$\newcommand{\d}{{\rm d}}$$ $$\newcommand{\T}{{\rm T}}$$ $$\newcommand{\dd}{{\rm d}}$$ $$\newcommand{\cc}{{\rm c}}$$ $$\newcommand{\pr}{{\rm pr}}$$ $$\newcommand{\var}{{\rm var}}$$ $$\newcommand{\se}{{\rm se}}$$ $$\newcommand{\indep}{\perp \!\!\! \perp}$$ $$\newcommand{\Pn}{n^{-1}\sum_{i=1}^n}$$ $$
@@ -412,7 +412,7 @@ beta <- coef(obj.cv, s = "lambda.min")
     -   **Cohort**: 686 breast cancer patients\
     -   **Outcome**: relapse-free survival
     -   **Predictors**: age ($\leq$ 40 vs \>40), menopausal status, hormone treatment, tumor grade, tumor size, lymph nodes, estrogen and progesterone receptor levels
-    -   Training set ($n=400$) + test set ($n=286$)
+    -   Training set ($n=400$) + test set ($n^*=286$)
 
 ```{r}
 #| eval: false
@@ -616,6 +616,7 @@ rpart.plot(fit)
 # fit$where: vector of terminal node for training data
 # compute KM estimates by terminal node
 km <- survfit(Surv(time, status) ~ fit$where)
+
 ## prediction on test data ---------------------------
 # terminal node for test data
 treeClust::rpart.predict.leaves(fit, test) 
@@ -624,28 +625,60 @@ treeClust::rpart.predict.leaves(fit, test)
 ::::
 
 
-## Software: `aorsf:orsf()`
+## Software: `aorsf:orsf()` (I)
 
 - **Oblique random survival forests**
-
+    - `mtry`: number of covariates randomly selected at each split
+    
 ::: big-code
 ```{r}
 #| eval: false
 #| echo: true
-# grow the tree, with cross-validation
-obj <- rpart(Surv(time, status) ~ covariates, 
-    control = rpart.control(xval = 10, minbucket = 2, cp = 0))
-# cross-validation results
-cptable <- obj$cptable
-# complexity parameter (lambda)
-CP <- cptable[, 1] 
-# find optimal parameter
-# cptable[, 4]: error function
-cp.opt <- CP[which.min(cptable[, 4])] 
+library(aorsf)
+# Fit a basic oblique random survival forest on training data
+set.seed(12345) # for reproducibility
+fit <- orsf(
+  Surv(<time>, <status>) ~ covariates, 
+  # Optional arguments:
+      # Forest size
+        n_tree = 500,
+      # Number of covariates randomly selected at each split
+        mtry = ceiling(sqrt(p)),
+         ...
+)
 ```
 :::
 
-## GBC: Survival Trees
+## Software: `aorsf:orsf()` (II)
+
+-  **Variable importance**
+    - Based on degradation of OOB prediction accuracy after permuting $Z_{\cdot j}$
+
+```{r}
+#| eval: false
+#| echo: true
+orsf_vi_permute(fit) # permutation-based variable importance
+```
+
+- **Prediction **
+
+```{r}
+#| eval: false
+#| echo: true
+# Survival prediction on test set
+pred_orsf <- predict(
+  fit,                       # fitted orsf object
+  new_data = test,           # test dataset
+  pred_type = "surv",        # survival function
+  pred_horizon = 0:60        # evaluation times
+)
+```
+
+
+
+
+
+## GBC: Fitting Survival Trees
 
 ::: fragment
 -   **Same training data**
@@ -672,22 +705,828 @@ printcp(obj) # xerror: objective
 ```
 :::
 
-## GBC: Final Tree
+## GBC: Survival Tree CV Result
+
+- **CV results and final tree**
+    -   $\log(\lambda_{\rm opt}) = -4.1$
+
+![](images/ml_rpart_gbc.png){fig-align="center" width="80%"}
+
+## GBC: KM Curves by Terminal Node
 
 ::: fragment
--   **Pruned tree**
+-   **Final tree**
 
-![](images/ml_gbc_tree.png){fig-align="center" width="65%"}
+![](images/ml_km_tree_gbc.png){fig-align="center" width="70%"}
 :::
 
-## GBC: Brier Scores
 
-::: fragment
--   **Brier scores of three models on test data**
+## GBC: Random Survival Forests
 
-![](images/ml_gbc_test.png){fig-align="center" width="60%"}
-:::
+- **Fitting RSF**
 
+```{r}
+#| eval: false
+#| echo: true
+orsf_fit <- orsf(
+  Surv(time, status) ~ hormone + age + meno + size + grade + nodes + prog + estrg,
+      data = train,
+      n_tree = 200,
+      ...
+)
+
+print(orsf_fit) 
+#> ---------- Oblique random survival forest
+#>      Linear combinations: Accelerated Cox regression
+#>           N observations: 400
+#>                 N events: 174
+#>                  N trees: 200
+#>       N predictors total: 8
+#>    N predictors per node: 3
+#>  ...
+#> -----------------------------------------
+```
+
+## GBC: RSF Results
+
+- **OOB performance and variable importance**
+
+![](images/ml_rsf_gbc.png){fig-align="center" width="80%"}
+
+# Survival Support Vector Machines
+
+## SVM for Classification
+
+- **Classification of $Y \in \{1, -1\}$**
+    - Linearly separable case
+\begin{equation}\label{eq:ml:hyperplane}
+\left\{
+\begin{aligned}
+\beta^\T Z_i \,+\, b &\,>\, 0 \quad \text{for all } Y_i = 1,\\[4pt]
+\beta^\T Z_i \,+\, b &\,<\, 0 \quad \text{for all } Y_i = -1.
+\end{aligned}
+\right.
+\end{equation}
+    - **Hyperplane** $\beta^\T Z + b = 0$ separates two classes
+    - **Margin**: distance from hyperplane to nearest data point
+    - **SVM**: find hyperplane with maximum margin
+    - **WLOS**: normalizing coefficients and centering the hyperplane
+\begin{equation}\label{eq:ml:hyperplane_margin}
+\left\{
+\begin{aligned}
+\beta^\T Z_i \,+\, b &\,\ge\, 1 \quad \text{for all } Y_i = 1,\\[4pt]
+\beta^\T Z_i \,+\, b &\,\le\, -1 \quad \text{for all } Y_i = -1.
+\end{aligned}
+\right.
+\end{equation} 
+        - Distance between hyperplanes: $2\|\beta\|^{-1}$
+
+## SVM: Maximum Margin
+
+- **Maximum margin hyperplane**
+    - Left panel: 
+    $$(\hat\beta, \hat b)
+\;=\;
+\arg\min_{\beta, b} \|\beta\|^2
+\quad\text{subject to}\quad
+Y_i(\beta^\T Z_i + b) \ge 1,\;\; i = 1,\ldots,n$$
+
+![](images/ml_svm_margin.png){fig-align="center" width="70%"}
+
+
+## SVM: Linearly Inseparable Case
+
+- **Soft margin SVM**
+    - Right panel: allow misclassification through slack variables $\zeta_i \ge 0$:
+\begin{align}\label{eq:ml:svm_soft_margin}
+(\hat\beta, \hat b)
+\;=\;&
+\arg\min_{\beta, b,\zeta} \left\{\|\beta\|^2 \,+\, \lambda\sum_{i=1}^n\zeta_i\right\}, \notag\\
+&\text{subject to}\quad
+\left\{
+\begin{aligned}
+&Y_i(\beta^\T Z_i + b) \,\ge\, 1 - \zeta_i,\\[4pt]
+&\zeta_i \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad i = 1,\ldots,n
+\end{align}
+
+- **Support vectors**: data points with 
+    - $\zeta_i > 0$ (misclassified)
+    - $Y_i(\hat\beta^\T Z_i + \hat b) = 1$ (on margin)
+
+## SVM: Regression (I)
+
+- **Support vector regression**
+    - Continuous $Y$: find hyperplane with $\epsilon$-insensitive loss
+\begin{equation*}
+(\hat\beta, \hat b)
+\;=\;
+\arg\min_{\beta, b} \|\beta\|^2
+\quad\text{subject to}\quad
+|Y_i - (\beta^\T Z_i + b)| \,\le\, \varepsilon,\;\; i = 1,\ldots,n
+\end{equation*}
+    - Allow for $\epsilon$-insensitive slack variables $\zeta_i^+, \zeta_i^- \ge 0$
+\begin{align}\label{eq:ml:svm_soft_margin_reg}
+   (\hat\beta, \hat b)
+\;=\;&
+\arg\min_{\beta, b, \xi^+, \xi^-}
+\left\{
+\|\beta\|^2 \,+\, 
+\lambda\sum_{i=1}^n(\xi_i^+ + \xi_i^-)
+\right\}, \notag\\[3pt]
+&\text{subject to}\quad
+   \left\{
+\begin{aligned}
+&Y_i - (\beta^\T Z_i + b) \,\le\, \varepsilon + \xi_i^+,\\[3pt]
+&(\beta^\T Z_i + b) - Y_i \,\le\, \varepsilon + \xi_i^-,\\[3pt]
+&\xi_i^+,\,\xi_i^- \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad i = 1,\ldots,n
+\end{align}    
+
+## SVM: Regression (II)
+
+- **Hard versus soft margin**
+
+![](images/ml_svr_margin.png){fig-align="center" width="80%"}
+
+
+## Survival SVM (I)
+
+- **Two perspectives**
+    - Ranking: order classification of comparable pairs
+    $$
+\mathcal P \;=\; \{(i, j):\, \delta_i = 1,\, X_i < X_j\}.
+$$
+    - Regression: predict survival time with censored data
+
+- **Ranking SSVM**
+    - Classification with soft margin
+\begin{align}\label{eq:ml:svm_soft_margin_surv}
+   \hat\beta
+\;=\;&
+\arg\min_{\beta, \zeta} \|\beta\|^2 \,+\, \lambda\sum_{(i, j)\in\mathcal P} \zeta_{ij}, \notag\\
+&\text{subject to}\quad
+   \left\{
+\begin{aligned}
+&\beta^\T (Z_i - Z_j) \,\ge\, 1 - \zeta_{ij},\\[4pt]
+&\zeta_{ij} \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad (i, j)\in\mathcal P
+\end{align}
+
+
+## Survival SVM (II)
+
+- **Regression SSVM**
+    - Censored observations $\to$ one-sided penalty
+\begin{align}\label{eq:ml:svm_soft_margin_reg_surv}
+   (\hat\beta, \hat b)
+\;=\;&
+\arg\min_{\beta, b, \xi^+, \xi^-}
+\left\{
+\|\beta\|^2 \,+\,
+\lambda\sum_{i=1}^n(\xi_i^+ + \xi_i^-)
+\right\}, \notag\\[3pt]
+&\text{subject to}\quad
+   \left\{
+\begin{aligned}
+&X_i - (\beta^\T Z_i + b) \,\le\, \xi_i^+,\\[3pt]
+&\delta_i\{\beta^\T Z_i + b - X_i\} \,\le\, \xi_i^-,\\[3pt]
+&\xi_i^+,\,\xi_i^- \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad i = 1,\ldots,n
+\end{align}
+
+## Survival SVM (III)
+
+- **Hybrid approach**
+    - Combines ranking and regression objective functions and penalties
+\begin{align}\label{eq:ml:svm_soft_margin_hybrid_surv}
+   (\hat\beta, \hat b)
+\;=\;&
+\arg\min_{\beta, b, \zeta, \xi^+, \xi^-}
+\left\{
+\|\beta\|^2
+\,+\,
+\mu\sum_{(i,j)\in\mathcal P} \zeta_{ij}
+\,+\,
+\gamma\sum_{i=1}^n(\xi_i^+ + \xi_i^-)
+\right\}, \notag\\[3pt]
+&\text{subject to}\quad
+   \left\{
+\begin{aligned}
+&\beta^\T (Z_i - Z_j) \,\ge\, 1 - \zeta_{ij},\\[2pt]
+&\zeta_{ij} \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad (i, j)\in\mathcal P, \notag\\[4pt]
+&\quad\quad\;\text{and}\quad
+   \left\{
+\begin{aligned}
+&X_i - (\beta^\T Z_i + b) \,\le\, \xi_i^+,\\[3pt]
+&\delta_i\{\beta^\T Z_i + b - X_i\} \,\le\, \xi_i^-,\\[3pt]
+&\xi_i^+,\,\xi_i^- \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad i = 1,\ldots,n.
+\end{align}
+
+## The Kernel Trick
+
+- **Nonlinear SVM**
+    - Map covariates to high-dimensional space: $z\mapsto \phi(z)$
+    - Use kernel function $K(z, z') = \langle \phi(z), \phi(z')\rangle$ to compute inner products
+    - Common kernels: linear, polynomial, radial basis function (RBF)
+
+![](images/ml_svm_kernel.png){fig-align="center" width="75%"}
+
+## Software: `survivalsvm::survivalsvm()` (I)
+
+- **Basic syntax for fitting survival SVM**
+    - `type`: "ranking", "regression", or "hybrid"
+    - `kernel`: "linear", "polynomial", or "radial"
+    - `gamma.mu`: tuning parameters $\gamma$ and $\mu$ for hybrid SVM
+
+```{r}
+#| eval: false
+#| echo: true
+library(survivalsvm)
+# Fit a regression SVM with linear kernel
+fit <- survivalsvm(
+  Surv(time, status) ~ covariates, 
+  type = "regression",
+  kernel = "linear",
+  gamma.mu = 1       # may need to be tuned manually
+)
+```
+
+
+## Software: `survivalsvm::survivalsvm()` (II)
+
+- **Predict risk scores**
+
+```{r}
+#| eval: false
+#| echo: true
+# Predict risk scores for test set (<test_scaled>)
+pred_svm <- predict(
+  object  = fit,
+  newdata = test
+)
+
+# Extract predicted scores
+pred_svm$predicted
+```
+
+
+## GBC: Fitting SSVM
+
+- **Regression with linear kernel**
+    - Feature importance computed from CV samples
+
+![](images/ml_ssvm_gbc.png){fig-align="center" width="75%"}
+
+## GBC: Models Fitted
+
+- **Models**
+    - Full Cox model with all predictors
+    - "Inadequate" Cox model excluding `prog` and `nodes`
+    - Lasso-regularized Cox model
+    - Survival tree
+    - Random survival forest
+    - Survival SVM
+    
+    
+## GBC: Model Evaluations 
+
+- **Prediction performance on test data** ($n^*=286$)
+
+![](images/ml_gbc_test.png){fig-align="center" width="100%"}
+
+## GBC: Brier Score
+
+- **Brier score over time**
+
+<!-- ml_brier_scores_all_models -->
+![](images/ml_brier_scores_all_models.png){fig-align="center" width="90%"}
+
+# R's Tidymodels System
+
+## Overview of `tidymodels` and `censored`
+
+-   **`tidymodels`**: a collection of packages for modeling and machine learning in R
+    -   Provides a *consistent interface* for model training, tuning, and evaluation
+        -   Key package `parsnip`
+    -   Supports various model types, including regression, classification, and survival analysis
+-   **`censored`**: a `parsnip` extension package for survival data
+    -   Implements parametric, semiparametric, and tree-based survival models
+
+## Data Preparation and Splitting
+
+-   **Create a `Surv` object** as response
+    -   `Surv(time, event)`
+
+```{r}
+#| eval: false
+#| echo: true
+library(tidymodels)
+library(censored)
+df <- df |>  
+  mutate(
+    surv_obj = Surv(time, event), # create Surv object as response variable
+    .keep = "unused"              # discard original time and event columns
+  )
+```
+
+-   **Data splitting**
+
+    -   `initial_split()`: splits data into training and testing sets
+
+```{r}
+#| eval: false
+#| echo: true
+df_split <- initial_split(flight_data, prop = 3/4) # default ratio 3:1
+df_train <- training(df_split) # obtain training set
+```
+
+
+## Model Specification
+
+-   **Model type**
+    -   `survival_reg()`: parametric AFT models
+    -   `proportional_hazards(penalty = tune())`: (regularized) Cox PH models
+    -   `decision_tree(cost_complexity = tune())`: decision trees
+    -   `rand_forest(mtry = tune())`: orandom forests
+-   **Set engine and mode**
+    -   `set_engine("survival")`: for parametric AFT models
+    -   `set_engine("glmnet")`: for Cox PH models
+    -   `set_engine("aorsf")`: for blique random forests
+    -   `set_mode("censored regression")`: for survival models
+
+
+## Model Specification - Example
+
+- **Example**: regularized Cox model using `glmnet`
+
+```{r}
+#| eval: false
+#| echo: true
+# Regularized Cox model 
+model_spec <- proportional_hazards(penalty = tune()) |>  # tune lambda
+  set_engine("glmnet") |>  # set engine to glmnet
+  set_mode("censored regression") # set mode to censored regression
+```
+
+## Recipe and Workflow 
+
+-   **Recipe**: a series of preprocessing steps for the data
+    -   `recipe(response ~ ., data = df)`: specify response and predictors
+    -   `step_mutate()`: standardize numeric predictors <!-- -  `step_unknown()`: handle unknown levels in categorical variables --> <!-- -  `step_other()`: group low-frequency levels into "other" -->
+    -   `step_dummy()`: convert categorical variables to dummy variables <!-- -  `step_zv()`: remove zero-variance predictors -->
+-   **Workflow**: combines model specification and recipe
+    -   `workflow() |> add_model(model_spec) |> add_recipe(recipe)`
+
+
+## Recipe and Workflow - Example
+
+-  **Example**: regularized Cox model with data preprocessing steps
+
+```{r}
+#| eval: false
+#| echo: true
+# Create a recipe
+model_recipe <- recipe(surv_obj ~ ., data = df_train) |> # specify formula
+  step_mutate(z1 = z1 / 1000) |>  # standardize z1  
+  # group levels with prop < .02 into "other"
+  step_other(z2, z3, threshold = 0.02) |> 
+  # convert categorical WWto dummy variables
+  step_dummy(all_nominal_predictors())  
+
+# Create a workflow by combining model and recipe
+model_wflow <- workflow() |> 
+  add_model(model_spec) |>   # add model specification
+  add_recipe(model_recipe)   # add recipe
+```
+
+## Tune Hyperparameters
+
+-   **Cross-validation**
+    -   `df_train_folds <- vfold_cv(df_train, v = k)`: create *k*-folds on training data (default 10)
+    -   `tune_grid(model_wflow, resamples = df_train_folds)`: tuning
+
+```{r}
+#| eval: false
+#| echo: true
+# k-fold cross-validation
+df_train_folds <- vfold_cv(df_train, v = 10) # 10-fold cross-validation
+# Tune hyperparameters
+model_res <- tune_grid(
+  model_wflow, 
+  resamples = df_train_folds, 
+  grid = 10, # number of hyperparameter combinations to try
+  metrics = metric_set(brier_survival, brier_survival_integrated,  
+                       roc_auc_survival, concordance_survival), # specify metrics
+  eval_time = seq(0, 84, by = 12) # evaluation time points
+)
+```
+
+
+## Finalize Workflow
+
+-   **Examine validation results**
+    -   `collect_metrics(model_res)`: collect metrics from tuning results
+    -   `show_best(model_res, metric = "brier_survival_integrated", n = 5)`: show top 5 models based on IBS
+-   **Workflow for best model**
+    -   `param_best <- select_best(model_res, metric = "brier_survival_integrated")`: select best hyperparameters based on Brier score
+    -   `final_wl <- finalize_workflow(model_wflow, param_best)`: finalize workflow with best hyperparameters
+
+
+## Finalize Workflow - Example
+
+- **Example**: select best hyperparameters based on Brier score and finalize workflow
+
+```{r}
+#| eval: false
+#| echo: true
+# Extract the best hyperparameters based on Brier score
+param_best <- select_best(model_res, metric = "brier_survival_integrated")
+
+# Finalize the workflow with the best hyperparameters
+final_wl <- model_wflow |> finalize_workflow(param_best)
+```
+
+
+## Fit Final Model
+
+-   **Fit the finalized workflow**
+    -   `final_mod <- last_fit(final_wl, split = df_split)`: fit the finalized workflow on the testing set
+    -   `collect_metrics(final_mod)`: collect metrics of final model on test data
+-   **Make predictions**
+    -   `predict(final_mod, new_data = new_data, type = "time")`: predict survival times on new data
+
+## Fit Final Model - Example
+
+- **Example**: fit the finalized workflow on the testing set, evaluate performance, and make predictions on new data
+
+```{r}
+#| eval: false
+#| echo: true
+# Fit the finalized workflow on the testing set
+final_mod <- last_fit(final_wl, split = df_split)
+
+# Collect metrics of final model on test data
+collect_metrics(final_mod) %>% 
+  filter(.metric == "brier_survival_integrated")
+
+# Make predictions on new data
+new_data <- testing(df_split) |>  slice(1:5) # take first 5 rows of test data
+predict(final_mod, new_data = new_data, type = "time")
+```
+
+# A Case Study for Tidymodels
+
+## GBC: Relapse-Free Survival
+
+-   **Time to first event**
+
+```{r}
+#| eval: true
+#| echo: true
+library(tidymodels) # load tidymodels
+library(censored)
+gbc <- read.table("Data/German Breast Cancer Study/gbc.txt", header = TRUE) # Load GBC dataset
+df <- gbc |>  # calculate time to first event (relapse or death)
+  group_by(id) |> # group by id
+  arrange(time) |> # sort rows by time
+  slice(1) |>      # get the first row within each id
+  ungroup() |> 
+  mutate(
+    surv_obj = Surv(time, status), # create the Surv object as response variable
+    .after = id, # keep id column after surv_obj
+    .keep = "unused" # discard original time and status columns
+  )
+
+```
+
+## Data Preparation
+
+-   **Analysis dataset**
+
+```{r}
+#| eval: true
+#| echo: true
+head(df) # show the first few rows of the dataset
+```
+
+```{r}
+#| eval: true
+#| echo: true
+# Data splitting
+set.seed(123) # set seed for reproducibility
+gbc_split <- initial_split(df) # split data into training and testing sets
+gbc_split 
+```
+
+## Models to be Trained
+
+-   **Regularized Cox model**
+    -   `proportional_hazards(penalty = tune())` (Default: $\alpha = 1$; lasso)
+    -   Tune penalty parameter $\lambda$
+    -   Use `glmnet` engine for fitting
+-   **Random forest**
+    -   `rand_forest(mtry = tune(), min_n = tune())`
+    -   Tune number of predictors to split on and minimum size of terminal node
+    -   Use `aorsf` engine for fitting
+
+```{r}
+#| eval: true
+#| echo: true
+# Training data
+gbc_train <- training(gbc_split) # obtain training set
+```
+
+## Common Recipe
+
+-   **Recipe for both models** <!-- -  Create binary variable for age $\geq 40$ --> <!-- -  Rescale `prog` and `estrg` by 0.01 --> <!-- -  Convert `grade` to dummy variables -->
+
+```{r}
+#| eval: true
+#| echo: true
+
+gbc_recipe <- recipe(surv_obj ~ ., data = gbc_train) |> # specify formula
+  step_mutate(
+    grade = factor(grade),
+    age40 = as.numeric(age >= 40), # create a binary variable for age >= 40
+    prog = prog / 100, # rescale prog
+    estrg = estrg / 100 # rescale estrg
+  ) |> 
+  step_dummy(grade) |> 
+  step_rm(id) # remove id
+# gbc_recipe # print recipe information
+```
+
+
+## Regularized Cox Model
+
+-   **Cox model specification and workflow**
+
+```{r}
+#| eval: true
+#| echo: true
+# Regularized Cox model specification
+cox_spec <- proportional_hazards(penalty = tune()) |>  # tune lambda
+  set_engine("glmnet") |>  # set engine to glmnet
+  set_mode("censored regression") # set mode to censored regression
+cox_spec # print model specification
+# Create a workflow by combining model and recipe
+cox_wflow <- workflow() |> 
+  add_model(cox_spec) |>   # add model specification
+  add_recipe(gbc_recipe)   # add recipe
+```
+
+## Model Tuning
+
+-   **Cross-validation set-up**
+
+```{r}
+#| eval: true
+#| echo: true
+set.seed(123) # set seed for reproducibility
+gbc_folds <- vfold_cv(gbc_train, v = 10) # 10-fold cross-validation
+# Set evaulation metrics
+gbc_metrics <- metric_set(brier_survival, brier_survival_integrated, 
+                          roc_auc_survival, concordance_survival)
+gbc_metrics # evaluation metrics info
+time_points <- seq(0, 84, by = 12) # evaluation time points
+```
+
+## Cox Model Tuning
+
+-   **Tune the regularized Cox model**
+    -   Use `tune_grid()` to perform hyperparameter tuning
+    -   Evaluate performance using Brier score and ROC AUC
+
+```{r}
+#| eval: false
+#| echo: true
+set.seed(123) # set seed for reproducibility
+# Tune the regularized Cox model (this will take some time)
+cox_res <- tune_grid(
+  cox_wflow, 
+  resamples = gbc_folds, 
+  grid = 10, # number of hyperparameter combinations to try
+  metrics = gbc_metrics, # evaluation metrics
+  eval_time = time_points, # evaluation time points
+  control = control_grid(save_workflow = TRUE) # save workflow
+)
+```
+
+```{r}
+#| eval: false
+#| echo: false
+saveRDS(cox_res, "data/cox_res.rds") # save the tuning results
+```
+
+
+```{r}
+#| eval: true
+#| echo: false
+# Load the tuning results
+cox_res <- readRDS("data/cox_res.rds") # load the tuning results
+```
+
+
+## Cox Model Tuning Results
+
+-   Plot IBS as function of $\log\lambda$
+
+```{r}
+#| eval: true
+#| fig-width: 8
+#| fig-height: 4
+#| fig-align: "center"
+collect_metrics(cox_res) |>  # collect metrics from tuning results
+  filter(.metric == "brier_survival_integrated") |>  # filter for Brier score
+  ggplot(aes(log(penalty), mean)) + # plot log-lambda vs Brier score
+  geom_line() +  # plot line
+  labs(x = "Log-lambda", y = "Integrated Brier Score") + # labels
+  theme_classic() # classic theme
+```
+
+## Best Cox Models
+
+-   **Show best models**
+    -   Based on Brier score
+
+    ```{r}
+    #| echo: true
+    #| eval: true
+    show_best(cox_res, metric = "brier_survival_integrated", n = 5) # top 5 models
+    ```
+
+
+## Random Forest Model
+
+-   **Random forest specification and workflow**
+
+```{r}
+#| eval: true
+#| echo: true
+
+# Random forest model specification
+rf_spec <- rand_forest(mtry = tune(), min_n = tune()) |>  # tune mtry and min_n
+  set_engine("aorsf") |>  # set engine to aorsf
+  set_mode("censored regression") # set mode to censored regression
+rf_spec # print model specification
+# Create a workflow by combining model and recipe
+rf_wflow <- workflow() |> 
+  add_model(rf_spec) |>   # add model specification
+  add_recipe(gbc_recipe)   # add recipe
+```
+
+## Random Forest Tuning
+
+-   **Tune the random forest model**
+    -   Similar to Cox model tuning
+
+```{r}
+#| eval: false
+#| echo: true
+
+set.seed(123) # set seed for reproducibility
+# Tune the random forest model (this will take some time)
+rf_res <- tune_grid(
+  rf_wflow, 
+  resamples = gbc_folds, 
+  grid = 10, # number of hyperparameter combinations to try
+  metrics = gbc_metrics, # evaluation metrics
+  eval_time = time_points # evaluation time points
+)
+
+```
+
+```{r}
+#| echo: false
+#| eval: false
+saveRDS(rf_res, "data/rf_res.rds") # save the tuning results
+
+```
+
+```{r}
+#| eval: true
+#| echo: false
+# Load the tuning results
+rf_res <- readRDS("data/rf_res.rds") # load the tuning results
+```
+
+
+## Random Forest Tuning Results
+
+-   **View validation results**
+
+```{r}
+#| eval: true
+#| echo: true
+collect_metrics(rf_res) |> head()   # collect metrics from tuning results
+```
+
+## Best Random Forest Models
+
+-   **Show best models**
+    -   Based on Brier score
+
+```{r}
+#| eval: true
+#| echo: true
+show_best(rf_res, metric = "brier_survival_integrated", n = 5) # top 5 models
+```
+
+-   **Conclusion**
+    -   Best RF model has lower Brier score than best Cox model
+
+## Finalize and Fit Best Model
+
+-   **Fit final RF model**
+
+```{r}
+#| eval: true
+#| echo: true
+# Select best RF hyperparameters (mtry, min_n) based on Brier score
+param_best <- select_best(rf_res, metric = "brier_survival_integrated") 
+param_best # view results
+
+rf_final_wflow <- finalize_workflow(rf_wflow, param_best) # Finalize workflow
+# Fit the finalized workflow on the testing set
+set.seed(123) # set seed for reproducibility
+final_rf_fit <- last_fit(
+  rf_final_wflow, 
+  split = gbc_split, # use the original split
+  metrics = gbc_metrics, # evaluation metrics
+  eval_time = time_points # evaluation time points
+)
+```
+
+## Test Performance (I)
+
+-   **Collect metrics on test data**
+
+```{r}
+#| eval: true
+#| echo: true
+collect_metrics(final_rf_fit) |> # collect overall performance metrics
+  filter(.metric %in% c("concordance_survival", "brier_survival_integrated")) 
+# Extract test ROC AUC over time
+roc_test <- collect_metrics(final_rf_fit) |>  
+  filter(.metric == "roc_auc_survival") |>  # filter for ROC AUC
+  rename(mean = .estimate) # rename mean column
+```
+
+## Test Performance (II)
+
+-   **Plot test ROC AUC over time**
+
+```{r}
+#| eval: true
+#| fig-width: 8
+#| fig-height: 4
+#| fig-align: "center"
+roc_test |>  # pass the test ROC AUC data
+  ggplot(aes(.eval_time, mean)) +  # plot evaluation time vs mean ROC AUC
+  geom_line() + # plot line
+  labs(x = "Time (months)", y = "ROC AUC") + # labels
+  theme_classic()
+```
+
+## Prediction by Final RF Model
+
+-   **Extract the fitted workflow**
+    -   Use `extract_workflow()` to get the final model
+
+```{r}
+#| eval: true
+#| echo: true
+gbc_rf <- extract_workflow(final_rf_fit) # extract the fitted workflow
+# Predict on new data
+gbc_5 <- testing(gbc_split) |>  slice(1:5) # take first 5 rows of test data
+predict(gbc_rf, new_data = gbc_5, type = "time") # predict survival times
+```
+
+
+## Survival Tree Exercise
+
+-   **Task**: fit a survival tree model to the GBC data
+    -   Use `decision_tree()` with `set_engine("rpart")`
+    -   Tune complexity parameter `cost_complexity` using `tune()`
+    -   Use the same recipe as for Cox and RF models
+    -   Evaluate performance using Brier score and ROC AUC
+    
+    
 # Conclusion
 
 ## Notes (I)
@@ -725,32 +1564,36 @@ printcp(obj) # xerror: objective
 
 ## Notes (III)
 
--   **Tidymodels**
-    -   `censored`: a member of `tidymodels` family
-    -   <https://censored.tidymodels.org/>
+- **Python’s machine learning systems**
+    -   `scikit-learn`: general machine learning library with support for survival analysis through extensions like `scikit-survival`
+    -   `lifelines`: library specifically for survival analysis, including Cox models and KM estimators
+    -   `xgboost` and `lightgbm`: gradient boosting libraries adaptable for survival analysis using custom loss functions
 
-::: big-code
-```{r}
-#| eval: false
-#| echo: true
-library(censored) 
+- **Deep learning in survival analysis**
+    -   `DeepSurv`: a deep learning-based Cox proportional hazards model
+    -   `DeepHit`: a deep learning model for competing risks survival analysis
 
-decision_tree() %>% 
-  set_engine("rpart") %>% 
-  set_mode("censored regression")
-#> Decision Tree Model Specification (censored regression)
-#> 
-#> Computational engine: rpart
-```
-:::
 
-## Summary
+## Summary (I)
 
 -   **Regularized Cox model**
-    -   **Objective function** $$
-        Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
+    -   **Elastic net** $$
+        Q_n(\beta;\lambda) = \ell_n(\beta) - \lambda\left\{\alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^2/2\right\}
         $$
         -   `glmnet::glmnet(Z, Surv(time, status), family =  “cox”, alpha = 1)`
 -   **Survival trees**
     -   Root node $\to$ recursive partitioning based on similarity in outcome $\to$ pruning to prevent overfitting
         -   `rpart:: rpart(Surv(time, status) ~ covariates)`
+
+## Summary (II)
+
+-  **Random survival forests**
+    -   Ensemble of survival trees with random feature selection and bootstrap 
+        -   `aorsf:: aorsf(Surv(time, status) ~ covariates, n_tree = 200)`
+
+-   **Survival SVM**
+    -   Extension of SVM for survival data using ranking or regression approaches
+    
+-  **R's `tidymodels` system**
+    -   A consistent interface for model training, tuning, and evaluation
+    -   `censored` package extends `parsnip` for survival models

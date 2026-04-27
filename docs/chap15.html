@@ -237,7 +237,7 @@ Lu Mao
 <li class="fragment"><p>Regularized Cox regression models</p></li>
 <li class="fragment"><p>Survival trees and random forests</p></li>
 <li class="fragment"><p>Survival surport vector machines</p></li>
-<li class="fragment"><p>Building prediction models for German Breast Cancer study</p></li>
+<li class="fragment"><p>R’s Tidymodels system</p></li>
 </ol>
 </div>
 <p><span class="math display">\[\newcommand{\d}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\T}{{\rm T}}\]</span> <span class="math display">\[\newcommand{\dd}{{\rm d}}\]</span> <span class="math display">\[\newcommand{\cc}{{\rm c}}\]</span> <span class="math display">\[\newcommand{\pr}{{\rm pr}}\]</span> <span class="math display">\[\newcommand{\var}{{\rm var}}\]</span> <span class="math display">\[\newcommand{\se}{{\rm se}}\]</span> <span class="math display">\[\newcommand{\indep}{\perp \!\!\! \perp}\]</span> <span class="math display">\[\newcommand{\Pn}{n^{-1}\sum_{i=1}^n}\]</span> <span class="math display">\[
@@ -743,7 +743,7 @@ E\left[
 </li>
 <li><strong>Outcome</strong>: relapse-free survival</li>
 <li><strong>Predictors</strong>: age (<span class="math inline">\(\leq\)</span> 40 vs &gt;40), menopausal status, hormone treatment, tumor grade, tumor size, lymph nodes, estrogen and progesterone receptor levels</li>
-<li>Training set (<span class="math inline">\(n=400\)</span>) + test set (<span class="math inline">\(n=286\)</span>)</li>
+<li>Training set (<span class="math inline">\(n=400\)</span>) + test set (<span class="math inline">\(n^*=286\)</span>)</li>
 </ul></li>
 </ul>
 <div class="cell">
@@ -1003,15 +1003,65 @@ R(A\mid\mid B)=n^{-1}\sum_{i \in A}d_{i}^2 +n^{-1}\sum_{i \in B}d_{i}^2
 <span id="cb6-5"><a></a><span class="co"># fit$where: vector of terminal node for training data</span></span>
 <span id="cb6-6"><a></a><span class="co"># compute KM estimates by terminal node</span></span>
 <span id="cb6-7"><a></a>km <span class="ot">&lt;-</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> fit<span class="sc">$</span>where)</span>
-<span id="cb6-8"><a></a><span class="do">## prediction on test data ---------------------------</span></span>
-<span id="cb6-9"><a></a><span class="co"># terminal node for test data</span></span>
-<span id="cb6-10"><a></a>treeClust<span class="sc">::</span><span class="fu">rpart.predict.leaves</span>(fit, test) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-8"><a></a></span>
+<span id="cb6-9"><a></a><span class="do">## prediction on test data ---------------------------</span></span>
+<span id="cb6-10"><a></a><span class="co"># terminal node for test data</span></span>
+<span id="cb6-11"><a></a>treeClust<span class="sc">::</span><span class="fu">rpart.predict.leaves</span>(fit, test) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="gbc-survival-trees" class="slide level2">
-<h2>GBC: Survival Trees</h2>
+<section id="software-aorsforsf-i" class="slide level2">
+<h2>Software: <code>aorsf:orsf()</code> (I)</h2>
+<ul>
+<li><strong>Oblique random survival forests</strong>
+<ul>
+<li><code>mtry</code>: number of covariates randomly selected at each split</li>
+</ul></li>
+</ul>
+<div class="big-code">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="fu">library</span>(aorsf)</span>
+<span id="cb7-2"><a></a><span class="co"># Fit a basic oblique random survival forest on training data</span></span>
+<span id="cb7-3"><a></a><span class="fu">set.seed</span>(<span class="dv">12345</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb7-4"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">orsf</span>(</span>
+<span id="cb7-5"><a></a>  <span class="fu">Surv</span>(<span class="sc">&lt;</span>time<span class="sc">&gt;</span>, <span class="sc">&lt;</span>status<span class="sc">&gt;</span>) <span class="sc">~</span> covariates, </span>
+<span id="cb7-6"><a></a>  <span class="co"># Optional arguments:</span></span>
+<span id="cb7-7"><a></a>      <span class="co"># Forest size</span></span>
+<span id="cb7-8"><a></a>        <span class="at">n_tree =</span> <span class="dv">500</span>,</span>
+<span id="cb7-9"><a></a>      <span class="co"># Number of covariates randomly selected at each split</span></span>
+<span id="cb7-10"><a></a>        <span class="at">mtry =</span> <span class="fu">ceiling</span>(<span class="fu">sqrt</span>(p)),</span>
+<span id="cb7-11"><a></a>         ...</span>
+<span id="cb7-12"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="software-aorsforsf-ii" class="slide level2">
+<h2>Software: <code>aorsf:orsf()</code> (II)</h2>
+<ul>
+<li><strong>Variable importance</strong>
+<ul>
+<li>Based on degradation of OOB prediction accuracy after permuting <span class="math inline">\(Z_{\cdot j}\)</span></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="fu">orsf_vi_permute</span>(fit) <span class="co"># permutation-based variable importance</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><strong>Prediction </strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="co"># Survival prediction on test set</span></span>
+<span id="cb9-2"><a></a>pred_orsf <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb9-3"><a></a>  fit,                       <span class="co"># fitted orsf object</span></span>
+<span id="cb9-4"><a></a>  <span class="at">new_data =</span> test,           <span class="co"># test dataset</span></span>
+<span id="cb9-5"><a></a>  <span class="at">pred_type =</span> <span class="st">"surv"</span>,        <span class="co"># survival function</span></span>
+<span id="cb9-6"><a></a>  <span class="at">pred_horizon =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">60</span>        <span class="co"># evaluation times</span></span>
+<span id="cb9-7"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="gbc-fitting-survival-trees" class="slide level2">
+<h2>GBC: Fitting Survival Trees</h2>
 <div class="fragment">
 <ul>
 <li><strong>Same training data</strong>
@@ -1020,48 +1070,1000 @@ R(A\mid\mid B)=n^{-1}\sum_{i \in A}d_{i}^2 +n^{-1}\sum_{i \in B}d_{i}^2
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co"># Conduct 10-fold cross-validation (xval = 10)</span></span>
-<span id="cb7-2"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno <span class="sc">+</span> size <span class="sc">+</span> grade <span class="sc">+</span> nodes <span class="sc">+</span> </span>
-<span id="cb7-3"><a></a>              prog <span class="sc">+</span> estrg <span class="sc">+</span> age,</span>
-<span id="cb7-4"><a></a>             <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">xval =</span> <span class="dv">10</span>, <span class="at">minbucket =</span> <span class="dv">2</span>, <span class="at">cp =</span> <span class="dv">0</span>),</span>
-<span id="cb7-5"><a></a>             <span class="at">data =</span> train)</span>
-<span id="cb7-6"><a></a><span class="fu">printcp</span>(obj) <span class="co"># xerror: objective </span></span>
-<span id="cb7-7"><a></a><span class="co">#            CP  nsplit rel.error  xerror   xstd</span></span>
-<span id="cb7-8"><a></a><span class="co"># 1  0.07556835      0   1.00000 1.00411 0.046231</span></span>
-<span id="cb7-9"><a></a><span class="co"># 2  0.03720019      1   0.92443 0.96817 0.047281</span></span>
-<span id="cb7-10"><a></a><span class="co"># 3  0.02661914      2   0.88723 0.95124 0.046567</span></span>
-<span id="cb7-11"><a></a><span class="co"># 4  0.01716925      3   0.86061 0.92745 0.046606 # minimizer</span></span>
-<span id="cb7-12"><a></a><span class="co"># 5  0.01398306      4   0.84344 0.92976 0.047514</span></span>
-<span id="cb7-13"><a></a><span class="co"># 6  0.01394869      5   0.82946 0.93941 0.048404</span></span>
-<span id="cb7-14"><a></a><span class="co"># 7  0.01055028      9   0.77120 0.97722 0.052133</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="co"># Conduct 10-fold cross-validation (xval = 10)</span></span>
+<span id="cb10-2"><a></a>obj <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> hormone <span class="sc">+</span> meno <span class="sc">+</span> size <span class="sc">+</span> grade <span class="sc">+</span> nodes <span class="sc">+</span> </span>
+<span id="cb10-3"><a></a>              prog <span class="sc">+</span> estrg <span class="sc">+</span> age,</span>
+<span id="cb10-4"><a></a>             <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">xval =</span> <span class="dv">10</span>, <span class="at">minbucket =</span> <span class="dv">2</span>, <span class="at">cp =</span> <span class="dv">0</span>),</span>
+<span id="cb10-5"><a></a>             <span class="at">data =</span> train)</span>
+<span id="cb10-6"><a></a><span class="fu">printcp</span>(obj) <span class="co"># xerror: objective </span></span>
+<span id="cb10-7"><a></a><span class="co">#            CP  nsplit rel.error  xerror   xstd</span></span>
+<span id="cb10-8"><a></a><span class="co"># 1  0.07556835      0   1.00000 1.00411 0.046231</span></span>
+<span id="cb10-9"><a></a><span class="co"># 2  0.03720019      1   0.92443 0.96817 0.047281</span></span>
+<span id="cb10-10"><a></a><span class="co"># 3  0.02661914      2   0.88723 0.95124 0.046567</span></span>
+<span id="cb10-11"><a></a><span class="co"># 4  0.01716925      3   0.86061 0.92745 0.046606 # minimizer</span></span>
+<span id="cb10-12"><a></a><span class="co"># 5  0.01398306      4   0.84344 0.92976 0.047514</span></span>
+<span id="cb10-13"><a></a><span class="co"># 6  0.01394869      5   0.82946 0.93941 0.048404</span></span>
+<span id="cb10-14"><a></a><span class="co"># 7  0.01055028      9   0.77120 0.97722 0.052133</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="gbc-final-tree" class="slide level2">
-<h2>GBC: Final Tree</h2>
-<div class="fragment">
+<section id="gbc-survival-tree-cv-result" class="slide level2">
+<h2>GBC: Survival Tree CV Result</h2>
 <ul>
-<li><strong>Pruned tree</strong></li>
+<li><strong>CV results and final tree</strong>
+<ul>
+<li><span class="math inline">\(\log(\lambda_{\rm opt}) = -4.1\)</span></li>
+</ul></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ml_gbc_tree.png" class="quarto-figure quarto-figure-center" style="width:65.0%"></p>
+<p><img data-src="images/ml_rpart_gbc.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
+</figure>
+</div>
+</section>
+<section id="gbc-km-curves-by-terminal-node" class="slide level2">
+<h2>GBC: KM Curves by Terminal Node</h2>
+<div class="fragment">
+<ul>
+<li><strong>Final tree</strong></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/ml_km_tree_gbc.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="gbc-brier-scores" class="slide level2">
-<h2>GBC: Brier Scores</h2>
-<div class="fragment">
+<section id="gbc-random-survival-forests" class="slide level2">
+<h2>GBC: Random Survival Forests</h2>
 <ul>
-<li><strong>Brier scores of three models on test data</strong></li>
+<li><strong>Fitting RSF</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a>orsf_fit <span class="ot">&lt;-</span> <span class="fu">orsf</span>(</span>
+<span id="cb11-2"><a></a>  <span class="fu">Surv</span>(time, status) <span class="sc">~</span> hormone <span class="sc">+</span> age <span class="sc">+</span> meno <span class="sc">+</span> size <span class="sc">+</span> grade <span class="sc">+</span> nodes <span class="sc">+</span> prog <span class="sc">+</span> estrg,</span>
+<span id="cb11-3"><a></a>      <span class="at">data =</span> train,</span>
+<span id="cb11-4"><a></a>      <span class="at">n_tree =</span> <span class="dv">200</span>,</span>
+<span id="cb11-5"><a></a>      ...</span>
+<span id="cb11-6"><a></a>)</span>
+<span id="cb11-7"><a></a></span>
+<span id="cb11-8"><a></a><span class="fu">print</span>(orsf_fit) </span>
+<span id="cb11-9"><a></a><span class="co">#&gt; ---------- Oblique random survival forest</span></span>
+<span id="cb11-10"><a></a><span class="co">#&gt;      Linear combinations: Accelerated Cox regression</span></span>
+<span id="cb11-11"><a></a><span class="co">#&gt;           N observations: 400</span></span>
+<span id="cb11-12"><a></a><span class="co">#&gt;                 N events: 174</span></span>
+<span id="cb11-13"><a></a><span class="co">#&gt;                  N trees: 200</span></span>
+<span id="cb11-14"><a></a><span class="co">#&gt;       N predictors total: 8</span></span>
+<span id="cb11-15"><a></a><span class="co">#&gt;    N predictors per node: 3</span></span>
+<span id="cb11-16"><a></a><span class="co">#&gt;  ...</span></span>
+<span id="cb11-17"><a></a><span class="co">#&gt; -----------------------------------------</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="gbc-rsf-results" class="slide level2">
+<h2>GBC: RSF Results</h2>
+<ul>
+<li><strong>OOB performance and variable importance</strong></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ml_gbc_test.png" class="quarto-figure quarto-figure-center" style="width:60.0%"></p>
+<p><img data-src="images/ml_rsf_gbc.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
+</figure>
+</div>
+</section></section>
+<section>
+<section id="survival-support-vector-machines" class="title-slide slide level1 center">
+<h1>Survival Support Vector Machines</h1>
+
+</section>
+<section id="svm-for-classification" class="slide level2">
+<h2>SVM for Classification</h2>
+<ul>
+<li><strong>Classification of <span class="math inline">\(Y \in \{1, -1\}\)</span></strong>
+<ul>
+<li>Linearly separable case <span class="math display">\[\begin{equation}\label{eq:ml:hyperplane}
+\left\{
+\begin{aligned}
+\beta^\T Z_i \,+\, b &amp;\,&gt;\, 0 \quad \text{for all } Y_i = 1,\\[4pt]
+\beta^\T Z_i \,+\, b &amp;\,&lt;\, 0 \quad \text{for all } Y_i = -1.
+\end{aligned}
+\right.
+\end{equation}\]</span></li>
+<li><strong>Hyperplane</strong> <span class="math inline">\(\beta^\T Z + b = 0\)</span> separates two classes</li>
+<li><strong>Margin</strong>: distance from hyperplane to nearest data point</li>
+<li><strong>SVM</strong>: find hyperplane with maximum margin</li>
+<li><strong>WLOS</strong>: normalizing coefficients and centering the hyperplane <span class="math display">\[\begin{equation}\label{eq:ml:hyperplane_margin}
+\left\{
+\begin{aligned}
+\beta^\T Z_i \,+\, b &amp;\,\ge\, 1 \quad \text{for all } Y_i = 1,\\[4pt]
+\beta^\T Z_i \,+\, b &amp;\,\le\, -1 \quad \text{for all } Y_i = -1.
+\end{aligned}
+\right.
+\end{equation}\]</span>
+<ul>
+<li>Distance between hyperplanes: <span class="math inline">\(2\|\beta\|^{-1}\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="svm-maximum-margin" class="slide level2">
+<h2>SVM: Maximum Margin</h2>
+<ul>
+<li><strong>Maximum margin hyperplane</strong>
+<ul>
+<li>Left panel: <span class="math display">\[(\hat\beta, \hat b)
+\;=\;
+\arg\min_{\beta, b} \|\beta\|^2
+\quad\text{subject to}\quad
+Y_i(\beta^\T Z_i + b) \ge 1,\;\; i = 1,\ldots,n\]</span></li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/ml_svm_margin.png" class="quarto-figure quarto-figure-center" style="width:70.0%"></p>
+</figure>
+</div>
+</section>
+<section id="svm-linearly-inseparable-case" class="slide level2">
+<h2>SVM: Linearly Inseparable Case</h2>
+<ul>
+<li><strong>Soft margin SVM</strong>
+<ul>
+<li>Right panel: allow misclassification through slack variables <span class="math inline">\(\zeta_i \ge 0\)</span>: <span class="math display">\[\begin{align}\label{eq:ml:svm_soft_margin}
+(\hat\beta, \hat b)
+\;=\;&amp;
+\arg\min_{\beta, b,\zeta} \left\{\|\beta\|^2 \,+\, \lambda\sum_{i=1}^n\zeta_i\right\}, \notag\\
+&amp;\text{subject to}\quad
+\left\{
+\begin{aligned}
+&amp;Y_i(\beta^\T Z_i + b) \,\ge\, 1 - \zeta_i,\\[4pt]
+&amp;\zeta_i \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad i = 1,\ldots,n
+\end{align}\]</span></li>
+</ul></li>
+<li><strong>Support vectors</strong>: data points with
+<ul>
+<li><span class="math inline">\(\zeta_i &gt; 0\)</span> (misclassified)</li>
+<li><span class="math inline">\(Y_i(\hat\beta^\T Z_i + \hat b) = 1\)</span> (on margin)</li>
+</ul></li>
+</ul>
+</section>
+<section id="svm-regression-i" class="slide level2">
+<h2>SVM: Regression (I)</h2>
+<ul>
+<li><strong>Support vector regression</strong>
+<ul>
+<li>Continuous <span class="math inline">\(Y\)</span>: find hyperplane with <span class="math inline">\(\epsilon\)</span>-insensitive loss <span class="math display">\[\begin{equation*}
+(\hat\beta, \hat b)
+\;=\;
+\arg\min_{\beta, b} \|\beta\|^2
+\quad\text{subject to}\quad
+|Y_i - (\beta^\T Z_i + b)| \,\le\, \varepsilon,\;\; i = 1,\ldots,n
+\end{equation*}\]</span></li>
+<li>Allow for <span class="math inline">\(\epsilon\)</span>-insensitive slack variables <span class="math inline">\(\zeta_i^+, \zeta_i^- \ge 0\)</span> <span class="math display">\[\begin{align}\label{eq:ml:svm_soft_margin_reg}
+(\hat\beta, \hat b)
+\;=\;&amp;
+\arg\min_{\beta, b, \xi^+, \xi^-}
+\left\{
+\|\beta\|^2 \,+\,
+\lambda\sum_{i=1}^n(\xi_i^+ + \xi_i^-)
+\right\}, \notag\\[3pt]
+&amp;\text{subject to}\quad
+\left\{
+\begin{aligned}
+&amp;Y_i - (\beta^\T Z_i + b) \,\le\, \varepsilon + \xi_i^+,\\[3pt]
+&amp;(\beta^\T Z_i + b) - Y_i \,\le\, \varepsilon + \xi_i^-,\\[3pt]
+&amp;\xi_i^+,\,\xi_i^- \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad i = 1,\ldots,n
+\end{align}\]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="svm-regression-ii" class="slide level2">
+<h2>SVM: Regression (II)</h2>
+<ul>
+<li><strong>Hard versus soft margin</strong></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/ml_svr_margin.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
+</figure>
+</div>
+</section>
+<section id="survival-svm-i" class="slide level2">
+<h2>Survival SVM (I)</h2>
+<ul>
+<li><strong>Two perspectives</strong>
+<ul>
+<li>Ranking: order classification of comparable pairs <span class="math display">\[
+\mathcal P \;=\; \{(i, j):\, \delta_i = 1,\, X_i &lt; X_j\}.
+\]</span></li>
+<li>Regression: predict survival time with censored data</li>
+</ul></li>
+<li><strong>Ranking SSVM</strong>
+<ul>
+<li>Classification with soft margin <span class="math display">\[\begin{align}\label{eq:ml:svm_soft_margin_surv}
+\hat\beta
+\;=\;&amp;
+\arg\min_{\beta, \zeta} \|\beta\|^2 \,+\, \lambda\sum_{(i, j)\in\mathcal P} \zeta_{ij}, \notag\\
+&amp;\text{subject to}\quad
+\left\{
+\begin{aligned}
+&amp;\beta^\T (Z_i - Z_j) \,\ge\, 1 - \zeta_{ij},\\[4pt]
+&amp;\zeta_{ij} \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad (i, j)\in\mathcal P
+\end{align}\]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="survival-svm-ii" class="slide level2">
+<h2>Survival SVM (II)</h2>
+<ul>
+<li><strong>Regression SSVM</strong>
+<ul>
+<li>Censored observations <span class="math inline">\(\to\)</span> one-sided penalty <span class="math display">\[\begin{align}\label{eq:ml:svm_soft_margin_reg_surv}
+(\hat\beta, \hat b)
+\;=\;&amp;
+\arg\min_{\beta, b, \xi^+, \xi^-}
+\left\{
+\|\beta\|^2 \,+\,
+\lambda\sum_{i=1}^n(\xi_i^+ + \xi_i^-)
+\right\}, \notag\\[3pt]
+&amp;\text{subject to}\quad
+\left\{
+\begin{aligned}
+&amp;X_i - (\beta^\T Z_i + b) \,\le\, \xi_i^+,\\[3pt]
+&amp;\delta_i\{\beta^\T Z_i + b - X_i\} \,\le\, \xi_i^-,\\[3pt]
+&amp;\xi_i^+,\,\xi_i^- \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad i = 1,\ldots,n
+\end{align}\]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="survival-svm-iii" class="slide level2">
+<h2>Survival SVM (III)</h2>
+<ul>
+<li><strong>Hybrid approach</strong>
+<ul>
+<li>Combines ranking and regression objective functions and penalties <span class="math display">\[\begin{align}\label{eq:ml:svm_soft_margin_hybrid_surv}
+(\hat\beta, \hat b)
+\;=\;&amp;
+\arg\min_{\beta, b, \zeta, \xi^+, \xi^-}
+\left\{
+\|\beta\|^2
+\,+\,
+\mu\sum_{(i,j)\in\mathcal P} \zeta_{ij}
+\,+\,
+\gamma\sum_{i=1}^n(\xi_i^+ + \xi_i^-)
+\right\}, \notag\\[3pt]
+&amp;\text{subject to}\quad
+\left\{
+\begin{aligned}
+&amp;\beta^\T (Z_i - Z_j) \,\ge\, 1 - \zeta_{ij},\\[2pt]
+&amp;\zeta_{ij} \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad (i, j)\in\mathcal P, \notag\\[4pt]
+&amp;\quad\quad\;\text{and}\quad
+\left\{
+\begin{aligned}
+&amp;X_i - (\beta^\T Z_i + b) \,\le\, \xi_i^+,\\[3pt]
+&amp;\delta_i\{\beta^\T Z_i + b - X_i\} \,\le\, \xi_i^-,\\[3pt]
+&amp;\xi_i^+,\,\xi_i^- \,\ge\, 0,
+\end{aligned}
+\right.
+\qquad i = 1,\ldots,n.
+\end{align}\]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="the-kernel-trick" class="slide level2">
+<h2>The Kernel Trick</h2>
+<ul>
+<li><strong>Nonlinear SVM</strong>
+<ul>
+<li>Map covariates to high-dimensional space: <span class="math inline">\(z\mapsto \phi(z)\)</span></li>
+<li>Use kernel function <span class="math inline">\(K(z, z') = \langle \phi(z), \phi(z')\rangle\)</span> to compute inner products</li>
+<li>Common kernels: linear, polynomial, radial basis function (RBF)</li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/ml_svm_kernel.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
+</figure>
+</div>
+</section>
+<section id="software-survivalsvmsurvivalsvm-i" class="slide level2">
+<h2>Software: <code>survivalsvm::survivalsvm()</code> (I)</h2>
+<ul>
+<li><strong>Basic syntax for fitting survival SVM</strong>
+<ul>
+<li><code>type</code>: “ranking”, “regression”, or “hybrid”</li>
+<li><code>kernel</code>: “linear”, “polynomial”, or “radial”</li>
+<li><code>gamma.mu</code>: tuning parameters <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\mu\)</span> for hybrid SVM</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="fu">library</span>(survivalsvm)</span>
+<span id="cb12-2"><a></a><span class="co"># Fit a regression SVM with linear kernel</span></span>
+<span id="cb12-3"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">survivalsvm</span>(</span>
+<span id="cb12-4"><a></a>  <span class="fu">Surv</span>(time, status) <span class="sc">~</span> covariates, </span>
+<span id="cb12-5"><a></a>  <span class="at">type =</span> <span class="st">"regression"</span>,</span>
+<span id="cb12-6"><a></a>  <span class="at">kernel =</span> <span class="st">"linear"</span>,</span>
+<span id="cb12-7"><a></a>  <span class="at">gamma.mu =</span> <span class="dv">1</span>       <span class="co"># may need to be tuned manually</span></span>
+<span id="cb12-8"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="software-survivalsvmsurvivalsvm-ii" class="slide level2">
+<h2>Software: <code>survivalsvm::survivalsvm()</code> (II)</h2>
+<ul>
+<li><strong>Predict risk scores</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a><span class="co"># Predict risk scores for test set (&lt;test_scaled&gt;)</span></span>
+<span id="cb13-2"><a></a>pred_svm <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb13-3"><a></a>  <span class="at">object  =</span> fit,</span>
+<span id="cb13-4"><a></a>  <span class="at">newdata =</span> test</span>
+<span id="cb13-5"><a></a>)</span>
+<span id="cb13-6"><a></a></span>
+<span id="cb13-7"><a></a><span class="co"># Extract predicted scores</span></span>
+<span id="cb13-8"><a></a>pred_svm<span class="sc">$</span>predicted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="gbc-fitting-ssvm" class="slide level2">
+<h2>GBC: Fitting SSVM</h2>
+<ul>
+<li><strong>Regression with linear kernel</strong>
+<ul>
+<li>Feature importance computed from CV samples</li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/ml_ssvm_gbc.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
+</figure>
+</div>
+</section>
+<section id="gbc-models-fitted" class="slide level2">
+<h2>GBC: Models Fitted</h2>
+<ul>
+<li><strong>Models</strong>
+<ul>
+<li>Full Cox model with all predictors</li>
+<li>“Inadequate” Cox model excluding <code>prog</code> and <code>nodes</code></li>
+<li>Lasso-regularized Cox model</li>
+<li>Survival tree</li>
+<li>Random survival forest</li>
+<li>Survival SVM</li>
+</ul></li>
+</ul>
+</section>
+<section id="gbc-model-evaluations" class="slide level2">
+<h2>GBC: Model Evaluations</h2>
+<ul>
+<li><strong>Prediction performance on test data</strong> (<span class="math inline">\(n^*=286\)</span>)</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/ml_gbc_test.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+</figure>
+</div>
+</section>
+<section id="gbc-brier-score" class="slide level2">
+<h2>GBC: Brier Score</h2>
+<ul>
+<li><strong>Brier score over time</strong></li>
+</ul>
+<!-- ml_brier_scores_all_models -->
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/ml_brier_scores_all_models.png" class="quarto-figure quarto-figure-center" style="width:90.0%"></p>
+</figure>
+</div>
+</section></section>
+<section>
+<section id="rs-tidymodels-system" class="title-slide slide level1 center">
+<h1>R’s Tidymodels System</h1>
+
+</section>
+<section id="overview-of-tidymodels-and-censored" class="slide level2">
+<h2>Overview of <code>tidymodels</code> and <code>censored</code></h2>
+<ul>
+<li><strong><code>tidymodels</code></strong>: a collection of packages for modeling and machine learning in R
+<ul>
+<li>Provides a <em>consistent interface</em> for model training, tuning, and evaluation
+<ul>
+<li>Key package <code>parsnip</code></li>
+</ul></li>
+<li>Supports various model types, including regression, classification, and survival analysis</li>
+</ul></li>
+<li><strong><code>censored</code></strong>: a <code>parsnip</code> extension package for survival data
+<ul>
+<li>Implements parametric, semiparametric, and tree-based survival models</li>
+</ul></li>
+</ul>
+</section>
+<section id="data-preparation-and-splitting" class="slide level2">
+<h2>Data Preparation and Splitting</h2>
+<ul>
+<li><strong>Create a <code>Surv</code> object</strong> as response
+<ul>
+<li><code>Surv(time, event)</code></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb14-2"><a></a><span class="fu">library</span>(censored)</span>
+<span id="cb14-3"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span>  </span>
+<span id="cb14-4"><a></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-5"><a></a>    <span class="at">surv_obj =</span> <span class="fu">Surv</span>(time, event), <span class="co"># create Surv object as response variable</span></span>
+<span id="cb14-6"><a></a>    <span class="at">.keep =</span> <span class="st">"unused"</span>              <span class="co"># discard original time and event columns</span></span>
+<span id="cb14-7"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p><strong>Data splitting</strong></p>
+<ul>
+<li><code>initial_split()</code>: splits data into training and testing sets</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a>df_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(flight_data, <span class="at">prop =</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span>) <span class="co"># default ratio 3:1</span></span>
+<span id="cb15-2"><a></a>df_train <span class="ot">&lt;-</span> <span class="fu">training</span>(df_split) <span class="co"># obtain training set</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="model-specification" class="slide level2">
+<h2>Model Specification</h2>
+<ul>
+<li><strong>Model type</strong>
+<ul>
+<li><code>survival_reg()</code>: parametric AFT models</li>
+<li><code>proportional_hazards(penalty = tune())</code>: (regularized) Cox PH models</li>
+<li><code>decision_tree(cost_complexity = tune())</code>: decision trees</li>
+<li><code>rand_forest(mtry = tune())</code>: orandom forests</li>
+</ul></li>
+<li><strong>Set engine and mode</strong>
+<ul>
+<li><code>set_engine("survival")</code>: for parametric AFT models</li>
+<li><code>set_engine("glmnet")</code>: for Cox PH models</li>
+<li><code>set_engine("aorsf")</code>: for blique random forests</li>
+<li><code>set_mode("censored regression")</code>: for survival models</li>
+</ul></li>
+</ul>
+</section>
+<section id="model-specification---example" class="slide level2">
+<h2>Model Specification - Example</h2>
+<ul>
+<li><strong>Example</strong>: regularized Cox model using <code>glmnet</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a><span class="co"># Regularized Cox model </span></span>
+<span id="cb16-2"><a></a>model_spec <span class="ot">&lt;-</span> <span class="fu">proportional_hazards</span>(<span class="at">penalty =</span> <span class="fu">tune</span>()) <span class="sc">|&gt;</span>  <span class="co"># tune lambda</span></span>
+<span id="cb16-3"><a></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) <span class="sc">|&gt;</span>  <span class="co"># set engine to glmnet</span></span>
+<span id="cb16-4"><a></a>  <span class="fu">set_mode</span>(<span class="st">"censored regression"</span>) <span class="co"># set mode to censored regression</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="recipe-and-workflow" class="slide level2">
+<h2>Recipe and Workflow</h2>
+<ul>
+<li><strong>Recipe</strong>: a series of preprocessing steps for the data
+<ul>
+<li><code>recipe(response ~ ., data = df)</code>: specify response and predictors</li>
+<li><code>step_mutate()</code>: standardize numeric predictors <!-- -  `step_unknown()`: handle unknown levels in categorical variables --> <!-- -  `step_other()`: group low-frequency levels into "other" --></li>
+<li><code>step_dummy()</code>: convert categorical variables to dummy variables <!-- -  `step_zv()`: remove zero-variance predictors --></li>
+</ul></li>
+<li><strong>Workflow</strong>: combines model specification and recipe
+<ul>
+<li><code>workflow() |&gt; add_model(model_spec) |&gt; add_recipe(recipe)</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="recipe-and-workflow---example" class="slide level2">
+<h2>Recipe and Workflow - Example</h2>
+<ul>
+<li><strong>Example</strong>: regularized Cox model with data preprocessing steps</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a><span class="co"># Create a recipe</span></span>
+<span id="cb17-2"><a></a>model_recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(surv_obj <span class="sc">~</span> ., <span class="at">data =</span> df_train) <span class="sc">|&gt;</span> <span class="co"># specify formula</span></span>
+<span id="cb17-3"><a></a>  <span class="fu">step_mutate</span>(<span class="at">z1 =</span> z1 <span class="sc">/</span> <span class="dv">1000</span>) <span class="sc">|&gt;</span>  <span class="co"># standardize z1  </span></span>
+<span id="cb17-4"><a></a>  <span class="co"># group levels with prop &lt; .02 into "other"</span></span>
+<span id="cb17-5"><a></a>  <span class="fu">step_other</span>(z2, z3, <span class="at">threshold =</span> <span class="fl">0.02</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb17-6"><a></a>  <span class="co"># convert categorical WWto dummy variables</span></span>
+<span id="cb17-7"><a></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>())  </span>
+<span id="cb17-8"><a></a></span>
+<span id="cb17-9"><a></a><span class="co"># Create a workflow by combining model and recipe</span></span>
+<span id="cb17-10"><a></a>model_wflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb17-11"><a></a>  <span class="fu">add_model</span>(model_spec) <span class="sc">|&gt;</span>   <span class="co"># add model specification</span></span>
+<span id="cb17-12"><a></a>  <span class="fu">add_recipe</span>(model_recipe)   <span class="co"># add recipe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tune-hyperparameters" class="slide level2">
+<h2>Tune Hyperparameters</h2>
+<ul>
+<li><strong>Cross-validation</strong>
+<ul>
+<li><code>df_train_folds &lt;- vfold_cv(df_train, v = k)</code>: create <em>k</em>-folds on training data (default 10)</li>
+<li><code>tune_grid(model_wflow, resamples = df_train_folds)</code>: tuning</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a><span class="co"># k-fold cross-validation</span></span>
+<span id="cb18-2"><a></a>df_train_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(df_train, <span class="at">v =</span> <span class="dv">10</span>) <span class="co"># 10-fold cross-validation</span></span>
+<span id="cb18-3"><a></a><span class="co"># Tune hyperparameters</span></span>
+<span id="cb18-4"><a></a>model_res <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(</span>
+<span id="cb18-5"><a></a>  model_wflow, </span>
+<span id="cb18-6"><a></a>  <span class="at">resamples =</span> df_train_folds, </span>
+<span id="cb18-7"><a></a>  <span class="at">grid =</span> <span class="dv">10</span>, <span class="co"># number of hyperparameter combinations to try</span></span>
+<span id="cb18-8"><a></a>  <span class="at">metrics =</span> <span class="fu">metric_set</span>(brier_survival, brier_survival_integrated,  </span>
+<span id="cb18-9"><a></a>                       roc_auc_survival, concordance_survival), <span class="co"># specify metrics</span></span>
+<span id="cb18-10"><a></a>  <span class="at">eval_time =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">84</span>, <span class="at">by =</span> <span class="dv">12</span>) <span class="co"># evaluation time points</span></span>
+<span id="cb18-11"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="finalize-workflow" class="slide level2">
+<h2>Finalize Workflow</h2>
+<ul>
+<li><strong>Examine validation results</strong>
+<ul>
+<li><code>collect_metrics(model_res)</code>: collect metrics from tuning results</li>
+<li><code>show_best(model_res, metric = "brier_survival_integrated", n = 5)</code>: show top 5 models based on IBS</li>
+</ul></li>
+<li><strong>Workflow for best model</strong>
+<ul>
+<li><code>param_best &lt;- select_best(model_res, metric = "brier_survival_integrated")</code>: select best hyperparameters based on Brier score</li>
+<li><code>final_wl &lt;- finalize_workflow(model_wflow, param_best)</code>: finalize workflow with best hyperparameters</li>
+</ul></li>
+</ul>
+</section>
+<section id="finalize-workflow---example" class="slide level2">
+<h2>Finalize Workflow - Example</h2>
+<ul>
+<li><strong>Example</strong>: select best hyperparameters based on Brier score and finalize workflow</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a><span class="co"># Extract the best hyperparameters based on Brier score</span></span>
+<span id="cb19-2"><a></a>param_best <span class="ot">&lt;-</span> <span class="fu">select_best</span>(model_res, <span class="at">metric =</span> <span class="st">"brier_survival_integrated"</span>)</span>
+<span id="cb19-3"><a></a></span>
+<span id="cb19-4"><a></a><span class="co"># Finalize the workflow with the best hyperparameters</span></span>
+<span id="cb19-5"><a></a>final_wl <span class="ot">&lt;-</span> model_wflow <span class="sc">|&gt;</span> <span class="fu">finalize_workflow</span>(param_best)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fit-final-model" class="slide level2">
+<h2>Fit Final Model</h2>
+<ul>
+<li><strong>Fit the finalized workflow</strong>
+<ul>
+<li><code>final_mod &lt;- last_fit(final_wl, split = df_split)</code>: fit the finalized workflow on the testing set</li>
+<li><code>collect_metrics(final_mod)</code>: collect metrics of final model on test data</li>
+</ul></li>
+<li><strong>Make predictions</strong>
+<ul>
+<li><code>predict(final_mod, new_data = new_data, type = "time")</code>: predict survival times on new data</li>
+</ul></li>
+</ul>
+</section>
+<section id="fit-final-model---example" class="slide level2">
+<h2>Fit Final Model - Example</h2>
+<ul>
+<li><strong>Example</strong>: fit the finalized workflow on the testing set, evaluate performance, and make predictions on new data</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a><span class="co"># Fit the finalized workflow on the testing set</span></span>
+<span id="cb20-2"><a></a>final_mod <span class="ot">&lt;-</span> <span class="fu">last_fit</span>(final_wl, <span class="at">split =</span> df_split)</span>
+<span id="cb20-3"><a></a></span>
+<span id="cb20-4"><a></a><span class="co"># Collect metrics of final model on test data</span></span>
+<span id="cb20-5"><a></a><span class="fu">collect_metrics</span>(final_mod) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-6"><a></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"brier_survival_integrated"</span>)</span>
+<span id="cb20-7"><a></a></span>
+<span id="cb20-8"><a></a><span class="co"># Make predictions on new data</span></span>
+<span id="cb20-9"><a></a>new_data <span class="ot">&lt;-</span> <span class="fu">testing</span>(df_split) <span class="sc">|&gt;</span>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="co"># take first 5 rows of test data</span></span>
+<span id="cb20-10"><a></a><span class="fu">predict</span>(final_mod, <span class="at">new_data =</span> new_data, <span class="at">type =</span> <span class="st">"time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section></section>
+<section>
+<section id="a-case-study-for-tidymodels" class="title-slide slide level1 center">
+<h1>A Case Study for Tidymodels</h1>
+
+</section>
+<section id="gbc-relapse-free-survival" class="slide level2">
+<h2>GBC: Relapse-Free Survival</h2>
+<ul>
+<li><strong>Time to first event</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a></a><span class="fu">library</span>(tidymodels) <span class="co"># load tidymodels</span></span>
+<span id="cb21-2"><a></a><span class="fu">library</span>(censored)</span>
+<span id="cb21-3"><a></a>gbc <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Data/German Breast Cancer Study/gbc.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>) <span class="co"># Load GBC dataset</span></span>
+<span id="cb21-4"><a></a>df <span class="ot">&lt;-</span> gbc <span class="sc">|&gt;</span>  <span class="co"># calculate time to first event (relapse or death)</span></span>
+<span id="cb21-5"><a></a>  <span class="fu">group_by</span>(id) <span class="sc">|&gt;</span> <span class="co"># group by id</span></span>
+<span id="cb21-6"><a></a>  <span class="fu">arrange</span>(time) <span class="sc">|&gt;</span> <span class="co"># sort rows by time</span></span>
+<span id="cb21-7"><a></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span>      <span class="co"># get the first row within each id</span></span>
+<span id="cb21-8"><a></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb21-9"><a></a>  <span class="fu">mutate</span>(</span>
+<span id="cb21-10"><a></a>    <span class="at">surv_obj =</span> <span class="fu">Surv</span>(time, status), <span class="co"># create the Surv object as response variable</span></span>
+<span id="cb21-11"><a></a>    <span class="at">.after =</span> id, <span class="co"># keep id column after surv_obj</span></span>
+<span id="cb21-12"><a></a>    <span class="at">.keep =</span> <span class="st">"unused"</span> <span class="co"># discard original time and status columns</span></span>
+<span id="cb21-13"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-preparation" class="slide level2">
+<h2>Data Preparation</h2>
+<ul>
+<li><strong>Analysis dataset</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a><span class="fu">head</span>(df) <span class="co"># show the first few rows of the dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 10
+     id   surv_obj hormone   age  meno  size grade nodes  prog estrg
+  &lt;int&gt;     &lt;Surv&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+1     1 43.836066        1    38     1    18     3     5   141   105
+2     2 46.557377        1    52     1    20     1     1    78    14
+3     3 41.934426        1    47     1    30     2     1   422    89
+4     4  4.852459+       1    40     1    24     1     3    25    11
+5     5 61.081967+       2    64     2    19     2     1    19     9
+6     6 63.377049+       2    49     2    56     1     3   356    64</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a><span class="co"># Data splitting</span></span>
+<span id="cb24-2"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># set seed for reproducibility</span></span>
+<span id="cb24-3"><a></a>gbc_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(df) <span class="co"># split data into training and testing sets</span></span>
+<span id="cb24-4"><a></a>gbc_split </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;Training/Testing/Total&gt;
+&lt;514/172/686&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="models-to-be-trained" class="slide level2">
+<h2>Models to be Trained</h2>
+<ul>
+<li><strong>Regularized Cox model</strong>
+<ul>
+<li><code>proportional_hazards(penalty = tune())</code> (Default: <span class="math inline">\(\alpha = 1\)</span>; lasso)</li>
+<li>Tune penalty parameter <span class="math inline">\(\lambda\)</span></li>
+<li>Use <code>glmnet</code> engine for fitting</li>
+</ul></li>
+<li><strong>Random forest</strong>
+<ul>
+<li><code>rand_forest(mtry = tune(), min_n = tune())</code></li>
+<li>Tune number of predictors to split on and minimum size of terminal node</li>
+<li>Use <code>aorsf</code> engine for fitting</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a><span class="co"># Training data</span></span>
+<span id="cb26-2"><a></a>gbc_train <span class="ot">&lt;-</span> <span class="fu">training</span>(gbc_split) <span class="co"># obtain training set</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="common-recipe" class="slide level2">
+<h2>Common Recipe</h2>
+<ul>
+<li><strong>Recipe for both models</strong> <!-- -  Create binary variable for age $\geq 40$ --> <!-- -  Rescale `prog` and `estrg` by 0.01 --> <!-- -  Convert `grade` to dummy variables --></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a></a>gbc_recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(surv_obj <span class="sc">~</span> ., <span class="at">data =</span> gbc_train) <span class="sc">|&gt;</span> <span class="co"># specify formula</span></span>
+<span id="cb27-2"><a></a>  <span class="fu">step_mutate</span>(</span>
+<span id="cb27-3"><a></a>    <span class="at">grade =</span> <span class="fu">factor</span>(grade),</span>
+<span id="cb27-4"><a></a>    <span class="at">age40 =</span> <span class="fu">as.numeric</span>(age <span class="sc">&gt;=</span> <span class="dv">40</span>), <span class="co"># create a binary variable for age &gt;= 40</span></span>
+<span id="cb27-5"><a></a>    <span class="at">prog =</span> prog <span class="sc">/</span> <span class="dv">100</span>, <span class="co"># rescale prog</span></span>
+<span id="cb27-6"><a></a>    <span class="at">estrg =</span> estrg <span class="sc">/</span> <span class="dv">100</span> <span class="co"># rescale estrg</span></span>
+<span id="cb27-7"><a></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb27-8"><a></a>  <span class="fu">step_dummy</span>(grade) <span class="sc">|&gt;</span> </span>
+<span id="cb27-9"><a></a>  <span class="fu">step_rm</span>(id) <span class="co"># remove id</span></span>
+<span id="cb27-10"><a></a><span class="co"># gbc_recipe # print recipe information</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="regularized-cox-model" class="slide level2">
+<h2>Regularized Cox Model</h2>
+<ul>
+<li><strong>Cox model specification and workflow</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a></a><span class="co"># Regularized Cox model specification</span></span>
+<span id="cb28-2"><a></a>cox_spec <span class="ot">&lt;-</span> <span class="fu">proportional_hazards</span>(<span class="at">penalty =</span> <span class="fu">tune</span>()) <span class="sc">|&gt;</span>  <span class="co"># tune lambda</span></span>
+<span id="cb28-3"><a></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) <span class="sc">|&gt;</span>  <span class="co"># set engine to glmnet</span></span>
+<span id="cb28-4"><a></a>  <span class="fu">set_mode</span>(<span class="st">"censored regression"</span>) <span class="co"># set mode to censored regression</span></span>
+<span id="cb28-5"><a></a>cox_spec <span class="co"># print model specification</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Proportional Hazards Model Specification (censored regression)
+
+Main Arguments:
+  penalty = tune()
+
+Computational engine: glmnet </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a></a><span class="co"># Create a workflow by combining model and recipe</span></span>
+<span id="cb30-2"><a></a>cox_wflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb30-3"><a></a>  <span class="fu">add_model</span>(cox_spec) <span class="sc">|&gt;</span>   <span class="co"># add model specification</span></span>
+<span id="cb30-4"><a></a>  <span class="fu">add_recipe</span>(gbc_recipe)   <span class="co"># add recipe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="model-tuning" class="slide level2">
+<h2>Model Tuning</h2>
+<ul>
+<li><strong>Cross-validation set-up</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># set seed for reproducibility</span></span>
+<span id="cb31-2"><a></a>gbc_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(gbc_train, <span class="at">v =</span> <span class="dv">10</span>) <span class="co"># 10-fold cross-validation</span></span>
+<span id="cb31-3"><a></a><span class="co"># Set evaulation metrics</span></span>
+<span id="cb31-4"><a></a>gbc_metrics <span class="ot">&lt;-</span> <span class="fu">metric_set</span>(brier_survival, brier_survival_integrated, </span>
+<span id="cb31-5"><a></a>                          roc_auc_survival, concordance_survival)</span>
+<span id="cb31-6"><a></a>gbc_metrics <span class="co"># evaluation metrics info</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>A metric set, consisting of:
+- `brier_survival()`, a dynamic survival metric               | direction:
+minimize
+- `brier_survival_integrated()`, a integrated survival metric | direction:
+minimize
+- `roc_auc_survival()`, a dynamic survival metric             | direction:
+maximize
+- `concordance_survival()`, a static survival metric          | direction:
+maximize</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a></a>time_points <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">84</span>, <span class="at">by =</span> <span class="dv">12</span>) <span class="co"># evaluation time points</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="cox-model-tuning" class="slide level2">
+<h2>Cox Model Tuning</h2>
+<ul>
+<li><strong>Tune the regularized Cox model</strong>
+<ul>
+<li>Use <code>tune_grid()</code> to perform hyperparameter tuning</li>
+<li>Evaluate performance using Brier score and ROC AUC</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># set seed for reproducibility</span></span>
+<span id="cb34-2"><a></a><span class="co"># Tune the regularized Cox model (this will take some time)</span></span>
+<span id="cb34-3"><a></a>cox_res <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(</span>
+<span id="cb34-4"><a></a>  cox_wflow, </span>
+<span id="cb34-5"><a></a>  <span class="at">resamples =</span> gbc_folds, </span>
+<span id="cb34-6"><a></a>  <span class="at">grid =</span> <span class="dv">10</span>, <span class="co"># number of hyperparameter combinations to try</span></span>
+<span id="cb34-7"><a></a>  <span class="at">metrics =</span> gbc_metrics, <span class="co"># evaluation metrics</span></span>
+<span id="cb34-8"><a></a>  <span class="at">eval_time =</span> time_points, <span class="co"># evaluation time points</span></span>
+<span id="cb34-9"><a></a>  <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_workflow =</span> <span class="cn">TRUE</span>) <span class="co"># save workflow</span></span>
+<span id="cb34-10"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="cox-model-tuning-results" class="slide level2">
+<h2>Cox Model Tuning Results</h2>
+<ul>
+<li>Plot IBS as function of <span class="math inline">\(\log\lambda\)</span></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chap15_files/figure-revealjs/unnamed-chunk-32-1.png" class="quarto-figure quarto-figure-center" width="768"></p>
 </figure>
 </div>
 </div>
+</div>
+</section>
+<section id="best-cox-models" class="slide level2">
+<h2>Best Cox Models</h2>
+<ul>
+<li><strong>Show best models</strong>
+<ul>
+<li>Based on Brier score</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a><span class="fu">show_best</span>(cox_res, <span class="at">metric =</span> <span class="st">"brier_survival_integrated"</span>, <span class="at">n =</span> <span class="dv">5</span>) <span class="co"># top 5 models</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+   penalty .metric             .estimator .eval_time  mean     n std_err .config
+     &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+1 2.92e- 3 brier_survival_int… standard           NA 0.160    10 0.00765 pre0_m…
+2 1.15e-10 brier_survival_int… standard           NA 0.160    10 0.00775 pre0_m…
+3 1.44e- 9 brier_survival_int… standard           NA 0.160    10 0.00775 pre0_m…
+4 1.30e- 8 brier_survival_int… standard           NA 0.160    10 0.00775 pre0_m…
+5 1.17e- 7 brier_survival_int… standard           NA 0.160    10 0.00775 pre0_m…</code></pre>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="random-forest-model" class="slide level2">
+<h2>Random Forest Model</h2>
+<ul>
+<li><strong>Random forest specification and workflow</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a></a><span class="co"># Random forest model specification</span></span>
+<span id="cb37-2"><a></a>rf_spec <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>(<span class="at">mtry =</span> <span class="fu">tune</span>(), <span class="at">min_n =</span> <span class="fu">tune</span>()) <span class="sc">|&gt;</span>  <span class="co"># tune mtry and min_n</span></span>
+<span id="cb37-3"><a></a>  <span class="fu">set_engine</span>(<span class="st">"aorsf"</span>) <span class="sc">|&gt;</span>  <span class="co"># set engine to aorsf</span></span>
+<span id="cb37-4"><a></a>  <span class="fu">set_mode</span>(<span class="st">"censored regression"</span>) <span class="co"># set mode to censored regression</span></span>
+<span id="cb37-5"><a></a>rf_spec <span class="co"># print model specification</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest Model Specification (censored regression)
+
+Main Arguments:
+  mtry = tune()
+  min_n = tune()
+
+Computational engine: aorsf </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a></a><span class="co"># Create a workflow by combining model and recipe</span></span>
+<span id="cb39-2"><a></a>rf_wflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb39-3"><a></a>  <span class="fu">add_model</span>(rf_spec) <span class="sc">|&gt;</span>   <span class="co"># add model specification</span></span>
+<span id="cb39-4"><a></a>  <span class="fu">add_recipe</span>(gbc_recipe)   <span class="co"># add recipe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="random-forest-tuning" class="slide level2">
+<h2>Random Forest Tuning</h2>
+<ul>
+<li><strong>Tune the random forest model</strong>
+<ul>
+<li>Similar to Cox model tuning</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># set seed for reproducibility</span></span>
+<span id="cb40-2"><a></a><span class="co"># Tune the random forest model (this will take some time)</span></span>
+<span id="cb40-3"><a></a>rf_res <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(</span>
+<span id="cb40-4"><a></a>  rf_wflow, </span>
+<span id="cb40-5"><a></a>  <span class="at">resamples =</span> gbc_folds, </span>
+<span id="cb40-6"><a></a>  <span class="at">grid =</span> <span class="dv">10</span>, <span class="co"># number of hyperparameter combinations to try</span></span>
+<span id="cb40-7"><a></a>  <span class="at">metrics =</span> gbc_metrics, <span class="co"># evaluation metrics</span></span>
+<span id="cb40-8"><a></a>  <span class="at">eval_time =</span> time_points <span class="co"># evaluation time points</span></span>
+<span id="cb40-9"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="random-forest-tuning-results" class="slide level2">
+<h2>Random Forest Tuning Results</h2>
+<ul>
+<li><strong>View validation results</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a></a><span class="fu">collect_metrics</span>(rf_res) <span class="sc">|&gt;</span> <span class="fu">head</span>()   <span class="co"># collect metrics from tuning results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 9
+   mtry min_n .metric         .estimator .eval_time   mean     n std_err .config
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;           &lt;chr&gt;           &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+1     1    14 brier_survival  standard            0 0         10 0       pre0_m…
+2     1    14 roc_auc_surviv… standard            0 0.5       10 0       pre0_m…
+3     1    14 brier_survival  standard           12 0.0643    10 0.00748 pre0_m…
+4     1    14 roc_auc_surviv… standard           12 0.838     10 0.0312  pre0_m…
+5     1    14 brier_survival  standard           24 0.165     10 0.0103  pre0_m…
+6     1    14 roc_auc_surviv… standard           24 0.753     10 0.0470  pre0_m…</code></pre>
+</div>
+</div>
+</section>
+<section id="best-random-forest-models" class="slide level2">
+<h2>Best Random Forest Models</h2>
+<ul>
+<li><strong>Show best models</strong>
+<ul>
+<li>Based on Brier score</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a></a><span class="fu">show_best</span>(rf_res, <span class="at">metric =</span> <span class="st">"brier_survival_integrated"</span>, <span class="at">n =</span> <span class="dv">5</span>) <span class="co"># top 5 models</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 9
+   mtry min_n .metric          .estimator .eval_time  mean     n std_err .config
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+1     5    35 brier_survival_… standard           NA 0.155    10 0.00775 pre0_m…
+2     8    40 brier_survival_… standard           NA 0.155    10 0.00745 pre0_m…
+3     7    23 brier_survival_… standard           NA 0.155    10 0.00758 pre0_m…
+4    10    27 brier_survival_… standard           NA 0.156    10 0.00731 pre0_m…
+5     4    18 brier_survival_… standard           NA 0.156    10 0.00795 pre0_m…</code></pre>
+</div>
+</div>
+<ul>
+<li><strong>Conclusion</strong>
+<ul>
+<li>Best RF model has lower Brier score than best Cox model</li>
+</ul></li>
+</ul>
+</section>
+<section id="finalize-and-fit-best-model" class="slide level2">
+<h2>Finalize and Fit Best Model</h2>
+<ul>
+<li><strong>Fit final RF model</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a></a><span class="co"># Select best RF hyperparameters (mtry, min_n) based on Brier score</span></span>
+<span id="cb45-2"><a></a>param_best <span class="ot">&lt;-</span> <span class="fu">select_best</span>(rf_res, <span class="at">metric =</span> <span class="st">"brier_survival_integrated"</span>) </span>
+<span id="cb45-3"><a></a>param_best <span class="co"># view results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+   mtry min_n .config         
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;           
+1     5    35 pre0_mod05_post0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a>rf_final_wflow <span class="ot">&lt;-</span> <span class="fu">finalize_workflow</span>(rf_wflow, param_best) <span class="co"># Finalize workflow</span></span>
+<span id="cb47-2"><a></a><span class="co"># Fit the finalized workflow on the testing set</span></span>
+<span id="cb47-3"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># set seed for reproducibility</span></span>
+<span id="cb47-4"><a></a>final_rf_fit <span class="ot">&lt;-</span> <span class="fu">last_fit</span>(</span>
+<span id="cb47-5"><a></a>  rf_final_wflow, </span>
+<span id="cb47-6"><a></a>  <span class="at">split =</span> gbc_split, <span class="co"># use the original split</span></span>
+<span id="cb47-7"><a></a>  <span class="at">metrics =</span> gbc_metrics, <span class="co"># evaluation metrics</span></span>
+<span id="cb47-8"><a></a>  <span class="at">eval_time =</span> time_points <span class="co"># evaluation time points</span></span>
+<span id="cb47-9"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="test-performance-i" class="slide level2">
+<h2>Test Performance (I)</h2>
+<ul>
+<li><strong>Collect metrics on test data</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a></a><span class="fu">collect_metrics</span>(final_rf_fit) <span class="sc">|&gt;</span> <span class="co"># collect overall performance metrics</span></span>
+<span id="cb48-2"><a></a>  <span class="fu">filter</span>(.metric <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"concordance_survival"</span>, <span class="st">"brier_survival_integrated"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  .metric                   .estimator .eval_time .estimate .config        
+  &lt;chr&gt;                     &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;          
+1 brier_survival_integrated standard           NA     0.235 pre0_mod0_post0
+2 concordance_survival      standard           NA     0.655 pre0_mod0_post0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a></a><span class="co"># Extract test ROC AUC over time</span></span>
+<span id="cb50-2"><a></a>roc_test <span class="ot">&lt;-</span> <span class="fu">collect_metrics</span>(final_rf_fit) <span class="sc">|&gt;</span>  </span>
+<span id="cb50-3"><a></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"roc_auc_survival"</span>) <span class="sc">|&gt;</span>  <span class="co"># filter for ROC AUC</span></span>
+<span id="cb50-4"><a></a>  <span class="fu">rename</span>(<span class="at">mean =</span> .estimate) <span class="co"># rename mean column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="test-performance-ii" class="slide level2">
+<h2>Test Performance (II)</h2>
+<ul>
+<li><strong>Plot test ROC AUC over time</strong></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chap15_files/figure-revealjs/unnamed-chunk-42-1.png" class="quarto-figure quarto-figure-center" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="prediction-by-final-rf-model" class="slide level2">
+<h2>Prediction by Final RF Model</h2>
+<ul>
+<li><strong>Extract the fitted workflow</strong>
+<ul>
+<li>Use <code>extract_workflow()</code> to get the final model</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a></a>gbc_rf <span class="ot">&lt;-</span> <span class="fu">extract_workflow</span>(final_rf_fit) <span class="co"># extract the fitted workflow</span></span>
+<span id="cb51-2"><a></a><span class="co"># Predict on new data</span></span>
+<span id="cb51-3"><a></a>gbc_5 <span class="ot">&lt;-</span> <span class="fu">testing</span>(gbc_split) <span class="sc">|&gt;</span>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="co"># take first 5 rows of test data</span></span>
+<span id="cb51-4"><a></a><span class="fu">predict</span>(gbc_rf, <span class="at">new_data =</span> gbc_5, <span class="at">type =</span> <span class="st">"time"</span>) <span class="co"># predict survival times</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 1
+  .pred_time
+       &lt;dbl&gt;
+1       48.2
+2       66.4
+3       66.2
+4       36.6
+5       49.7</code></pre>
+</div>
+</div>
+</section>
+<section id="survival-tree-exercise" class="slide level2">
+<h2>Survival Tree Exercise</h2>
+<ul>
+<li><strong>Task</strong>: fit a survival tree model to the GBC data
+<ul>
+<li>Use <code>decision_tree()</code> with <code>set_engine("rpart")</code></li>
+<li>Tune complexity parameter <code>cost_complexity</code> using <code>tune()</code></li>
+<li>Use the same recipe as for Cox and RF models</li>
+<li>Evaluate performance using Brier score and ROC AUC</li>
+</ul></li>
+</ul>
 </section></section>
 <section>
 <section id="conclusion" class="title-slide slide level1 center">
@@ -1119,32 +2121,26 @@ R(A\mid\mid B)=n^{-1}\sum_{i \in A}d_{i}^2 +n^{-1}\sum_{i \in B}d_{i}^2
 <section id="notes-iii" class="slide level2">
 <h2>Notes (III)</h2>
 <ul>
-<li><strong>Tidymodels</strong>
+<li><strong>Python’s machine learning systems</strong>
 <ul>
-<li><code>censored</code>: a member of <code>tidymodels</code> family</li>
-<li><a href="https://censored.tidymodels.org/" class="uri">https://censored.tidymodels.org/</a></li>
+<li><code>scikit-learn</code>: general machine learning library with support for survival analysis through extensions like <code>scikit-survival</code></li>
+<li><code>lifelines</code>: library specifically for survival analysis, including Cox models and KM estimators</li>
+<li><code>xgboost</code> and <code>lightgbm</code>: gradient boosting libraries adaptable for survival analysis using custom loss functions</li>
+</ul></li>
+<li><strong>Deep learning in survival analysis</strong>
+<ul>
+<li><code>DeepSurv</code>: a deep learning-based Cox proportional hazards model</li>
+<li><code>DeepHit</code>: a deep learning model for competing risks survival analysis</li>
 </ul></li>
 </ul>
-<div class="big-code">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="fu">library</span>(censored) </span>
-<span id="cb8-2"><a></a></span>
-<span id="cb8-3"><a></a><span class="fu">decision_tree</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb8-4"><a></a>  <span class="fu">set_engine</span>(<span class="st">"rpart"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-5"><a></a>  <span class="fu">set_mode</span>(<span class="st">"censored regression"</span>)</span>
-<span id="cb8-6"><a></a><span class="co">#&gt; Decision Tree Model Specification (censored regression)</span></span>
-<span id="cb8-7"><a></a><span class="co">#&gt; </span></span>
-<span id="cb8-8"><a></a><span class="co">#&gt; Computational engine: rpart</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
 </section>
-<section id="summary" class="slide level2">
-<h2>Summary</h2>
+<section id="summary-i" class="slide level2">
+<h2>Summary (I)</h2>
 <ul>
 <li><strong>Regularized Cox model</strong>
 <ul>
-<li><strong>Objective function</strong> <span class="math display">\[
-Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
+<li><strong>Elastic net</strong> <span class="math display">\[
+Q_n(\beta;\lambda) = \ell_n(\beta) - \lambda\left\{\alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^2/2\right\}
 \]</span>
 <ul>
 <li><code>glmnet::glmnet(Z, Surv(time, status), family =  “cox”, alpha = 1)</code></li>
@@ -1156,6 +2152,27 @@ Q_n(\beta;\lambda)=-n^{-1}pl_n(\beta)+\lambda\sum_{j=1}^p|\beta_j|
 <ul>
 <li><code>rpart:: rpart(Surv(time, status) ~ covariates)</code></li>
 </ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="summary-ii" class="slide level2">
+<h2>Summary (II)</h2>
+<ul>
+<li><strong>Random survival forests</strong>
+<ul>
+<li>Ensemble of survival trees with random feature selection and bootstrap
+<ul>
+<li><code>aorsf:: aorsf(Surv(time, status) ~ covariates, n_tree = 200)</code></li>
+</ul></li>
+</ul></li>
+<li><strong>Survival SVM</strong>
+<ul>
+<li>Extension of SVM for survival data using ranking or regression approaches</li>
+</ul></li>
+<li><strong>R’s <code>tidymodels</code> system</strong>
+<ul>
+<li>A consistent interface for model training, tuning, and evaluation</li>
+<li><code>censored</code> package extends <code>parsnip</code> for survival models</li>
 </ul></li>
 </ul>
 

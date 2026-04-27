@@ -1242,8 +1242,6 @@ brier_score_results5 <- rbind(
 
 
 
-
-
 ## Survival support vector machine (SSVM)
 # install.packages("survivalsvm")
 library(survivalsvm)
