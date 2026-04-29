@@ -233,7 +233,7 @@ Lu Mao
 <section id="outline" class="slide level2">
 <h2>Outline</h2>
 <ul>
-<li>What have we learned (and what have we not)?
+<li>What have we learned (and future directions)?
 <ul>
 <li>Background</li>
 <li>Univariate event time</li>
@@ -447,7 +447,7 @@ Lu Mao
 </ul></li>
 <li><strong>Formula</strong> <strong>(Ch 6)</strong>
 <ul>
-<li>R-programs available <span class="math display">\[
+<li>R-programs available (<code>npsurvSS</code> package) <span class="math display">\[
 \mbox{Log-rank}: n= \frac{(z_{1-\alpha/2}+z_{\gamma})^2}{q(1-q)\psi\theta^2}\,\,\,\,
 \mbox{$\tau$-RMST}: n= \frac{\zeta(\tau)(z_{1-\alpha/2}+z_{\gamma})^2}{q(1-q)\theta(\tau)^2}
 \]</span></li>
@@ -533,6 +533,12 @@ Lu Mao
 </tr>
 </tbody>
 </table></li>
+<li><p><strong>Three scenarios</strong></p>
+<ol type="1">
+<li>Same regression parameter; same baseline function</li>
+<li>Same regression parameter; different baseline functions</li>
+<li>Different regression parameters; different baseline functions</li>
+</ol></li>
 </ul></li>
 </ul>
 </section>
@@ -607,6 +613,7 @@ Lu Mao
 <ul>
 <li><code>JM::jointModel(obj1, obj2, timeVar)</code></li>
 </ul></li>
+<li><strong>Dynamic prediction</strong></li>
 </ul>
 </div><div class="column" style="width:35%;">
 <div class="quarto-figure quarto-figure-center">
@@ -633,6 +640,7 @@ Lu Mao
 <li>Markov or semi-Markov models for intensity <span class="math inline">\(k\to j\)</span></li>
 <li><code>coxph(Surv(start, stop, status) ~ covariates, subset = (from==k)&amp;(to==j))</code></li>
 </ul></li>
+<li><strong>Dynamic prediction</strong></li>
 </ul>
 </div><div class="column" style="width:35%;">
 <div class="quarto-figure quarto-figure-center">
@@ -702,8 +710,7 @@ Lu Mao
 <ul>
 <li><strong>Regularized Cox model</strong> <strong>(Ch 15)</strong>
 <ul>
-<li>Penalize log-partial likelihood by <span class="math inline">\(L_1\)</span>-norm of <span class="math inline">\(\beta\)</span></li>
-<li>Selected variables <span class="math inline">\(\{Z_{\cdot j}: \hat\beta_j(\lambda_{\rm opt})\neq 0, j=1,\ldots, p\}\)</span>
+<li>Penalize log-partial likelihood by <span class="math inline">\(L_1\)</span>/<span class="math inline">\(L_2\)</span>-norm of <span class="math inline">\(\beta\)</span>
 <ul>
 <li><code>glmnet::glmnet(Z, Surv(time, status), family =  "cox", alpha = 1)</code></li>
 </ul></li>
@@ -715,12 +722,11 @@ Lu Mao
 <li><code>rpart:: rpart(Surv(time, status) ~ covariates)</code></li>
 </ul></li>
 </ul></li>
+<li><strong>Random survival forest</strong></li>
+<li><strong>Survival support vector machines</strong></li>
 <li><strong>Deeping learning</strong> for survival analysis
 <ul>
-<li>Tutorial by Löschmann and Smorodina (2020)
-<ul>
-<li><a href="https://humboldt-wi.github.io/blog/research/information_systems_1920/group2_survivalanalysis" class="uri">https://humboldt-wi.github.io/blog/research/information_systems_1920/group2_survivalanalysis</a></li>
-</ul></li>
+<li>Tutorial by Löschmann and Smorodina (2020)</li>
 </ul></li>
 </ul>
 </section>
@@ -737,11 +743,11 @@ Lu Mao
 <div class="callout-content">
 <p>After taking the course, students will be able to</p>
 <ul>
-<li>Understand the features of censored data and their impact on statistical inference.</li>
-<li>Select appropriate non- and semi-parametric methods for various data types.</li>
-<li>Evaluate and verify assumptions for estimation and inference.</li>
-<li>Apply statistical procedures to solve real-world problems using R (or SAS).</li>
-<li>Clearly interpret and present analytical results to address substantive questions.</li>
+<li>Understand the defining features of censored data and their implications for statistical inference</li>
+<li>Select appropriate nonparametric and semiparametric methods for different types of time-to-event data</li>
+<li>Evaluate and assess modeling assumptions for estimation and inference</li>
+<li>Apply statistical procedures to real-world problems using R (or SAS)</li>
+<li>Clearly interpret and communicate analytical results in response to substantive scientific questions</li>
 </ul>
 </div>
 </div>
@@ -750,7 +756,7 @@ Lu Mao
 <section id="springer-book" class="slide level2">
 <h2>Springer Book</h2>
 <ul>
-<li><p>Book manuscript due to Springer by fall 2025</p>
+<li><p>Book manuscript to be published by Springer soon</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
@@ -765,9 +771,9 @@ Lu Mao
 <ul>
 <li>Please take a few minutes to complete course evaluation
 <ul>
-<li>Deadline 5/2/2025</li>
+<li>Deadline 5/1/2026</li>
 </ul></li>
-<li>Target response rate: &gt; 90%<br>
+<li>Target response rate: 100%<br>
 </li>
 <li>Your feedback matters!</li>
 </ul>

@@ -5519,7 +5519,7 @@
     "href": "recap.html#outline",
     "title": "Applied Survival Analysis",
     "section": "Outline",
-    "text": "Outline\n\nWhat have we learned (and what have we not)?\n\nBackground\nUnivariate event time\nComplex outcomes\nSpecial topics (causal inference and machine learning)\n\nAre learning objectives achieved?\nWhat’s next?\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]"
+    "text": "Outline\n\nWhat have we learned (and future directions)?\n\nBackground\nUnivariate event time\nComplex outcomes\nSpecial topics (causal inference and machine learning)\n\nAre learning objectives achieved?\nWhat’s next?\n\n\\[\\newcommand{\\d}{{\\rm d}}\\] \\[\\newcommand{\\T}{{\\rm T}}\\] \\[\\newcommand{\\dd}{{\\rm d}}\\] \\[\\newcommand{\\cc}{{\\rm c}}\\] \\[\\newcommand{\\pr}{{\\rm pr}}\\] \\[\\newcommand{\\var}{{\\rm var}}\\] \\[\\newcommand{\\se}{{\\rm se}}\\] \\[\\newcommand{\\indep}{\\perp \\!\\!\\! \\perp}\\] \\[\\newcommand{\\Pn}{n^{-1}\\sum_{i=1}^n}\\] \\[\n\\newcommand\\mymathop[1]{\\mathop{\\operatorname{#1}}}\n\\] \\[\n\\newcommand{\\Ut}{{n \\choose 2}^{-1}\\sum_{i&lt;j}\\sum}\n\\]"
   },
   {
     "objectID": "recap.html#why-bmi-741",
@@ -5568,7 +5568,7 @@
     "href": "recap.html#sample-size-calculation",
     "title": "Applied Survival Analysis",
     "section": "Sample Size Calculation",
-    "text": "Sample Size Calculation\n\nInput\n\nType I error \\(\\alpha=0.05\\); Desired power \\(\\gamma = 0.8, 0.9\\)\nAssignment proportion \\(q = E(Z)\\) (e.g., 0.5)\nNuisance parameter (affected by censoring distribution)\n\nLog-rank: \\(\\psi=\\pr(T\\leq C\\mid Z=0)\\) proportion of failure\n\\(\\tau\\)-RMST: \\(\\zeta(\\tau)=\\int_0^\\tau \\left\\{\\int_t^\\tau S_0(t)\\dd t\\right\\}^2\\pi(t)^{-1}\\lambda_0(t)\\dd t\\)\n\nEffect sizes 𝜃: log-hazard ratio; 𝜃(𝜏): difference in 𝜏-RMST\n\nFormula (Ch 6)\n\nR-programs available \\[\n\\mbox{Log-rank}: n= \\frac{(z_{1-\\alpha/2}+z_{\\gamma})^2}{q(1-q)\\psi\\theta^2}\\,\\,\\,\\,\n\\mbox{$\\tau$-RMST}: n= \\frac{\\zeta(\\tau)(z_{1-\\alpha/2}+z_{\\gamma})^2}{q(1-q)\\theta(\\tau)^2}\n\\]"
+    "text": "Sample Size Calculation\n\nInput\n\nType I error \\(\\alpha=0.05\\); Desired power \\(\\gamma = 0.8, 0.9\\)\nAssignment proportion \\(q = E(Z)\\) (e.g., 0.5)\nNuisance parameter (affected by censoring distribution)\n\nLog-rank: \\(\\psi=\\pr(T\\leq C\\mid Z=0)\\) proportion of failure\n\\(\\tau\\)-RMST: \\(\\zeta(\\tau)=\\int_0^\\tau \\left\\{\\int_t^\\tau S_0(t)\\dd t\\right\\}^2\\pi(t)^{-1}\\lambda_0(t)\\dd t\\)\n\nEffect sizes 𝜃: log-hazard ratio; 𝜃(𝜏): difference in 𝜏-RMST\n\nFormula (Ch 6)\n\nR-programs available (npsurvSS package) \\[\n\\mbox{Log-rank}: n= \\frac{(z_{1-\\alpha/2}+z_{\\gamma})^2}{q(1-q)\\psi\\theta^2}\\,\\,\\,\\,\n\\mbox{$\\tau$-RMST}: n= \\frac{\\zeta(\\tau)(z_{1-\\alpha/2}+z_{\\gamma})^2}{q(1-q)\\theta(\\tau)^2}\n\\]"
   },
   {
     "objectID": "recap.html#other-truncationcensoring",
@@ -5582,7 +5582,7 @@
     "href": "recap.html#multiplerecurrent-events",
     "title": "Applied Survival Analysis",
     "section": "Multiple/Recurrent Events",
-    "text": "Multiple/Recurrent Events\n\nKey feature (Ch 8 & 9)\n\nWithin-subject correlations between multiple events\n\n\n\n\n\n\n\n\n\nFrailty (conditional) models\nMarginal models\n\n\n\n\nInterpretation\nUnit-level hazard\nPopulation-level hazard\n\n\nComputation\nIntensive\nSimple\n\n\nStatistical efficiency\nEfficient (more assumptions)\nLess efficient (fewer assumptions)\n\n\nRobustness\nLess robust (more assumptions)\nRobust (fewer assumptions)\n\n\nAssociation measure\nVariance of frailty term\nNo such measure"
+    "text": "Multiple/Recurrent Events\n\nKey feature (Ch 8 & 9)\n\nWithin-subject correlations between multiple events\n\n\n\n\n\n\n\n\n\nFrailty (conditional) models\nMarginal models\n\n\n\n\nInterpretation\nUnit-level hazard\nPopulation-level hazard\n\n\nComputation\nIntensive\nSimple\n\n\nStatistical efficiency\nEfficient (more assumptions)\nLess efficient (fewer assumptions)\n\n\nRobustness\nLess robust (more assumptions)\nRobust (fewer assumptions)\n\n\nAssociation measure\nVariance of frailty term\nNo such measure\n\n\n\nThree scenarios\n\nSame regression parameter; same baseline function\nSame regression parameter; different baseline functions\nDifferent regression parameters; different baseline functions"
   },
   {
     "objectID": "recap.html#recurrent-events",
@@ -5603,14 +5603,14 @@
     "href": "recap.html#joint-models-with-longitudinal-data",
     "title": "Applied Survival Analysis",
     "section": "Joint Models with Longitudinal Data",
-    "text": "Joint Models with Longitudinal Data\n\nTwo-stage joint models (Ch 11)\n\n\n\nLongitudinal sub-model \\[m_i(t)=\\gamma_0+\\gamma^\\T Z_i(t)+b_i^\\T\\tilde Z_i(t)\\]\n\nobj1 &lt;- nlme::lme()\n\nSurvival sub-model\n\n\\(\\pr\\{t\\leq T_i&lt;t+\\dd t\\mid Z_i^*, \\overline m_i(t)\\}=\\exp\\{\\beta^\\T Z_i^*+\\nu m_i(t)\\}\\lambda_0(t)\\dd t\\)\nobj2 &lt;- survival::coxph()\n\nJoining two models\n\nJM::jointModel(obj1, obj2, timeVar)"
+    "text": "Joint Models with Longitudinal Data\n\nTwo-stage joint models (Ch 11)\n\n\n\nLongitudinal sub-model \\[m_i(t)=\\gamma_0+\\gamma^\\T Z_i(t)+b_i^\\T\\tilde Z_i(t)\\]\n\nobj1 &lt;- nlme::lme()\n\nSurvival sub-model\n\n\\(\\pr\\{t\\leq T_i&lt;t+\\dd t\\mid Z_i^*, \\overline m_i(t)\\}=\\exp\\{\\beta^\\T Z_i^*+\\nu m_i(t)\\}\\lambda_0(t)\\dd t\\)\nobj2 &lt;- survival::coxph()\n\nJoining two models\n\nJM::jointModel(obj1, obj2, timeVar)\n\nDynamic prediction"
   },
   {
     "objectID": "recap.html#multistate-models",
     "href": "recap.html#multistate-models",
     "title": "Applied Survival Analysis",
     "section": "Multistate Models",
-    "text": "Multistate Models\n\nAn approach to complex life history data (Ch 12)\n\n\\(Y(t)\\in \\{0, 1,\\ldots, K\\}\\,\\,\\,\\) \n\n\n\n\nTransition intensity: risk of going to another state given current state and history\nCox-type multiplicative intensity models\n\nMarkov or semi-Markov models for intensity \\(k\\to j\\)\ncoxph(Surv(start, stop, status) ~ covariates, subset = (from==k)&(to==j))"
+    "text": "Multistate Models\n\nAn approach to complex life history data (Ch 12)\n\n\\(Y(t)\\in \\{0, 1,\\ldots, K\\}\\,\\,\\,\\) \n\n\n\n\nTransition intensity: risk of going to another state given current state and history\nCox-type multiplicative intensity models\n\nMarkov or semi-Markov models for intensity \\(k\\to j\\)\ncoxph(Surv(start, stop, status) ~ covariates, subset = (from==k)&(to==j))\n\nDynamic prediction"
   },
   {
     "objectID": "recap.html#hierarchical-composite-endpoints",
@@ -5631,28 +5631,28 @@
     "href": "recap.html#machine-learning",
     "title": "Applied Survival Analysis",
     "section": "Machine Learning",
-    "text": "Machine Learning\n\nRegularized Cox model (Ch 15)\n\nPenalize log-partial likelihood by \\(L_1\\)-norm of \\(\\beta\\)\nSelected variables \\(\\{Z_{\\cdot j}: \\hat\\beta_j(\\lambda_{\\rm opt})\\neq 0, j=1,\\ldots, p\\}\\)\n\nglmnet::glmnet(Z, Surv(time, status), family =  \"cox\", alpha = 1)\n\n\nSurvival trees (Ch 15)\n\nRoot node \\(\\to\\) recursive splitting \\(\\to\\) pruning to prevent overfitting\n\nrpart:: rpart(Surv(time, status) ~ covariates)\n\n\nDeeping learning for survival analysis\n\nTutorial by Löschmann and Smorodina (2020)\n\nhttps://humboldt-wi.github.io/blog/research/information_systems_1920/group2_survivalanalysis"
+    "text": "Machine Learning\n\nRegularized Cox model (Ch 15)\n\nPenalize log-partial likelihood by \\(L_1\\)/\\(L_2\\)-norm of \\(\\beta\\)\n\nglmnet::glmnet(Z, Surv(time, status), family =  \"cox\", alpha = 1)\n\n\nSurvival trees (Ch 15)\n\nRoot node \\(\\to\\) recursive splitting \\(\\to\\) pruning to prevent overfitting\n\nrpart:: rpart(Surv(time, status) ~ covariates)\n\n\nRandom survival forest\nSurvival support vector machines\nDeeping learning for survival analysis\n\nTutorial by Löschmann and Smorodina (2020)"
   },
   {
     "objectID": "recap.html#learning-outcomes",
     "href": "recap.html#learning-outcomes",
     "title": "Applied Survival Analysis",
     "section": "Learning Outcomes",
-    "text": "Learning Outcomes\n\n\n\n\n\n\nOn Syllabus …\n\n\nAfter taking the course, students will be able to\n\nUnderstand the features of censored data and their impact on statistical inference.\nSelect appropriate non- and semi-parametric methods for various data types.\nEvaluate and verify assumptions for estimation and inference.\nApply statistical procedures to solve real-world problems using R (or SAS).\nClearly interpret and present analytical results to address substantive questions."
+    "text": "Learning Outcomes\n\n\n\n\n\n\nOn Syllabus …\n\n\nAfter taking the course, students will be able to\n\nUnderstand the defining features of censored data and their implications for statistical inference\nSelect appropriate nonparametric and semiparametric methods for different types of time-to-event data\nEvaluate and assess modeling assumptions for estimation and inference\nApply statistical procedures to real-world problems using R (or SAS)\nClearly interpret and communicate analytical results in response to substantive scientific questions"
   },
   {
     "objectID": "recap.html#springer-book",
     "href": "recap.html#springer-book",
     "title": "Applied Survival Analysis",
     "section": "Springer Book",
-    "text": "Springer Book\n\nBook manuscript due to Springer by fall 2025\n\n\n\nCheck back on study site: https://lmaowisc.github.io/BMI741\nI welcome your feedback!"
+    "text": "Springer Book\n\nBook manuscript to be published by Springer soon\n\n\n\nCheck back on study site: https://lmaowisc.github.io/BMI741\nI welcome your feedback!"
   },
   {
     "objectID": "recap.html#final-assignment",
     "href": "recap.html#final-assignment",
     "title": "Applied Survival Analysis",
     "section": "Final Assignment",
-    "text": "Final Assignment\n\nPlease take a few minutes to complete course evaluation\n\nDeadline 5/2/2025\n\nTarget response rate: &gt; 90%\n\nYour feedback matters!"
+    "text": "Final Assignment\n\nPlease take a few minutes to complete course evaluation\n\nDeadline 5/1/2026\n\nTarget response rate: 100%\n\nYour feedback matters!"
   },
   {
     "objectID": "chap3.html",

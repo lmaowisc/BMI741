@@ -23,7 +23,7 @@ include-in-header:
 
 ## Outline
 
--   What have we learned (and what have we not)?
+-   What have we learned (and future directions)?
     -   Background
     -   Univariate event time
     -   Complex outcomes
@@ -129,7 +129,7 @@ $$
         -   $\tau$-RMST: $\zeta(\tau)=\int_0^\tau \left\{\int_t^\tau S_0(t)\dd t\right\}^2\pi(t)^{-1}\lambda_0(t)\dd t$
     -   **Effect sizes** 𝜃: log-hazard ratio; 𝜃(𝜏): difference in 𝜏-RMST
 -   **Formula** **(Ch 6)**
-    -   R-programs available $$
+    -   R-programs available (`npsurvSS` package) $$
         \mbox{Log-rank}: n= \frac{(z_{1-\alpha/2}+z_{\gamma})^2}{q(1-q)\psi\theta^2}\,\,\,\,
         \mbox{$\tau$-RMST}: n= \frac{\zeta(\tau)(z_{1-\alpha/2}+z_{\gamma})^2}{q(1-q)\theta(\tau)^2}
         $$
@@ -169,6 +169,11 @@ $$
         | **Association measure** | Variance of frailty term | No such measure |
 
         : {tbl-colwidths="\[25, 35, 40\]"}
+
+    - **Three scenarios**
+        1. Same regression parameter; same baseline function
+        2. Same regression parameter; different baseline functions
+        3. Different regression parameters; different baseline functions
 
 ## Recurrent Events
 
@@ -225,6 +230,7 @@ coxph(Surv(start, stop, status) ~ covariates
         -   `obj2 <- survival::coxph()`
     -   **Joining two models**
         -   `JM::jointModel(obj1, obj2, timeVar)`
+    -   **Dynamic prediction**
     :::
 
     ::: {.column width="35%"}
@@ -244,6 +250,7 @@ coxph(Surv(start, stop, status) ~ covariates
     -   **Cox-type multiplicative intensity models**
         -   Markov or semi-Markov models for intensity $k\to j$
         -   `coxph(Surv(start, stop, status) ~ covariates, subset = (from==k)&(to==j))`
+    -   **Dynamic prediction**
     :::
 
     ::: {.column width="35%"}
@@ -288,15 +295,16 @@ coxph(Surv(start, stop, status) ~ covariates
 ## Machine Learning
 
 -   **Regularized Cox model** **(Ch 15)**
-    -   Penalize log-partial likelihood by $L_1$-norm of $\beta$
-    -   Selected variables $\{Z_{\cdot j}: \hat\beta_j(\lambda_{\rm opt})\neq 0, j=1,\ldots, p\}$
+    -   Penalize log-partial likelihood by $L_1$/$L_2$-norm of $\beta$
         -   `glmnet::glmnet(Z, Surv(time, status), family =  "cox", alpha = 1)`
 -   **Survival trees** **(Ch 15)**
     -   Root node $\to$ recursive splitting $\to$ pruning to prevent overfitting
         -   `rpart:: rpart(Surv(time, status) ~ covariates)`
+-  **Random survival forest**
+-  **Survival support vector machines**
 -   **Deeping learning** for survival analysis
     -   Tutorial by Löschmann and Smorodina (2020)
-        -   <https://humboldt-wi.github.io/blog/research/information_systems_1920/group2_survivalanalysis>
+
 
 ## Learning Outcomes
 
@@ -305,30 +313,27 @@ coxph(Surv(start, stop, status) ~ covariates
 
 After taking the course, students will be able to
 
-
--    Understand the features of censored data and their impact on statistical inference.
--    Select appropriate non- and semi-parametric methods for various data types.
--    Evaluate and verify assumptions for estimation and inference.
--    Apply statistical procedures to solve real-world problems using R (or SAS).
--    Clearly interpret and present analytical results to address substantive questions.
-
+- Understand the defining features of censored data and their implications for statistical inference
+- Select appropriate nonparametric and semiparametric methods for different types of time-to-event data
+- Evaluate and assess modeling assumptions for estimation and inference
+- Apply statistical procedures to real-world problems using R (or SAS)
+- Clearly interpret and communicate analytical results in response to substantive scientific questions
 :::
 
 ## Springer Book
 
--   Book manuscript due to Springer by fall 2025
+-   Book manuscript to be published by Springer soon
 
-    ::::: columns
+    :::: columns
     ::: {.column width="50%"}
     -   Check back on study site: <https://lmaowisc.github.io/BMI741>
     -   I welcome your feedback!
     :::
-
-
+    ::::
 
 ## Final Assignment
 
 -   Please take a few minutes to complete course evaluation
-    -   Deadline 5/2/2025
--   Target response rate: \> 90%\
+    -   Deadline 5/1/2026
+-   Target response rate: 100%\
 -   Your feedback matters!
